@@ -53,20 +53,22 @@ See section about [deployment](https://facebook.github.io/create-react-app/docs/
 
 1. Routing
    - Route
-   - Navigate
+   - Navigate 
    - useNavigate
+   - Link (param "state" to carry data )
+   - useLocation (useLocation.state to retrieve data)
    - Outlet
-   - Link
    - useParams
 
 ## Workspace tools
 
 ### Dependencies
 
-- react-router-dom v6
+- react-router-dom (v6)
 
 ### Extensions
 
+- GitLens
 - Emmet
 - Implicit indent
 - Indent rainbow
