@@ -3,7 +3,7 @@ import axios from 'axios';
 
 export default function RegisterPage() {
     
-    const initialState = { userName: '', password: ''};
+    const initialState = { username: '', email: '', password: ''};
     const [formData, setFormData] = useState();
     
     const handleChange = (e) => {
@@ -17,7 +17,7 @@ export default function RegisterPage() {
         console.log(formData);
         
         axios.post(
-            'https://61a67ad28395690017be92ee.mockapi.io/users', 
+            'http://localhost:3001/api/auth/register', 
             { formData }
         )
     }
@@ -30,6 +30,14 @@ export default function RegisterPage() {
                     <p>Username</p>
                     <input 
                         name="username" 
+                        onChange={ handleChange } 
+                        type="text" 
+                    />
+                </label>
+                <label>
+                    <p>Email</p>
+                    <input 
+                        name="email" 
                         onChange={ handleChange } 
                         type="text" 
                     />
