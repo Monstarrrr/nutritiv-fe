@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import HomePage from './Pages/HomePage.js';
 import RegisterPage from './Pages/RegisterPage.js';
+import LoginPage from './Pages/LoginPage.js';
 import {
   BrowserRouter as
   Router,
@@ -64,17 +65,6 @@ function UserProfilePage() {
   return (
     <div>
       <h4>USER YOANN</h4>
-    </div>
-  )
-}
-
-function LoginPage() {
-  console.log("login page")
-  return (
-    <div>
-      <h2>
-        Login page
-      </h2>
     </div>
   )
 }

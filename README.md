@@ -60,6 +60,9 @@ See section about [deployment](https://facebook.github.io/create-react-app/docs/
    - Outlet
    - useParams
 
+2. Axios
+   - Form with axios.post
+
 ## Workspace tools
 
 ### Dependencies
