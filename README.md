@@ -61,7 +61,10 @@ See section about [deployment](https://facebook.github.io/create-react-app/docs/
    - useParams
 
 2. Axios
-   - Form with axios.post
+   - Add default.baseURL
+   - Get JWT token w/ res & store it locally w/ localStorage.setItem
+   - Login/Signup
+   - 
 
 ## Workspace tools
 

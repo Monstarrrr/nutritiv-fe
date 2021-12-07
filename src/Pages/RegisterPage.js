@@ -4,6 +4,7 @@ import axios from 'axios';
 export default function RegisterPage() {
     
     const initialState = { username: '', email: '', password: ''};
+    // usf
     const [formData, setFormData] = useState();
     
     const handleChange = (e) => {
@@ -17,7 +18,7 @@ export default function RegisterPage() {
         console.log(formData);
         
         axios.post(
-            'http://localhost:3001/api/auth/register', 
+            '/auth/register', 
             { formData }
         )
     }

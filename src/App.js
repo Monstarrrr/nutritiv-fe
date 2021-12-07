@@ -17,8 +17,6 @@ import {
 } from 'react-router-dom';
 
 function App() {
-
-  const [token, setToken] = useState();
   
   return (
     <Router>
