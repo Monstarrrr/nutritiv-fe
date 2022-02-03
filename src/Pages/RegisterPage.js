@@ -3,30 +3,48 @@ import axios from 'axios';
 
 export default function RegisterPage() {
     
-    const initialState = { username: '', email: '', password: ''};
-    // usf
-    const [formData, setFormData] = useState();
+    const [registerData, setRegisterData] = useState({
+        username: "",
+        email: "",
+        password: "",
+        error: false,
+    });
     
     const handleChange = (e) => {
-        setFormData({
-            ... formData, 
+        setRegisterData({
+            ...registerData, 
             [e.target.name]: e.target.value 
         })
     }
+    
+    const validation = () => {
+        setRegisterData({
+            ...registerData,
+            error: true,
+        })
+    }
+    
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(formData);
         
-        axios.post(
-            '/auth/register', 
-            { formData }
-        )
+        const isValid = validation();
+        
+        if(isValid) {
+            try {
+                axios.post(
+                    'http://localhost:3001/api/auth/register', 
+                    { registerData }
+                )
+            } catch(err) {
+                console.log('# err :', err)
+            }
+        }
     }
     
     return (
         <div>
             <h2>Register page</h2>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={ handleSubmit }>
                 <label>
                     <p>Username</p>
                     <input 

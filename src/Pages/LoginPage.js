@@ -1,92 +1,120 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { 
+    useState, 
+    // useEffect 
+} from 'react';
+import nutritivApi from '../Api/nutritivApi';
+
 
 export default function LoginPage() {
+    console.log("##### LoginPage render #####");
     
-    const initialState = { username: '', email: '', password: ''};
-    // usf
-    const [formData, setFormData] = useState();
-    const [userData, setUserData] = useState();
+    const [loginInput, setLoginInput] = useState({
+        username: "",
+        password: "",
+        usernameError: false,
+        passwordError: false,
+    })
+    const [invalidLogin, setInvalidLogin] = useState(false)
+    const loginData = {
+        username: loginInput.username,
+        password: loginInput.password,
+    }
+    const tokens = {
+        refresh_token: localStorage.getItem('refresh_token'),
+        access_token: localStorage.getItem('access_token'),
+    }
     
     const handleChange = (e) => {
-        setFormData({
-            ... formData, 
-            [e.target.name]: e.target.value 
+        setLoginInput({
+            ...loginInput,
+            [e.target.name]: e.target.value,
         })
     }
     
-    const handleSubmit = (e) => {
-        e.preventDefault(); // Prevents auto submition on button click
-        console.log(formData);
-
-        axios
-        .post(
-            '/auth/login',
-            { formData }
-        )
-        .then(res => {
-            localStorage.setItem('token', res.data.accessToken);
-            // localStorage.setItem('userid', res.data._id);
-            console.log(res.data)
-        })
-        .catch(err => {
-            console.log(err);
-        })
-    }
-    
-    const fetchData = async () => {
-        const { data } = await axios
-        .get(
-            '/users/find/61a7af193e112c5ca4fe1f01',
-            {
-                headers: {
-                    token: 'Bearer ' + localStorage.getItem('token')
-                }
-            }
-        )
-        console.log(data)
-        return data;
-    }
+    const validation = () => {
+        let usernameError = !loginInput.username
+        let passwordError = !loginInput.password
         
-    // uef
-    useEffect(() => {
-        fetchData();
-    }, [])
+        setLoginInput({
+            ...loginInput,
+            usernameError,
+            passwordError,
+        })
+        setInvalidLogin(false)
+        
+        return !usernameError && !passwordError
+    }
+    
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        
+        // We store and use the return value because the state won't update yet
+        const isValid = validation();
+        
+        if(isValid) {
+            try {
+                await nutritivApi.post(
+                    '/auth/login',
+                    { loginData },
+                );
+            } catch(err) {
+                setInvalidLogin(true)
+            }
+        }
+    }
     
     return (
-        
         <div>
             <h2>Login page</h2>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={ handleSubmit }>
                 <label>
                     <p>Username</p>
                     <input 
                         name="username" 
                         onChange={ handleChange } 
+                        placeholder="Username..."
                         type="text" 
                     />
+                    {
+                        loginInput.usernameError ? (
+                            <p style={{color: "red"}}>Please enter a username</p>
+                        ) : null
+                    }
                 </label>
                 <label>
                     <p>Password</p>
                     <input 
                         name="password" 
-                        onChange={ handleChange } 
+                        onChange={ handleChange }
+                        placeholder="Password..." 
                         type="password"
                     />
+                    {
+                        loginInput.passwordError ? (
+                            <p style={{color: "red"}}>Please enter a password</p>
+                        ) : null
+                    }
                 </label>
                 <div>
                     <button type="submit">Submit</button>
                 </div>
+                {
+                    invalidLogin ? (
+                        <p style={{color: "red"}}>Incorrect password or username</p>
+                    ) : ""
+                }
                 <div>
-                    <h4>
-                        { userData ? (
-                            userData.public.username.toString()
-                        ) : (
-                            <p>
-                                Not connected.
-                            </p>
-                        )}
-                    </h4>
+                    <h3>
+                        accessToken: 
+                    </h3>
+                    <p style={{fontSize: '12px'}}>{ tokens.refresh_token }</p>
+                    <h3>
+                        refreshToken:
+                    </h3>
+                    <p style={{fontSize: '12px'}}>{ tokens.access_token }</p>
+                    <button>
+                        Some API call
+                    </button>
                 </div>
             </form>
         </div>

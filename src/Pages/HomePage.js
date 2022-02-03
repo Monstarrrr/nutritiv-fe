@@ -2,6 +2,8 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 export default function HomePage() {
+
+    console.log("Hello world!")
     return (
         <div>
             <h1>Homepage</h1>

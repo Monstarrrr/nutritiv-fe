@@ -64,7 +64,7 @@ See section about [deployment](https://facebook.github.io/create-react-app/docs/
    - Add default.baseURL
    - Get JWT token w/ res & store it locally w/ localStorage.setItem
    - Login/Signup
-   - 
+   - set localStorage tokens interceptor
 
 ## Workspace tools
 
