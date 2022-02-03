@@ -71,13 +71,3 @@ See section about [deployment](https://facebook.github.io/create-react-app/docs/
 ### Dependencies
 
 - react-router-dom (v6)
-
-### Extensions
-
-- GitLens
-- Emmet
-- Implicit indent
-- Indent rainbow
-- Auto rename
-- Auto close tag
-- Brackets pair colorizer

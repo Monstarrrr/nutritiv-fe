@@ -5,14 +5,18 @@ import App from './App';
 import { createStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 import entities from './Redux/config/entities';
+import { injectStore } from './Api/nutritivApi';
 
-const store = createStore(
+export const store = createStore(
   entities,
   /* preloadedState, */
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__({
     trace: true
   })
 );
+
+// INJECT STORE TO USE IT IN AXIOS INTERCEPTORS
+injectStore(store);
 
 ReactDOM.render(
   <React.StrictMode>

@@ -16,4 +16,7 @@ export const {
     updateAuthStatus,
 } = userSlice.actions;
 
+// Selector
+
+
 export default userSlice.reducer;

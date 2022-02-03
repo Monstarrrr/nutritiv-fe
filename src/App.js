@@ -1,11 +1,13 @@
 import React, { useEffect } from 'react';
 import { 
   // useSelector, 
-  useDispatch 
+  useDispatch,
+  useSelector,
 } from "react-redux";
-import { updateAuthStatus } from './Redux/reducers/user';
+import {
+  updateAuthStatus,
+} from './Redux/reducers/user';
 import nutritivApi from './Api/nutritivApi';
-import useAuth from './Helpers/useAuth';
 import HomePage from './Pages/HomePage.js';
 import RegisterPage from './Pages/RegisterPage.js';
 import LoginPage from './Pages/LoginPage.js';
@@ -19,20 +21,24 @@ import {
 
 function App() {
   const dispatch = useDispatch();
-
+  
   const RestrictedRoutes = () => {
-    const isLogged = useAuth();
-    return !isLogged ? <Outlet /> : <Navigate to="/welcome" />;
+    const loggedIn = useSelector(state => state.user.loggedIn)
+    const isLogged = () => {
+      const user = { loggedIn }
+      return user.loggedIn;
+    }
+    return isLogged() ? <Navigate to="/welcome" /> : <Outlet />;
   }
   
-  // users/checkJWT --> add to store
+  // ON LOAD: CHECK IF LOGGEDIN
   useEffect(() => {
     const checkUserAuth = async () => {
       try {
         const { data } = await nutritivApi.get(
           '/users/checkJWT',
         )
-        console.log('# data :', data)
+        console.log('# users/checkJWT res :', data)
         dispatch(updateAuthStatus({
           loggedIn: data.loggedIn
         }))

@@ -1,12 +1,16 @@
 import axios from 'axios';
-import store from '../Redux/config/store'
 import { updateAuthStatus } from '../Redux/reducers/user';
 
 const nutritivApi = axios.create({
     baseURL: 'http://localhost:3001/', // Change in prod
 })
 
-// REGENERATE TOKENS || DISCONNECT //
+// INJECT STORE TO PREVENT IMPORT ISSUES
+let store
+export const injectStore = _store => {
+  store = _store
+}
+
 nutritivApi.interceptors.request.use(req => {
     const refreshToken = localStorage.getItem('refresh_token');
     const accessToken = localStorage.getItem('access_token');
@@ -22,6 +26,9 @@ nutritivApi.interceptors.response.use(res => {
         localStorage.setItem('refresh_token', res.headers.refresh_token)
         localStorage.setItem('access_token', res.headers.access_token)
     }
+    store.dispatch(updateAuthStatus({
+        loggedIn: res.data.loggedIn,
+    }))
     console.log("# API res :", res);
     return res;
 }, function (err) {
