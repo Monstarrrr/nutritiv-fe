@@ -2,7 +2,8 @@ import React, {
     useState, 
     // useEffect 
 } from 'react';
-import nutritivApi from '../Api/nutritivApi';
+import { loginUser } from '../Api/nutritivApi';
+import storage from '../Helpers/localStorage';
 
 
 export default function LoginPage() {
@@ -20,8 +21,8 @@ export default function LoginPage() {
         password: loginInput.password,
     }
     const tokens = {
-        refresh_token: localStorage.getItem('refresh_token'),
-        access_token: localStorage.getItem('access_token'),
+        refresh_token: localStorage.getItem(storage.accessToken),
+        access_token: localStorage.getItem(storage.accessToken),
     }
     
     const handleChange = (e) => {
@@ -53,10 +54,7 @@ export default function LoginPage() {
         
         if(isValid) {
             try {
-                await nutritivApi.post(
-                    '/auth/login',
-                    { loginData },
-                );
+                await loginUser(loginData)
             } catch(err) {
                 setInvalidLogin(true)
             }

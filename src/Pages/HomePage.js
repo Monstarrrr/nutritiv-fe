@@ -1,17 +1,31 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import storage from '../Helpers/localStorage';
+import { updateAuthStatus } from '../Redux/reducers/user';
 
 export default function HomePage() {
     console.log("##### HomePage render #####");
     
+    const dispatch = useDispatch();
+    
     const loggedIn = useSelector(state => state.user.loggedIn)
+    
+    const handleLogout = () => {
+        localStorage.removeItem(storage.accessToken)
+        localStorage.removeItem(storage.refreshToken)
+        dispatch(updateAuthStatus({ loggedIn: false }))
+    }
     
     return (
         <div>
             <h1>Homepage</h1>
             {
-                loggedIn ? null : (
+                loggedIn ? (
+                    <button onClick={handleLogout}>
+                        Logout
+                    </button>
+                ) : (
                     <>
                         <Link to="/register">
                             REGISTER HERE

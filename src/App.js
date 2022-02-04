@@ -33,22 +33,26 @@ function App() {
   
   // ON LOAD: CHECK IF LOGGEDIN
   useEffect(() => {
+    let isSubscribed = true
     const checkUserAuth = async () => {
       try {
         const { data } = await nutritivApi.get(
           '/users/checkJWT',
         )
-        console.log('# users/checkJWT res :', data)
-        dispatch(updateAuthStatus({
-          loggedIn: data.loggedIn
-        }))
+        if(isSubscribed) {
+          console.log('# users/checkJWT res :', data)
+          dispatch(updateAuthStatus({
+            loggedIn: data.loggedIn
+          }))
+        }
       } catch(err) {
         console.error('# err', err)
       }
     };
     checkUserAuth()
+    return () => { isSubscribed = false }
   }, [dispatch]);
-
+  
   return (
     <Router>
       <Routes>
