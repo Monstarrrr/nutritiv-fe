@@ -12,28 +12,20 @@ import HomePage from './Pages/HomePage.js';
 import RegisterPage from './Pages/RegisterPage.js';
 import LoginPage from './Pages/LoginPage.js';
 import { 
-  BrowserRouter as Router,
+  BrowserRouter,
   Routes,
   Route,
   Navigate,
   Outlet,
+  Link,
 } from 'react-router-dom';
 
 function App() {
   const dispatch = useDispatch();
   
-  const RestrictedRoutes = () => {
-    const loggedIn = useSelector(state => state.user.loggedIn)
-    const isLogged = () => {
-      const user = { loggedIn }
-      return user.loggedIn;
-    }
-    return isLogged() ? <Navigate to="/welcome" /> : <Outlet />;
-  }
-  
-  // ON LOAD: CHECK IF LOGGEDIN
+  // ON LOAD: CHECK IF IS LOGGED & UPDATE STORE
   useEffect(() => {
-    let isSubscribed = true
+    let isSubscribed = true;
     const checkUserAuth = async () => {
       try {
         const { data } = await nutritivApi.get(
@@ -53,25 +45,59 @@ function App() {
     return () => { isSubscribed = false }
   }, [dispatch]);
   
+  // RESTRICTED: IS LOGGED ?
+  const RestrictedRoutes = () => {
+    const loggedIn = useSelector(state => state.user.loggedIn)
+    const isLogged = () => {
+      const user = { loggedIn }
+      return user.loggedIn;
+    }
+    return isLogged() ? <Navigate to="/welcome" /> : <Outlet />;
+  }
+  
+  // TEMP
+  function Auth() {
+    return (
+      <h3>
+        <Link to="/auth/login">Login</Link>
+        <Outlet />
+      </h3>
+    )
+  }
+  
+  // TEMP
+  function Navbar() {
+    return (
+      <nav>
+        <Link to="/welcome">NUTRITIV</Link>
+        <span>----</span>
+        <Link to="/register">REGISTER</Link>
+        <span>----</span>
+        <Link to="/login">LOGIN</Link>
+      </nav>
+    )
+  }
+  
   return (
-    <Router>
+    <BrowserRouter>
+      <Navbar />
       <Routes>
         {/* PUBLIC */}
         <Route path="*" element={<Navigate replace to="/welcome"/>}/>
-        <Route path="/welcome" element={<HomePage/>}/>
-        {/* <Route path="/dashboard" element={<DashboardPage/>}/> */}
+        <Route path="/welcome" element={<HomePage />}/>
         {/* RESTRICTED */}
         <Route element={<RestrictedRoutes />}>
-          <Route path="/login" element={<LoginPage/>}/>
-          <Route path="/register" element={<RegisterPage/>}/>
+          <Route path="login" element={<LoginPage/>}/>
+          <Route path="register" element={<RegisterPage/>}/>
         </Route>
+        {/* <Route path="/dashboard" element={<DashboardPage/>}/> */}
         {/* PRIVATE */}
         {/* <Route path="/user" element={<Users/>}>
           <Route index path="*" element={<UserNotFoundPage/>}/>
           <Route path="username" element={<UserProfilePage/>}/>
         </Route> */}
       </Routes>
-    </Router>
+    </BrowserRouter>
   );
 }
 

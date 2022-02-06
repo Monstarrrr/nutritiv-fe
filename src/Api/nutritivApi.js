@@ -21,17 +21,18 @@ export const injectStore = _store => {
 // INTERCEPTORS
 // on request
 nutritivApi.interceptors.request.use(req => {
-    const refreshToken = localStorage.getItem(storage.accessToken);
-    const accessToken = localStorage.getItem(storage.refreshToken);
+    const refreshToken = localStorage.getItem(storage.refreshToken);
+    const accessToken = localStorage.getItem(storage.accessToken);
     req.headers.access_token = accessToken;
     req.headers.refresh_token = refreshToken;
-    console.log('# API req :', req)
+    console.log('# req :', req)
     return req;
 }, function (err) {
     return Promise.reject(err)
 })
 // on response
 nutritivApi.interceptors.response.use(res => {
+    // set tokens
     if(res.headers.access_token || res.headers.refresh_token) {
         localStorage.setItem(
             storage.accessToken,
@@ -42,10 +43,11 @@ nutritivApi.interceptors.response.use(res => {
             res.headers.refresh_token
         )
     }
+    // update store
     store.dispatch(updateAuthStatus({
         loggedIn: res.data.loggedIn,
     }))
-    console.log("# API res :", res);
+    console.log("# res :", res);
     return res;
 }, function (err) {
     return Promise.reject(err)

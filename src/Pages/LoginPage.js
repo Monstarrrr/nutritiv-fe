@@ -2,9 +2,8 @@ import React, {
     useState, 
     // useEffect 
 } from 'react';
+import { Outlet } from 'react-router-dom';
 import { loginUser } from '../Api/nutritivApi';
-import storage from '../Helpers/localStorage';
-
 
 export default function LoginPage() {
     console.log("##### LoginPage render #####");
@@ -19,10 +18,6 @@ export default function LoginPage() {
     const loginData = {
         username: loginInput.username,
         password: loginInput.password,
-    }
-    const tokens = {
-        refresh_token: localStorage.getItem(storage.accessToken),
-        access_token: localStorage.getItem(storage.accessToken),
     }
     
     const handleChange = (e) => {
@@ -49,7 +44,8 @@ export default function LoginPage() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         
-        // We store and use the return value because the state won't update yet
+        // We store and use the return value 
+        // because the state won't update yet
         const isValid = validation();
         
         if(isValid) {
@@ -75,7 +71,9 @@ export default function LoginPage() {
                     />
                     {
                         loginInput.usernameError ? (
-                            <p style={{color: "red"}}>Please enter a username</p>
+                            <p style={{color: "red"}}>
+                                Please enter a username
+                            </p>
                         ) : null
                     }
                 </label>
@@ -89,7 +87,9 @@ export default function LoginPage() {
                     />
                     {
                         loginInput.passwordError ? (
-                            <p style={{color: "red"}}>Please enter a password</p>
+                            <p style={{color: "red"}}>
+                                Please enter a password
+                            </p>
                         ) : null
                     }
                 </label>
@@ -98,22 +98,11 @@ export default function LoginPage() {
                 </div>
                 {
                     invalidLogin ? (
-                        <p style={{color: "red"}}>Incorrect password or username</p>
+                        <p style={{color: "red"}}>
+                            Incorrect password or username
+                        </p>
                     ) : ""
                 }
-                <div>
-                    <h3>
-                        accessToken: 
-                    </h3>
-                    <p style={{fontSize: '12px'}}>{ tokens.refresh_token }</p>
-                    <h3>
-                        refreshToken:
-                    </h3>
-                    <p style={{fontSize: '12px'}}>{ tokens.access_token }</p>
-                    <button>
-                        Some API call
-                    </button>
-                </div>
             </form>
         </div>
     )
