@@ -1,5 +1,8 @@
-const storage = {
+export const storageKeys = {
     accessToken: 'access_token',
     refreshToken: 'refresh_token',
 }
-export default storage;
+export const storageValues = {
+    accessToken: localStorage.getItem(storageKeys.accessToken),
+    refreshToken: localStorage.getItem(storageKeys.refreshToken),
+}

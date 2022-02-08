@@ -5,9 +5,9 @@ import {
   useSelector,
 } from "react-redux";
 import {
-  updateAuthStatus,
+  updateUser,
 } from './Redux/reducers/user';
-import nutritivApi from './Api/nutritivApi';
+import { apiGetUser } from './Api/nutritivApi';
 import HomePage from './Pages/HomePage.js';
 import RegisterPage from './Pages/RegisterPage.js';
 import LoginPage from './Pages/LoginPage.js';
@@ -17,24 +17,27 @@ import {
   Route,
   Navigate,
   Outlet,
-  Link,
 } from 'react-router-dom';
+import Navbar from './Components/Navbar';
+import Profile from './Pages/Profile';
 
 function App() {
   const dispatch = useDispatch();
-  
-  // ON LOAD: CHECK IF IS LOGGED & UPDATE STORE
+
+  // ON LOAD: GET USER INFO & UPDATE STORE
   useEffect(() => {
     let isSubscribed = true;
     const checkUserAuth = async () => {
       try {
-        const { data } = await nutritivApi.get(
-          '/users/checkJWT',
-        )
+        const data = await apiGetUser();
         if(isSubscribed) {
-          console.log('# users/checkJWT res :', data)
-          dispatch(updateAuthStatus({
-            loggedIn: data.loggedIn
+          console.log('# users/self res :', data)
+          dispatch(updateUser({
+            loggedIn: data.loggedIn,
+            username: data.username,
+            email: data.email,
+            isAdmin: data.isAdmin,
+            isVerified: data.isVerified,
           }))
         }
       } catch(err) {
@@ -52,30 +55,7 @@ function App() {
       const user = { loggedIn }
       return user.loggedIn;
     }
-    return isLogged() ? <Navigate to="/welcome" /> : <Outlet />;
-  }
-  
-  // TEMP
-  function Auth() {
-    return (
-      <h3>
-        <Link to="/auth/login">Login</Link>
-        <Outlet />
-      </h3>
-    )
-  }
-  
-  // TEMP
-  function Navbar() {
-    return (
-      <nav>
-        <Link to="/welcome">NUTRITIV</Link>
-        <span>----</span>
-        <Link to="/register">REGISTER</Link>
-        <span>----</span>
-        <Link to="/login">LOGIN</Link>
-      </nav>
-    )
+    return isLogged() ? <Navigate replace to="/welcome" /> : <Outlet />;
   }
   
   return (
@@ -83,19 +63,20 @@ function App() {
       <Navbar />
       <Routes>
         {/* PUBLIC */}
-        <Route path="*" element={<Navigate replace to="/welcome"/>}/>
+        {/* <Route path="*" element={<Navigate replace to="/welcome"/>}/> */}
         <Route path="/welcome" element={<HomePage />}/>
         {/* RESTRICTED */}
         <Route element={<RestrictedRoutes />}>
           <Route path="login" element={<LoginPage/>}/>
           <Route path="register" element={<RegisterPage/>}/>
         </Route>
+        <Route path="/profile" element={<Profile/>}/>
         {/* <Route path="/dashboard" element={<DashboardPage/>}/> */}
         {/* PRIVATE */}
-        {/* <Route path="/user" element={<Users/>}>
-          <Route index path="*" element={<UserNotFoundPage/>}/>
-          <Route path="username" element={<UserProfilePage/>}/>
-        </Route> */}
+        {/* <Route path="/user" element={<Users/>}> */}
+          {/* <Route index path="*" element={<UserNotFoundPage/>}/> */}
+          {/* <Route path="username" element={<UserProfilePage/>}/> */}
+        {/* </Route> */}
       </Routes>
     </BrowserRouter>
   );

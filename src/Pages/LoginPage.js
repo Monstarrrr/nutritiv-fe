@@ -1,109 +1,109 @@
 import React, { 
-    useState, 
-    // useEffect 
+  useState, 
+  // useEffect 
 } from 'react';
-import { Outlet } from 'react-router-dom';
-import { loginUser } from '../Api/nutritivApi';
+import { apiLoginUser } from '../Api/nutritivApi';
 
 export default function LoginPage() {
-    console.log("##### LoginPage render #####");
-    
-    const [loginInput, setLoginInput] = useState({
-        username: "",
-        password: "",
-        usernameError: false,
-        passwordError: false,
+  console.log("##### LoginPage render #####");
+      
+  const [loginInput, setLoginInput] = useState({
+    username: "",
+    password: "",
+    usernameError: false,
+    passwordError: false,
+  })
+  const [invalidLogin, setInvalidLogin] = useState(false)
+  const loginData = {
+    username: loginInput.username,
+    password: loginInput.password,
+  }
+  
+  const handleChange = (e) => {
+    setLoginInput({
+      ...loginInput,
+      [e.target.name]: e.target.value,
     })
-    const [invalidLogin, setInvalidLogin] = useState(false)
-    const loginData = {
-        username: loginInput.username,
-        password: loginInput.password,
-    }
+  }
+  
+  const validation = () => {
+    let usernameError = !loginInput.username
+    let passwordError = !loginInput.password
     
-    const handleChange = (e) => {
-        setLoginInput({
-            ...loginInput,
-            [e.target.name]: e.target.value,
-        })
-    }
+    setLoginInput({
+      ...loginInput,
+      usernameError,
+      passwordError,
+    })
+    setInvalidLogin(false)
     
-    const validation = () => {
-        let usernameError = !loginInput.username
-        let passwordError = !loginInput.password
-        
-        setLoginInput({
-            ...loginInput,
-            usernameError,
-            passwordError,
-        })
-        setInvalidLogin(false)
-        
-        return !usernameError && !passwordError
-    }
+    // returns true only if both are true
+    return !usernameError && !passwordError
+  }
+  
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        
-        // We store and use the return value 
-        // because the state won't update yet
-        const isValid = validation();
-        
-        if(isValid) {
-            try {
-                await loginUser(loginData)
-            } catch(err) {
-                setInvalidLogin(true)
-            }
-        }
+    // We store and use the return value 
+    // because the state won't update yet
+    const isValid = validation();
+      
+    if(isValid) {
+      try {
+        apiLoginUser(loginData)
+      } catch(err) {
+        setInvalidLogin(true)
+      }
     }
-    
-    return (
+  }
+  
+  return (
+    <div>
+      <h2>Login page</h2>
+      <form onSubmit={ handleSubmit }>
+        <label>
+          <p>Username</p>
+          <input 
+            name="username" 
+            onChange={ handleChange } 
+            placeholder="Username..."
+            type="text" 
+          />
+          {
+            loginInput.usernameError && (
+              <p style={{color: "red"}}>
+                Please enter a username
+              </p>
+            )
+          }
+        </label>
+        <label>
+          <p>Password</p>
+          <input 
+            name="password" 
+            onChange={ handleChange }
+            placeholder="Password..." 
+            type="password"
+          />
+          {
+            loginInput.passwordError && (
+              <p style={{color: "red"}}>
+                Please enter a password
+              </p>
+            )
+          }
+        </label>
         <div>
-            <h2>Login page</h2>
-            <form onSubmit={ handleSubmit }>
-                <label>
-                    <p>Username</p>
-                    <input 
-                        name="username" 
-                        onChange={ handleChange } 
-                        placeholder="Username..."
-                        type="text" 
-                    />
-                    {
-                        loginInput.usernameError ? (
-                            <p style={{color: "red"}}>
-                                Please enter a username
-                            </p>
-                        ) : null
-                    }
-                </label>
-                <label>
-                    <p>Password</p>
-                    <input 
-                        name="password" 
-                        onChange={ handleChange }
-                        placeholder="Password..." 
-                        type="password"
-                    />
-                    {
-                        loginInput.passwordError ? (
-                            <p style={{color: "red"}}>
-                                Please enter a password
-                            </p>
-                        ) : null
-                    }
-                </label>
-                <div>
-                    <button type="submit">Submit</button>
-                </div>
-                {
-                    invalidLogin ? (
-                        <p style={{color: "red"}}>
-                            Incorrect password or username
-                        </p>
-                    ) : ""
-                }
-            </form>
+          <button type="submit">Submit</button>
         </div>
-    )
+        {
+          invalidLogin && (
+            <p style={{color: "red"}}>
+              Incorrect password or username
+            </p>
+          )
+        }
+      </form>
+    </div>
+  )
 }
