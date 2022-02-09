@@ -7,6 +7,13 @@ export default function Products() {
   
   const { products } = productsData;
   
+  const removeProductItems = data => {
+    let products = data.products;
+    products.map(product => (
+      delete product.productItems
+    ))
+  }
+  
   useEffect(() => {
     let isSubscribed = true;
     const getProducts = async () => {
@@ -14,11 +21,13 @@ export default function Products() {
         const data = await apiGetProducts(3);
         if(isSubscribed) {
           console.log('# /products/?limit res :', data)
+          // removeProductItems(data);
           setProductsData(data);
           setproductsLoading(false);
         }
       } catch(err) {
         console.error('# err', err)
+        console.log('# killme')
       }
     };
     getProducts();
@@ -27,13 +36,15 @@ export default function Products() {
   
   // products[0] is always true because initial state is set to 
   // { products: [] }
-  const productsKeys = products[0] && Object.keys(products[0])
-  
+  const columns = products[0] && Object.keys(products[0])
+
   return (
     <div>
       {
         productsLoading && (
-          <h1 style={{fontSize: 62}}>Products are loading...</h1>
+          <h1 style={{fontSize: 62}}>
+            Products are loading...
+          </h1>
         )
       }
       <table cellSpacing={5} cellPadding={5}>
@@ -41,20 +52,50 @@ export default function Products() {
           <tr>
             {
               products[0] && (
-                productsKeys.map((headerValue) => (
-                  <th>{headerValue}</th>
+                columns.map((headerValue, i) => (
+                  <th key={i}>
+                    {headerValue}
+                  </th>
                 ))
               )
             }
           </tr>
         </thead>
         <tbody>
+          {
+            products.map(row => (
+              <tr key={row._id}>
+                {
+                  columns.map((column, i) => (
+                    <React.Fragment key={i}>
+                      {
+                        column === 'productItems' ? (
+                          <table>
+                            <tr>
+                              {
+                                row[column].map(item => (
+                                  <td>
+                                    {item.load}
+                                  </td>
+                                ))
+                              }
+                            </tr>
+                          </table>
+                        ) : (
+                          <td>
+                            {row[column]}
+                          </td>
+                        )
+                      }
+                    </React.Fragment>
+                  ))
+                }
+              </tr>
+            ))
+          }
           <tr>
             <td>
-
-            </td>
-            <td>
-
+            
             </td>
           </tr>
         </tbody>
