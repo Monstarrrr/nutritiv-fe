@@ -70,17 +70,21 @@ export default function Products() {
                     <React.Fragment key={i}>
                       {
                         column === 'productItems' ? (
-                          <table>
-                            <tr>
-                              {
-                                row[column].map(item => (
-                                  <td>
-                                    {item.load}
-                                  </td>
-                                ))
-                              }
-                            </tr>
-                          </table>
+                          <td>
+                            <table>
+                              <tbody>
+                                <tr>
+                                  {
+                                    row[column].map((item, i) => (
+                                      <td key={i}>
+                                        {item.load}
+                                      </td>
+                                    ))
+                                  }
+                                </tr>
+                              </tbody>
+                            </table>
+                          </td>
                         ) : (
                           <td>
                             {row[column]}
