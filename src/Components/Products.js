@@ -4,15 +4,10 @@ import { apiGetProducts } from '../Api/nutritivApi';
 export default function Products() {
   const [productsData, setProductsData] = useState({products: []})
   const [productsLoading, setproductsLoading] = useState(true)
+  const [input, setInput] = useState("")
   
+
   const { products } = productsData;
-  
-  const removeProductItems = data => {
-    let products = data.products;
-    products.map(product => (
-      delete product.productItems
-    ))
-  }
   
   useEffect(() => {
     let isSubscribed = true;
@@ -21,7 +16,6 @@ export default function Products() {
         const data = await apiGetProducts(3);
         if(isSubscribed) {
           console.log('# /products/?limit res :', data)
-          // removeProductItems(data);
           setProductsData(data);
           setproductsLoading(false);
         }
@@ -37,7 +31,15 @@ export default function Products() {
   // products[0] is always true because initial state is set to 
   // { products: [] }
   const columns = products[0] && Object.keys(products[0])
-
+  
+  function search(rows) {
+    return rows.filter(row => (
+      columns.some(column => (
+        row[column].toString().toLowerCase().indexOf(input.toLowerCase()) > -1
+      ))
+    ))
+  }
+  
   return (
     <div>
       {
@@ -47,6 +49,11 @@ export default function Products() {
           </h1>
         )
       }
+      <input 
+        onChange={(e) => setInput(e.target.value)} 
+        type="text"
+        value={input}
+      />
       <table cellSpacing={5} cellPadding={5}>
         <thead>
           <tr>
@@ -63,14 +70,14 @@ export default function Products() {
         </thead>
         <tbody>
           {
-            products.map(row => (
+            search(products).map(row => (
               <tr key={row._id}>
                 {
                   columns.map((column, i) => (
                     <React.Fragment key={i}>
                       {
                         column === 'productItems' ? (
-                          <td>
+                          <td style={{border: '1px solid black'}}>
                             <table>
                               <tbody>
                                 <tr>
@@ -86,7 +93,7 @@ export default function Products() {
                             </table>
                           </td>
                         ) : (
-                          <td>
+                          <td style={{border: '1px solid black'}}>
                             {row[column]}
                           </td>
                         )
