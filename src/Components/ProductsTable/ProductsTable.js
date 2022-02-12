@@ -64,11 +64,11 @@ export default function Products() {
       <table {...getTableProps()}>
         <thead>
           {
-            headerGroups.map(headerGroup => (
-              <tr {...headerGroup.getHeaderGroupProps}>
+            headerGroups.map((headerGroup, i) => (
+              <tr key={i} {...headerGroup.getHeaderGroupProps}>
                 {
-                  headerGroup.headers.map(column => (
-                    <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                  headerGroup.headers.map((column, i) => (
+                    <th key={i} {...column.getHeaderProps(column.getSortByToggleProps())}>
                       { column.render('Header') }
                       <span>
                         {
@@ -89,11 +89,11 @@ export default function Products() {
             rows.map(row => {
               prepareRow(row)
               return (
-                <tr {...row.getRowProps()}>
+                <tr key={row.id} {...row.getRowProps()}>
                   {
-                    row.cells.map(cell => {
+                    row.cells.map((cell, i) => {
                       return (
-                        <td {...cell.getCellProps}>
+                        <td key={i} {...cell.getCellProps}>
                           { cell.render('Cell') }
                         </td>
                       )
