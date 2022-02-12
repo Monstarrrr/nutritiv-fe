@@ -42,7 +42,7 @@ export default function Products() {
   const tableInstance = useTable({
     columns,
     data,
-  })
+  }, useSortBy)
   
   const {
     getTableProps,
@@ -50,7 +50,7 @@ export default function Products() {
     headerGroups,
     rows,
     prepareRow,
-  } = tableInstance
+  } = tableInstance;
   
   return (
     <div>
@@ -68,8 +68,15 @@ export default function Products() {
               <tr {...headerGroup.getHeaderGroupProps}>
                 {
                   headerGroup.headers.map(column => (
-                    <th {...column.getHeaderProps()}>
+                    <th {...column.getHeaderProps(column.getSortByToggleProps())}>
                       { column.render('Header') }
+                      <span>
+                        {
+                          column.isSorted ? (
+                            column.isSortedDesc ? ' ⬆️' : ' ⬇️'
+                          ) : ''
+                        }
+                      </span>
                     </th>
                   ))
                 }
