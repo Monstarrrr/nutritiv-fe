@@ -1,3 +1,5 @@
+import { format } from 'date-fns';
+
 export const COLUMNS = [
   {
     Header: 'Id',
@@ -70,6 +72,9 @@ export const GROUPED_COLUMNS = [
       {
         Header: 'Created At',
         accessor: 'createdAt',
+        Cell: ({ value }) => { 
+          return format(new Date(value), "do LLLL 'at' K':'maaa") 
+        }
       },
       {
         Header: 'Description',
@@ -103,6 +108,9 @@ export const GROUPED_COLUMNS = [
       {
         Header: 'Updated at',
         accessor: 'updatedAt',
+        Cell: ({ value }) => { 
+          return format(new Date(value), "do LLLL 'at' K':'maaa") 
+        }
       },
       {
         Header: '__v',

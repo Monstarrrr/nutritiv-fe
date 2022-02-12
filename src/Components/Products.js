@@ -12,12 +12,12 @@ export default function Products() {
   
   const { products } = productsData;
 
-  const removeLoadPrice = () => {
-    delete products.productItems
-  }
-
+  
   useEffect(() => {
     let isSubscribed = true;
+    const removeLoadPrice = () => {
+      delete products.productItems
+    }
     const getProducts = async () => {
       try {
         const data = await apiGetProducts(3);
@@ -34,7 +34,7 @@ export default function Products() {
     };
     getProducts();
     return () => { isSubscribed = false }
-  }, [])
+  }, [products.productItems])
   
   const columns = useMemo(() => GROUPED_COLUMNS, [])
   const data = useMemo(() => products, [products])
@@ -73,7 +73,7 @@ export default function Products() {
                       <span>
                         {
                           column.isSorted ? (
-                            column.isSortedDesc ? ' ⬆️' : ' ⬇️'
+                            column.isSortedDesc ? ' ⬇️' : ' ⬆️'
                           ) : ''
                         }
                       </span>
