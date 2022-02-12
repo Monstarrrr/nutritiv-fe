@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import Products from '../Components/Products';
+import Products from '../Components/ProductsTable/ProductsTable';
 
 export default function HomePage() {
   console.log("##### HomePage render #####");

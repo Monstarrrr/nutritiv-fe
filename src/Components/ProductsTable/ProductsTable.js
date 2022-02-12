@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { apiGetProducts } from '../Api/nutritivApi';
+import { apiGetProducts } from '../../Api/nutritivApi';
 import { useSortBy, useTable } from 'react-table';
-import { GROUPED_COLUMNS } from './Table/Columns';
-import './Table/table.css'
+import { GROUPED_COLUMNS } from './Columns';
+import './table.css';
 
 export default function Products() {
   const [productsData, setProductsData] = useState({products: []})
