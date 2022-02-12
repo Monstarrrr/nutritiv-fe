@@ -1,8 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { apiGetProducts } from '../../Api/nutritivApi';
-import { useSortBy, useTable } from 'react-table';
+import { useGlobalFilter, useSortBy, useTable } from 'react-table';
 import { GROUPED_COLUMNS } from './Columns';
 import './table.css';
+import { GlobalFilter } from './GlobalFilter';
 
 export default function Products() {
   const [productsData, setProductsData] = useState({products: []})
@@ -20,7 +21,7 @@ export default function Products() {
     }
     const getProducts = async () => {
       try {
-        const data = await apiGetProducts(3);
+        const data = await apiGetProducts(4);
         if(isSubscribed) {
           console.log('# /products/?limit res :', data)
           removeLoadPrice(data)
@@ -29,7 +30,6 @@ export default function Products() {
         }
       } catch(err) {
         console.error('# err', err)
-        console.log('# killme')
       }
     };
     getProducts();
@@ -39,72 +39,80 @@ export default function Products() {
   const columns = useMemo(() => GROUPED_COLUMNS, [])
   const data = useMemo(() => products, [products])
 
-  const tableInstance = useTable({
-    columns,
-    data,
-  }, useSortBy)
-  
   const {
     getTableProps,
     getTableBodyProps,
     headerGroups,
     rows,
     prepareRow,
-  } = tableInstance;
+    state,
+    setGlobalFilter,
+  } = useTable({
+    columns,
+    data,
+  }, useGlobalFilter, useSortBy)
+  
+  const { globalFilter } = state;
   
   return (
-    <div>
-      {
-        productsLoading && (
-          <h1 style={{fontSize: 62}}>
-            Products are loading...
-          </h1>
-        )
-      }
-      <table {...getTableProps()}>
-        <thead>
-          {
-            headerGroups.map((headerGroup, i) => (
-              <tr key={i} {...headerGroup.getHeaderGroupProps}>
-                {
-                  headerGroup.headers.map((column, i) => (
-                    <th key={i} {...column.getHeaderProps(column.getSortByToggleProps())}>
-                      { column.render('Header') }
-                      <span>
-                        {
-                          column.isSorted ? (
-                            column.isSortedDesc ? ' ⬇️' : ' ⬆️'
-                          ) : ''
-                        }
-                      </span>
-                    </th>
-                  ))
-                }
-              </tr>
-            ))
-          }
-        </thead>
-        <tbody {...getTableBodyProps()}>
-          {
-            rows.map(row => {
-              prepareRow(row)
-              return (
-                <tr key={row.id} {...row.getRowProps()}>
+    <>
+      <GlobalFilter 
+        filter={globalFilter}
+        setFilter={setGlobalFilter}
+      />
+      <div>
+        {
+          productsLoading && (
+            <h1 style={{fontSize: 62}}>
+              Products are loading...
+            </h1>
+          )
+        }
+        <table {...getTableProps()}>
+          <thead>
+            {
+              headerGroups.map((headerGroup, i) => (
+                <tr key={i} {...headerGroup.getHeaderGroupProps}>
                   {
-                    row.cells.map((cell, i) => {
-                      return (
-                        <td key={i} {...cell.getCellProps}>
-                          { cell.render('Cell') }
-                        </td>
-                      )
-                    })
+                    headerGroup.headers.map((column, i) => (
+                      <th key={i} {...column.getHeaderProps(column.getSortByToggleProps())}>
+                        { column.render('Header') }
+                        <span>
+                          {
+                            column.isSorted ? (
+                              column.isSortedDesc ? ' ⬇️' : ' ⬆️'
+                            ) : ''
+                          }
+                        </span>
+                      </th>
+                    ))
                   }
                 </tr>
-              )
-            })
-          }
-        </tbody>
-      </table>    
-    </div>
+              ))
+            }
+          </thead>
+          <tbody {...getTableBodyProps()}>
+            {
+              rows.map(row => {
+                prepareRow(row)
+                return (
+                  <tr key={row.id} {...row.getRowProps()}>
+                    {
+                      row.cells.map((cell, i) => {
+                        return (
+                          <td key={i} {...cell.getCellProps}>
+                            { cell.render('Cell') }
+                          </td>
+                        )
+                      })
+                    }
+                  </tr>
+                )
+              })
+            }
+          </tbody>
+        </table>    
+      </div>
+    </>
   )
 }

@@ -40,11 +40,11 @@ export const apiGetUser = async () => {
 export const apiGetProducts = async (limit) => {
   try {
     const { data } = await nutritivApi.get(
-      `/products/?limit=3`,
+      `/products/?limit=${limit}`,
     )
     return data;
   } catch (err) {
-    console.log('# /products/?limit err :', err)
+    console.log(`# /products/?limit err :`, err)
   }
 }
 
