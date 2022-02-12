@@ -1,14 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { apiGetProducts } from '../Api/nutritivApi';
+import { useSortBy, useTable } from 'react-table';
+import { GROUPED_COLUMNS } from './Table/Columns';
+import './Table/table.css'
 
 export default function Products() {
   const [productsData, setProductsData] = useState({products: []})
   const [productsLoading, setproductsLoading] = useState(true)
+  
   const [input, setInput] = useState("")
   
-
   const { products } = productsData;
-  
+
+  const removeLoadPrice = () => {
+    delete products.productItems
+  }
+
   useEffect(() => {
     let isSubscribed = true;
     const getProducts = async () => {
@@ -16,6 +23,7 @@ export default function Products() {
         const data = await apiGetProducts(3);
         if(isSubscribed) {
           console.log('# /products/?limit res :', data)
+          removeLoadPrice(data)
           setProductsData(data);
           setproductsLoading(false);
         }
@@ -28,17 +36,21 @@ export default function Products() {
     return () => { isSubscribed = false }
   }, [])
   
-  // products[0] is always true because initial state is set to 
-  // { products: [] }
-  const columns = products[0] && Object.keys(products[0])
+  const columns = useMemo(() => GROUPED_COLUMNS, [])
+  const data = useMemo(() => products, [products])
+
+  const tableInstance = useTable({
+    columns,
+    data,
+  })
   
-  function search(rows) {
-    return rows.filter(row => (
-      columns.some(column => (
-        row[column].toString().toLowerCase().indexOf(input.toLowerCase()) > -1
-      ))
-    ))
-  }
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    rows,
+    prepareRow,
+  } = tableInstance
   
   return (
     <div>
@@ -49,68 +61,43 @@ export default function Products() {
           </h1>
         )
       }
-      <input 
-        onChange={(e) => setInput(e.target.value)} 
-        type="text"
-        value={input}
-      />
-      <table cellSpacing={5} cellPadding={5}>
+      <table {...getTableProps()}>
         <thead>
-          <tr>
-            {
-              products[0] && (
-                columns.map((headerValue, i) => (
-                  <th key={i}>
-                    {headerValue}
-                  </th>
-                ))
-              )
-            }
-          </tr>
-        </thead>
-        <tbody>
           {
-            search(products).map(row => (
-              <tr key={row._id}>
+            headerGroups.map(headerGroup => (
+              <tr {...headerGroup.getHeaderGroupProps}>
                 {
-                  columns.map((column, i) => (
-                    <React.Fragment key={i}>
-                      {
-                        column === 'productItems' ? (
-                          <td style={{border: '1px solid black'}}>
-                            <table>
-                              <tbody>
-                                <tr>
-                                  {
-                                    row[column].map((item, i) => (
-                                      <td key={i}>
-                                        {item.load}
-                                      </td>
-                                    ))
-                                  }
-                                </tr>
-                              </tbody>
-                            </table>
-                          </td>
-                        ) : (
-                          <td style={{border: '1px solid black'}}>
-                            {row[column]}
-                          </td>
-                        )
-                      }
-                    </React.Fragment>
+                  headerGroup.headers.map(column => (
+                    <th {...column.getHeaderProps()}>
+                      { column.render('Header') }
+                    </th>
                   ))
                 }
               </tr>
             ))
           }
-          <tr>
-            <td>
-            
-            </td>
-          </tr>
+        </thead>
+        <tbody {...getTableBodyProps()}>
+          {
+            rows.map(row => {
+              prepareRow(row)
+              return (
+                <tr {...row.getRowProps()}>
+                  {
+                    row.cells.map(cell => {
+                      return (
+                        <td {...cell.getCellProps}>
+                          { cell.render('Cell') }
+                        </td>
+                      )
+                    })
+                  }
+                </tr>
+              )
+            })
+          }
         </tbody>
-      </table>
+      </table>    
     </div>
   )
 }
