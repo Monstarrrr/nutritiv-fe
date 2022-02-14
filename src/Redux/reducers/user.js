@@ -19,7 +19,11 @@ export const userSlice = createSlice({
         },
         updateUser: (user, action) => {
             const { 
-                loggedIn, username, email, isAdmin, isVerified 
+                loggedIn, 
+                username, 
+                email, 
+                isAdmin, 
+                isVerified 
             } = action.payload;
             user.loggedIn = loggedIn;
             user.username = username;

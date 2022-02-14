@@ -8,9 +8,9 @@ import {
   updateUser,
 } from './Redux/reducers/user';
 import { apiGetUser } from './Api/nutritivApi';
-import HomePage from './Pages/HomePage.js';
-import RegisterPage from './Pages/RegisterPage.js';
-import LoginPage from './Pages/LoginPage.js';
+import HomePage from './Layouts/HomePage.js';
+import RegisterPage from './Layouts/RegisterPage.js';
+import LoginPage from './Layouts/LoginPage.js';
 import { 
   BrowserRouter,
   Routes,
@@ -18,11 +18,21 @@ import {
   Navigate,
   Outlet,
 } from 'react-router-dom';
-import Navbar from './Components/Navbar';
-import Profile from './Pages/Profile';
+import Navbar from './Components/Navbar/Navbar';
+import Profile from './Layouts/Profile';
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
+import './App.scss';
+
+const stripePromise = loadStripe('pk_test_51KRFsTBn735HEKXDQ1UykrwoOHcBe7ao1c6UfqyI3uYLqW7LKa0oipY4fawf0UPKrR64G38aLtg8iXXlWQu10lHt00LYRhlp8b');
 
 function App() {
   const dispatch = useDispatch();
+  
+  const stripeOptions = {
+    // passing the client secret obtained from the server
+    clientSecret: '{{CLIENT_SECRET}}',
+  };
 
   // ON LOAD: GET USER INFO & UPDATE STORE
   useEffect(() => {
@@ -60,24 +70,29 @@ function App() {
   
   return (
     <BrowserRouter>
-      <Navbar />
-      <Routes>
-        {/* PUBLIC */}
-        {/* <Route path="*" element={<Navigate replace to="/welcome"/>}/> */}
-        <Route path="/welcome" element={<HomePage />}/>
-        {/* RESTRICTED */}
-        <Route element={<RestrictedRoutes />}>
-          <Route path="login" element={<LoginPage/>}/>
-          <Route path="register" element={<RegisterPage/>}/>
-        </Route>
-        <Route path="/profile" element={<Profile/>}/>
-        {/* <Route path="/dashboard" element={<DashboardPage/>}/> */}
-        {/* PRIVATE */}
-        {/* <Route path="/user" element={<Users/>}> */}
-          {/* <Route index path="*" element={<UserNotFoundPage/>}/> */}
-          {/* <Route path="username" element={<UserProfilePage/>}/> */}
-        {/* </Route> */}
-      </Routes>
+      <Elements
+        stripe={stripePromise}
+        // options={stripeOptions}
+      >
+        <Navbar />
+        <Routes>
+          {/* PUBLIC */}
+          {/* <Route path="*" element={<Navigate replace to="/welcome"/>}/> */}
+          <Route path="/welcome" element={<HomePage />}/>
+          {/* RESTRICTED */}
+          <Route element={<RestrictedRoutes />}>
+            <Route path="login" element={<LoginPage/>}/>
+            <Route path="register" element={<RegisterPage/>}/>
+          </Route>
+          <Route path="/profile" element={<Profile/>}/>
+          {/* <Route path="/dashboard" element={<DashboardPage/>}/> */}
+          {/* PRIVATE */}
+          {/* <Route path="/user" element={<Users/>}> */}
+            {/* <Route index path="*" element={<UserNotFoundPage/>}/> */}
+            {/* <Route path="username" element={<UserProfilePage/>}/> */}
+          {/* </Route> */}
+        </Routes>
+      </Elements>
     </BrowserRouter>
   );
 }

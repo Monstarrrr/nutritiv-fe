@@ -4,6 +4,8 @@
   "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "^1.7.1",
+    "@stripe/react-stripe-js": "^1.7.0",
+    "@stripe/stripe-js": "^1.22.0",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
@@ -15,6 +17,7 @@
     "react-router-dom": "^6.0.2",
     "react-scripts": "4.0.3",
     "react-table": "^7.7.0",
+    "sass": "^1.49.7",
     "web-vitals": "^1.0.1"
   },
   "scripts": {

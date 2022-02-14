@@ -1,7 +1,8 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { logout } from '../Helpers/logout';
+import { logout } from '../../Helpers/logout';
+import './Navbar.scss';
 
 export default function Navbar() {
   const dispatch = useDispatch();
@@ -12,8 +13,8 @@ export default function Navbar() {
   const handleLogout = () => logout(dispatch);
   
   return (
-    <nav>
-      <Link to="/welcome">NUTRITIV</Link>
+    <nav id={"navbar"}>
+      <Link className={'test'} to="/welcome">NUTRITIV</Link>
       <span>----</span>
       {
         loggedIn ? (

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import Products from '../Components/ProductsTable/ProductsTable';
+import { PaymentContainer } from '../Components/StripeContainer/PaymentContainer';
 
 export default function HomePage() {
   console.log("##### HomePage render #####");
@@ -17,7 +17,7 @@ export default function HomePage() {
           </div>
         )
       }
-      <Products />
+      <PaymentContainer />
     </div>
   );
 }

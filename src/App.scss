@@ -1,0 +1,7 @@
+@import './Styles/variables';
+@import './Styles/mixins';
+
+body {
+  background: $primary;
+  color: #c5c5c5;
+}

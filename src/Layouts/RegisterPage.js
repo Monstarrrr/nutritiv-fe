@@ -32,7 +32,7 @@ export default function RegisterPage() {
     if(isValid) {
       try {
         axios.post(
-          'http://localhost:3001/api/auth/register', 
+          'http://localhost:3001/api/auth/register', // temp
           { registerData }
         )
       } catch(err) {

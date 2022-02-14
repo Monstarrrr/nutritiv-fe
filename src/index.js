@@ -10,7 +10,8 @@ import { injectStore } from './Api/nutritivApi';
 export const store = createStore(
   entities,
   /* preloadedState, */
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__({
+  window.__REDUX_DEVTOOLS_EXTENSION__ && 
+  window.__REDUX_DEVTOOLS_EXTENSION__({
     trace: true
   })
 );

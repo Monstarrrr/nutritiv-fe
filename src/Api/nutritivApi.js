@@ -47,6 +47,17 @@ export const apiGetProducts = async (limit) => {
     console.log(`# /products/?limit err :`, err)
   }
 }
+// /stripe/payment
+export const apiStripePayment = async () => {
+  try {
+    const { data } = await nutritivApi.get(
+      `stripe/payment`,
+    )
+    return data;
+  } catch (err) {
+    console.log(`# /stripe/payment err :`, err)
+  }
+}
 
 // INTERCEPTORS
 // on request
