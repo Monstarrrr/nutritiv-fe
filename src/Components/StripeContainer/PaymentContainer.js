@@ -3,15 +3,15 @@ import { apiStripePayment } from '../../Api/nutritivApi';
 
 export const PaymentContainer = () => {
   
-  // const handlePay = () => {
-  //   try {
-  //     const data = apiStripePayment();
-  //     console.log('# apiStripePayment data :', data)
-  //   } catch (err) {
-  //     console.log('# err :', err)
-  //   }
-  // }
-
+  const handlePay = () => {
+    try {
+      const data = apiStripePayment();
+      console.log('# apiStripePayment data :', data)
+    } catch (err) {
+      console.log('# err :', err)
+    }
+  }
+  
   return (
     <form id="payment-form">
       <div id="payment-element">
@@ -20,7 +20,7 @@ export const PaymentContainer = () => {
       <button id="submit">
         <div className="spinner hidden" id="spinner"></div>
         <span 
-          // onClick={handlePay} 
+          onClick={handlePay} 
           id="button-text"
         >
           Pay now
