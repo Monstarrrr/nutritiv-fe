@@ -17,16 +17,18 @@ const nutritivApi = axios.create({
 // /auth/login
 export const apiLoginUser = async (loginData) => {
   try {
-    await nutritivApi.post(
+    const { data } = await nutritivApi.post(
       '/auth/login', 
       { loginData }
     )
+    return data;
   } catch (err) {
     console.log('# /auth/login err :', err)
   }
 };
 // /users/self
 export const apiGetUser = async () => {
+  console.log('# user/self')
   try {
     const { data } = await nutritivApi.get(
         '/users/self'
@@ -47,13 +49,13 @@ export const apiGetProducts = async (limit) => {
     console.log(`# /products/?limit err :`, err)
   }
 }
-// /stripe/payment
-export const apiStripePayment = async () => {
+// /stripe/secret
+export const apiGetStripeSecret = async () => {
   try {
-    const { data } = await nutritivApi.post(
-      '/stripe/payment',
+    const { data: clientSecret } = await nutritivApi.get(
+      '/stripe/secret',
     )
-    return data;
+    return clientSecret;
   } catch (err) {
     console.error('# /stripe/payment err', err)
   }
@@ -83,6 +85,7 @@ nutritivApi.interceptors.response.use(res => {
       storageKeys.refreshToken, 
       res.headers.refresh_token
     )
+    console.log('# res.data.loggedIn :', res.data.loggedIn)
     // update user token in store
     store.dispatch(updateAuthStatus({
       loggedIn: res.data.loggedIn,
@@ -92,7 +95,7 @@ nutritivApi.interceptors.response.use(res => {
   return res;
 }, function (err) {
   if(err.status === 429) {
-    console.log('# 429 error :', err)
+    console.log('# Too many API requests :', err)
   }
   return Promise.reject(err)
 })

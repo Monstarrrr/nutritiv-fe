@@ -1,39 +1,37 @@
-import React from 'react';
-import { apiStripePayment } from '../../Api/nutritivApi';
+import React, { useState } from 'react';
+import { 
+  CardElement, 
+  PaymentElement, 
+  useElements, 
+  useStripe 
+} from '@stripe/react-stripe-js';
+import { apiGetStripeSecret } from '../../Api/nutritivApi';
 
 export const PaymentContainer = () => {
+  const [clientSecret, setClientSecret] = useState("")
+  const [errorMessage, setErrorMessage] = useState(null);
+  // const stripe = useStripe();
+  // const elements = useElements();
   
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    
-    try {
-      const data = apiStripePayment();
-      console.log('# apiStripePayment data :', data)
-    } catch (err) {
-      console.log('# err :', err)
-    }
+  const handleGetClientSecret = async () => {
+      const data = await apiGetStripeSecret();
+      setClientSecret(data);
   }
   
   return (
-    <form 
-      id="payment-form"
-      onSubmit={handleSubmit}
-    >
-      <div id="payment-element">
-        {/* Displays payment form */}
-      </div>
-      <button 
-        id="submit"
-        type="submit"
-      >
-        <div className="spinner hidden" id="spinner"></div>
-        <span 
-          id="button-text"
-        >
-          Pay now
-        </span>
+    <>
+      <button onClick={handleGetClientSecret}>
+        Get client_secret
       </button>
-      <div id="payment-message" className="hidden"></div>
-    </form>
+      <div style={{maxWidth: "600px"}}>
+        <h1>Stripe form</h1>
+        <form onSubmit={handleGetClientSecret}>
+          <PaymentElement options={clientSecret}/>
+          <button>
+            Buy
+          </button>  
+        </form>        
+      </div>
+    </>
   )
 }

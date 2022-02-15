@@ -22,19 +22,13 @@ import Navbar from './Components/Navbar/Navbar';
 import Profile from './Layouts/Profile';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
-import './App.scss';
 
-// Init stripe
+// init stripe
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
 
 function App() {
   const dispatch = useDispatch();
   
-  const stripeOptions = {
-    // passing the client secret obtained from the server
-    clientSecret: '{{CLIENT_SECRET}}',
-  };
-
   // ON LOAD: GET USER INFO & UPDATE STORE
   useEffect(() => {
     let isSubscribed = true;
@@ -78,7 +72,7 @@ function App() {
         <Navbar />
         <Routes>
           {/* PUBLIC */}
-          {/* <Route path="*" element={<Navigate replace to="/welcome"/>}/> */}
+          <Route path="*" element={<Navigate replace to="/welcome"/>}/>
           <Route path="/welcome" element={<HomePage />}/>
           {/* RESTRICTED */}
           <Route element={<RestrictedRoutes />}>
@@ -86,12 +80,6 @@ function App() {
             <Route path="register" element={<RegisterPage/>}/>
           </Route>
           <Route path="/profile" element={<Profile/>}/>
-          {/* <Route path="/dashboard" element={<DashboardPage/>}/> */}
-          {/* PRIVATE */}
-          {/* <Route path="/user" element={<Users/>}> */}
-            {/* <Route index path="*" element={<UserNotFoundPage/>}/> */}
-            {/* <Route path="username" element={<UserProfilePage/>}/> */}
-          {/* </Route> */}
         </Routes>
       </Elements>
     </BrowserRouter>

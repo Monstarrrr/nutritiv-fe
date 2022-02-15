@@ -12,10 +12,7 @@ export const userSlice = createSlice({
     reducers: {
         updateAuthStatus: (user, action) => {
             const { loggedIn } = action.payload;
-            user = {
-                ...user,
-                loggedIn: loggedIn
-            }
+            user.loggedIn = loggedIn;
         },
         updateUser: (user, action) => {
             const { 
@@ -23,7 +20,7 @@ export const userSlice = createSlice({
                 username, 
                 email, 
                 isAdmin, 
-                isVerified 
+                isVerified,
             } = action.payload;
             user.loggedIn = loggedIn;
             user.username = username;
