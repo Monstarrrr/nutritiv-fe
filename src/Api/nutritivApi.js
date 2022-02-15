@@ -50,12 +50,12 @@ export const apiGetProducts = async (limit) => {
 // /stripe/payment
 export const apiStripePayment = async () => {
   try {
-    const { data } = await nutritivApi.get(
-      `stripe/payment`,
+    const { data } = await nutritivApi.post(
+      '/stripe/payment',
     )
     return data;
   } catch (err) {
-    console.log(`# /stripe/payment err :`, err)
+    console.error('# /stripe/payment err', err)
   }
 }
 
@@ -91,6 +91,9 @@ nutritivApi.interceptors.response.use(res => {
   console.log("# Interceptor res :", res);
   return res;
 }, function (err) {
+  if(err.status === 429) {
+    console.log('# 429 error :', err)
+  }
   return Promise.reject(err)
 })
 

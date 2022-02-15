@@ -3,7 +3,9 @@ import { apiStripePayment } from '../../Api/nutritivApi';
 
 export const PaymentContainer = () => {
   
-  const handlePay = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    
     try {
       const data = apiStripePayment();
       console.log('# apiStripePayment data :', data)
@@ -13,14 +15,19 @@ export const PaymentContainer = () => {
   }
   
   return (
-    <form id="payment-form">
+    <form 
+      id="payment-form"
+      onSubmit={handleSubmit}
+    >
       <div id="payment-element">
         {/* Displays payment form */}
       </div>
-      <button id="submit">
+      <button 
+        id="submit"
+        type="submit"
+      >
         <div className="spinner hidden" id="spinner"></div>
         <span 
-          onClick={handlePay} 
           id="button-text"
         >
           Pay now

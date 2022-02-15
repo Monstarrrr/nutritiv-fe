@@ -25,7 +25,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import './App.scss';
 
 const stripePromise = loadStripe('pk_test_51KRFsTBn735HEKXDQ1UykrwoOHcBe7ao1c6UfqyI3uYLqW7LKa0oipY4fawf0UPKrR64G38aLtg8iXXlWQu10lHt00LYRhlp8b');
-
+console.log('# process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY :', process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY)
 function App() {
   const dispatch = useDispatch();
   
