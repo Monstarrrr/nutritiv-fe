@@ -5,33 +5,29 @@ import {
   useElements, 
   useStripe 
 } from '@stripe/react-stripe-js';
-import { apiGetStripeSecret } from '../../Api/nutritivApi';
+import './PaymentContainer.scss';
+import { apiCreateCheckoutSession } from '../../Api/nutritivApi';
 
 export const PaymentContainer = () => {
-  const [clientSecret, setClientSecret] = useState("")
-  const [errorMessage, setErrorMessage] = useState(null);
-  // const stripe = useStripe();
-  // const elements = useElements();
   
-  const handleGetClientSecret = async () => {
-      const data = await apiGetStripeSecret();
-      setClientSecret(data);
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+
+    try {
+      const data = await apiCreateCheckoutSession();
+      console.log('# stripe/create-checkout-session data :', data)
+    } catch (err) {
+      console.log('# stripe/create-checkout-session err :', err)
+    }
   }
-  
+
   return (
-    <>
-      <button onClick={handleGetClientSecret}>
-        Get client_secret
-      </button>
-      <div style={{maxWidth: "600px"}}>
-        <h1>Stripe form</h1>
-        <form onSubmit={handleGetClientSecret}>
-          <PaymentElement options={clientSecret}/>
-          <button>
-            Buy
-          </button>  
-        </form>        
-      </div>
-    </>
+    <div id="paymentContainer">
+      <form>
+        <button onClick={handleSubmit}>
+          Checkout
+        </button>
+      </form>
+    </div>
   )
 }

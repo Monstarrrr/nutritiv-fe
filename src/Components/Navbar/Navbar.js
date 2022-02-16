@@ -14,7 +14,11 @@ export default function Navbar() {
   
   return (
     <nav id={"navbar"}>
-      <Link className={'test'} to="/welcome">NUTRITIV</Link>
+      <Link className={'test'} to="/welcome">HOMEPAGE</Link>
+      <span>----</span>
+      <Link to="/products">
+        PILLS
+      </Link>
       <span>----</span>
       {
         loggedIn ? (

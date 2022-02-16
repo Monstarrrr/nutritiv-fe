@@ -41,23 +41,47 @@ export const apiGetUser = async () => {
 // /products
 export const apiGetProducts = async (limit) => {
   try {
-    const { data } = await nutritivApi.get(
+    const { data: products } = await nutritivApi.get(
       `/products/?limit=${limit}`,
     )
-    return data;
+    return products.products;
   } catch (err) {
     console.log(`# /products/?limit err :`, err)
   }
 }
-// /stripe/secret
-export const apiGetStripeSecret = async () => {
+// carts/addToCart
+export const apiAddToCart = async (product) => {
   try {
-    const { data: clientSecret } = await nutritivApi.get(
-      '/stripe/secret',
+    await nutritivApi.post(
+      `/carts/addToCart/`,
     )
-    return clientSecret;
+    return;
   } catch (err) {
-    console.error('# /stripe/payment err', err)
+    console.log(`# /products/?limit err :`, err)
+  }
+}
+
+// /stripe/secret
+// export const apiGetCheckoutSecret = async () => {
+//   try {
+//     const { data: clientSecret } = await nutritivApi.get(
+//       '/stripe/secret',
+//     )
+//     return clientSecret;
+//   } catch (err) {
+//     console.error('# /stripe/payment err', err)
+//   }
+// }
+// /stripe/create-checkout-session
+export const apiCreateCheckoutSession = async () => {
+  try {
+    const { data } = await nutritivApi.post(
+      '/stripe/create-checkout-session',
+    )
+    return data;
+  } catch (err) {
+    console.error('# /stripe/create-checkout-session err')
+    console.log(err)
   }
 }
 

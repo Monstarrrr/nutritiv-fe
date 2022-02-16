@@ -8,6 +8,7 @@ export const userSlice = createSlice({
         email: "",
         isAdmin: false,
         isVerified: false,
+        cart: [],
     },
     reducers: {
         updateAuthStatus: (user, action) => {
@@ -27,15 +28,19 @@ export const userSlice = createSlice({
             user.email = email;
             user.isAdmin = isAdmin;
             user.isVerified = isVerified;
+        },
+        updateUserCart: (user, action) => {
+            // const { ??? } = action.payload;
+            // user.cart = ???;
         }
     }
 })
-export const { 
+export const {
     updateUser,
+    updateUserCart,
     updateAuthStatus,
 } = userSlice.actions;
 
 // Selector
-
 
 export default userSlice.reducer;

@@ -22,9 +22,14 @@ import Navbar from './Components/Navbar/Navbar';
 import Profile from './Layouts/Profile';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
+import { Products } from './Components/Products/Products';
+import { CheckoutSuccess } from './Components/CheckoutSuccess/CheckoutSuccess';
+import { CheckoutCancel } from './Components/CheckoutCancel/CheckoutCancel';
 
 // init stripe
-const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
+const stripePromise = loadStripe(
+  process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY
+);
 
 function App() {
   const dispatch = useDispatch();
@@ -60,7 +65,9 @@ function App() {
       const user = { loggedIn }
       return user.loggedIn;
     }
-    return isLogged() ? <Navigate replace to="/welcome" /> : <Outlet />;
+    return isLogged() ? (
+      <Navigate replace to="/welcome" /> 
+    ) : <Outlet />;
   }
   
   return (
@@ -72,13 +79,17 @@ function App() {
         <Navbar />
         <Routes>
           {/* PUBLIC */}
-          <Route path="*" element={<Navigate replace to="/welcome"/>}/>
+          {/* <Route path="*" element={<Navigate replace to="/welcome"/>}/> */}
           <Route path="/welcome" element={<HomePage />}/>
+          <Route path="/cancel" element={<CheckoutCancel />}/>
+          <Route path="/success" element={<CheckoutSuccess />}/>
+          <Route path="/products" element={<Products/>}/>
           {/* RESTRICTED */}
           <Route element={<RestrictedRoutes />}>
             <Route path="login" element={<LoginPage/>}/>
             <Route path="register" element={<RegisterPage/>}/>
           </Route>
+          {/* PRIVATE */}
           <Route path="/profile" element={<Profile/>}/>
         </Routes>
       </Elements>
