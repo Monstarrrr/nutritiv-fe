@@ -56,7 +56,7 @@ export const apiGetCountInStock = async (productId) => {
       `/products/countInStock/${productId}`,
     )
     console.log('# /products/countInStock res :', data)
-    return data;
+    return data.countInStock;
   } catch (err) {
     console.log(`# /products/countInStock err :`, err)
   }

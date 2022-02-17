@@ -12,21 +12,21 @@ export const ProductCard = ({ product }) => {
   const [availableQuantity, setAvailableQuantity] = useState(0)
   const [addedToCart, setAddedToCart] = useState(false)
 
-  console.log('# availableQuantity :', availableQuantity)
-
   useEffect(() => {
     if(selectedItem.productId) {
-      async function fetchApi() {
-        const { countInStock } = await apiGetCountInStock(selectedItem.productId);
-        setCountInStock(countInStock)
+      try {
+        async function fetchApi() {
+          const data = await apiGetCountInStock(selectedItem.productId);
+          setCountInStock(data)
+        }
+        fetchApi();
+      } catch (err) {
+        console.log('# apiGetCountInStock err :', err)
       }
-      fetchApi();
     }
   }, [selectedItem.productId, addedToCart]);
   
   useEffect(() => {
-    console.log('# countInStock :', countInStock)
-    console.log('# selectedItem.load :', selectedItem.load)
     if(selectedItem.load && countInStock){
       setAvailableQuantity(
         Math.floor(countInStock / selectedItem.load)
@@ -34,8 +34,8 @@ export const ProductCard = ({ product }) => {
     }
   }, [selectedItem.load, countInStock]);
   
-  const handleSelectedItem = (itemValues) => {
-    setSelectedItem(itemValues)
+  const handleSelectedItem = (item) => {
+    setSelectedItem(item) // { productId: ..., load: ..., price: ... }
     setSelectedQuantity(1)
   }
   
@@ -44,7 +44,10 @@ export const ProductCard = ({ product }) => {
   }
   
   const handleAddToCart = async () => {
-    selectedItem.quantity = selectedQuantity;
+    setSelectedItem({
+      ...selectedItem,
+      quantity: selectedQuantity
+    })
     await apiAddToCart(selectedItem);
     setAddedToCart(!addedToCart);
   }
@@ -77,7 +80,7 @@ export const ProductCard = ({ product }) => {
           />
         ))
       }
-      {/* ITEMS */}
+      {/* LOAD */}
       <div>
         {
           product.productItems.map((item, i) => (
@@ -103,14 +106,14 @@ export const ProductCard = ({ product }) => {
       {/* QUANTITY */}
       {
         <select 
-          disabled={!selectedItem.productId}
+          disabled={!availableQuantity}
           id={product._id}
           name="quantity" 
           onChange={(e) => handleSelectedQuantity(e.target.value)}
           value={selectedQuantity}
         >
           {
-            selectedItem.productId ? (
+            (selectedItem.productId && availableQuantity) ? (
               [...Array(availableQuantity)].map((e, i) => (
                 <option value={e}>
                   {i+1}
