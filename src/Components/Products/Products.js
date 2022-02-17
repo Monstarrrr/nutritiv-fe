@@ -11,11 +11,7 @@ export const Products = () => {
       setProducts(data)
     }
     fetchApi();
-  }, [])
-  
-  const handleAddToCart = () => {
-
-  }
+  }, []);
   
   return (
     <div>

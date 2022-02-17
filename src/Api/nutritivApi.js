@@ -49,18 +49,31 @@ export const apiGetProducts = async (limit) => {
     console.log(`# /products/?limit err :`, err)
   }
 }
-// carts/addToCart
-export const apiAddToCart = async (product) => {
+// products/countInStock
+export const apiGetCountInStock = async (productId) => {
   try {
-    await nutritivApi.post(
-      `/carts/addToCart/`,
+    const { data } = await nutritivApi.get(
+      `/products/countInStock/${productId}`,
     )
-    return;
+    console.log('# /products/countInStock res :', data)
+    return data;
   } catch (err) {
-    console.log(`# /products/?limit err :`, err)
+    console.log(`# /products/countInStock err :`, err)
   }
 }
-
+// carts/addToCart
+export const apiAddToCart = async (item) => {
+  try {
+    const { data } = await nutritivApi.post(
+      `/carts/addToCart/`,
+      item
+    )
+    console.log('# /carts/addToCart res :', data)
+    return;
+  } catch (err) {
+    console.log(`# /carts/addToCart err :`, err)
+  }
+}
 // /stripe/secret
 // export const apiGetCheckoutSecret = async () => {
 //   try {
