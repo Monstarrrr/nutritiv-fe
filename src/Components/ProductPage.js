@@ -1,17 +1,36 @@
 import React, { useEffect, useState } from 'react'
-import { apiAddToCart, apiGetCountInStock } from '../../Api/nutritivApi'
+import { useParams } from 'react-router-dom'
+import { apiAddToCart, apiGetCountInStock, apiGetProductByTitle } from '../Api/nutritivApi';
 
-export const ProductCard = ({ product }) => {
+export const ProductPage = () => {
+  const { productTitle } = useParams();
+  const [countInStock, setCountInStock] = useState(0)
+  const [availableQuantity, setAvailableQuantity] = useState(0)
+  const [addedToCart, setAddedToCart] = useState(false)
   const [selectedItem, setSelectedItem] = useState({
     productId: "",
     load: 0,
     price: 0,
+    quantity: 0,
   })
-  const [selectedQuantity, setSelectedQuantity] = useState(0)
-  const [countInStock, setCountInStock] = useState(0)
-  const [availableQuantity, setAvailableQuantity] = useState(0)
-  const [addedToCart, setAddedToCart] = useState(false)
+  const [product, setProduct] = useState({
+    productItems: []
+  })
+  
+  // GET PRODUCT
+  useEffect(() => {
+    try {
+      async function fetchApi() {
+        const data = await apiGetProductByTitle(productTitle)
+        setProduct(data);
+      }
+      fetchApi();
+    } catch (err) {
+      console.log('# apiGetProductByTitle err :', err)
+    }
+  }, [productTitle])
 
+  // GET STOCK
   useEffect(() => {
     if(selectedItem.productId) {
       try {
@@ -26,67 +45,40 @@ export const ProductCard = ({ product }) => {
     }
   }, [selectedItem.productId, addedToCart]);
   
+  // HANDLE QUANTITY
+  const handleSelectedQuantity = (quantity) => {
+    setSelectedItem({
+      ...selectedItem,
+      quantity
+    })
+  }
   useEffect(() => {
     if(selectedItem.load && countInStock){
-      setAvailableQuantity(
-        Math.floor(countInStock / selectedItem.load)
-      )
+      setAvailableQuantity(Math.floor(countInStock / selectedItem.load))
     }
   }, [selectedItem.load, countInStock]);
   
+  // HANDLE ITEM
   const handleSelectedItem = (item) => {
-    setSelectedItem(item) // { productId: ..., load: ..., price: ... }
-    setSelectedQuantity(1)
+    setSelectedItem({...item, quantity: 1})
   }
   
-  const handleSelectedQuantity = (quantity) => {
-    setSelectedQuantity(quantity)
-  }
-  
+  // HANDLE ADD TO CART
   const handleAddToCart = async () => {
-    setSelectedItem({
-      ...selectedItem,
-      quantity: selectedQuantity
-    })
     await apiAddToCart(selectedItem);
     setAddedToCart(!addedToCart);
   }
-  
+
   return (
-    <div
-      key={product._id}
-      style={{
-        background: "lightgray",
-      }}
-    >
-      {/* GENERAL INFO */}
+    <>
       <h2>
-        {product.title}
+        { product.title }
       </h2>
-      <span>
-        {product.desc}
-      </span>
-      {/* IMAGES */}
-      {
-        product.imgs.map((img, i) => (
-          <img
-            style={{
-              paddingLeft: "22px",
-              maxWidth: "100px",
-            }}
-            key={i}
-            src={`${process.env.REACT_APP_SERVER_ADDRESS}${img}`}
-            alt={`${product.title} ${i+1}`}
-          />
-        ))
-      }
-      {/* LOAD */}
       <div>
         {
           product.productItems.map((item, i) => (
-            <>
+            <React.Fragment key={i}>
               <input 
-                type="radio" 
                 id={`${product._id}${item.load}`} 
                 name={product._id}
                 onChange={() => handleSelectedItem({
@@ -94,28 +86,31 @@ export const ProductCard = ({ product }) => {
                   load: item.load,
                   price: item.price.value,
                 })}
+                type="radio" 
                 value={item.load}
               />
-              <label for={i}>
+              <label htmlFor={i}>
                 {item.load}
               </label>
-            </>
+            </React.Fragment>
           ))
         }
       </div>
-      {/* QUANTITY */}
       {
         <select 
           disabled={!availableQuantity}
           id={product._id}
           name="quantity" 
           onChange={(e) => handleSelectedQuantity(e.target.value)}
-          value={selectedQuantity}
+          value={selectedItem.quantity}
         >
           {
             (selectedItem.productId && availableQuantity) ? (
               [...Array(availableQuantity)].map((e, i) => (
-                <option value={e}>
+                <option 
+                  key={i}
+                  value={e}
+                >
                   {i+1}
                 </option>
               ))
@@ -123,16 +118,12 @@ export const ProductCard = ({ product }) => {
           }
         </select>
       }
-      {/* ADD TO CART */}
-      <button onClick={handleAddToCart}>
+      <button 
+        disabled={!selectedItem.productId}
+        onClick={handleAddToCart}
+      >
         Add to cart
       </button>
-      <h2>
-        {JSON.stringify(selectedItem, null, 2) }
-      </h2>
-      <h2>
-        {JSON.stringify(selectedQuantity, null, 2) }
-      </h2>
-    </div>
+    </>
   )
 }

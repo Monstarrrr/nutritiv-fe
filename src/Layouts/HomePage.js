@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { PaymentContainer } from '../Components/StripeContainer/PaymentContainer';
+import { PaymentContainer } from '../Components/PaymentContainer';
 
 export default function HomePage() {
   console.log("##### HomePage render #####");

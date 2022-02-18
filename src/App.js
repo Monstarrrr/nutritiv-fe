@@ -5,9 +5,9 @@ import {
   useSelector,
 } from "react-redux";
 import {
-  updateUser,
+  updateUser, updateUserCartQuantity,
 } from './Redux/reducers/user';
-import { apiGetUser } from './Api/nutritivApi';
+import { apiGetSelfCart, apiGetSelfCartQuantity, apiGetUserSelf } from './Api/nutritivApi';
 import HomePage from './Layouts/HomePage.js';
 import RegisterPage from './Layouts/RegisterPage.js';
 import LoginPage from './Layouts/LoginPage.js';
@@ -18,13 +18,14 @@ import {
   Navigate,
   Outlet,
 } from 'react-router-dom';
-import Navbar from './Components/Navbar/Navbar';
+import Navbar from './Components/Navbar';
 import Profile from './Layouts/Profile';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
-import { Products } from './Components/Products/Products';
-import { CheckoutSuccess } from './Components/CheckoutSuccess/CheckoutSuccess';
-import { CheckoutCancel } from './Components/CheckoutCancel/CheckoutCancel';
+import { Products } from './Components/Products';
+import { CheckoutSuccess } from './Components/CheckoutSuccess';
+import { CheckoutCancel } from './Components/CheckoutCancel';
+import { ProductPage } from './Components/ProductPage';
 
 // init stripe
 const stripePromise = loadStripe(
@@ -34,14 +35,15 @@ const stripePromise = loadStripe(
 function App() {
   const dispatch = useDispatch();
   
-  // ON LOAD: GET USER INFO & UPDATE STORE
+  // ON LOAD
+  // Get user-self info & update store
   useEffect(() => {
     let isSubscribed = true;
     const checkUserAuth = async () => {
       try {
-        const data = await apiGetUser();
+        const data = await apiGetUserSelf();
         if(isSubscribed) {
-          console.log('# users/self res :', data)
+          console.log('# apiGetUserSelf res :', data)
           dispatch(updateUser({
             loggedIn: data.loggedIn,
             username: data.username,
@@ -54,9 +56,22 @@ function App() {
         console.error('# err', err)
       }
     };
-    checkUserAuth()
+    checkUserAuth();
     return () => { isSubscribed = false }
   }, [dispatch]);
+  
+  // Get user-self cart
+  useEffect(() => {
+    const checkSelfCartQuantity = async () => {
+      try {
+        await apiGetSelfCart();
+      } catch(err) {
+        console.error('# err', err)
+      }
+    }
+    checkSelfCartQuantity();
+  }, [dispatch])
+  
   
   // RESTRICTED: IS LOGGED ?
   const RestrictedRoutes = () => {
@@ -80,10 +95,14 @@ function App() {
         <Routes>
           {/* PUBLIC */}
           {/* <Route path="*" element={<Navigate replace to="/welcome"/>}/> */}
-          <Route path="/welcome" element={<HomePage />}/>
-          <Route path="/cancel" element={<CheckoutCancel />}/>
-          <Route path="/success" element={<CheckoutSuccess />}/>
+          <Route path="/welcome" element={<HomePage/>}/>
           <Route path="/products" element={<Products/>}/>
+          <Route path="/product">
+            <Route path=":productTitle" element={<ProductPage/>}/>
+          </Route>
+          {/* TEMP */}
+          <Route path="/cancel" element={<CheckoutCancel/>}/>
+          <Route path="/success" element={<CheckoutSuccess/>}/>
           {/* RESTRICTED */}
           <Route element={<RestrictedRoutes />}>
             <Route path="login" element={<LoginPage/>}/>

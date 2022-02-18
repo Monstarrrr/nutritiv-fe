@@ -6,7 +6,7 @@ import {
   useStripe 
 } from '@stripe/react-stripe-js';
 import './PaymentContainer.scss';
-import { apiCreateCheckoutSession } from '../../Api/nutritivApi';
+import { apiCreateCheckoutSession } from '../Api/nutritivApi';
 
 export const PaymentContainer = () => {
   

@@ -1,15 +1,16 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { logout } from '../../Helpers/logout';
+import { logout } from '../Helpers/logout';
 import './Navbar.scss';
 
 export default function Navbar() {
   const dispatch = useDispatch();
   const loggedIn = useSelector(state => state.user.loggedIn)
   const userUsername = useSelector(state => state.user.username)
+  const cartQuantity = useSelector(state => state.user.cartQuantity)
   
-  // LOGOUT
+  // HANDLE LOGOUT
   const handleLogout = () => logout(dispatch);
   
   return (
@@ -39,6 +40,9 @@ export default function Navbar() {
           </>
         )
       }
+      <span>
+        {cartQuantity}
+      </span>
     </nav>
   )
 }

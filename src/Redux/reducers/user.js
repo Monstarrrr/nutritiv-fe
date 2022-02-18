@@ -8,7 +8,7 @@ export const userSlice = createSlice({
         email: "",
         isAdmin: false,
         isVerified: false,
-        cart: [],
+        cartQuantity: 0,
     },
     reducers: {
         updateAuthStatus: (user, action) => {
@@ -29,15 +29,15 @@ export const userSlice = createSlice({
             user.isAdmin = isAdmin;
             user.isVerified = isVerified;
         },
-        updateUserCart: (user, action) => {
-            // const { ??? } = action.payload;
-            // user.cart = ???;
+        updateUserCartQuantity: (user, action) => {
+            const { cartQuantity } = action.payload;
+            user.cartQuantity = cartQuantity;
         }
     }
 })
 export const {
     updateUser,
-    updateUserCart,
+    updateUserCartQuantity,
     updateAuthStatus,
 } = userSlice.actions;
 

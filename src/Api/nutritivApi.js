@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { storageKeys } from '../Helpers/localStorage';
-import { updateAuthStatus } from '../Redux/reducers/user';
+import { updateAuthStatus, updateUserCartQuantity } from '../Redux/reducers/user';
 
 // INJECT STORE TO PREVENT IMPORT ISSUES
 let store
@@ -26,8 +26,9 @@ export const apiLoginUser = async (loginData) => {
     console.log('# /auth/login err :', err)
   }
 };
+
 // /users/self
-export const apiGetUser = async () => {
+export const apiGetUserSelf = async () => {
   console.log('# user/self')
   try {
     const { data } = await nutritivApi.get(
@@ -38,7 +39,8 @@ export const apiGetUser = async () => {
     console.log('# /users/self err :', err)
   }
 }
-// /products
+
+// /products/?limit=X
 export const apiGetProducts = async (limit) => {
   try {
     const { data: products } = await nutritivApi.get(
@@ -49,42 +51,66 @@ export const apiGetProducts = async (limit) => {
     console.log(`# /products/?limit err :`, err)
   }
 }
+
 // products/countInStock
 export const apiGetCountInStock = async (productId) => {
   try {
     const { data } = await nutritivApi.get(
       `/products/countInStock/${productId}`,
     )
-    console.log('# /products/countInStock res :', data)
     return data.countInStock;
   } catch (err) {
     console.log(`# /products/countInStock err :`, err)
   }
 }
+
+// products/findByTitle/:productTitle
+export const apiGetProductByTitle = async (productTitle) => {
+  try {
+    const { data } = await nutritivApi.get(
+      `/products/findByTitle/${productTitle}`,
+    )
+    return data.Product[0];
+  } catch (err) {
+    console.log(`# /products/findByTitle err :`, err)
+  }
+}
+
 // carts/addToCart
 export const apiAddToCart = async (item) => {
   try {
+    console.log('# carts/addToCart req :', item)
     const { data } = await nutritivApi.post(
-      `/carts/addToCart/`,
+      `/carts/addToCart`,
       item
     )
-    console.log('# /carts/addToCart res :', data)
+    console.log('# /carts/addToCart res :', data.updatedCart.totalQuantity)
+    store.dispatch(updateUserCartQuantity({
+      cartQuantity: data.updatedCart.totalQuantity,
+    }))
+    return data;
+  } catch (err) {
+    console.log(`# /carts/addToCart err .:`)
+    console.log(err)
+  }
+}
+
+// carts/self
+export const apiGetSelfCart = async () => {
+  try {
+    const { data } = await nutritivApi.get(
+      `/carts/self`,
+    )
+    console.log('# /carts/self :', data)
+    store.dispatch(updateUserCartQuantity({
+      cartQuantity: data.cart.totalQuantity,
+    }))
     return;
   } catch (err) {
     console.log(`# /carts/addToCart err :`, err)
   }
 }
-// /stripe/secret
-// export const apiGetCheckoutSecret = async () => {
-//   try {
-//     const { data: clientSecret } = await nutritivApi.get(
-//       '/stripe/secret',
-//     )
-//     return clientSecret;
-//   } catch (err) {
-//     console.error('# /stripe/payment err', err)
-//   }
-// }
+
 // /stripe/create-checkout-session
 export const apiCreateCheckoutSession = async () => {
   try {
@@ -110,6 +136,7 @@ nutritivApi.interceptors.request.use(req => {
 }, function (err) {
   return Promise.reject(err)
 })
+
 // on response
 nutritivApi.interceptors.response.use(res => {
   // set tokens in localStorage
