@@ -4,38 +4,58 @@ import { apiAddToCart, apiGetCountInStock, apiGetProductByTitle } from '../Api/n
 
 export const ProductPage = () => {
   const { productTitle } = useParams();
-  const [countInStock, setCountInStock] = useState(0)
-  const [availableQuantity, setAvailableQuantity] = useState(0)
-  const [addedToCart, setAddedToCart] = useState(false)
+  const [product, setProduct] = useState({
+    productItems: []
+  })
   const [selectedItem, setSelectedItem] = useState({
-    productId: "",
+    // productId: "", <- Added at apiGetProductByTitle()
     load: 0,
     price: 0,
     quantity: 0,
   })
-  const [product, setProduct] = useState({
-    productItems: []
-  })
+  const [countInStock, setCountInStock] = useState(0)
+  const [availableQuantity, setAvailableQuantity] = useState(0)
+  const [errorOutOfStock, setErrorOutOfStock] = useState(false)
+  const [addedToCart, setAddedToCart] = useState(false)
   
-  // GET PRODUCT
+  // GET PRODUCT (by title)
   useEffect(() => {
     try {
       async function fetchApi() {
-        const data = await apiGetProductByTitle(productTitle)
-        setProduct(data);
+        const fetchedProduct = await apiGetProductByTitle(productTitle)
+        setProduct(fetchedProduct);
+        setSelectedItem(prevState => ({
+          ...prevState,
+          productId: fetchedProduct._id
+        }))
       }
       fetchApi();
     } catch (err) {
       console.log('# apiGetProductByTitle err :', err)
     }
   }, [productTitle])
+  
+  // HANDLE SELECTED ITEM
+  const handleSelectedItem = (item) => {
+    if(countInStock >= item.load) { 
+      item.quantity = 1
+      setErrorOutOfStock(false)
+    } else { setErrorOutOfStock(true) }
+    const { load, price, quantity } = item;
+    setSelectedItem(prevState => ({
+      ...prevState,
+      load,
+      price,
+      quantity
+    }))
+  }
 
   // GET STOCK
   useEffect(() => {
-    if(selectedItem.productId) {
+    if(product._id) {
       try {
         async function fetchApi() {
-          const data = await apiGetCountInStock(selectedItem.productId);
+          const data = await apiGetCountInStock(product._id);
           setCountInStock(data)
         }
         fetchApi();
@@ -43,14 +63,11 @@ export const ProductPage = () => {
         console.log('# apiGetCountInStock err :', err)
       }
     }
-  }, [selectedItem.productId, addedToCart]);
-  
+  }, [addedToCart, product._id]);
+
   // HANDLE QUANTITY
   const handleSelectedQuantity = (quantity) => {
-    setSelectedItem({
-      ...selectedItem,
-      quantity
-    })
+    setSelectedItem(prevState => ({...prevState, quantity}))
   }
   useEffect(() => {
     if(selectedItem.load && countInStock){
@@ -58,17 +75,16 @@ export const ProductPage = () => {
     }
   }, [selectedItem.load, countInStock]);
   
-  // HANDLE ITEM
-  const handleSelectedItem = (item) => {
-    setSelectedItem({...item, quantity: 1})
-  }
-  
   // HANDLE ADD TO CART
   const handleAddToCart = async () => {
-    await apiAddToCart(selectedItem);
-    setAddedToCart(!addedToCart);
+    try {
+      await apiAddToCart(selectedItem);
+      setAddedToCart(!addedToCart);
+    } catch (err) {
+      console.log('# apiAddToCart err :', err)
+    }
   }
-
+  
   return (
     <>
       <h2>
@@ -82,7 +98,6 @@ export const ProductPage = () => {
                 id={`${product._id}${item.load}`} 
                 name={product._id}
                 onChange={() => handleSelectedItem({
-                  productId: product._id,
                   load: item.load,
                   price: item.price.value,
                 })}
@@ -96,6 +111,9 @@ export const ProductPage = () => {
           ))
         }
       </div>
+      {
+        errorOutOfStock && <p style={{color: "red"}}>Out of stock</p>
+      }
       {
         <select 
           disabled={!availableQuantity}
@@ -118,8 +136,8 @@ export const ProductPage = () => {
           }
         </select>
       }
-      <button 
-        disabled={!selectedItem.productId}
+      <button
+        disabled={!selectedItem.quantity}
         onClick={handleAddToCart}
       >
         Add to cart

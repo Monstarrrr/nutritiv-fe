@@ -54,13 +54,16 @@ export const apiGetProducts = async (limit) => {
 
 // products/countInStock
 export const apiGetCountInStock = async (productId) => {
+  console.log('# products/countInStock req :', productId)
   try {
     const { data } = await nutritivApi.get(
       `/products/countInStock/${productId}`,
     )
+    console.log('# products/countInStock res :', data)
     return data.countInStock;
   } catch (err) {
     console.log(`# /products/countInStock err :`, err)
+    return undefined;
   }
 }
 
@@ -76,7 +79,7 @@ export const apiGetProductByTitle = async (productTitle) => {
   }
 }
 
-// carts/addToCart
+// [POST] carts/addToCart
 export const apiAddToCart = async (item) => {
   try {
     console.log('# carts/addToCart req :', item)
@@ -84,14 +87,36 @@ export const apiAddToCart = async (item) => {
       `/carts/addToCart`,
       item
     )
-    console.log('# /carts/addToCart res :', data.updatedCart.totalQuantity)
+    console.log(
+      '# /carts/addToCart res :',
+      data
+    )
     store.dispatch(updateUserCartQuantity({
-      cartQuantity: data.updatedCart.totalQuantity,
+      // cartQuantity: data.updatedCart.totalQuantity,
+      cartQuantity: data.cart.totalQuantity,
     }))
-    return data;
+    return (
+      data
+    )
   } catch (err) {
     console.log(`# /carts/addToCart err .:`)
     console.log(err)
+  }
+}
+
+// [DELETE] /carts/
+export const apiDeleteCartItem = async (userId, productId, load) => {
+  try {
+    const { data } = await nutritivApi.delete(
+      `/carts/${userId}/${productId}/${load}`,
+    )
+    console.log('# /carts/ :', data)
+    
+    return (
+      data
+    )
+  } catch(err) {
+    console.log('# [delete] /carts/ err:', err)
   }
 }
 
@@ -102,12 +127,14 @@ export const apiGetSelfCart = async () => {
       `/carts/self`,
     )
     console.log('# /carts/self :', data)
-    store.dispatch(updateUserCartQuantity({
+    data.cart && store.dispatch(updateUserCartQuantity({
       cartQuantity: data.cart.totalQuantity,
     }))
-    return;
+    return (
+      data?.cart
+    )
   } catch (err) {
-    console.log(`# /carts/addToCart err :`, err)
+    console.log(`# /carts/self err :`, err)
   }
 }
 
@@ -149,8 +176,8 @@ nutritivApi.interceptors.response.use(res => {
       storageKeys.refreshToken, 
       res.headers.refresh_token
     )
-    console.log('# res.data.loggedIn :', res.data.loggedIn)
-    // update user token in store
+  }
+  if(res.data.loggedIn) {
     store.dispatch(updateAuthStatus({
       loggedIn: res.data.loggedIn,
     }))

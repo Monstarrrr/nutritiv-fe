@@ -7,8 +7,12 @@ export const Products = () => {
   
   useEffect(() => {
     async function fetchApi() {
-      const data = await apiGetProducts(4);
-      setProducts(data)
+      try {
+        const data = await apiGetProducts(4);
+        setProducts(data)
+      } catch (err) {
+        console.log('# apiGetProducts() err :', err)
+      }
     }
     fetchApi();
   }, []);
@@ -17,7 +21,7 @@ export const Products = () => {
     <div>
       {
         products.map(product => (
-          <ProductCard product={product}/>
+          <ProductCard key={product._id} product={product}/>
         ))
       }
     </div>

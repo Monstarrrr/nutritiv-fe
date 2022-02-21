@@ -1,10 +1,4 @@
-import React, { useState } from 'react';
-import { 
-  CardElement, 
-  PaymentElement, 
-  useElements, 
-  useStripe 
-} from '@stripe/react-stripe-js';
+import React from 'react';
 import './PaymentContainer.scss';
 import { apiCreateCheckoutSession } from '../Api/nutritivApi';
 

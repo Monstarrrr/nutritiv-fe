@@ -5,9 +5,9 @@ import {
   useSelector,
 } from "react-redux";
 import {
-  updateUser, updateUserCartQuantity,
+  updateUser,
 } from './Redux/reducers/user';
-import { apiGetSelfCart, apiGetSelfCartQuantity, apiGetUserSelf } from './Api/nutritivApi';
+import { apiGetSelfCart, apiGetUserSelf } from './Api/nutritivApi';
 import HomePage from './Layouts/HomePage.js';
 import RegisterPage from './Layouts/RegisterPage.js';
 import LoginPage from './Layouts/LoginPage.js';
@@ -26,6 +26,7 @@ import { Products } from './Components/Products';
 import { CheckoutSuccess } from './Components/CheckoutSuccess';
 import { CheckoutCancel } from './Components/CheckoutCancel';
 import { ProductPage } from './Components/ProductPage';
+import { Cart } from './Components/Cart';
 
 // init stripe
 const stripePromise = loadStripe(
@@ -64,7 +65,8 @@ function App() {
   useEffect(() => {
     const checkSelfCartQuantity = async () => {
       try {
-        await apiGetSelfCart();
+        const data = await apiGetSelfCart();
+        console.log('# checkSelfCartQuantity data :', data)
       } catch(err) {
         console.error('# err', err)
       }
@@ -100,6 +102,7 @@ function App() {
           <Route path="/product">
             <Route path=":productTitle" element={<ProductPage/>}/>
           </Route>
+          <Route path="/cart" element={<Cart/>}/>
           {/* TEMP */}
           <Route path="/cancel" element={<CheckoutCancel/>}/>
           <Route path="/success" element={<CheckoutSuccess/>}/>

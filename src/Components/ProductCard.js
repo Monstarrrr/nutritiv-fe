@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import React, {  } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { apiAddToCart, apiGetCountInStock } from '../Api/nutritivApi'
 
 export const ProductCard = ({ product }) => {
   const navigate = useNavigate();
