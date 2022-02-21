@@ -123,7 +123,7 @@ export const ProductPage = () => {
           value={selectedItem.quantity}
         >
           {
-            (selectedItem.productId && availableQuantity) ? (
+            (selectedItem.productId && availableQuantity) && (
               [...Array(availableQuantity)].map((e, i) => (
                 <option 
                   key={i}
@@ -132,7 +132,7 @@ export const ProductPage = () => {
                   {i+1}
                 </option>
               ))
-            ) : null
+            )
           }
         </select>
       }
