@@ -127,9 +127,15 @@ export const apiGetSelfCart = async () => {
       `/carts/self`,
     )
     console.log('# /carts/self :', data)
-    data.cart && store.dispatch(updateUserCartQuantity({
-      cartQuantity: data.cart.totalQuantity,
-    }))
+    data.cart ? (
+      store.dispatch(updateUserCartQuantity({
+        cartQuantity: data.cart.totalQuantity,
+      }))
+    ) : (
+      store.dispatch(updateUserCartQuantity({
+        cartQuantity: 0,
+      }))
+    )
     return (
       data?.cart
     )

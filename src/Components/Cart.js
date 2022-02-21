@@ -3,7 +3,8 @@ import { apiDeleteCartItem, apiGetSelfCart } from '../Api/nutritivApi';
 
 export const Cart = () => {
   const [cart, setCart] = useState(null)
-  
+  const [deletedItem, setDeletedItem] = useState(false)
+
   useEffect(() => {
     async function fetchApi() {
       try {
@@ -14,11 +15,12 @@ export const Cart = () => {
       }
     }
     fetchApi();
-  }, []);
+  }, [deletedItem]);
   
   const handleRemoveCartItem = async (productId, load) => {
     try {
-      cart && await apiDeleteCartItem(cart.userId, productId, load)
+      await apiDeleteCartItem(cart.userId, productId, load)
+      setDeletedItem(!deletedItem);
     } catch (err) {
       console.log('# apiDeleteCartItem err :', err)
     }
