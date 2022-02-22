@@ -4,13 +4,6 @@ import {
   useDispatch,
   useSelector,
 } from "react-redux";
-import {
-  updateUser,
-} from './Redux/reducers/user';
-import { apiGetSelfCart, apiGetUserSelf } from './Api/nutritivApi';
-import HomePage from './Layouts/HomePage.js';
-import RegisterPage from './Layouts/RegisterPage.js';
-import LoginPage from './Layouts/LoginPage.js';
 import { 
   BrowserRouter,
   Routes,
@@ -18,10 +11,17 @@ import {
   Navigate,
   Outlet,
 } from 'react-router-dom';
-import Navbar from './Components/Navbar';
-import Profile from './Layouts/Profile';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
+import {
+  updateUser,
+} from './Redux/reducers/user';
+import { apiGetSelfCart, apiGetUserSelf } from './Api/nutritivApi';
+import HomePage from './Layouts/HomePage.js';
+import RegisterPage from './Layouts/RegisterPage.js';
+import LoginPage from './Layouts/LoginPage.js';
+import Navbar from './Components/Navbar';
+import Profile from './Layouts/Profile';
 import { Products } from './Components/Products';
 import { CheckoutSuccess } from './Components/CheckoutSuccess';
 import { CheckoutCancel } from './Components/CheckoutCancel';

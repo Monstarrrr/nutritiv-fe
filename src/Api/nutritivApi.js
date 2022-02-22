@@ -41,7 +41,7 @@ export const apiGetUserSelf = async () => {
 }
 
 // /products/?limit=X
-export const apiGetProducts = async (limit) => {
+export const apiGetProductsByLimit = async (limit) => {
   try {
     const { data: products } = await nutritivApi.get(
       `/products/?limit=${limit}`,
@@ -49,6 +49,23 @@ export const apiGetProducts = async (limit) => {
     return products.products;
   } catch (err) {
     console.log(`# /products/?limit err :`, err)
+  }
+}
+
+// [GET] /products/?start=x&end=y
+export const apiGetProductsBySlice = async (start, end) => {
+  try {
+    console.log('# start, end :', start, end)
+    const { data } = await nutritivApi.get(
+      `/products/?start=${start}&end=${end}`,
+    )
+    console.log('# /products/?start=x&end=y :', data)
+    
+    return (
+      data
+    )
+  } catch(err) {
+    console.log('# [get] /products/?start=x&end=y err:', err)
   }
 }
 

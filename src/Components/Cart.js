@@ -17,9 +17,9 @@ export const Cart = () => {
     fetchApi();
   }, [deletedItem]);
   
-  const handleRemoveCartItem = async (productId, load) => {
+  const handleRemoveCartItem = async (productId, id) => {
     try {
-      await apiDeleteCartItem(cart.userId, productId, load)
+      await apiDeleteCartItem(cart.userId, productId, id)
       setDeletedItem(!deletedItem);
     } catch (err) {
       console.log('# apiDeleteCartItem err :', err)
@@ -44,7 +44,7 @@ export const Cart = () => {
                     <button 
                       onClick={() => handleRemoveCartItem(
                         product.productId, 
-                        item.load
+                        item.id
                       )}
                     >
                       X
