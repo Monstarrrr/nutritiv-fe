@@ -122,7 +122,8 @@ export const apiAddToCart = async (item) => {
 }
 
 // [DELETE] /carts/
-export const apiDeleteCartItem = async (userId, productId, load) => {
+export const apiDeleteCartItem = async (props) => {
+  const { userId, productId, load } = props;
   try {
     const { data } = await nutritivApi.delete(
       `/carts/${userId}/${productId}/${load}`,

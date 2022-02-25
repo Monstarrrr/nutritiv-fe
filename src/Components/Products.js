@@ -1,98 +1,94 @@
 import React, { useEffect, useState } from 'react'
-import ReactPaginate from "react-paginate";
-import { apiGetProductsBySlice } from '../Api/nutritivApi';
+import usePagination from '@mui/material/usePagination';
+import { styled } from '@mui/material/styles';
+
+import { apiGetProductsByLimit, apiGetProductsBySlice } from '../Api/nutritivApi';
+import UsePagination from './UsePagination';
 import { ProductCard } from './ProductCard';
+import './products.scss';
+import { List, Pagination } from '@mui/material';
+import { ProductsPagination } from './ProductsPagination';
 
 export const Products = () => {  
   console.log("######################")
-  const [products, setProducts] = useState([])
-  const [productsToDisplay, setProductsToDisplay] = useState([])
-  const [totalProductsCount, setTotalProductsCount] = useState(0)
+  const [errorApiGetProducts, setErrorApiGetProducts] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [pageNumber, setPageNumber] = useState(0)
-  
-  const productsPerPage = 4
-  const pagesVisited = pageNumber * productsPerPage
-  const productsLoadedStart = pagesVisited - productsPerPage
-  const productsLoadedEnd = pagesVisited + (productsPerPage * 2)
-  const pageCount = Math.ceil(totalProductsCount / productsPerPage)
-  
-  useEffect(() => {
-    pageNumber > 0 ? (
-      setProductsToDisplay(products.slice(
-        productsPerPage,
-        productsPerPage * 2    
-      ))
-    ) : (
-      setProductsToDisplay(products.slice(
-        0,
-        productsPerPage    
-      ))
-    )
-  }, [pageNumber, products])
-  
-  console.log(
-    '# productsToDisplay :', 
-    pageNumber > 0 ? (
-      productsPerPage,
-      productsPerPage * 2
-    ) : (
-      0, 
-      productsPerPage
-    )
-  )
-  
-  const changePage = ({ selected })  => {
-    console.log('# page :', selected)
-    setPageNumber(selected)
-  }
+  const [allProducts, setAllProducts] = useState([])
+  const [productsToDisplay, setProductsToDisplay] = useState(0)
 
+  const [page, setPage] = useState(1)
+  const [numberOfPages, setNumberOfPages] = useState(10)
+  const [productsPerPage, setProductsPerPage] = useState(5)
+  
+  
   useEffect(() => {
     async function fetchApi() {
       try {
         setLoading(true)
-        
-        const data = await apiGetProductsBySlice(
-          productsLoadedStart < 0 ? 0 : productsLoadedStart,
-          productsLoadedEnd
-        );
-        console.log('# data.products :', data.products)
-        setProducts(data.products)
-        setTotalProductsCount(data.length)
+        const data = await apiGetProductsByLimit();
+        console.log('# data.products :', data)
+        setAllProducts(data)
         setLoading(false)
       } catch (err) {
-        console.log('# apiGetProducts() err :', err)
+        setErrorApiGetProducts(true)
+        console.log('# apiGetProzducts() err :', err)
       }
     }
     fetchApi();
-  }, [pageNumber, productsLoadedEnd, productsLoadedStart]);
+  }, [page]);
+
+  useEffect(() => {
+    setNumberOfPages(Math.ceil(allProducts.length / productsPerPage))
+    console.log("calculating productsToDisplay")
+    setProductsToDisplay(
+      allProducts.slice(
+        productsPerPage * page - productsPerPage,
+        productsPerPage * page
+      )
+    )
+  }, [allProducts, page, productsPerPage]);
   
+  const handleChangeProductsPerPage = (e) => {
+    setProductsPerPage(e.target.value)
+  }
+
   return (
-    <div>
-      {/* {
+    <div id="products">
+      {
         loading ? (
           <h2>
             Loading products...
           </h2>
         ) : (
-          <> */}
+          <>
             {
-              productsToDisplay.map(product => (
+              productsToDisplay && productsToDisplay.map(product => (
                 <ProductCard 
                   key={product._id} 
                   product={product}
                 />
               ))
             }
-            <ReactPaginate 
-              previousLabel={"Previous"}
-              nextLabel={"Next"}
-              pageCount={pageCount}
-              onPageChange={changePage}
+            <Pagination
+              count={numberOfPages}
+              page={page}
+              onChange={(e, val) => setPage(val)}
             />
-          {/* </>
+            <form onSubmit={handleChangeProductsPerPage}>
+              <label for="productsPerPage">Products per page: </label>
+              <select 
+                onChange={(e) => setProductsPerPage(e.target.value)}
+                id="selectProductsPerPage"
+                name="productsPerPage" 
+              >
+                <option value="5">5</option>
+                <option value="15">15</option>
+                <option value="30">30</option>
+              </select>
+            </form>
+          </>
         )
-      } */}
+      }
     </div>
   )
 }

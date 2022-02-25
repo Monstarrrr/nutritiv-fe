@@ -4,4 +4,24 @@
 #products {
   margin: 0;
   
+  .paginationBtns {
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    width: 80%;
+
+    & a {
+      border: 1px solid blue;
+      border-radius: 5px;
+      color: blue;
+      cursor: pointer;
+      padding: 10px;
+      margin: 8px;
+    }
+  }
+
+  .paginationActive a {
+    background-color: $primary;
+  }
 }
