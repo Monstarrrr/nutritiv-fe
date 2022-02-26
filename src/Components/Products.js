@@ -1,26 +1,25 @@
 import React, { useEffect, useState } from 'react'
-import usePagination from '@mui/material/usePagination';
-import { styled } from '@mui/material/styles';
 
-import { apiGetProductsByLimit, apiGetProductsBySlice } from '../Api/nutritivApi';
-import UsePagination from './UsePagination';
+import { apiGetProductsByLimit } from '../Api/nutritivApi';
 import { ProductCard } from './ProductCard';
 import './products.scss';
-import { List, Pagination } from '@mui/material';
-import { ProductsPagination } from './ProductsPagination';
+import { Pagination } from '@mui/material';
 
 export const Products = () => {  
   console.log("######################")
-  const [errorApiGetProducts, setErrorApiGetProducts] = useState(false)
-  const [loading, setLoading] = useState(false)
   const [allProducts, setAllProducts] = useState([])
   const [productsToDisplay, setProductsToDisplay] = useState(0)
-
+  
   const [page, setPage] = useState(1)
   const [numberOfPages, setNumberOfPages] = useState(10)
   const [productsPerPage, setProductsPerPage] = useState(5)
   
+  const [loading, setLoading] = useState(false)
+  const [errorApiGetProducts, setErrorApiGetProducts] = useState(false)
   
+  const [filterInput, setFilterInput] = useState("")
+  
+  // API EFFECT
   useEffect(() => {
     async function fetchApi() {
       try {
@@ -35,21 +34,34 @@ export const Products = () => {
       }
     }
     fetchApi();
-  }, [page]);
-
+  }, []);
+  
+  // DISPLAY EFFECT
   useEffect(() => {
     setNumberOfPages(Math.ceil(allProducts.length / productsPerPage))
-    console.log("calculating productsToDisplay")
+    
+    const filteredProducts = filterInput ? (
+      allProducts.filter((product) => {
+        return product.title.toLowerCase().includes(filterInput.toLowerCase())
+      })
+    ) : allProducts
+
     setProductsToDisplay(
-      allProducts.slice(
+      filteredProducts.slice(
         productsPerPage * page - productsPerPage,
         productsPerPage * page
       )
     )
-  }, [allProducts, page, productsPerPage]);
+    console.log('# allProducts :', allProducts)
+    console.log('# productsToDisplay :', productsToDisplay)
+  }, [allProducts, page, productsPerPage, filterInput]);
   
+  // HANDLERS
   const handleChangeProductsPerPage = (e) => {
     setProductsPerPage(e.target.value)
+  }
+  const handleProductsFilter = (e) => {
+    setFilterInput(e.target.value)
   }
 
   return (
@@ -61,6 +73,11 @@ export const Products = () => {
           </h2>
         ) : (
           <>
+            <input 
+              onChange={handleProductsFilter}
+              placeholder="Search a product..."
+              type="text" 
+            />
             {
               productsToDisplay && productsToDisplay.map(product => (
                 <ProductCard 

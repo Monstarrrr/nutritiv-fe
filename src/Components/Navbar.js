@@ -19,7 +19,7 @@ export default function Navbar() {
       <Link className={'test'} to="/welcome">HOMEPAGE</Link>
       <span>----</span>
       <Link to="/products">
-        PILLS
+        PRODUCTS
       </Link>
       <span>----</span>
       {
