@@ -18,7 +18,7 @@ export const Products = () => {
   const [loading, setLoading] = useState(false)
   const [errorApiGetProducts, setErrorApiGetProducts] = useState(false)
   
-  const [filterByTitleInput, setFilterByTitleInput] = useState("")
+  const [filterByTextInput, setFilterByTextInput] = useState("")
   const [filterByShapeInput, setFilterByShapeInput] = useState("")
   
 
@@ -53,11 +53,12 @@ export const Products = () => {
   // DISPLAY EFFECT
   useEffect(() => {
     
-    const filterByTitle = (array) => filterByTitleInput ? (
+    const filterByText = (array) => filterByTextInput ? (
       array.filter((product) => {
-        return (
-          product.title.toLowerCase().includes(filterByTitleInput)
-        )
+        let titleFilter = product.title.toLowerCase().includes(filterByTextInput)
+        let descFilter = product.desc.toLowerCase().includes(filterByTextInput)
+        
+        return titleFilter || descFilter;
       })
     ) : array;
 
@@ -70,7 +71,7 @@ export const Products = () => {
     ) : array;
     
     let result = allProducts;
-    result = filterByTitle(result)    
+    result = filterByText(result)    
     result = filterByShape(result)
     
     setAllFilteredProducts(result)
@@ -84,15 +85,15 @@ export const Products = () => {
     allProducts, 
     page, 
     productsPerPage, 
-    filterByTitleInput, 
+    filterByTextInput, 
     filterByShapeInput
   ]);
   
-
+  
   // HANDLERS
   const handleProductsFilter = (e) => {
-    setFilterByTitleInput(
-      e.target.value.toLowerCase().replace(/\s/g, '')
+    setFilterByTextInput(
+      e.target.value.toLowerCase()
     )
   }
   const handleFilterByShapeInput = (e) => {
