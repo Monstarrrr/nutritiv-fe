@@ -8,6 +8,7 @@ import { Pagination } from '@mui/material';
 export const Products = () => {  
   console.log("######################")
   const [allProducts, setAllProducts] = useState([])
+  const [allFilteredProducts, setAllFilteredProducts] = useState([])
   const [productsToDisplay, setProductsToDisplay] = useState(0)
   
   const [page, setPage] = useState(1)
@@ -17,16 +18,18 @@ export const Products = () => {
   const [loading, setLoading] = useState(false)
   const [errorApiGetProducts, setErrorApiGetProducts] = useState(false)
   
-  const [filterInput, setFilterInput] = useState("")
+  const [filterByTitleInput, setFilterByTitleInput] = useState("")
+  const [filterByShapeInput, setFilterByShapeInput] = useState("")
   
+
   // API EFFECT
   useEffect(() => {
     async function fetchApi() {
       try {
         setLoading(true)
         const data = await apiGetProductsByLimit();
-        console.log('# data.products :', data)
         setAllProducts(data)
+        setAllFilteredProducts(data)
         setLoading(false)
       } catch (err) {
         setErrorApiGetProducts(true)
@@ -35,35 +38,73 @@ export const Products = () => {
     }
     fetchApi();
   }, []);
+
   
+  // TOTAL PAGES EFFECT
+  useEffect(() => {
+    setNumberOfPages(Math.ceil(allFilteredProducts.length / productsPerPage))
+  }, [
+    productsPerPage,
+    allProducts.length,
+    allFilteredProducts
+  ]);
+  
+
   // DISPLAY EFFECT
   useEffect(() => {
-    setNumberOfPages(Math.ceil(allProducts.length / productsPerPage))
     
-    const filteredProducts = filterInput ? (
-      allProducts.filter((product) => {
-        return product.title.toLowerCase().includes(filterInput.toLowerCase())
+    const filterByTitle = (array) => filterByTitleInput ? (
+      array.filter((product) => {
+        return (
+          product.title.toLowerCase().includes(filterByTitleInput.toLowerCase())
+        )
       })
-    ) : allProducts
+    ) : array;
 
+    const filterByShape = (array) => filterByShapeInput ? (
+      array.filter((product) => {
+        return (
+          product.shape.toLowerCase() === filterByShapeInput.toLowerCase()
+        )
+      })
+    ) : array;
+    
+    let result = allProducts;
+    result = filterByTitle(result)    
+    result = filterByShape(result)
+    
+    setAllFilteredProducts(result)
     setProductsToDisplay(
-      filteredProducts.slice(
+      result.slice(
         productsPerPage * page - productsPerPage,
         productsPerPage * page
       )
     )
-    console.log('# allProducts :', allProducts)
-    console.log('# productsToDisplay :', productsToDisplay)
-  }, [allProducts, page, productsPerPage, filterInput]);
   
+  }, [
+    allProducts, 
+    page, 
+    productsPerPage, 
+    filterByTitleInput, 
+    filterByShapeInput
+  ]);
+  
+
   // HANDLERS
+  const handleProductsFilter = (e) => {
+    setFilterByTitleInput(e.target.value)
+  }
+  const handleFilterByShapeInput = (e) => {
+    setFilterByShapeInput(e.target.value)
+  }
+  const handleChangeActivePage = (e, val) => {
+    setPage(val)
+  }
   const handleChangeProductsPerPage = (e) => {
     setProductsPerPage(e.target.value)
   }
-  const handleProductsFilter = (e) => {
-    setFilterInput(e.target.value)
-  }
-
+  
+  
   return (
     <div id="products">
       {
@@ -73,11 +114,22 @@ export const Products = () => {
           </h2>
         ) : (
           <>
+            <br />
             <input 
               onChange={handleProductsFilter}
               placeholder="Search a product..."
               type="text" 
             />
+            <form>
+              <select 
+                onChange={handleFilterByShapeInput}
+                name="shapeFilter"
+              >
+                <option value="">Shape</option>
+                <option value="capsules">Capsule</option>
+                <option value="powder">Powder</option>
+              </select>
+            </form>
             {
               productsToDisplay && productsToDisplay.map(product => (
                 <ProductCard 
@@ -89,12 +141,14 @@ export const Products = () => {
             <Pagination
               count={numberOfPages}
               page={page}
-              onChange={(e, val) => setPage(val)}
+              onChange={handleChangeActivePage}
             />
-            <form onSubmit={handleChangeProductsPerPage}>
-              <label for="productsPerPage">Products per page: </label>
+            <form>
+              <label for="productsPerPage">
+                Products per page: 
+              </label>
               <select 
-                onChange={(e) => setProductsPerPage(e.target.value)}
+                onChange={handleChangeProductsPerPage}
                 id="selectProductsPerPage"
                 name="productsPerPage" 
               >
