@@ -56,7 +56,7 @@ export const Products = () => {
     const filterByTitle = (array) => filterByTitleInput ? (
       array.filter((product) => {
         return (
-          product.title.toLowerCase().includes(filterByTitleInput.toLowerCase())
+          product.title.toLowerCase().includes(filterByTitleInput)
         )
       })
     ) : array;
@@ -80,7 +80,6 @@ export const Products = () => {
         productsPerPage * page
       )
     )
-  
   }, [
     allProducts, 
     page, 
@@ -92,10 +91,14 @@ export const Products = () => {
 
   // HANDLERS
   const handleProductsFilter = (e) => {
-    setFilterByTitleInput(e.target.value)
+    setFilterByTitleInput(
+      e.target.value.toLowerCase().replace(/\s/g, '')
+    )
   }
   const handleFilterByShapeInput = (e) => {
-    setFilterByShapeInput(e.target.value)
+    setFilterByShapeInput(
+      e.target.value.toLowerCase()
+    )
   }
   const handleChangeActivePage = (e, val) => {
     setPage(val)
