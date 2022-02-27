@@ -19,6 +19,14 @@ export const ProductCard = ({ product }) => {
       <span>
         {product.desc}
       </span>
+      <br />
+      {
+        product.tags && product.tags.map(tag => (
+          <span>
+             &nbsp;{tag} /
+          </span>
+        ))
+      }
       {/* IMAGES */}
       {
         product.imgs.map((img, i) => (

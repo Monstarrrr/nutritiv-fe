@@ -7,6 +7,7 @@ import { Pagination } from '@mui/material';
 
 export const Products = () => {  
   console.log("######################")
+  
   const [allProducts, setAllProducts] = useState([])
   const [allFilteredProducts, setAllFilteredProducts] = useState([])
   const [productsToDisplay, setProductsToDisplay] = useState(0)
@@ -20,8 +21,18 @@ export const Products = () => {
   
   const [filterByTextInput, setFilterByTextInput] = useState("")
   const [filterByShapeInput, setFilterByShapeInput] = useState("")
+  const [filterByTagsInput, setFilterByTagsInput] = useState({})
   
+  const allTags = ["longevity", "skin", "anti-inflammatory", "anti-oxydant"]
+  
+  // CONVERSIONS
+  const objectOfTags = allTags.reduce((obj, tag) => ({
+    ...obj,
+    [tag]: false,
+  }), {})
 
+  console.log('# filterByTagsInput :', filterByTagsInput)
+  
   // API EFFECT
   useEffect(() => {
     async function fetchApi() {
@@ -57,7 +68,7 @@ export const Products = () => {
       array.filter((product) => {
         let titleFilter = product.title.toLowerCase().includes(filterByTextInput)
         let descFilter = product.desc.toLowerCase().includes(filterByTextInput)
-        
+
         return titleFilter || descFilter;
       })
     ) : array;
@@ -65,7 +76,24 @@ export const Products = () => {
     const filterByShape = (array) => filterByShapeInput ? (
       array.filter((product) => {
         return (
-          product.shape.toLowerCase() === filterByShapeInput.toLowerCase()
+          product.shape.toLowerCase() === filterByShapeInput
+        )
+      })
+    ) : array;
+    
+    let filterTagActive;
+    
+    console.log('# filterByTagsInput :', filterByTagsInput)
+    if(Object.values(filterByTagsInput).includes(true)) {
+      filterTagActive = true;
+    } else {
+      filterTagActive = false;
+    }
+
+    const filterByTags = (array) => filterTagActive ? (
+      array.filter((product) => {
+        return (
+          product.tags.some(val => filterByTagsInput[val] === true)
         )
       })
     ) : array;
@@ -73,6 +101,7 @@ export const Products = () => {
     let result = allProducts;
     result = filterByText(result)    
     result = filterByShape(result)
+    result = filterByTags(result)
     
     setAllFilteredProducts(result)
     setProductsToDisplay(
@@ -86,7 +115,8 @@ export const Products = () => {
     page, 
     productsPerPage, 
     filterByTextInput, 
-    filterByShapeInput
+    filterByShapeInput,
+    filterByTagsInput
   ]);
   
   
@@ -107,7 +137,13 @@ export const Products = () => {
   const handleChangeProductsPerPage = (e) => {
     setProductsPerPage(e.target.value)
   }
-  
+  const handleFilterByTags = (e) => {
+    setFilterByTagsInput(prevState => ({
+      ...filterByTagsInput,
+      [e.target.name]: !prevState[e.target.name],
+    }))
+  }
+  console.log('# filterByTagsInput :', filterByTagsInput)
   
   return (
     <div id="products">
@@ -134,6 +170,21 @@ export const Products = () => {
                 <option value="powder">Powder</option>
               </select>
             </form>
+              {
+                allTags.map((tag, i) => (
+                  <div key={i}>
+                    <input 
+                      defaultChecked={true}
+                      name={tag}
+                      onClick={handleFilterByTags}
+                      type="checkbox"
+                    />
+                    <label for={tag}>
+                      {tag}
+                    </label>
+                  </div>
+                ))
+              }
             {
               productsToDisplay && productsToDisplay.map(product => (
                 <ProductCard 
