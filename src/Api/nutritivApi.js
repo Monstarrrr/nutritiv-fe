@@ -2,19 +2,20 @@ import axios from 'axios';
 import { storageKeys } from '../Helpers/localStorage';
 import { updateAuthStatus, updateUserCartQuantity } from '../Redux/reducers/user';
 
-// INJECT STORE TO PREVENT IMPORT ISSUES
+// # INJECT STORE TO PREVENT IMPORT ISSUES #
 let store
 export const injectStore = _store => {
   store = _store
 }
 
-// API INSTANCE
+// # API INSTANCE #
 const nutritivApi = axios.create({
   baseURL: 'http://localhost:3001/', // Change in prod
 })
 
-// API CALLS
-// /auth/login
+// # API CALLS #
+// ### auth ###
+// [POST] /auth/login
 export const apiLoginUser = async (loginData) => {
   try {
     const { data } = await nutritivApi.post(
@@ -27,7 +28,8 @@ export const apiLoginUser = async (loginData) => {
   }
 };
 
-// /users/self
+// ### users ###
+// [GET] /users/self
 export const apiGetUserSelf = async () => {
   console.log('# user/self')
   try {
@@ -40,7 +42,8 @@ export const apiGetUserSelf = async () => {
   }
 }
 
-// /products/?limit=X
+// ### products ###
+// [GET] /products/?limit=X
 export const apiGetProductsByLimit = async (limit) => {
   try {
     const { data: products } = await nutritivApi.get(
@@ -51,7 +54,6 @@ export const apiGetProductsByLimit = async (limit) => {
     console.log(`# /products/?limit err :`, err)
   }
 }
-
 // [GET] /products/?start=x&end=y
 export const apiGetProductsBySlice = async (start, end) => {
   try {
@@ -68,8 +70,7 @@ export const apiGetProductsBySlice = async (start, end) => {
     console.log('# [get] /products/?start=x&end=y err:', err)
   }
 }
-
-// products/countInStock
+// [GET] /products/countInStock
 export const apiGetCountInStock = async (productId) => {
   console.log('# products/countInStock req :', productId)
   try {
@@ -80,11 +81,24 @@ export const apiGetCountInStock = async (productId) => {
     return data.countInStock;
   } catch (err) {
     console.log(`# /products/countInStock err :`, err)
-    return undefined;
+    return null;
   }
 }
-
-// products/findByTitle/:productTitle
+// [GET] /products/tags
+export const apiGetAllUniqueTags = async () => {
+  try {
+    const { data } = await nutritivApi.get(
+      `/products/tags`
+    )
+    console.log('# /products/tags :', data.uniqueTags)
+    return (
+      data.uniqueTags
+    )
+  } catch(err) {
+    console.log('# [get] /products/tags err:', err)
+  }
+}
+// [GET] /products/findByTitle/:productTitle
 export const apiGetProductByTitle = async (productTitle) => {
   try {
     const { data } = await nutritivApi.get(
@@ -96,7 +110,31 @@ export const apiGetProductByTitle = async (productTitle) => {
   }
 }
 
-// [POST] carts/addToCart
+// ### carts ###
+// [GET] carts/self
+export const apiGetSelfCart = async () => {
+  try {
+    const { data } = await nutritivApi.get(
+      `/carts/self`,
+    )
+    console.log('# /carts/self :', data)
+    data.cart ? (
+      store.dispatch(updateUserCartQuantity({
+        cartQuantity: data.cart.totalQuantity,
+      }))
+    ) : (
+      store.dispatch(updateUserCartQuantity({
+        cartQuantity: 0,
+      }))
+    )
+    return (
+      data?.cart
+    )
+  } catch (err) {
+    console.log(`# /carts/self err :`, err)
+  }
+}
+// [POST] /carts/addToCart
 export const apiAddToCart = async (item) => {
   try {
     console.log('# carts/addToCart req :', item)
@@ -120,7 +158,6 @@ export const apiAddToCart = async (item) => {
     console.log(err)
   }
 }
-
 // [DELETE] /carts/
 export const apiDeleteCartItem = async (props) => {
   const { userId, productId, load } = props;
@@ -138,31 +175,8 @@ export const apiDeleteCartItem = async (props) => {
   }
 }
 
-// carts/self
-export const apiGetSelfCart = async () => {
-  try {
-    const { data } = await nutritivApi.get(
-      `/carts/self`,
-    )
-    console.log('# /carts/self :', data)
-    data.cart ? (
-      store.dispatch(updateUserCartQuantity({
-        cartQuantity: data.cart.totalQuantity,
-      }))
-    ) : (
-      store.dispatch(updateUserCartQuantity({
-        cartQuantity: 0,
-      }))
-    )
-    return (
-      data?.cart
-    )
-  } catch (err) {
-    console.log(`# /carts/self err :`, err)
-  }
-}
-
-// /stripe/create-checkout-session
+// ### stripe ###
+// [POST] /stripe/create-checkout-session
 export const apiCreateCheckoutSession = async () => {
   try {
     const { data } = await nutritivApi.post(
@@ -175,7 +189,7 @@ export const apiCreateCheckoutSession = async () => {
   }
 }
 
-// INTERCEPTORS
+// # INTERCEPTORS #
 // on request
 nutritivApi.interceptors.request.use(req => {
   const refreshToken = localStorage.getItem(storageKeys.refreshToken);

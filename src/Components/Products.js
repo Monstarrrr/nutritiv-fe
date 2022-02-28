@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
 
-import { apiGetProductsByLimit } from '../Api/nutritivApi';
+import { apiGetAllUniqueTags, apiGetProductsByLimit } from '../Api/nutritivApi';
 import { ProductCard } from './ProductCard';
 import './products.scss';
 import { Pagination } from '@mui/material';
 
 export const Products = () => {  
-  console.log("######################")
+  console.log("###########-Products-###########")
   
   const [allProducts, setAllProducts] = useState([])
   const [allFilteredProducts, setAllFilteredProducts] = useState([])
@@ -21,19 +21,13 @@ export const Products = () => {
   
   const [filterByTextInput, setFilterByTextInput] = useState("")
   const [filterByShapeInput, setFilterByShapeInput] = useState("")
-  const [filterByTagsInput, setFilterByTagsInput] = useState({})
+  const [filterByTagsInput, setFilterByTagsInput] = useState([])
+  const [filterByPriceMinInput, setFilterByPriceMinInput] = useState(0)
+  const [filterByPriceMaxInput, setFilterByPriceMaxInput] = useState(0)
   
-  const allTags = ["longevity", "skin", "anti-inflammatory", "anti-oxydant"]
+  const [allTags, setAllTags] = useState([])
   
-  // CONVERSIONS
-  const objectOfTags = allTags.reduce((obj, tag) => ({
-    ...obj,
-    [tag]: false,
-  }), {})
-
-  console.log('# filterByTagsInput :', filterByTagsInput)
-  
-  // API EFFECT
+  // API EFFECTS
   useEffect(() => {
     async function fetchApi() {
       try {
@@ -44,7 +38,19 @@ export const Products = () => {
         setLoading(false)
       } catch (err) {
         setErrorApiGetProducts(true)
-        console.log('# apiGetProzducts() err :', err)
+        console.log('# apiGetProducts() err :', err)
+      }
+    }
+    fetchApi();
+  }, []);
+  useEffect(() => {
+    async function fetchApi() {
+      try {
+        setLoading(true)
+        const data = await apiGetAllUniqueTags();
+        setAllTags(data)
+      } catch (err) {
+        console.log('# apiGetAllUniqueTags() err :', err)
       }
     }
     fetchApi();
@@ -81,20 +87,9 @@ export const Products = () => {
       })
     ) : array;
     
-    let filterTagActive;
-    
-    console.log('# filterByTagsInput :', filterByTagsInput)
-    if(Object.values(filterByTagsInput).includes(true)) {
-      filterTagActive = true;
-    } else {
-      filterTagActive = false;
-    }
-
-    const filterByTags = (array) => filterTagActive ? (
+    const filterByTags = (array) => filterByTagsInput ? (
       array.filter((product) => {
-        return (
-          product.tags.some(val => filterByTagsInput[val] === true)
-        )
+        return filterByTagsInput.every(tag => product.tags.includes(tag))
       })
     ) : array;
     
@@ -118,8 +113,7 @@ export const Products = () => {
     filterByShapeInput,
     filterByTagsInput
   ]);
-  
-  
+
   // HANDLERS
   const handleProductsFilter = (e) => {
     setFilterByTextInput(
@@ -138,12 +132,17 @@ export const Products = () => {
     setProductsPerPage(e.target.value)
   }
   const handleFilterByTags = (e) => {
-    setFilterByTagsInput(prevState => ({
-      ...filterByTagsInput,
-      [e.target.name]: !prevState[e.target.name],
-    }))
+    e.target.checked ? (
+      setFilterByTagsInput(() => [
+        ...filterByTagsInput,
+        e.target.name,
+      ])
+    ) : (
+      setFilterByTagsInput(prevState => (
+        prevState.filter(tag => tag !== e.target.name)
+      )
+    ))
   }
-  console.log('# filterByTagsInput :', filterByTagsInput)
   
   return (
     <div id="products">
@@ -171,10 +170,10 @@ export const Products = () => {
               </select>
             </form>
               {
-                allTags.map((tag, i) => (
+                allTags && allTags.map((tag, i) => (
                   <div key={i}>
                     <input 
-                      defaultChecked={true}
+                      defaultChecked={false}
                       name={tag}
                       onClick={handleFilterByTags}
                       type="checkbox"
@@ -187,8 +186,7 @@ export const Products = () => {
               }
             {
               productsToDisplay && productsToDisplay.map(product => (
-                <ProductCard 
-                  key={product._id} 
+                <ProductCard
                   product={product}
                 />
               ))
