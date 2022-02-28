@@ -24,7 +24,9 @@ export const Products = () => {
   const [filterByTagsInput, setFilterByTagsInput] = useState([])
   const [filterByPriceMinInput, setFilterByPriceMinInput] = useState(0)
   const [filterByPriceMaxInput, setFilterByPriceMaxInput] = useState(0)
-  
+  const [sortedByPrice, setSortedByPrice] = useState("")
+  const [sortedByPriceStatus, setSortedByPriceStatus] = useState("")
+
   const [allTags, setAllTags] = useState([])
   
   // API EFFECTS
@@ -92,11 +94,34 @@ export const Products = () => {
         return filterByTagsInput.every(tag => product.tags.includes(tag))
       })
     ) : array;
-    
+
+    const filterByPrice = (array) => {
+      if(sortedByPrice === "asc") {
+        setSortedByPriceStatus("asc")
+        const filteredArray = array.sort((a, b) => {
+          if(a.productItems[0].price.value < b.productItems[0].price.value) return -1;
+          if(a.productItems[0].price.value > b.productItems[0].price.value) return 1;
+          return 0;
+        })
+        return filteredArray;
+      }
+      if(sortedByPrice === "desc") {
+        setSortedByPriceStatus("asc")
+        const filteredArray = array.sort((a, b) => {
+          if(a.productItems[0].price.value > b.productItems[0].price.value) return -1;
+          if(a.productItems[0].price.value < b.productItems[0].price.value) return 1;
+          return 0;
+        })
+        return filteredArray;
+      } 
+      return !sortedByPrice && array;
+    }
+
     let result = allProducts;
     result = filterByText(result)    
     result = filterByShape(result)
     result = filterByTags(result)
+    result = filterByPrice(result)
     
     setAllFilteredProducts(result)
     setProductsToDisplay(
@@ -111,7 +136,8 @@ export const Products = () => {
     productsPerPage, 
     filterByTextInput, 
     filterByShapeInput,
-    filterByTagsInput
+    filterByTagsInput,
+    sortedByPrice
   ]);
 
   // HANDLERS
@@ -143,7 +169,12 @@ export const Products = () => {
       )
     ))
   }
-  
+  const handleOrderByPrice = () => {
+    sortedByPrice ? (
+      sortedByPrice === "asc" ? setSortedByPrice("desc") : setSortedByPrice("")
+    ) : setSortedByPrice("asc")
+  }
+
   return (
     <div id="products">
       {
@@ -154,11 +185,13 @@ export const Products = () => {
         ) : (
           <>
             <br />
+            {/* TITLE FILTER - TEXTBOX */}
             <input 
               onChange={handleProductsFilter}
               placeholder="Search a product..."
               type="text" 
             />
+            {/* SHAPE FILTER - DROPDOWN */}
             <form>
               <select 
                 onChange={handleFilterByShapeInput}
@@ -169,21 +202,36 @@ export const Products = () => {
                 <option value="powder">Powder</option>
               </select>
             </form>
+            {/* PRICE SORTER - BUTTON */}
+            <button
+              onClick={handleOrderByPrice}
+            >
+              Sorted by price
               {
-                allTags && allTags.map((tag, i) => (
-                  <div key={i}>
-                    <input 
-                      defaultChecked={false}
-                      name={tag}
-                      onClick={handleFilterByTags}
-                      type="checkbox"
-                    />
-                    <label for={tag}>
-                      {tag}
-                    </label>
-                  </div>
+                sortedByPrice && (sortedByPrice === "asc" ? (
+                  <span> ▲ </span>
+                ) : (
+                  <span> ▼ </span>
                 ))
               }
+            </button>
+            {/* TAGS FILTER - CHECKBOXES */}
+            {/* {
+              allTags && allTags.map((tag, i) => (
+                <div key={i}>
+                  <input 
+                    defaultChecked={false}
+                    name={tag}
+                    onClick={handleFilterByTags}
+                    type="checkbox"
+                  />
+                  <label for={tag}>
+                    {tag}
+                  </label>
+                </div>
+              ))
+            } */}
+            {/* PRODUCTS - CARDS */}
             {
               productsToDisplay && productsToDisplay.map(product => (
                 <ProductCard
@@ -196,6 +244,7 @@ export const Products = () => {
               page={page}
               onChange={handleChangeActivePage}
             />
+            {/* PRODUCTS PER PAGE - DROPDOWN */}
             <form>
               <label for="productsPerPage">
                 Products per page: 
