@@ -216,7 +216,7 @@ export const Products = () => {
               }
             </button>
             {/* TAGS FILTER - CHECKBOXES */}
-            {/* {
+            {
               allTags && allTags.map((tag, i) => (
                 <div key={i}>
                   <input 
@@ -230,7 +230,7 @@ export const Products = () => {
                   </label>
                 </div>
               ))
-            } */}
+            }
             {/* PRODUCTS - CARDS */}
             {
               productsToDisplay && productsToDisplay.map(product => (

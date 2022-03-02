@@ -42,6 +42,24 @@ export const apiGetUserSelf = async () => {
   }
 }
 
+// [PUT] /users/reset_password
+export const apiUpdatePassword = async ({
+  oldPass, newPass, confirmNewPass 
+}) => {
+  try {
+    const { data } = await nutritivApi.put(
+      `/users/reset_password`,
+      { oldPass, newPass, confirmNewPass }
+    )
+    console.log('# /users/reset_password :', data)
+    
+    return data;
+  } catch(err) {
+    console.log('# [put] /users/reset_password err:', err)
+    return err;
+  }
+}
+
 // ### products ###
 // [GET] /products/?limit=X
 export const apiGetProductsByLimit = async (limit) => {

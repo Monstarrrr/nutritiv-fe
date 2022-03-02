@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { apiDeleteCartItem, apiGetSelfCart } from '../Api/nutritivApi';
+import { PaymentContainer } from './PaymentContainer';
 
 export const Cart = () => {
   const [cart, setCart] = useState(null)
@@ -58,6 +59,8 @@ export const Cart = () => {
           <h2>Cart is empty!</h2>
         )
       }
+      <br />
+      <PaymentContainer />
       <pre>{JSON.stringify(cart, null, 2)}</pre>
     </div>
   )
