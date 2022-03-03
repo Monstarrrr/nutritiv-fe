@@ -102,8 +102,6 @@ export default function Profile() {
     }
   }
 
-  console.log('# updatePasswordResponse :', updatePasswordResponse)
-  
   return (
     <div>
       <h1>Profile</h1>
