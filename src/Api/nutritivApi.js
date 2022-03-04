@@ -60,6 +60,21 @@ export const apiUpdatePassword = async ({
   }
 }
 
+// [PUT] /users/addAddress
+export const apiAddUserAddress = async (props) => {
+  try {
+    const { data } = await nutritivApi.put(
+      `/users/addAddress`,
+      props
+    )
+    console.log('# /users/addAddress :', data)
+    
+    return data;
+  } catch(err) {
+    console.error('# [put] /users/addAddress code:', err.response.status)
+  }
+}
+
 // ### products ###
 // [GET] /products/?limit=X
 export const apiGetProductsByLimit = async (limit) => {
