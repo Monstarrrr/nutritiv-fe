@@ -101,22 +101,6 @@ export const apiDeleteUserAddress = async (addressId) => {
     )
   }
 }
-
-// ### products ###
-// [GET] /products/?limit=X
-export const apiGetProductsByLimit = async (limit) => {
-  try {
-    const { data: products } = await nutritivApi.get(
-      `/products/?limit=${limit}`,
-    )
-    return products.products;
-  } catch (err) {
-    console.log(
-      `# /products/?limit code :`, 
-      err.response.status
-    )
-  }
-}
 // [GET] /products/?start=x&end=y
 export const apiGetProductsBySlice = async (start, end) => {
   try {

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-import { apiGetAllUniqueTags, apiGetProductsByLimit } from '../Api/nutritivApi';
+import nutritivApi, { apiGetAllUniqueTags } from '../Api/nutritivApi';
 import { ProductCard } from './ProductCard';
 import './products.scss';
 import { Pagination } from '@mui/material';
@@ -26,7 +26,7 @@ export const Products = () => {
   const [filterByPriceMaxInput, setFilterByPriceMaxInput] = useState(0)
   const [sortedByPrice, setSortedByPrice] = useState("")
   const [sortedByPriceStatus, setSortedByPriceStatus] = useState("")
-
+  
   const [allTags, setAllTags] = useState([])
   
   // API EFFECTS
@@ -34,9 +34,11 @@ export const Products = () => {
     async function fetchApi() {
       try {
         setLoading(true)
-        const data = await apiGetProductsByLimit();
-        setAllProducts(data)
-        setAllFilteredProducts(data)
+        const { data: products } = await nutritivApi.get(
+          `/products/`,
+        );
+        setAllProducts(products.products)
+        setAllFilteredProducts(products.products)
         setLoading(false)
       } catch (err) {
         setErrorApiGetProducts(true)

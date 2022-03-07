@@ -5,7 +5,7 @@ export const ProductCard = ({ product }) => {
   const navigate = useNavigate();
   
   const lowestItemPrice = product.productItems[0].price.value
-
+  
   return (
     <div
       key={product._id}
