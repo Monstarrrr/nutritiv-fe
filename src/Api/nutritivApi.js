@@ -137,23 +137,6 @@ export const apiGetCountInStock = async (productId) => {
     return null;
   }
 }
-// [GET] /products/tags
-export const apiGetAllUniqueTags = async () => {
-  try {
-    const { data } = await nutritivApi.get(
-      `/products/tags`
-    )
-    console.log('# /products/tags :', data.uniqueTags)
-    return (
-      data.uniqueTags
-    )
-  } catch(err) {
-    console.log(
-      '# [get] /products/tags code:', 
-      err.response.status
-    )
-  }
-}
 // [GET] /products/findByTitle/:productTitle
 export const apiGetProductByTitle = async (productTitle) => {
   try {

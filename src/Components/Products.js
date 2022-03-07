@@ -34,11 +34,11 @@ export const Products = () => {
     async function fetchApi() {
       try {
         setLoading(true)
-        const { data: products } = await nutritivApi.get(
+        const { data } = await nutritivApi.get(
           `/products/`,
         );
-        setAllProducts(products.products)
-        setAllFilteredProducts(products.products)
+        setAllProducts(data.products)
+        setAllFilteredProducts(data.products)
         setLoading(false)
       } catch (err) {
         setErrorApiGetProducts(true)
@@ -51,10 +51,13 @@ export const Products = () => {
     async function fetchApi() {
       try {
         setLoading(true)
-        const data = await apiGetAllUniqueTags();
-        setAllTags(data)
+        const { data } = await nutritivApi.get(
+          `/products/tags`
+        );
+        console.log('# data :', data)
+        setAllTags(data.uniqueTags)
       } catch (err) {
-        console.log('# apiGetAllUniqueTags() err :', err)
+        console.log('# /products/tags err :', err)
       }
     }
     fetchApi();
@@ -227,7 +230,7 @@ export const Products = () => {
                     onClick={handleFilterByTags}
                     type="checkbox"
                   />
-                  <label for={tag}>
+                  <label htmlFor={tag}>
                     {tag}
                   </label>
                 </div>
