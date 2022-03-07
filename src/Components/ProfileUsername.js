@@ -4,7 +4,6 @@ export const ProfileUsername = ({ userInfo }) => {
 
   return (
     <div>
-      <h1>Profile</h1>
       <span>
         <h3>
           Username

@@ -1,6 +1,9 @@
 import axios from 'axios';
 import { storageKeys } from '../Helpers/localStorage';
-import { updateAuthStatus, updateUserCartQuantity } from '../Redux/reducers/user';
+import { 
+  updateAuthStatus, 
+  updateUserCartQuantity 
+} from '../Redux/reducers/user';
 
 // # INJECT STORE TO PREVENT IMPORT ISSUES #
 let store
@@ -10,7 +13,7 @@ export const injectStore = _store => {
 
 // # API INSTANCE #
 const nutritivApi = axios.create({
-  baseURL: 'http://localhost:3001/', // Change in prod
+  baseURL: 'http://localhost:3001/', // Change in pro
 })
 
 // # API CALLS #
@@ -24,24 +27,44 @@ export const apiLoginUser = async (loginData) => {
     )
     return data;
   } catch (err) {
-    console.log('# /auth/login err :', err)
+    console.log(
+      '# /auth/login code :', 
+      err.response.status
+    )
   }
-};
+}
 
 // ### users ###
 // [GET] /users/self
 export const apiGetUserSelf = async () => {
-  console.log('# user/self')
   try {
     const { data } = await nutritivApi.get(
-        '/users/self'
+      '/users/self'
     )
     return data;
   } catch (err) {
-    console.log('# /users/self err :', err)
+    console.log(
+      '# /users/self code :', 
+      err.response.status
+    )
   }
 }
-
+// [GET] /users/selfAddresses
+export const apiGetUserSelfAddresses = async () => {
+  try {
+    const { data } = await nutritivApi.get(
+      `/users/selfAddresses`,
+    )
+    console.log('# /users/selfAddresses :', data)
+    
+    return data;
+  } catch(err) {
+    console.error(
+      '# [get] /users/selfAddresses code:',
+      err.response.status
+    )
+  }
+}
 // [PUT] /users/reset_password
 export const apiUpdatePassword = async ({
   oldPass, newPass, confirmNewPass 
@@ -55,23 +78,27 @@ export const apiUpdatePassword = async ({
     
     return data;
   } catch(err) {
-    console.log('# [put] /users/reset_password err:', err)
+    console.error(
+      '# [put] /users/reset_password code:',
+      err.response.status
+    )
     return err;
   }
 }
-
-// [PUT] /users/addAddress
-export const apiAddUserAddress = async (props) => {
+// [DELETE] /users/removeAddress/${addressId}
+export const apiDeleteUserAddress = async (addressId) => {
   try {
-    const { data } = await nutritivApi.put(
-      `/users/addAddress`,
-      props
+    const { data } = await nutritivApi.delete(
+      `/users/removeAddress/${addressId}`,
     )
-    console.log('# /users/addAddress :', data)
+    console.log('# /users/removeAddress/ :', data)
     
-    return data;
+    return data
   } catch(err) {
-    console.error('# [put] /users/addAddress code:', err.response.status)
+    console.error(
+      '# [del] /users/removeAddress/ code:',
+      err.response.status
+    )
   }
 }
 
@@ -84,7 +111,10 @@ export const apiGetProductsByLimit = async (limit) => {
     )
     return products.products;
   } catch (err) {
-    console.log(`# /products/?limit err :`, err)
+    console.log(
+      `# /products/?limit code :`, 
+      err.response.status
+    )
   }
 }
 // [GET] /products/?start=x&end=y
@@ -100,7 +130,10 @@ export const apiGetProductsBySlice = async (start, end) => {
       data
     )
   } catch(err) {
-    console.log('# [get] /products/?start=x&end=y err:', err)
+    console.log(
+      '# [get] /products/?start=x&end=y code:', 
+      err.response.status
+    )
   }
 }
 // [GET] /products/countInStock
@@ -113,7 +146,10 @@ export const apiGetCountInStock = async (productId) => {
     console.log('# products/countInStock res :', data)
     return data.countInStock;
   } catch (err) {
-    console.log(`# /products/countInStock err :`, err)
+    console.log(
+      `# /products/countInStock code :`, 
+      err.response.status
+    )
     return null;
   }
 }
@@ -128,7 +164,10 @@ export const apiGetAllUniqueTags = async () => {
       data.uniqueTags
     )
   } catch(err) {
-    console.log('# [get] /products/tags err:', err)
+    console.log(
+      '# [get] /products/tags code:', 
+      err.response.status
+    )
   }
 }
 // [GET] /products/findByTitle/:productTitle
@@ -139,7 +178,10 @@ export const apiGetProductByTitle = async (productTitle) => {
     )
     return data.Product[0];
   } catch (err) {
-    console.log(`# /products/findByTitle err :`, err)
+    console.log(
+      `# /products/findByTitle code :`, 
+      err.response.status
+    )
   }
 }
 
@@ -164,7 +206,10 @@ export const apiGetSelfCart = async () => {
       data?.cart
     )
   } catch (err) {
-    console.log(`# /carts/self err :`, err)
+    console.log(
+      `# /carts/self code :`, 
+      err.response.status
+    )
   }
 }
 // [POST] /carts/addToCart
@@ -187,8 +232,10 @@ export const apiAddToCart = async (item) => {
       data
     )
   } catch (err) {
-    console.log(`# /carts/addToCart err .:`)
-    console.log(err)
+    console.log(
+      `# /carts/addToCart code :`,
+      err.response.status
+    )
   }
 }
 // [DELETE] /carts/
@@ -204,7 +251,10 @@ export const apiDeleteCartItem = async (props) => {
       data
     )
   } catch(err) {
-    console.log('# [delete] /carts/ err:', err)
+    console.log(
+      '# [delete] /carts/ code :', 
+      err.response.status
+    )
   }
 }
 
@@ -217,8 +267,10 @@ export const apiCreateCheckoutSession = async () => {
     )
     return data;
   } catch (err) {
-    console.error('# /stripe/create-checkout-session err')
-    console.log(err)
+    console.error(
+      '# /stripe/create-checkout-session code :',
+      err.response.status
+    )
   }
 }
 
@@ -257,7 +309,10 @@ nutritivApi.interceptors.response.use(res => {
   return res;
 }, function (err) {
   if(err.status === 429) {
-    console.log('# Too many API requests :', err)
+    console.error(
+      '# Too many API requests :', 
+      err.response.status
+    )
   }
   return Promise.reject(err)
 })

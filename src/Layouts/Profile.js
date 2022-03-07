@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { apiGetUserSelf, apiUpdatePassword } from '../Api/nutritivApi';
+import { apiGetUserSelf } from '../Api/nutritivApi';
 import { ProfileAddress } from '../Components/ProfileAddress';
 import { ProfileEmail } from '../Components/ProfileEmail';
 import { ProfilePassword } from '../Components/ProfilePassword';
@@ -23,7 +23,7 @@ export default function Profile() {
     }
     fetchApi();
   }, []);
-
+  
   // HANDLERS
   // const handleChangeUsername = (e) => {
   //   setNewUsername(e.target.value)
@@ -35,13 +35,19 @@ export default function Profile() {
   
   return (
     <div>
+      <h1>Profile</h1>
+      <hr />
       <ProfileUsername userInfo={userInfo} />
+      <hr />
       <br />
       <ProfileEmail userInfo={userInfo} />
+      <hr />
       <br />
       <ProfilePassword />
+      <hr />
       <br />
       <ProfileAddress />
+      <hr />
       <br />
       Is admin: {userInfo.isAdmin?.toString()}
       <br />

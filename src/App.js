@@ -51,6 +51,7 @@ function App() {
             email: data.email,
             isAdmin: data.isAdmin,
             isVerified: data.isVerified,
+            addresses: data.addressDetails
           }))
         }
       } catch(err) {
