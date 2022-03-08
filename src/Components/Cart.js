@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux';
-import nutritivApi, { apiDeleteCartItem, apiGetSelfCart } from '../Api/nutritivApi';
+import nutritivApi from '../Api/nutritivApi';
 import { updateUserCartQuantity } from '../Redux/reducers/user';
 import { PaymentContainer } from './PaymentContainer';
 

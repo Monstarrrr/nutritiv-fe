@@ -1,8 +1,7 @@
 import axios from 'axios';
 import { storageKeys } from '../Helpers/localStorage';
 import { 
-  updateAuthStatus, 
-  updateUserCartQuantity 
+  updateAuthStatus
 } from '../Redux/reducers/user';
 
 // # INJECT STORE TO PREVENT IMPORT ISSUES #
@@ -15,6 +14,26 @@ export const injectStore = _store => {
 const nutritivApi = axios.create({
   baseURL: 'http://localhost:3001/', // Change in pro
 })
+
+// [DELETE] /carts/
+export const apiDeleteCartItem = async (props) => {
+  const { userId, productId, load } = props;
+  try {
+    const { data } = await nutritivApi.delete(
+      `/carts/${userId}/${productId}/${load}`,
+    )
+    console.log('# /carts/ :', data)
+    
+    return (
+      data
+    )
+  } catch(err) {
+    console.log(
+      '# [delete] /carts/ code :', 
+      err.response.status
+    )
+  }
+}
 
 // # INTERCEPTORS #
 // on request

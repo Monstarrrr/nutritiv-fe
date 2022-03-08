@@ -1,14 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import nutritivApi, { 
-  apiAddUserAddress, 
-  apiDeleteUserAddress, 
-  apiGetUserSelfAddresses, 
-  nutritivApiCall
-} from '../Api/nutritivApi'
+  } from '../Api/nutritivApi'
 import { 
-  addUserAddress,
-  deleteUserAddress,
   updateUserAddresses,
 } from '../Redux/reducers/user'
 

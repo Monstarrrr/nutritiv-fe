@@ -16,7 +16,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import {
   updateUser, updateUserCartQuantity,
 } from './Redux/reducers/user';
-import nutritivApi, { apiGetSelfCart, apiGetUserSelf } from './Api/nutritivApi';
+import nutritivApi from './Api/nutritivApi';
 import HomePage from './Layouts/HomePage.js';
 import RegisterPage from './Layouts/RegisterPage.js';
 import LoginPage from './Layouts/LoginPage.js';
