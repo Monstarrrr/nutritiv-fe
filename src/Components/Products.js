@@ -1,6 +1,7 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react'
 
-import nutritivApi, { apiGetAllUniqueTags } from '../Api/nutritivApi';
+import nutritivApi from '../Api/nutritivApi';
 import { ProductCard } from './ProductCard';
 import './products.scss';
 import { Pagination } from '@mui/material';
