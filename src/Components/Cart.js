@@ -8,7 +8,7 @@ export const Cart = () => {
   const dispatch = useDispatch();
   const [cart, setCart] = useState(null)
   const [deletedItem, setDeletedItem] = useState(false)
-
+  
   useEffect(() => {
     async function fetchApi() {
       try {

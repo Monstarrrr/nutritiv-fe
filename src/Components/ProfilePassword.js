@@ -10,24 +10,42 @@ export const ProfilePassword = () => {
   const [updatePasswordResponse, setUpdatePasswordResponse] = useState(null)
   const [loadingUpdatePassword, setLoadingUpdatePassword] = useState(false)
   
-  const [errorUpdatePasswordEmpty, setErrorUpdatePasswordEmpty] = useState(false)
-  const [errorUpdatePasswordNotMatching, setErrorUpdatePasswordNotMatching] = useState(false)
+  const [errorPasswordInput, setErrorPasswordInput] = useState({
+    isEmpty: false,
+    isNotMatching: false,
+  })
   
   const passwordInputsValidation = () => {
     setUpdatePasswordResponse(null)
     let passwordEmpty = false;
     let passwordNotMatching = false;
     if(
-      !passwordInput.oldPass || 
-      !passwordInput.newPass || 
+      !passwordInput.oldPass ||
+      !passwordInput.newPass ||
       !passwordInput.confirmNewPass
     ) {
-      setErrorUpdatePasswordEmpty(true)
+      setErrorPasswordInput({
+        ...errorPasswordInput,
+        isEmpty: true,
+      })
       passwordEmpty = true;
+    } else {
+      setErrorPasswordInput({
+        ...errorPasswordInput,
+        isEmpty: false,
+      })
     }
     if(passwordInput.newPass !== passwordInput.confirmNewPass) {
-      setErrorUpdatePasswordNotMatching(true)
+      setErrorPasswordInput({
+        ...errorPasswordInput,
+        isNotMatching: true,
+      })
       passwordNotMatching = true;
+    } else {
+      setErrorPasswordInput({
+        ...errorPasswordInput,
+        isNotMatching: false,
+      })
     }
     return !passwordEmpty && !passwordNotMatching
   }
@@ -47,11 +65,12 @@ export const ProfilePassword = () => {
     
     if(isValid) {
       setLoadingUpdatePassword(true)
-      setErrorUpdatePasswordNotMatching(false)
-      setErrorUpdatePasswordEmpty(false)
-        
-      console.log('# sending passwordInput :', passwordInput)
-
+      setErrorPasswordInput(
+        Object.keys(errorPasswordInput).forEach(v => (
+          errorPasswordInput[v] = false
+        ))
+      )
+      
       try {
         const { data } = await nutritivApi.put(
           `/users/reset_password`,
