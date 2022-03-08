@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import nutritivApi from '../Api/nutritivApi';
 
 export default function RegisterPage() {
   
@@ -17,30 +18,31 @@ export default function RegisterPage() {
     })
   }
   
-  const validation = () => {
-    setRegisterData({
-      ...registerData,
-      error: true,
-    })
-  }
+  // const validation = () => {
+  //   setRegisterData({
+  //     ...registerData,
+  //     error: true,
+  //   })
+  // }
   
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
-    const isValid = validation();
+    // const isValid = validation();
     
-    if(isValid) {
-      try {
-        axios.post(
-          'http://localhost:3001/api/auth/register', // temp
-          { registerData }
-        )
-      } catch(err) {
-        console.log('# err :', err)
-      }
+    // if(isValid) {
+    try {
+      await nutritivApi.post(
+        '/auth/register',
+        registerData
+      )
+    } catch(err) {
+      console.log('# err :', err)
     }
   }
-  
+    // }
+  console.log('# registerData :', registerData)
+    
   return (
     <div>
       <h2>Register page</h2>

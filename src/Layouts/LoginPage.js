@@ -2,7 +2,7 @@ import React, {
   useState, 
   // useEffect 
 } from 'react';
-import { apiLoginUser } from '../Api/nutritivApi';
+import nutritivApi, { apiLoginUser } from '../Api/nutritivApi';
 
 export default function LoginPage() {
   console.log("##### LoginPage render #####");
@@ -50,7 +50,10 @@ export default function LoginPage() {
       
     if(isValid) {
       try {
-        apiLoginUser(loginData)
+        await nutritivApi.post(
+          `/auth/login`,
+          loginData
+        )
       } catch(err) {
         setInvalidLogin(true)
       }

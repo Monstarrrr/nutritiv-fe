@@ -14,9 +14,9 @@ import {
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import {
-  updateUser,
+  updateUser, updateUserCartQuantity,
 } from './Redux/reducers/user';
-import { apiGetSelfCart, apiGetUserSelf } from './Api/nutritivApi';
+import nutritivApi, { apiGetSelfCart, apiGetUserSelf } from './Api/nutritivApi';
 import HomePage from './Layouts/HomePage.js';
 import RegisterPage from './Layouts/RegisterPage.js';
 import LoginPage from './Layouts/LoginPage.js';
@@ -42,9 +42,11 @@ function App() {
     let isSubscribed = true;
     const checkUserAuth = async () => {
       try {
-        const data = await apiGetUserSelf();
+        const { data } = await nutritivApi.get(
+          '/users/self'
+        );
         if(isSubscribed) {
-          console.log('# apiGetUserSelf res :', data)
+          console.log('# /users/self res :', data)
           dispatch(updateUser({
             loggedIn: data.loggedIn,
             username: data.username,
@@ -55,7 +57,7 @@ function App() {
           }))
         }
       } catch(err) {
-        console.error('# err', err)
+        console.error('# /users/self :', err)
       }
     };
     checkUserAuth();
@@ -66,7 +68,18 @@ function App() {
   useEffect(() => {
     const checkSelfCartQuantity = async () => {
       try {
-        const data = await apiGetSelfCart();
+        const { data } = await nutritivApi.get(
+          `/carts/self`,
+        );
+        data.cart ? (
+          dispatch(updateUserCartQuantity({
+            cartQuantity: data.cart.totalQuantity,
+          }))
+        ) : (
+          dispatch(updateUserCartQuantity({
+            cartQuantity: 0,
+          }))
+        )
         console.log('# checkSelfCartQuantity data :', data)
       } catch(err) {
         console.error('# err', err)

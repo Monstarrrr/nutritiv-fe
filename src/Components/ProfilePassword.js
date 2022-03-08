@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { apiUpdatePassword } from '../Api/nutritivApi'
+import nutritivApi, { apiUpdatePassword } from '../Api/nutritivApi'
 
 export const ProfilePassword = () => {
   const [passwordInput, setPasswordInput] = useState({
@@ -51,26 +51,23 @@ export const ProfilePassword = () => {
       setErrorUpdatePasswordEmpty(false)
         
       console.log('# sending passwordInput :', passwordInput)
-      
-      // API FUNCTION
-      const data = await apiUpdatePassword(passwordInput)
-      
-      // IN ANY CASE
-      setLoadingUpdatePassword(false)
-      
-      // IF ERROR
-      if(data?.response?.status) {
+
+      try {
+        const { data } = await nutritivApi.put(
+          `/users/reset_password`,
+          passwordInput
+        )
+        setUpdatePasswordResponse(data)
+        setPasswordInput({
+          oldPass: "",
+          newPass: "",
+          confirmNewPass: ""
+        })
+      } catch (err) {
         setUpdatePasswordResponse({})
-        return;
+        console.log('# /users/reset_password :', err)
       }
-      
-      // IF SUCCESS
-      setUpdatePasswordResponse(data)
-      setPasswordInput({
-        oldPass: "",
-        newPass: "",
-        confirmNewPass: ""
-      })
+      setLoadingUpdatePassword(false)
     }
   }
 

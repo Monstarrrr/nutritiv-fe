@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { apiGetUserSelf } from '../Api/nutritivApi';
+import nutritivApi, { apiGetUserSelf } from '../Api/nutritivApi';
 import { ProfileAddress } from '../Components/ProfileAddress';
 import { ProfileEmail } from '../Components/ProfileEmail';
 import { ProfilePassword } from '../Components/ProfilePassword';
@@ -15,10 +15,12 @@ export default function Profile() {
   useEffect(() => {
     async function fetchApi() {
       try {
-        const data = await apiGetUserSelf()
+        const { data } = await nutritivApi.get(
+          '/users/self'
+        )
         setUserInfo(data)
       } catch(err) {
-        console.log('apiGetUserSelf() err :', err)
+        console.log('/users/self :', err)
       }
     }
     fetchApi();

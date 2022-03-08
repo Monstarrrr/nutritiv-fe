@@ -1,29 +1,45 @@
 import React, { useEffect, useState } from 'react'
-import { apiDeleteCartItem, apiGetSelfCart } from '../Api/nutritivApi';
+import { useDispatch } from 'react-redux';
+import nutritivApi, { apiDeleteCartItem, apiGetSelfCart } from '../Api/nutritivApi';
+import { updateUserCartQuantity } from '../Redux/reducers/user';
 import { PaymentContainer } from './PaymentContainer';
 
 export const Cart = () => {
+  const dispatch = useDispatch();
   const [cart, setCart] = useState(null)
   const [deletedItem, setDeletedItem] = useState(false)
 
   useEffect(() => {
     async function fetchApi() {
       try {
-        const data = await apiGetSelfCart()
-        setCart(data)
+        const { data } = await nutritivApi.get(
+          `/carts/self`
+        )
+        data.cart ? (
+          dispatch(updateUserCartQuantity({
+            cartQuantity: data.cart.totalQuantity,
+          }))
+        ) : (
+          dispatch(updateUserCartQuantity({
+            cartQuantity: 0,
+          }))
+        )
+        setCart(data.cart)
       } catch(err) {
         console.log('apiGetSelfCart() err :', err)
       }
     }
     fetchApi();
-  }, [deletedItem]);
+  }, [deletedItem, dispatch]);
   
   const handleRemoveCartItem = async (productId, id) => {
     try {
-      await apiDeleteCartItem(cart.userId, productId, id)
+      await nutritivApi.delete(
+        `/carts/${cart.userId}/${productId}/${id}`
+      )
       setDeletedItem(!deletedItem);
     } catch (err) {
-      console.log('# apiDeleteCartItem err :', err)
+      console.log('# [DEL] /carts/ :', err)
     }
   }
   

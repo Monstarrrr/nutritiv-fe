@@ -1,8 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import React, { 
+  useEffect, 
+  useState 
+} from 'react'
+import { useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
-import { apiAddToCart, apiGetCountInStock, apiGetProductByTitle } from '../Api/nutritivApi';
+import nutritivApi from '../Api/nutritivApi';
+import { updateUserCartQuantity } from '../Redux/reducers/user';
 
 export const ProductPage = () => {
+  const dispatch = useDispatch();
   const { productTitle } = useParams();
   const [product, setProduct] = useState({
     productItems: []
@@ -22,7 +28,10 @@ export const ProductPage = () => {
   useEffect(() => {
     try {
       async function fetchApi() {
-        const fetchedProduct = await apiGetProductByTitle(productTitle)
+        const { data } = await nutritivApi.get(
+          `/products/findByTitle/${productTitle}`
+        )
+        const fetchedProduct = data.Product[0]
         setProduct(fetchedProduct);
         setSelectedItem(prevState => ({
           ...prevState,
@@ -31,7 +40,7 @@ export const ProductPage = () => {
       }
       fetchApi();
     } catch (err) {
-      console.log('# apiGetProductByTitle err :', err)
+      console.log('# /products/findByTitle err :', err)
     }
   }, [productTitle])
   
@@ -55,8 +64,10 @@ export const ProductPage = () => {
     if(product._id) {
       try {
         async function fetchApi() {
-          const data = await apiGetCountInStock(product._id);
-          setCountInStock(data)
+          const { data } = await nutritivApi.get(
+            `/products/countInStock/${product._id}`
+          );
+          setCountInStock(data.countInStock)
         }
         fetchApi();
       } catch (err) {
@@ -78,7 +89,13 @@ export const ProductPage = () => {
   // HANDLE ADD TO CART
   const handleAddToCart = async () => {
     try {
-      await apiAddToCart(selectedItem);
+      const { data } = await nutritivApi.post(
+        `carts/addToCart`,
+        selectedItem
+      );
+      dispatch(updateUserCartQuantity({
+        cartQuantity: data.cart.totalQuantity,
+      }))
       setAddedToCart(!addedToCart);
     } catch (err) {
       console.log('# apiAddToCart err :', err)

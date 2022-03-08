@@ -7,8 +7,9 @@ import nutritivApi, {
   nutritivApiCall
 } from '../Api/nutritivApi'
 import { 
-  deleteUserAddress, 
-  updateUserAddresses 
+  addUserAddress,
+  deleteUserAddress,
+  updateUserAddresses,
 } from '../Redux/reducers/user'
 
 const fields = {
@@ -44,21 +45,16 @@ export const ProfileAddress = () => {
   // DELETE ADDRESS
   useEffect(() => {
     async function fetchApi() {
-      // API FUNCTION
-      const data = await apiDeleteUserAddress(addressToDelete)
-      
-      // IN ANY CASE
-      
-      // IF ERROR
-      if(data?.response) {
-        console.error(data.response.status)
-        return;
+      try {
+        const { data } = await nutritivApi.delete(
+          `/users/removeAddress/${addressToDelete}`
+        )
+        dispatch(updateUserAddresses({
+          addresses: data.addressDetails,
+        }))
+      } catch (err) {
+        console.log('# /users/removeAddress :', err) 
       }
-      
-      // IF SUCCESS
-      dispatch(updateUserAddresses({
-        addresses: data.addressDetails,
-      }))
     }
     if(isFirstRender.current) {
       isFirstRender.current = false

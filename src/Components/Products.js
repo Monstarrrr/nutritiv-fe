@@ -73,7 +73,6 @@ export const Products = () => {
     allFilteredProducts
   ]);
   
-
   // DISPLAY EFFECT
   useEffect(() => {
     
