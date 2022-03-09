@@ -15,26 +15,6 @@ const nutritivApi = axios.create({
   baseURL: 'http://localhost:3001/', // Change in pro
 })
 
-// [DELETE] /carts/
-export const apiDeleteCartItem = async (props) => {
-  const { userId, productId, load } = props;
-  try {
-    const { data } = await nutritivApi.delete(
-      `/carts/${userId}/${productId}/${load}`,
-    )
-    console.log('# /carts/ :', data)
-    
-    return (
-      data
-    )
-  } catch(err) {
-    console.log(
-      '# [delete] /carts/ code :', 
-      err.response.status
-    )
-  }
-}
-
 // # INTERCEPTORS #
 // on request
 nutritivApi.interceptors.request.use(req => {
@@ -42,7 +22,7 @@ nutritivApi.interceptors.request.use(req => {
   const accessToken = localStorage.getItem(storageKeys.accessToken);
   req.headers.access_token = accessToken;
   req.headers.refresh_token = refreshToken;
-  console.log('# Interceptor req :', req)
+  console.log("# Interceptor req :", req)
   return req;
 }, function (err) {
   return Promise.reject(err)
@@ -71,7 +51,7 @@ nutritivApi.interceptors.response.use(res => {
 }, function (err) {
   if(err.status === 429) {
     console.error(
-      '# Too many API requests :', 
+      "# Too many API requests :", 
       err.response.status
     )
   }

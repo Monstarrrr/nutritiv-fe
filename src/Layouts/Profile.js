@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import nutritivApi, { apiGetUserSelf } from '../Api/nutritivApi';
+import nutritivApi from '../Api/nutritivApi';
 import { ProfileAddress } from '../Components/ProfileAddress';
 import { ProfileEmail } from '../Components/ProfileEmail';
 import { ProfilePassword } from '../Components/ProfilePassword';

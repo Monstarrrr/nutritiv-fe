@@ -1,97 +1,100 @@
-import React, { useState } from 'react'
-import { useReducer } from 'react'
+import React, { useReducer } from 'react'
 import nutritivApi from '../Api/nutritivApi'
 
 const reducer = (prevState, action) => {
-  switch(action.type) {
-    case 'ADD_PASSWORD':
-      return {
-        ...prevState,
-        passwordInput: {
-          ...prevState.passwordInput,
-          [action.payload.target.name]: action.payload.target.value
-        }
+  const { type, key, value } = action;
+  
+  if(type === 'INPUT') {
+    return {
+      ...prevState,
+      inputs: {
+        ...prevState.inputs,
+        [key]: value
       }
-    default:
-      throw new Error();
+    } 
+  } else if(type === 'CLEAR_INPUTS') {
+    const clearedInputs = Object.keys(prevState.inputs).map(v => (
+      prevState.inputs[v] = ""
+    ))
+    return {
+      ...prevState,
+      inputs: clearedInputs
+    }
+  } else if(type === 'API') {
+    return {
+      ...prevState,
+      [key]: value,
+    }
+  } else if(type === 'LOADING') {
+    return {
+      ...prevState,
+      [key]: value
+    }
+  } else if(type === 'ERROR') {
+    return {
+      ...prevState,
+      errors: {
+        ...prevState.errors,
+        [key]: value
+      }
+    }
   }
 }
 
-export const ProfilePassword = () => {
-  const [
-    { 
-      passwordInput,
-    }, 
-    dispatch
-  ] = useReducer(reducer, {
-    passwordInput: {
-      oldPass: "",
-      newPass: "",
-      confirmNewPass: ""
-    }
-  })
-  // const [passwordInput, setPasswordInput] = useState({
-  //   oldPass: "",
-  //   newPass: "",
-  //   confirmNewPass: ""
-  // })
-  const [updatePasswordResponse, setUpdatePasswordResponse] = useState(null)
-  const [loadingUpdatePassword, setLoadingUpdatePassword] = useState(false)
-  
-  const [errorPasswordInput, setErrorPasswordInput] = useState({
+const initialState = {
+  inputs: {
+    oldPass: "",
+    newPass: "",
+    confirmNewPass: "",
+  },
+  errors: {
     isEmpty: false,
     isNotMatching: false,
-  })
+  },
+  loading: false,
+  response: null
+}
 
-  console.log('# passwordInput :', passwordInput)
-  console.log('# errorPasswordInput :', errorPasswordInput)
-  console.log('# !passwordInput.oldPass :', !passwordInput.oldPass)
+export const ProfilePassword = () => {
   
-  const passwordInputsValidation = () => {
-    setUpdatePasswordResponse(null)
+  const [state, dispatch] = useReducer(reducer, initialState)
+  
+  const { inputs, errors, loading, response } = state;
+  
+  const changeState = (type, key, value) => {
+    dispatch({ type, key, value })
+  }
+
+  console.log("# password inputs :", inputs)
+  console.log('# password errorInput :', errors)
+  console.log('# password loadings :', loading)
+  console.log('# password apiResponses :', response)
+  
+  const passwordInputsValidation = () => {  
+    
+    changeState('API', 'response', null)
     let passwordEmpty = false;
     let passwordNotMatching = false;
     
     if(
-      !passwordInput.oldPass ||
-      !passwordInput.newPass ||
-      !passwordInput.confirmNewPass
+      !inputs.oldPass ||
+      !inputs.newPass ||
+      !inputs.confirmNewPass
     ) {
-      console.log("IF ENTERED SUCCESSFULLY...")
-      setErrorPasswordInput({
-        ...errorPasswordInput,
-        isEmpty: true,
-      })
+      changeState('ERROR', 'isEmpty', true)
       passwordEmpty = true;
     } else {
-      setErrorPasswordInput({
-        ...errorPasswordInput,
-        isEmpty: false,
-      })
+      changeState('ERROR', 'isEmpty', false)
     }
     
-    if(passwordInput.newPass !== passwordInput.confirmNewPass) {
-      setErrorPasswordInput({
-        ...errorPasswordInput,
-        isNotMatching: true,
-      })
+    if(inputs.newPass !== inputs.confirmNewPass) {
+      changeState('ERROR', 'isNotMatching', true)
       passwordNotMatching = true;
     } else {
-      setErrorPasswordInput({
-        ...errorPasswordInput,
-        isNotMatching: false,
-      })
+      changeState('ERROR', 'isNotMatching', false)
     }
     return !passwordEmpty && !passwordNotMatching
   }
-  
-  // HANDLERS
-  // const handlePasswordInputChange = (e) => {
-  //   setPasswordInput({
-  //     ...passwordInput,
-  //     [e.target.name]: e.target.value
-  //   })
-  // }
   
   const handleSubmitUpdatePassword = async (e) => {
     e.preventDefault()
@@ -99,34 +102,20 @@ export const ProfilePassword = () => {
     const isValid = passwordInputsValidation();
     
     if(isValid) {
-      console.log("INPUTS VALID, API CALL STARTING...")
-      setLoadingUpdatePassword(true)
-      setErrorPasswordInput(
-        Object.keys(errorPasswordInput).forEach(v => (
-          errorPasswordInput[v] = false
-        ))
-      )
-      
+      changeState('LOADING', 'serverResponse', true)
+      changeState('CLEAR_INPUTS')
       try {
         const { data } = await nutritivApi.put(
           `/users/reset_password`,
-          passwordInput
+          inputs
         )
-        setUpdatePasswordResponse(data)
-        dispatch({
-          type: "ADD_PASSWORD",
-          payload: ""
-        })
-        // setPasswordInput({
-        //   oldPass: "",
-        //   newPass: "",
-        //   confirmNewPass: ""
-        // })
+        changeState('API', 'response', data)
+        changeState('CLEAR_INPUTS')
       } catch (err) {
-        setUpdatePasswordResponse({})
-        console.log('# /users/reset_password :', err)
+        changeState('API', 'response', {})
+        console.log("# /users/reset_password :", err)
       }
-      setLoadingUpdatePassword(false)
+      changeState('LOADING', 'serverResponse', false)
     }
   }
 
@@ -139,33 +128,33 @@ export const ProfilePassword = () => {
           </h3>
           <br />
           <input
-            onChange={event =>
-              dispatch({ type: "ADD_PASSWORD", payload: event })
+            onChange={e =>
+              changeState("INPUT", "oldPass", e.target.value)
             }
             name='oldPass'
             placeholder='Current password...'
             type="password"
-            value={passwordInput.oldPass}
+            value={inputs.oldPass}
           />
           <br />
           <input
-            onChange={event =>
-              dispatch({ type: "ADD_PASSWORD", payload: event.target.value})
+            onChange={e =>
+              changeState('PASSWORD', 'newPass', e.target.value)  
             }
             name='newPass'
             placeholder='New password...'
             type="password"
-            value={passwordInput.newPass}
+            value={inputs.newPass}
           />
           <br />
           <input
-            onChange={event =>
-              dispatch({ type: "ADD_PASSWORD", payload: event.target.value})
+            onChange={e =>
+              changeState('PASSWORD', 'confirmNewPass', e.target.value)
             }
             name='confirmNewPass'
             placeholder='Confirm new password...'
             type="password"
-            value={passwordInput.confirmNewPass}
+            value={inputs.confirmNewPass}
           />
           <br />
           <input
@@ -174,7 +163,7 @@ export const ProfilePassword = () => {
           />
           <br />
           { 
-            errorPasswordInput.isNotMatching && (
+            errors.passwordNotMatching && (
               <span style={{color: "red"}}>
                 The password do not match the confirmation field.
               </span>
@@ -182,7 +171,7 @@ export const ProfilePassword = () => {
           }
           <br />
           { 
-            errorPasswordInput.isEmpty && (
+            errors.isEmpty && (
               <span style={{color: "red"}}>
                 Please fill in all the fields.
               </span>
@@ -190,7 +179,7 @@ export const ProfilePassword = () => {
           }
           <br />
           {
-            loadingUpdatePassword && (
+            loading && (
               <span>
                 Loading...
               </span>
@@ -198,8 +187,8 @@ export const ProfilePassword = () => {
           }
           <br />
           {
-            updatePasswordResponse && (
-              updatePasswordResponse.success ? (
+            response && (
+              response.success ? (
                 <span style={{color: "green"}}>
                   Password successfully changed.
                 </span>

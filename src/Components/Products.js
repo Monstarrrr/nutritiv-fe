@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars */
+/* eslint-disable no-unused-vars */ // Temp
 import React, { useEffect, useState } from 'react'
 
 import nutritivApi from '../Api/nutritivApi';
