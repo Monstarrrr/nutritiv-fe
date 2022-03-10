@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import nutritivApi from '../Api/nutritivApi';
 import { ProfileAddress } from '../Components/ProfileAddress';
+import { ProfileAvatar } from '../Components/ProfileAvatar';
 import { ProfileEmail } from '../Components/ProfileEmail';
 import { ProfilePassword } from '../Components/ProfilePassword';
 import { ProfileUsername } from '../Components/ProfileUsername';
@@ -39,6 +40,10 @@ export default function Profile() {
     <div>
       <h1>Profile</h1>
       <hr />
+      <br />
+      <ProfileAvatar userInfo={userInfo} />
+      <hr />
+      <br />
       <ProfileUsername userInfo={userInfo} />
       <hr />
       <br />

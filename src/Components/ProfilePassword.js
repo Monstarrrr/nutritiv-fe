@@ -38,29 +38,29 @@ const reducer = (prevState, action) => {
         [key]: value
       }
     }
+  } else {
+    return prevState;
   }
-}
-
-const initialState = {
-  inputs: {
-    oldPass: "",
-    newPass: "",
-    confirmNewPass: "",
-  },
-  errors: {
-    isEmpty: false,
-    isNotMatching: false,
-  },
-  loading: false,
-  response: null
 }
 
 export const ProfilePassword = () => {
   
-  const [state, dispatch] = useReducer(reducer, initialState)
+  const [state, dispatch] = useReducer(reducer, {
+    inputs: {
+      oldPass: "",
+      newPass: "",
+      confirmNewPass: "",
+    },
+    errors: {
+      isEmpty: false,
+      isNotMatching: false,
+    },
+    loading: false,
+    response: null
+  })
   
   const { inputs, errors, loading, response } = state;
-  
+
   const changeState = (type, key, value) => {
     dispatch({ type, key, value })
   }
@@ -129,7 +129,7 @@ export const ProfilePassword = () => {
           <br />
           <input
             onChange={e =>
-              changeState("INPUT", "oldPass", e.target.value)
+              changeState('INPUT', 'oldPass', e.target.value)
             }
             name='oldPass'
             placeholder='Current password...'
@@ -139,7 +139,7 @@ export const ProfilePassword = () => {
           <br />
           <input
             onChange={e =>
-              changeState('PASSWORD', 'newPass', e.target.value)  
+              changeState('INPUT', 'newPass', e.target.value)  
             }
             name='newPass'
             placeholder='New password...'
@@ -149,7 +149,7 @@ export const ProfilePassword = () => {
           <br />
           <input
             onChange={e =>
-              changeState('PASSWORD', 'confirmNewPass', e.target.value)
+              changeState('INPUT', 'confirmNewPass', e.target.value)
             }
             name='confirmNewPass'
             placeholder='Confirm new password...'
@@ -158,12 +158,12 @@ export const ProfilePassword = () => {
           />
           <br />
           <input
-            type="submit" 
+            type="submit"
             value="Change password"
           />
           <br />
           { 
-            errors.passwordNotMatching && (
+            errors.isNotMatching && (
               <span style={{color: "red"}}>
                 The password do not match the confirmation field.
               </span>
