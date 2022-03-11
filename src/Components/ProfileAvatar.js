@@ -3,14 +3,14 @@ import nutritivApi from '../Api/nutritivApi';
 
 export const ProfileAvatar = () => {
   const [file, setFile] = useState(null)
-  
+
   const handleUpload = (e) => {
     setFile(e.target.files[0])
   }
   
   const onClick = () => {
     var data = new FormData();
-    data.append("file", file);
+    data.append("imageFile", file);
     
     try {
       nutritivApi.post(
@@ -21,21 +21,30 @@ export const ProfileAvatar = () => {
       console.log('# err :', err)
     }
   };
-
+  
   return (
-    <form onSubmit={() => false}>
-      <input 
-        id="file" 
-        type="file" 
-        onChange={handleUpload}
-      />
-      <button
-        id="upload" 
-        type="button" 
-        onClick={onClick}
-      >
-        Upload
-      </button>
-    </form>
+    <>
+      <h3>
+        Avatar
+      </h3>
+      <form onSubmit={() => false}>
+        <input 
+          id="file" 
+          name="imageFile"
+          type="file"
+          onChange={handleUpload}
+        />
+        <br />
+        <button
+          disabled={!file}
+          id="upload" 
+          type="button" 
+          onClick={onClick}
+        >
+          Save avatar
+        </button>
+      </form>
+
+    </>
   );
 };

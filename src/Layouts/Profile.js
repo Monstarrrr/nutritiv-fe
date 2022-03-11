@@ -40,22 +40,21 @@ export default function Profile() {
     <div>
       <h1>Profile</h1>
       <hr />
-      <br />
       <ProfileAvatar userInfo={userInfo} />
-      <hr />
       <br />
+      <hr />
       <ProfileUsername userInfo={userInfo} />
-      <hr />
       <br />
+      <hr />
       <ProfileEmail userInfo={userInfo} />
-      <hr />
       <br />
+      <hr />
       <ProfilePassword />
-      <hr />
       <br />
+      <hr />
       <ProfileAddress />
-      <hr />
       <br />
+      <hr />
       Is admin: {userInfo.isAdmin?.toString()}
       <br />
       Is verified: {userInfo.isVerified?.toString()}
