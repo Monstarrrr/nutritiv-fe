@@ -6,9 +6,12 @@ import './Navbar.scss';
 
 export default function Navbar() {
   const dispatch = useDispatch();
-  const loggedIn = useSelector(state => state.user.loggedIn)
-  const userUsername = useSelector(state => state.user.username)
-  const cartQuantity = useSelector(state => state.user.cartQuantity)
+  const {
+     loggedIn,
+     username,
+     cartQuantity,
+     avatar
+  } = useSelector(state => state.user)
   const navigate = useNavigate();
 
   // HANDLE LOGOUT
@@ -26,8 +29,16 @@ export default function Navbar() {
         loggedIn ? (
           <>
             <Link to="/profile">
-              { userUsername }
+              { username }
             </Link>
+            <span>----</span>
+            <img 
+              alt="avatar" 
+              style={{
+                maxWidth: "30px",
+              }}
+              src={avatar} 
+            />
             <span>----</span>
             <button onClick={handleLogout}>
               Logout
