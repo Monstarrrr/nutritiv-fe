@@ -1,5 +1,8 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+.env-cmdrc.json
+.env
+
 # dependencies
 /node_modules
 /.pnp
@@ -13,7 +16,6 @@ package-lock.json
 /build
 
 # misc
-.env-cmdrc.json
 .DS_Store
 .env.local
 .env.development.local

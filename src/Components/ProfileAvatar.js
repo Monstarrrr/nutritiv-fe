@@ -1,22 +1,34 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
 import nutritivApi from '../Api/nutritivApi';
+import { updateUserAvatar } from '../Redux/reducers/user';
 
 export const ProfileAvatar = () => {
+  const dispatch = useDispatch();
+  const avatarSelector = useSelector(state => state.user.avatar)
+  const [avatar, setAvatar] = useState("")
   const [file, setFile] = useState(null)
+  
+  useEffect(() => {
+    setAvatar(avatarSelector)
+  }, [avatarSelector]);
 
   const handleUpload = (e) => {
     setFile(e.target.files[0])
   }
   
-  const onClick = () => {
-    var data = new FormData();
-    data.append("imageFile", file);
+  const onClick = async () => {
+    var formData = new FormData();
+    formData.append("imageFile", file);
     
     try {
-      nutritivApi.post(
+      const { data } = await nutritivApi.post(
         `/users/addAvatar`,
-        data,
+        formData,
       )
+      dispatch(updateUserAvatar({
+        avatar: data.avatar
+      }))
     } catch (err) {
       console.log('# err :', err)
     }
@@ -44,7 +56,12 @@ export const ProfileAvatar = () => {
           Save avatar
         </button>
       </form>
-
+      {
+        avatar && <img 
+          alt="avatar"
+          src={avatar}
+        />
+      }
     </>
   );
 };

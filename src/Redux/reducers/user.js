@@ -10,6 +10,7 @@ export const userSlice = createSlice({
     isVerified: false,
     cartQuantity: 0,
     addresses: [],
+    avatar: "",
   },
   reducers: {
     updateAuthStatus: (user, action) => {
@@ -24,6 +25,7 @@ export const userSlice = createSlice({
         isAdmin,
         isVerified,
         addresses,
+        avatar,
       } = action.payload;
       user.loggedIn = loggedIn;
       user.username = username;
@@ -31,6 +33,7 @@ export const userSlice = createSlice({
       user.isAdmin = isAdmin;
       user.isVerified = isVerified;
       user.addresses = addresses;
+      user.avatar = avatar;
     },
     updateUserCartQuantity: (user, action) => {
       const { cartQuantity } = action.payload;
@@ -39,6 +42,10 @@ export const userSlice = createSlice({
     updateUserAddresses: (user, action) => {
       const { addresses } = action.payload;
       user.addresses = addresses;
+    },
+    updateUserAvatar: (user, action) => {
+      const { avatar } = action.payload;
+      user.avatar = avatar;
     },
     deleteUserAddress: (user, action) => {
       const { addressId } = action.payload;
@@ -54,6 +61,7 @@ export const {
   updateAuthStatus,
   updateUserAddresses,
   deleteUserAddress,
+  updateUserAvatar
 } = userSlice.actions;
 
 // Selector
