@@ -60,11 +60,11 @@ export const ProfilePassword = () => {
   })
   
   const { inputs, errors, loading, response } = state;
-
+  
   const changeState = (type, key, value) => {
     dispatch({ type, key, value })
   }
-
+  
   console.log("# password inputs :", inputs)
   console.log('# password errorInput :', errors)
   console.log('# password loadings :', loading)
@@ -165,7 +165,7 @@ export const ProfilePassword = () => {
           { 
             errors.isNotMatching && (
               <span style={{color: "red"}}>
-                The password do not match the confirmation field.
+                The password does not match the confirmation field.
               </span>
             )
           }
