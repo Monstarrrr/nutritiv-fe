@@ -3,7 +3,7 @@ import React, {
   useState, 
   // useEffect 
 } from 'react';
-import nutritivApi, { apiLoginUser } from '../Api/nutritivApi';
+import nutritivApi from '../Api/nutritivApi';
 
 export default function LoginPage() {
   console.log("##### LoginPage render #####");

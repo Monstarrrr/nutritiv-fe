@@ -240,6 +240,7 @@ export const Products = () => {
             {
               productsToDisplay && productsToDisplay.map(product => (
                 <ProductCard
+                  key={product._id}
                   product={product}
                 />
               ))
@@ -251,7 +252,7 @@ export const Products = () => {
             />
             {/* PRODUCTS PER PAGE - DROPDOWN */}
             <form>
-              <label for="productsPerPage">
+              <label htmlFor="productsPerPage">
                 Products per page: 
               </label>
               <select 

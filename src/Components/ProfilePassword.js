@@ -39,7 +39,7 @@ const reducer = (prevState, action) => {
       }
     }
   } else {
-    return prevState;
+    throw new Error(`useReducer -> ${type} does not exists`);
   }
 }
 
@@ -58,7 +58,6 @@ export const ProfilePassword = () => {
     loading: false,
     response: null
   })
-  
   const { inputs, errors, loading, response } = state;
   
   const changeState = (type, key, value) => {
