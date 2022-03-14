@@ -77,7 +77,6 @@ export const Cart = () => {
       }
       <br />
       <PaymentContainer />
-      <pre>{JSON.stringify(cart, null, 2)}</pre>
     </div>
   )
 }

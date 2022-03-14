@@ -15,11 +15,10 @@ const fields = {
 }
 const isNumberField = ["zip", "phoneNumber"]
 
-export const ProfileAddress = () => {
+export const ProfileAddress = ({ userInfo }) => {
   const dispatch = useDispatch();
-  const isFirstRender = useRef(true);
-  const selectorUserAddresses = useSelector(state => state.user.addresses)
   const [userAddresses, setUserAddresses] = useState([])
+  
   const [addressInput, setAddressInput] = useState({
     [fields.street]: "",
     [fields.zip]: "",
@@ -27,37 +26,12 @@ export const ProfileAddress = () => {
     [fields.country]: "",
     [fields.phoneNumber]: ""
   })
-  const [addressToDelete, setAddressToDelete] = useState(null)
   
-  console.log('# userAddresses :', userAddresses)
-
-  // GET USER ADDRESSES FROM REDUX
-  useEffect(() => {
-    setUserAddresses(selectorUserAddresses)
-  }, [selectorUserAddresses]);
+  console.log('# userInfo :', userInfo)
   
-  // DELETE ADDRESS
   useEffect(() => {
-    async function fetchApi() {
-      try {
-        const { data } = await nutritivApi.delete(
-          `/users/removeAddress/${addressToDelete}`
-        )
-        dispatch(updateUserAddresses({
-          addresses: data.addressDetails,
-        }))
-      } catch (err) {
-        console.log('# /users/removeAddress :', err) 
-      }
-    }
-    if(isFirstRender.current) {
-      isFirstRender.current = false
-      return;
-    }
-    fetchApi();
-  }, [addressToDelete, dispatch]);
-
-  // ## HANDLERS ##
+    setUserAddresses(userInfo.addresses)
+  }, [userInfo.addresses]);
   
   // ADDRESS INPUT CHANGE
   const handleChange = async (e) => {
@@ -66,7 +40,7 @@ export const ProfileAddress = () => {
       [e.target.name]: e.target.value
     })
   }
-
+  
   const handleSubmitAddAddress = async (e) => {
     e.preventDefault();
     
@@ -83,8 +57,19 @@ export const ProfileAddress = () => {
     }
   }
   
-  const handleDeleteAddress = (e) => {
-    setAddressToDelete(e.target.name)
+  const handleDeleteAddress = async (e) => {
+    const addressToDelete = e.target.name
+    
+    try {
+      const { data } = await nutritivApi.delete(
+        `/users/removeAddress/${addressToDelete}`
+      )
+      dispatch(updateUserAddresses({
+        addresses: data.addressDetails,
+      }))
+    } catch (err) {
+      console.log('# /users/removeAddress :', err) 
+    }
   }
   
   return (
@@ -118,7 +103,7 @@ export const ProfileAddress = () => {
       <br />
       <div>
       {
-        userAddresses.length !== 0 ? (
+        userAddresses && userAddresses.length !== 0 ? (
           userAddresses.map((address, i) => (
             <React.Fragment key={address._id}>
               <details>

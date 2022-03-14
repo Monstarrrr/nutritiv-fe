@@ -48,7 +48,9 @@ export default function LoginPage() {
     // We store and use the return value 
     // because the state won't update yet
     const isValid = validation();
-      
+    
+    console.log('# loginData :', loginData)
+
     if(isValid) {
       try {
         await nutritivApi.post(

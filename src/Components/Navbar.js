@@ -1,21 +1,23 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { logout } from '../Helpers/logout';
+import { Logout } from './Logout';
 import './Navbar.scss';
 
 export default function Navbar() {
-  const dispatch = useDispatch();
-  const {
-     loggedIn,
-     username,
-     cartQuantity,
-     avatar
-  } = useSelector(state => state.user)
+  const userSelector = useSelector(state => state.user)
+  const [user, setUser] = useState({
+    loggedIn: false,
+    username: "",
+    cartQuantity: 0,
+    avatar: "",
+  })
+  
+  useEffect(() => {
+    setUser(userSelector)
+  }, [userSelector]);
+  
   const navigate = useNavigate();
-
-  // HANDLE LOGOUT
-  const handleLogout = () => logout(dispatch);
   
   return (
     <nav id={"navbar"}>
@@ -26,10 +28,10 @@ export default function Navbar() {
       </Link>
       <span>----</span>
       {
-        loggedIn ? (
+        user.loggedIn ? (
           <>
             <Link to="/profile">
-              { username }
+              { user.username }
             </Link>
             <span>----</span>
             <img 
@@ -37,12 +39,10 @@ export default function Navbar() {
               style={{
                 maxWidth: "30px",
               }}
-              src={avatar} 
+              src={user.avatar} 
             />
             <span>----</span>
-            <button onClick={handleLogout}>
-              Logout
-            </button>
+            <Logout />
           </>
         ) : (
           <>
@@ -54,7 +54,7 @@ export default function Navbar() {
       }
       <span>----</span>
       <button onClick={() => navigate('/cart')}>
-        Cart ({cartQuantity})
+        Cart ({user.cartQuantity})
       </button>
     </nav>
   )

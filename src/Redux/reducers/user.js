@@ -1,17 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+const initialState = {
+  loggedIn: false,
+  username: "",
+  email: "",
+  isAdmin: false,
+  isVerified: false,
+  cartQuantity: 0,
+  addresses: [],
+  avatar: "",
+}
+
 export const userSlice = createSlice({
   name: 'user',
-  initialState: {
-    loggedIn: false,
-    username: "",
-    email: "",
-    isAdmin: false,
-    isVerified: false,
-    cartQuantity: 0,
-    addresses: [],
-    avatar: "",
-  },
+  initialState,
   reducers: {
     updateAuthStatus: (user, action) => {
       const { loggedIn } = action.payload;
@@ -53,6 +55,7 @@ export const userSlice = createSlice({
         address => address._id !== addressId
       )
     },
+    logoutUser: () => initialState
   }
 })
 export const {
@@ -61,7 +64,8 @@ export const {
   updateAuthStatus,
   updateUserAddresses,
   deleteUserAddress,
-  updateUserAvatar
+  updateUserAvatar,
+  logoutUser,
 } = userSlice.actions;
 
 // Selector

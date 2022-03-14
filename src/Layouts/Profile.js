@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import nutritivApi from '../Api/nutritivApi';
 import { ProfileAddress } from '../Components/ProfileAddress';
 import { ProfileAvatar } from '../Components/ProfileAvatar';
@@ -7,25 +8,15 @@ import { ProfilePassword } from '../Components/ProfilePassword';
 import { ProfileUsername } from '../Components/ProfileUsername';
 
 export default function Profile() {
+  const user = useSelector(state => state.user)
   const [userInfo, setUserInfo] = useState({})
   
   // const [newUsername, setNewUsername] = useState(null)
   // const [newEmail, setNewEmail] = useState(null)
   
-  // EFFECTS
   useEffect(() => {
-    async function fetchApi() {
-      try {
-        const { data } = await nutritivApi.get(
-          '/users/self'
-        )
-        setUserInfo(data)
-      } catch(err) {
-        console.log('/users/self :', err)
-      }
-    }
-    fetchApi();
-  }, []);
+    setUserInfo(user)
+  }, [user]);
   
   // HANDLERS
   // const handleChangeUsername = (e) => {
@@ -40,24 +31,30 @@ export default function Profile() {
     <div>
       <h1>Profile</h1>
       <hr />
-      <ProfileAvatar userInfo={userInfo} />
+      <ProfileAvatar 
+        userInfo={userInfo} 
+      />
       <br />
       <hr />
-      <ProfileUsername userInfo={userInfo} />
+      <ProfileUsername 
+        userInfo={userInfo} 
+      />
       <br />
       <hr />
-      <ProfileEmail userInfo={userInfo} />
+      <ProfileEmail 
+        userInfo={userInfo} 
+      />
       <br />
       <hr />
       <ProfilePassword />
       <br />
       <hr />
-      <ProfileAddress />
+      <ProfileAddress userInfo={userInfo} />
       <br />
       <hr />
-      Is admin: {userInfo.isAdmin?.toString()}
+      {/* Is admin: {userInfo.isAdmin?.toString()} */}
       <br />
-      Is verified: {userInfo.isVerified?.toString()}
+      {/* Is verified: {userInfo.isVerified?.toString()} */}
       <br />
     </div>
   )

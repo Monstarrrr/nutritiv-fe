@@ -11,12 +11,13 @@ export const PaymentContainer = () => {
       const { data } = await nutritivApi.post(
         '/stripe/create-checkout-session',
       );
+      window?.open(data.url, "_self");
       console.log('# stripe/create-checkout-session data :', data)
     } catch (err) {
       console.log('# stripe/create-checkout-session :', err)
     }
   }
-
+  
   return (
     <div id="paymentContainer">
       <form>

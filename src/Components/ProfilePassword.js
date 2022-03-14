@@ -64,11 +64,6 @@ export const ProfilePassword = () => {
     dispatch({ type, key, value })
   }
   
-  console.log("# password inputs :", inputs)
-  console.log('# password errorInput :', errors)
-  console.log('# password loadings :', loading)
-  console.log('# password apiResponses :', response)
-  
   const passwordInputsValidation = () => {  
     
     changeState('API', 'response', null)

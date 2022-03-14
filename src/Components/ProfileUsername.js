@@ -1,7 +1,7 @@
 import React from 'react'
 
 export const ProfileUsername = ({ userInfo }) => {
-
+  
   return (
     <div>
       <span>

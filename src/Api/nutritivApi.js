@@ -49,7 +49,7 @@ nutritivApi.interceptors.response.use(res => {
   console.log("# Interceptor res :", res);
   return res;
 }, function (err) {
-  if(err.status === 429) {
+  if(err?.response?.status === 429) {
     console.error(
       "# Too many API requests :", 
       err.response.status

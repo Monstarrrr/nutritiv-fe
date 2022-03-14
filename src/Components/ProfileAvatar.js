@@ -3,15 +3,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import nutritivApi from '../Api/nutritivApi';
 import { updateUserAvatar } from '../Redux/reducers/user';
 
-export const ProfileAvatar = () => {
+export const ProfileAvatar = ({ userInfo }) => {
   const dispatch = useDispatch();
-  const avatarSelector = useSelector(state => state.user.avatar)
-  const [avatar, setAvatar] = useState("")
+  // const avatarSelector = useSelector(state => state.user.avatar)
+  // const [avatar, setAvatar] = useState("")
   const [file, setFile] = useState(null)
   
-  useEffect(() => {
-    setAvatar(avatarSelector)
-  }, [avatarSelector]);
+  // useEffect(() => {
+  //   setAvatar(avatarSelector)
+  // }, [avatarSelector]);
 
   const handleUpload = (e) => {
     setFile(e.target.files[0])
@@ -57,9 +57,9 @@ export const ProfileAvatar = () => {
         </button>
       </form>
       {
-        avatar && <img 
+        userInfo.avatar && <img 
           alt="avatar"
-          src={avatar}
+          src={userInfo.avatar}
         />
       }
     </>

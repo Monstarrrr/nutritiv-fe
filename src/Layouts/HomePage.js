@@ -8,7 +8,7 @@ export default function HomePage() {
   const loggedIn = useSelector(state => state.user.loggedIn)
   
   const handleSpam = async () => {
-    for(let i=0; i<60; i = i+1){
+    for(let i=0; i<12; i = i+1){
       try {
         const { data } = await nutritivApi.get(
           `/users/self`,

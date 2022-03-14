@@ -1,6 +1,6 @@
 import React from 'react'
 
-export const ProfileEmail = ({ userInfo }) => {
+export const ProfileEmail = () => {
   
   return (
     <div>
@@ -8,7 +8,7 @@ export const ProfileEmail = ({ userInfo }) => {
         <h3>
           Email
         </h3>
-        {userInfo.email}
+        {/* {userInfo.email} */}
         <br />
         <input
           disabled
