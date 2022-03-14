@@ -1,6 +1,7 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
 import nutritivApi from '../Api/nutritivApi'
+import { storageKeys } from '../Helpers/localStorage';
 import { logoutUser } from '../Redux/reducers/user';
 
 export const Logout = () => {
@@ -12,6 +13,8 @@ export const Logout = () => {
         `/auth/logout`,
       )
       dispatch(logoutUser())
+      localStorage.removeItem(storageKeys.accessToken)
+      localStorage.removeItem(storageKeys.refreshToken)
     } catch(err) {
       console.error(':', err)
     }

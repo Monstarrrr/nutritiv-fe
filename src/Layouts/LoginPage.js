@@ -3,11 +3,14 @@ import React, {
   useState, 
   // useEffect 
 } from 'react';
+import { useDispatch } from 'react-redux';
 import nutritivApi from '../Api/nutritivApi';
+import { updateUser, updateUserCartQuantity } from '../Redux/reducers/user';
 
 export default function LoginPage() {
   console.log("##### LoginPage render #####");
-      
+  const dispatch = useDispatch();
+
   const [loginInput, setLoginInput] = useState({
     username: "",
     password: "",
@@ -57,6 +60,25 @@ export default function LoginPage() {
           `/auth/login`,
           loginData
         )
+        const { data } = await nutritivApi.get(
+          `/users/self`
+        )
+        const cartSelf = await nutritivApi.get(
+          `carts/self`
+        )
+        console.log('# cart :', cartSelf.data.cart.totalQuantity)
+        dispatch(updateUser({
+          loggedIn: data.loggedIn,
+          username: data.username,
+          email: data.email,
+          isAdmin: data.isAdmin,
+          isVerified: data.isVerified,
+          addresses: data.addressDetails,
+          avatar: data.avatar
+        }))
+        dispatch(updateUserCartQuantity({
+          cartQuantity: cartSelf.data.cart.totalQuantity
+        }))
       } catch(err) {
         setInvalidLogin(true)
       }
