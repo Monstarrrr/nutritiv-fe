@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { Logout } from './Logout';
-import './Navbar.scss';
 
 export default function Navbar() {
   const userSelector = useSelector(state => state.user)
@@ -21,7 +20,7 @@ export default function Navbar() {
   
   return (
     <nav id={"navbar"}>
-      <Link className={'test'} to="/welcome">HOMEPAGE</Link>
+      <Link className={'test'} to="/">HOMEPAGE</Link>
       <span>----</span>
       <Link to="/products">
         PRODUCTS
@@ -42,6 +41,10 @@ export default function Navbar() {
               src={user.avatar} 
             />
             <span>----</span>
+            <button onClick={() => navigate('/cart')}>
+              Cart ({user.cartQuantity})
+            </button>
+            <span>----</span>
             <Logout />
           </>
         ) : (
@@ -52,10 +55,6 @@ export default function Navbar() {
           </>
         )
       }
-      <span>----</span>
-      <button onClick={() => navigate('/cart')}>
-        Cart ({user.cartQuantity})
-      </button>
     </nav>
   )
 }

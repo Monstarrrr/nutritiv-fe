@@ -1,9 +1,9 @@
-import React from 'react';
+import React from 'react'
 import { useSelector } from 'react-redux';
 import nutritivApi from '../Api/nutritivApi';
 
-export default function HomePage() {
-  console.log("##### HomePage render #####");
+export const Welcome = () => {
+  console.log("##### Welcome #####");
   
   const loggedIn = useSelector(state => state.user.loggedIn)
   
@@ -34,5 +34,5 @@ export default function HomePage() {
         Spam :)
       </button>
     </div>
-  );
+  )
 }

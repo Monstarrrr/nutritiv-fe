@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import nutritivApi from '../Api/nutritivApi';
-import { ProfileAddress } from '../Components/ProfileAddress';
-import { ProfileAvatar } from '../Components/ProfileAvatar';
-import { ProfileEmail } from '../Components/ProfileEmail';
-import { ProfilePassword } from '../Components/ProfilePassword';
-import { ProfileUsername } from '../Components/ProfileUsername';
+import { ProfileAddress } from './ProfileAddress';
+import { ProfileAvatar } from './ProfileAvatar';
+import { ProfileEmail } from './ProfileEmail';
+import { ProfilePassword } from './ProfilePassword';
+import { ProfileUsername } from './ProfileUsername';
 
 export default function Profile() {
   const user = useSelector(state => state.user)

@@ -17,16 +17,17 @@ import {
   updateUser, updateUserCartQuantity,
 } from './Redux/reducers/user';
 import nutritivApi from './Api/nutritivApi';
-import HomePage from './Layouts/HomePage.js';
-import RegisterPage from './Layouts/RegisterPage.js';
-import LoginPage from './Layouts/LoginPage.js';
-import Navbar from './Components/Navbar';
-import Profile from './Layouts/Profile';
+import General from './Layouts/GeneralLayout.js';
+import Register from './Components/Register.js';
+import Login from './Components/Login.js';
+import Profile from './Components/Profile';
 import { Products } from './Components/Products';
 import { CheckoutSuccess } from './Components/CheckoutSuccess';
 import { CheckoutCancel } from './Components/CheckoutCancel';
 import { ProductPage } from './Components/ProductPage';
 import { Cart } from './Components/Cart';
+import { Welcome } from './Components/Welcome';
+import { PageNotFound } from './Components/PageNotFound';
 
 // init stripe
 const stripePromise = loadStripe(
@@ -35,6 +36,7 @@ const stripePromise = loadStripe(
 
 function App() {
   const dispatch = useDispatch();
+  const loggedIn = useSelector(state => state.user.loggedIn)
   
   // ON LOAD
   // Get user-self info & update store
@@ -89,17 +91,24 @@ function App() {
     checkSelfCartQuantity();
   }, [dispatch])
   
-  
-  // RESTRICTED: IS LOGGED ?
-  const RestrictedRoutes = () => {
-    const loggedIn = useSelector(state => state.user.loggedIn)
+  // RESTRICTED ROUTES
+  const GuestRoutes = () => {
     const isLogged = () => {
       const user = { loggedIn }
       return user.loggedIn;
     }
     return isLogged() ? (
-      <Navigate replace to="/welcome" /> 
+      <Navigate replace to="/" /> 
     ) : <Outlet />;
+  }
+  const UserRoutes = () => {
+    const isLogged = () => {
+      const user = { loggedIn }
+      return user.loggedIn;
+    }
+    return isLogged() ? (
+      <Outlet /> 
+    ) : <Navigate replace to="/" />;
   }
   
   return (
@@ -108,26 +117,30 @@ function App() {
         stripe={stripePromise}
         // options={stripeOptions}
       >
-        <Navbar />
         <Routes>
           {/* PUBLIC */}
-          {/* <Route path="*" element={<Navigate replace to="/welcome"/>}/> */}
-          <Route path="/welcome" element={<HomePage/>}/>
-          <Route path="/products" element={<Products/>}/>
-          <Route path="/product">
-            <Route path=":productTitle" element={<ProductPage/>}/>
+          <Route path="*" element={<Navigate replace to="/page-not-found"/>} />
+          <Route path="/" element={<General/>}>
+            <Route index element={<Welcome/>} />
+            <Route path="/products" element={<Products/>} />
+            <Route path="/product">
+              <Route path=":productTitle" element={<ProductPage/>} />
+            </Route>
+            <Route path="/cancel" element={<CheckoutCancel/>} /> 
+            <Route path="/success" element={<CheckoutSuccess/>} />
+            <Route path="/page-not-found" element={<PageNotFound/>} />
+            {/* PRIVATE */}
+            <Route path="/profile" element={<Profile/>} />
+            {/* RESTRICTED - LOGGED */}
+            <Route element={<UserRoutes />}>
+              <Route path="/cart" element={<Cart/>} />
+            </Route>
+            {/* RESTRICTED - NOT LOGGED */}
+            <Route element={<GuestRoutes />}>
+              <Route path="login" element={<Login/>} />
+              <Route path="register" element={<Register/>} />
+            </Route>
           </Route>
-          <Route path="/cart" element={<Cart/>}/>
-          {/* TEMP */}
-          <Route path="/cancel" element={<CheckoutCancel/>}/>
-          <Route path="/success" element={<CheckoutSuccess/>}/>
-          {/* RESTRICTED */}
-          <Route element={<RestrictedRoutes />}>
-            <Route path="login" element={<LoginPage/>}/>
-            <Route path="register" element={<RegisterPage/>}/>
-          </Route>
-          {/* PRIVATE */}
-          <Route path="/profile" element={<Profile/>}/>
         </Routes>
       </Elements>
     </BrowserRouter>

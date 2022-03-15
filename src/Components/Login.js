@@ -4,12 +4,14 @@ import React, {
   // useEffect 
 } from 'react';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import nutritivApi from '../Api/nutritivApi';
 import { updateUser, updateUserCartQuantity } from '../Redux/reducers/user';
 
 export default function LoginPage() {
   console.log("##### LoginPage render #####");
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [loginInput, setLoginInput] = useState({
     username: "",
@@ -79,6 +81,7 @@ export default function LoginPage() {
         dispatch(updateUserCartQuantity({
           cartQuantity: cartSelf.data.cart.totalQuantity
         }))
+        navigate('/', { replace: true })
       } catch(err) {
         setInvalidLogin(true)
       }

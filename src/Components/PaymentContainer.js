@@ -1,5 +1,4 @@
 import React from 'react';
-import './PaymentContainer.scss';
 import nutritivApi from '../Api/nutritivApi';
 
 export const PaymentContainer = () => {

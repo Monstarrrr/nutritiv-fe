@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react'
 
 import nutritivApi from '../Api/nutritivApi';
 import { ProductCard } from './ProductCard';
-import './products.scss';
 import { Pagination } from '@mui/material';
 
 export const Products = () => {  
