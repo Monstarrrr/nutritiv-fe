@@ -17,7 +17,7 @@ import {
   updateUser, updateUserCartQuantity,
 } from './Redux/reducers/user';
 import nutritivApi from './Api/nutritivApi';
-import General from './Layouts/GeneralLayout.js';
+import GeneralLayout from './Layouts/GeneralLayout.js';
 import Register from './Components/Register.js';
 import Login from './Components/Login.js';
 import Profile from './Components/Profile';
@@ -28,6 +28,7 @@ import { ProductPage } from './Components/ProductPage';
 import { Cart } from './Components/Cart';
 import { Welcome } from './Components/Welcome';
 import { PageNotFound } from './Components/PageNotFound';
+import { Chat } from './Components/Chat';
 
 // init stripe
 const stripePromise = loadStripe(
@@ -50,6 +51,7 @@ function App() {
         if(isSubscribed) {
           console.log('# /users/self res :', data)
           dispatch(updateUser({
+            id: data._id,
             loggedIn: data.loggedIn,
             username: data.username,
             email: data.email,
@@ -120,12 +122,13 @@ function App() {
         <Routes>
           {/* PUBLIC */}
           <Route path="*" element={<Navigate replace to="/page-not-found"/>} />
-          <Route path="/" element={<General/>}>
+          <Route path="/" element={<GeneralLayout/>}>
             <Route index element={<Welcome/>} />
             <Route path="/products" element={<Products/>} />
             <Route path="/product">
               <Route path=":productTitle" element={<ProductPage/>} />
             </Route>
+            <Route path="/chat" element={<Chat/>} /> 
             <Route path="/cancel" element={<CheckoutCancel/>} /> 
             <Route path="/success" element={<CheckoutSuccess/>} />
             <Route path="/page-not-found" element={<PageNotFound/>} />

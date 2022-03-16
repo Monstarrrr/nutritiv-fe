@@ -41,6 +41,10 @@ export default function Navbar() {
               src={user.avatar} 
             />
             <span>----</span>
+            <Link to="/chat">
+              CHAT
+            </Link>
+            <span>----</span>
             <button onClick={() => navigate('/cart')}>
               Cart ({user.cartQuantity})
             </button>

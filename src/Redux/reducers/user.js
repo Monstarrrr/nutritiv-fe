@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
+  id: null,
   loggedIn: false,
   username: "",
   email: "",
@@ -21,6 +22,7 @@ export const userSlice = createSlice({
     },
     updateUser: (user, action) => {
       const { 
+        id,
         loggedIn,
         username,
         email,
@@ -36,6 +38,7 @@ export const userSlice = createSlice({
       user.isVerified = isVerified;
       user.addresses = addresses;
       user.avatar = avatar;
+      user._id = id;
     },
     updateUserCartQuantity: (user, action) => {
       const { cartQuantity } = action.payload;
