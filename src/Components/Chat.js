@@ -1,31 +1,37 @@
-import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux';
+import React, { useEffect, useRef, useState } from 'react'
 import socketIOClient from "socket.io-client";
 import nutritivApi from '../Api/nutritivApi';
 
 const ENDPOINT = process.env.REACT_APP_SOCKET_SERVER_ADDRESS
 
 export const Chat = () => {
-  const user = useSelector(state => state.user)
+  const scrollRef = useRef()
   // const [response, setResponse] = useState("")
-  const [conversations, setConversations] = useState([])
-  const [messages, setMessages] = useState(null)
+  const [chats, setChats] = useState([])
+  const [selectedChat, setSelectedChat] = useState(null)
   const [newMessage, setNewMessage] = useState("")
+  
+  
+  // # EFFECTS #
 
+  // GET CHATS
   useEffect(() => {
-    const getConversations = async () => {
+    const getChats = async () => {
       try {
         const { data } = await nutritivApi.get(
-          `/conversations/${user._id}`
+          `/chats/`
         )
-        setConversations(data)
+        console.log('# chats :', data)
+        setChats(data)
+        setSelectedChat(data[0])
       } catch (err) {
         console.error(err)
       }
     }
-    getConversations();
-  }, [user._id]);
+    getChats();
+  }, []);
   
+  // SOCKET
   useEffect(() => {
     const socket = socketIOClient(ENDPOINT)
     socket.on("welcome", data => {
@@ -35,94 +41,156 @@ export const Chat = () => {
     
     return () => socket.disconnect();
   }, []);
+  
 
-  const handleSelectConversation = async (e) => {
+  // # HANDLERS #
+
+  // CREATE CHAT
+  const handleCreateChat = async (e) => {
+    e.preventDefault();
     try {
-      const { data } = await nutritivApi.get(
-        `/messages/${e.target.value}`
+      const { data } = await nutritivApi.post(
+        `/chats/`,
+        {
+          members: [
+            "123",
+            "456",
+          ]
+        }
       )
-      console.log('# messages :', data)
-      setMessages(data)
+      console.log('# /chats/ :', data)
     } catch(err) {
-      console.error(
-        '/messages/:', err
-      )
+      console.error('/chats/:', err)
     }
   }
+  
+  // SELECT CHAT
+  const handleSelectChat = (e) => {
+    let chat = chats.find(chat => chat._id === e.target.value)
+    setSelectedChat(chat)
+  }
 
+  // PREPARE MESSAGE
   const handleNewMessage = (e) => {
     setNewMessage(e.target.value)
   }
 
-  const handleSubmit = async (e) => {
-    const message = {
-      sender: user._id,
-      text: newMessage,
-      conversationId: messages[0]._id
-    }
+  // SEND MESSAGE
+  const handleSubmitMessage = async (e) => {
+    e.preventDefault();
+    
     try {
-      const { data } = await nutritivApi.post(
-        `/messages`,
-        message
+      await nutritivApi.post(
+        `/chats/message/${selectedChat._id}`,
+        {
+          "text": newMessage
+        }
       )
-      setMessages([
-        ...messages,
-        data
-      ])
-      console.log('# message sent res :', data)
     } catch (err) {
-      console.error('# err ', err)
+      console.error('# chats/message/:chatId :', err)
+    }
+  }
+  
+  // DELETE CHAT
+  const handleDeleteChat = async (e) => {
+    e.preventDefault();
+    
+    try {
+      let chat = e.target.id
+      const { data } = await nutritivApi.delete(
+        `/chats/${chat}`,
+      )
+      console.log('# delete chat res :', data)
+    } catch(err) {
+      console.error('/chats/:', err)
     }
   }
   
   return (
     <div>
       <h2>
-        Conversations :
+        Chats
       </h2>
-      <pre>
-        {JSON.stringify(conversations, null, 2)}
-      </pre>
-      <select 
-        name="conversations" 
-        id="conversations"
-        onChange={handleSelectConversation}
+      {/* CREATE CHAT */}
+      <form>
+        <input type="text" placeholder=''/>
+        <input
+          onClick={handleCreateChat}
+          type="submit"
+          value="Create"
+        />
+      </form>
+      {/* SELECT CHAT */}
+      {
+        chats.map((chat, index) => (
+          <form 
+            id={chat._id}
+            key={chat._id}
+            onSubmit={e => handleDeleteChat(e)} 
+          >
+            <input
+              defaultChecked={index === 0}
+              id="selectedChat"
+              name="selectedChat"
+              onChange={e => handleSelectChat(e)}
+              type="radio"
+              value={chat._id}
+            />
+            <label htmlFor="selectedChat">
+              {chat._id}
+            </label>
+            <input
+              name="delete"
+              type="submit" 
+              value="X"
+            />
+          </form>
+        ))
+      }
+      {/* CHAT BOX */}
+      <div 
+        ref={scrollRef}
+        style={{
+          maxHeight: "250px",
+          overflow: "auto",
+        }}
       >
-        <option value="">
-          Chose a conversation
-        </option>
         {
-          conversations.map(conv => (
-            <option 
-              key={conv._id}
-              value={conv._id}
-            >
-              {conv._id}
-            </option>
-          ))
-        }
-      </select>
-      <div style={{maxHeight: "450px"}}>
-        {
-          messages && (
-            messages.map(msg => (
-              <React.Fragment key={msg._id}>
-                <p>
-                  {msg.text}
-                </p>
-                <br />
-              </React.Fragment>
-            ))
+          selectedChat ? (
+            selectedChat.messages.length > 0 ? (
+              selectedChat.messages.map(msg => (
+                <div key={msg._id}>
+                  <p>
+                    {msg.text}
+                  </p>
+                  <br />
+                </div>
+              ))
+            ) : (
+              <p>
+                There are no messages.
+              </p>
+            )
+          ) : (
+            <p>
+              Select a chat.
+            </p>
           )
         }
       </div>
-      <textarea 
-        placeholder='Type something...'
-        onChange={handleNewMessage}
-      />
-      <button onClick={handleSubmit}>
-        Send
-      </button>
+      {/* TYPE IN CHAT */}
+      <form>
+        <textarea 
+          placeholder='Type something...'
+          onChange={handleNewMessage}
+        />
+        <button 
+          onClick={handleSubmitMessage}
+          type="submit"
+        >
+          Send
+        </button>
+      </form>
     </div>
   )
 }
