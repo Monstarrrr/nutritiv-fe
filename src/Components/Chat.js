@@ -1,22 +1,48 @@
 import React, { useEffect, useRef, useState } from 'react'
 import socketIOClient from "socket.io-client";
 import nutritivApi from '../Api/nutritivApi';
+import Multiselect from 'multiselect-react-dropdown';
 
 const ENDPOINT = process.env.REACT_APP_SOCKET_SERVER_ADDRESS
 
 export const Chat = () => {
   const scrollRef = useRef()
   // const [response, setResponse] = useState("")
+  
+  const [users, setUsers] = useState([])
+  const [selectedUsers, setSelectedUsers] = useState([])
+  
+  const [test, setTest] = useState("")
+  
+
   const [chats, setChats] = useState([])
   const [selectedChat, setSelectedChat] = useState(null)
   const [newMessage, setNewMessage] = useState("")
   
   
   // # EFFECTS #
+  
+  // GET ALL USERS
+  useEffect(() => {
+    let fetchApi = async () => {
+      try {
+        const { data } = await nutritivApi.get(
+          `/users`
+        )
+        setUsers(data)
+        console.log('# /users :', data)
+      } catch(err) {
+        console.error(
+          '/users:', err
+        )
+      }
+    }
+    fetchApi();
+  }, []);
 
   // GET CHATS
   useEffect(() => {
-    const getChats = async () => {
+    let fetchApi = async () => {
       try {
         const { data } = await nutritivApi.get(
           `/chats/`
@@ -28,7 +54,7 @@ export const Chat = () => {
         console.error(err)
       }
     }
-    getChats();
+    fetchApi();
   }, []);
   
   // SOCKET
@@ -49,19 +75,23 @@ export const Chat = () => {
   const handleCreateChat = async (e) => {
     e.preventDefault();
     try {
+      let members = selectedUsers.map(user => user._id)
       const { data } = await nutritivApi.post(
         `/chats/`,
-        {
-          members: [
-            "123",
-            "456",
-          ]
-        }
+        { members }
       )
-      console.log('# /chats/ :', data)
+      setSelectedChat(data)
+      setChats([...chats, data])
+      console.log('# create chat /chats/ :', data)
     } catch(err) {
       console.error('/chats/:', err)
     }
+  }
+  const handleUserSelect = (selectedList) => {
+    setSelectedUsers(selectedList)
+  }
+  const handleUserRemove = (selectedList) => {
+    setSelectedUsers(selectedList)
   }
   
   // SELECT CHAT
@@ -78,7 +108,7 @@ export const Chat = () => {
   // SEND MESSAGE
   const handleSubmitMessage = async (e) => {
     e.preventDefault();
-    
+    console.log("Message sending...")
     try {
       await nutritivApi.post(
         `/chats/message/${selectedChat._id}`,
@@ -86,6 +116,15 @@ export const Chat = () => {
           "text": newMessage
         }
       )
+      // [WIP]
+      // let chatsCopy = [...chats]
+      // let indexOfSelectedChat = chats.findIndex(chat => {
+      //   return chat._id === selectedChat._id
+      // })
+      // let chatCopy = {...chats[indexOfSelectedChat]}
+      // let message
+      // console.log('# chatCopy :', chatCopy)
+      // setChats([])
     } catch (err) {
       console.error('# chats/message/:chatId :', err)
     }
@@ -94,42 +133,47 @@ export const Chat = () => {
   // DELETE CHAT
   const handleDeleteChat = async (e) => {
     e.preventDefault();
-    
     try {
-      let chat = e.target.id
-      const { data } = await nutritivApi.delete(
-        `/chats/${chat}`,
+      let idChatToDelete = e.target.id
+      await nutritivApi.delete(
+        `/chats/single/${idChatToDelete}`,
       )
-      console.log('# delete chat res :', data)
+      let newChats = chats.filter(chat => chat._id !== idChatToDelete)
+      setChats(newChats);
+      console.log('# idChatToDelete :', idChatToDelete)
+      selectedChat._id === idChatToDelete && setSelectedChat(newChats[0])
     } catch(err) {
-      console.error('/chats/:', err)
+      console.error('/chats/single:', err)
     }
   }
-  
+
   return (
     <div>
       <h2>
         Chats
       </h2>
       {/* CREATE CHAT */}
-      <form>
-        <input type="text" placeholder=''/>
-        <input
-          onClick={handleCreateChat}
-          type="submit"
-          value="Create"
-        />
-      </form>
+      <Multiselect 
+        onSelect={handleUserSelect}
+        onRemove={handleUserRemove}
+        options={users}
+        displayValue="username"
+      />
+      <button onClick={handleCreateChat}>
+        Create chatroom
+      </button>
+      <br />
+      <h3>
+        Chatrooms
+      </h3>
       {/* SELECT CHAT */}
       {
         chats.map((chat, index) => (
-          <form 
-            id={chat._id}
-            key={chat._id}
-            onSubmit={e => handleDeleteChat(e)} 
-          >
+          <React.Fragment key={chat._id}>
             <input
-              defaultChecked={index === 0}
+              checked={
+                chat._id === selectedChat?._id
+              }
               id="selectedChat"
               name="selectedChat"
               onChange={e => handleSelectChat(e)}
@@ -139,18 +183,22 @@ export const Chat = () => {
             <label htmlFor="selectedChat">
               {chat._id}
             </label>
-            <input
-              name="delete"
-              type="submit" 
-              value="X"
-            />
-          </form>
+            <button
+              id={chat._id}
+              onClick={e => handleDeleteChat(e)}
+              type="submit"
+            >
+              X
+            </button>
+            <br />
+          </React.Fragment>
         ))
       }
       {/* CHAT BOX */}
       <div 
         ref={scrollRef}
         style={{
+          background: "lightblue",
           maxHeight: "250px",
           overflow: "auto",
         }}
@@ -168,7 +216,7 @@ export const Chat = () => {
               ))
             ) : (
               <p>
-                There are no messages.
+                There are no messages in {selectedChat._id}.
               </p>
             )
           ) : (
@@ -180,7 +228,8 @@ export const Chat = () => {
       </div>
       {/* TYPE IN CHAT */}
       <form>
-        <textarea 
+        <input 
+          type="text"
           placeholder='Type something...'
           onChange={handleNewMessage}
         />
