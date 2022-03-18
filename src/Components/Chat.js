@@ -110,26 +110,27 @@ export const Chat = () => {
     e.preventDefault();
     console.log("Message sending...")
     try {
-      await nutritivApi.post(
-        `/chats/message/${selectedChat._id}`,
-        {
-          "text": newMessage
-        }
+      // await nutritivApi.post(
+      //   `/chats/message/${selectedChat._id}`,
+      //   {
+      //     "text": newMessage
+      //   }
+      // )
+      //
+      setChats(
+        chats.map(chat => (
+          chat._id === selectedChat._id ? {
+            ...chat, "messages": [...chat.messages, { "text": newMessage }]
+          } : chat
+        ))
       )
-      // [WIP]
-      // let chatsCopy = [...chats]
-      // let indexOfSelectedChat = chats.findIndex(chat => {
-      //   return chat._id === selectedChat._id
-      // })
-      // let chatCopy = {...chats[indexOfSelectedChat]}
-      // let message
-      // console.log('# chatCopy :', chatCopy)
-      // setChats([])
     } catch (err) {
       console.error('# chats/message/:chatId :', err)
     }
   }
-  
+
+  console.log('# chats :', chats)
+
   // DELETE CHAT
   const handleDeleteChat = async (e) => {
     e.preventDefault();
