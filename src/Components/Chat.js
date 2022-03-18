@@ -117,18 +117,20 @@ export const Chat = () => {
       //   }
       // )
       //
-      setChats(
-        chats.map(chat => (
-          chat._id === selectedChat._id ? {
-            ...chat, "messages": [...chat.messages, { "text": newMessage }]
-          } : chat
-        ))
-      )
+      let chatsCopy = [...chats]
+      let newChats = chatsCopy.map(chat => (
+        chat._id === selectedChat._id ? {
+          ...chat, "messages": [...chat.messages, { "text": newMessage }]
+        } : chat
+      ))
+      setChats(newChats)
+      setSelectedChat(newChats.find(chat => chat._id === selectedChat._id))
     } catch (err) {
       console.error('# chats/message/:chatId :', err)
     }
   }
-
+  
+  console.log('# selectedChat :', selectedChat)
   console.log('# chats :', chats)
 
   // DELETE CHAT
