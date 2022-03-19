@@ -12,13 +12,10 @@ export const Chat = () => {
   const [users, setUsers] = useState([])
   const [selectedUsers, setSelectedUsers] = useState([])
   
-  const [test, setTest] = useState("")
-  
-
   const [chats, setChats] = useState([])
   const [selectedChat, setSelectedChat] = useState(null)
-  const [newMessage, setNewMessage] = useState("")
   
+  const [newMessage, setNewMessage] = useState("")
   
   // # EFFECTS #
   
@@ -39,7 +36,7 @@ export const Chat = () => {
     }
     fetchApi();
   }, []);
-
+  
   // GET CHATS
   useEffect(() => {
     let fetchApi = async () => {
@@ -68,7 +65,7 @@ export const Chat = () => {
     return () => socket.disconnect();
   }, []);
   
-
+  
   // # HANDLERS #
 
   // CREATE CHAT

@@ -26,7 +26,7 @@ import { CheckoutSuccess } from './Components/CheckoutSuccess';
 import { CheckoutCancel } from './Components/CheckoutCancel';
 import { ProductPage } from './Components/ProductPage';
 import { Cart } from './Components/Cart';
-import { Welcome } from './Components/Welcome';
+import { Welcome } from './Components/Homepage';
 import { PageNotFound } from './Components/PageNotFound';
 import { Chat } from './Components/Chat';
 
