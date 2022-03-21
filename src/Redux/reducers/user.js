@@ -21,24 +21,14 @@ export const userSlice = createSlice({
       user.loggedIn = loggedIn;
     },
     updateUser: (user, action) => {
-      const { 
-        id,
-        loggedIn,
-        username,
-        email,
-        isAdmin,
-        isVerified,
-        addresses,
-        avatar,
-      } = action.payload;
-      user.loggedIn = loggedIn;
-      user.username = username;
-      user.email = email;
-      user.isAdmin = isAdmin;
-      user.isVerified = isVerified;
-      user.addresses = addresses;
-      user.avatar = avatar;
-      user._id = id;
+      user.id = action.payload.id;
+      user.loggedIn = action.payload.loggedIn;
+      user.username = action.payload.username;
+      user.email = action.payload.email;
+      user.isAdmin = action.payload.isAdmin;
+      user.isVerified = action.payload.isVerified;
+      user.addresses = action.payload.addresses;
+      user.avatar = action.payload.avatar;
     },
     updateUserCartQuantity: (user, action) => {
       const { cartQuantity } = action.payload;

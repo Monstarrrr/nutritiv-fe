@@ -11,11 +11,11 @@ export const injectStore = _store => {
 }
 
 // # API INSTANCE #
-const serverVersion = process.env.REACT_APP_SERVER_VERSION
-const appServerAddress = process.env.REACT_APP_SERVER_ADDRESS
+const apiVersion = process.env.REACT_APP_API_VERSION
+const apiAddress = process.env.REACT_APP_API_ADDRESS
 
 const nutritivApi = axios.create({
-  baseURL: `${appServerAddress}${serverVersion}`,
+  baseURL: `${apiAddress}/${apiVersion}`,
 })
 
 // # INTERCEPTORS #

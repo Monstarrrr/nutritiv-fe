@@ -35,15 +35,15 @@ export const ProductCard = ({ product }) => {
               maxWidth: "100px",
             }}
             key={i}
-            src={`${process.env.REACT_APP_SERVER_ADDRESS}${img}`}
+            src={`${process.env.REACT_APP_S3_ADDRESS}${img}`}
             alt={`${product.title} ${i+1}`}
           />
         ))
       }
       <br />
       {
-        product.tags && product.tags.map(tag => (
-          <span>
+        product.tags && product.tags.map((tag, i) => (
+          <span key={i}>
              &nbsp;{tag} /
           </span>
         ))

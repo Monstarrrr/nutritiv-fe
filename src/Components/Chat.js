@@ -2,11 +2,13 @@ import React, { useEffect, useRef, useState } from 'react'
 import socketIOClient from "socket.io-client";
 import nutritivApi from '../Api/nutritivApi';
 import Multiselect from 'multiselect-react-dropdown';
+import { useSelector } from 'react-redux';
 
 const ENDPOINT = process.env.REACT_APP_SOCKET_SERVER_ADDRESS
 
 export const Chat = () => {
   const scrollRef = useRef()
+  const userId = useSelector(state => state.user.id)
   // const [response, setResponse] = useState("")
   
   const [users, setUsers] = useState([])
@@ -14,10 +16,10 @@ export const Chat = () => {
   
   const [chats, setChats] = useState([])
   const [selectedChat, setSelectedChat] = useState(null)
+  const [getChats, setGetChats] = useState(false) // temp
+  
   
   const [newMessage, setNewMessage] = useState("")
-  
-  // # EFFECTS #
   
   // GET ALL USERS
   useEffect(() => {
@@ -42,17 +44,20 @@ export const Chat = () => {
     let fetchApi = async () => {
       try {
         const { data } = await nutritivApi.get(
-          `/chats/`
+          `/chats/?messagesQty=2`
         )
         console.log('# chats :', data)
         setChats(data)
         setSelectedChat(data[0])
+        scrollRef.current?.scrollIntoView({
+          block: 'nearest',
+        })
       } catch (err) {
         console.error(err)
       }
     }
     fetchApi();
-  }, []);
+  }, [getChats]);
   
   // SOCKET
   useEffect(() => {
@@ -78,7 +83,7 @@ export const Chat = () => {
         { members }
       )
       setSelectedChat(data)
-      setChats([...chats, data])
+      setChats([data, ...chats])
       console.log('# create chat /chats/ :', data)
     } catch(err) {
       console.error('/chats/:', err)
@@ -105,30 +110,49 @@ export const Chat = () => {
   // SEND MESSAGE
   const handleSubmitMessage = async (e) => {
     e.preventDefault();
-    console.log("Message sending...")
+    setNewMessage("");
+    let chatsCopy = [...chats]
+    let newChats = chatsCopy.map(chat => (
+      chat._id === selectedChat._id ? (
+        {
+          ...chat,
+          "messages": [
+            ...chat.messages,
+            { 
+              "text": newMessage, 
+              sender: userId
+            }
+          ]
+        }
+      ) : chat
+    ))
+    setChats(newChats)
+    setSelectedChat(newChats.find(chat => chat._id === selectedChat._id))
+    
+    scrollRef.current?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'nearest',
+    })
+
     try {
-      // await nutritivApi.post(
-      //   `/chats/message/${selectedChat._id}`,
-      //   {
-      //     "text": newMessage
-      //   }
-      // )
-      //
-      let chatsCopy = [...chats]
-      let newChats = chatsCopy.map(chat => (
-        chat._id === selectedChat._id ? {
-          ...chat, "messages": [...chat.messages, { "text": newMessage }]
-        } : chat
-      ))
-      setChats(newChats)
-      setSelectedChat(newChats.find(chat => chat._id === selectedChat._id))
+      await nutritivApi.post(
+        `/chats/message/${selectedChat._id}`,
+        {
+          "text": newMessage
+        }
+      )
+      setGetChats(!getChats) // temp
     } catch (err) {
       console.error('# chats/message/:chatId :', err)
     }
   }
   
-  console.log('# selectedChat :', selectedChat)
-  console.log('# chats :', chats)
+  // AUTO SCROLL
+  useEffect(() => {
+    scrollRef.current?.scrollIntoView({
+      block: 'nearest',
+    })
+  }, [selectedChat]);
 
   // DELETE CHAT
   const handleDeleteChat = async (e) => {
@@ -146,6 +170,9 @@ export const Chat = () => {
       console.error('/chats/single:', err)
     }
   }
+  
+  console.log('# selectedChat :', selectedChat)
+  console.log('# userId :', userId)
 
   return (
     <div>
@@ -195,8 +222,7 @@ export const Chat = () => {
         ))
       }
       {/* CHAT BOX */}
-      <div 
-        ref={scrollRef}
+      <div
         style={{
           background: "lightblue",
           maxHeight: "250px",
@@ -207,10 +233,33 @@ export const Chat = () => {
           selectedChat ? (
             selectedChat.messages.length > 0 ? (
               selectedChat.messages.map(msg => (
-                <div key={msg._id}>
-                  <p>
-                    {msg.text}
-                  </p>
+                  <div 
+                    key={msg._id}
+                    ref={scrollRef}
+                  >
+                  {
+                    userId === msg.sender ? (
+                      <p style={{textAlign: "end", margin: 0}}>
+                        {
+                          msg.id ? (
+                            <span role="img">
+                              ✔️
+                            </span>
+                          ) : (
+
+                            <span role="img">
+                              🕘
+                            </span>
+                          )
+                        }
+                        {msg.text}
+                      </p>
+                    ) : (
+                      <p>
+                        {msg.text}
+                      </p>
+                    )
+                  }
                   <br />
                 </div>
               ))
@@ -232,6 +281,7 @@ export const Chat = () => {
           type="text"
           placeholder='Type something...'
           onChange={handleNewMessage}
+          value={newMessage}
         />
         <button 
           onClick={handleSubmitMessage}
@@ -240,6 +290,9 @@ export const Chat = () => {
           Send
         </button>
       </form>
+      <pre>
+        {JSON.stringify(chats, null, 2)}
+      </pre>
     </div>
   )
 }
