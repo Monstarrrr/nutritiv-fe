@@ -66,7 +66,7 @@ export default function LoginPage() {
           `/users/self`
         )
         const cartSelf = await nutritivApi.get(
-          `carts/self`
+          `/carts/self`
         )
         console.log('# cart :', cartSelf.data.cart.totalQuantity)
         dispatch(updateUser({
@@ -91,6 +91,9 @@ export default function LoginPage() {
   return (
     <div>
       <h2>Login page</h2>
+      <pre>
+        {JSON.stringify(loginInput, null, 2)}
+      </pre>
       <form onSubmit={ handleSubmit }>
         <label>
           <p>Username</p>
@@ -103,7 +106,7 @@ export default function LoginPage() {
           {
             loginInput.usernameError && (
               <p style={{color: "red"}}>
-                Please enter a username
+                Please enter your username
               </p>
             )
           }
@@ -119,7 +122,7 @@ export default function LoginPage() {
           {
             loginInput.passwordError && (
               <p style={{color: "red"}}>
-                Please enter a password
+                Please enter your password
               </p>
             )
           }

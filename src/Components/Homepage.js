@@ -8,26 +8,26 @@ export const Welcome = () => {
   
   const loggedIn = useSelector(state => state.user.loggedIn)
   
-  useEffect(() => {
-    if(localStorage) {
-      const formDataFromLocalStorage = localStorage.getItem('formData');
-      if(formDataFromLocalStorage) {
-        const formDataCopy = JSON.parse(formDataFromLocalStorage)
-        setFormData({...formDataCopy})
-      }
-    }
-  }, []);
+  // useEffect(() => {
+  //   if(localStorage) {
+  //     const formDataFromLocalStorage = localStorage.getItem('formData');
+  //     if(formDataFromLocalStorage) {
+  //       const formDataCopy = JSON.parse(formDataFromLocalStorage)
+  //       setFormData({...formDataCopy})
+  //     }
+  //   }
+  // }, []);
   
-  useEffect(() => {
-    localStorage && localStorage.setItem("formData", JSON.stringify(formData))
-  }, [formData]);
+  // useEffect(() => {
+  //   localStorage && localStorage.setItem("formData", JSON.stringify(formData))
+  // }, [formData]);
   
-  const handleInputsChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    })
-  }
+  // const handleInputsChange = (e) => {
+  //   setFormData({
+  //     ...formData,
+  //     [e.target.name]: e.target.value
+  //   })
+  // }
   
   return (
     <div>
@@ -36,14 +36,14 @@ export const Welcome = () => {
         type="text" 
         name="firstName"
         placeholder='first name'
-        onChange={e => handleInputsChange(e)}
+        // onChange={e => handleInputsChange(e)}
         value={formData?.firstName}
       />
       <input 
         type="text" 
         name="lastName"
         placeholder='last name'
-        onChange={e => handleInputsChange(e)}
+        // onChange={e => handleInputsChange(e)}
         value={formData?.lastName}
       />
       
