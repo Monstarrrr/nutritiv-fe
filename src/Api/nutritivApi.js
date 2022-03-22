@@ -36,11 +36,11 @@ nutritivApi.interceptors.response.use(res => {
   // set tokens in localStorage
   if(res.headers.access_token || res.headers.refresh_token) {
     localStorage.setItem(
-      storageKeys.accessToken,
+      'access_token',
       res.headers.access_token
     )
     localStorage.setItem(
-      storageKeys.refreshToken,
+      'refresh_token',
       res.headers.refresh_token
     )
   }
