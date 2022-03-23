@@ -91,9 +91,6 @@ export default function LoginPage() {
   return (
     <div>
       <h2>Login page</h2>
-      <pre>
-        {JSON.stringify(loginInput, null, 2)}
-      </pre>
       <form onSubmit={ handleSubmit }>
         <label>
           <p>Username</p>

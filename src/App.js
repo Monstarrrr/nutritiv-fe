@@ -58,7 +58,8 @@ function App() {
             isAdmin: data.isAdmin,
             isVerified: data.isVerified,
             addresses: data.addressDetails,
-            avatar: data.avatar
+            avatar: data.avatar,
+            chat: data.chat,
           }))
         }
       } catch(err) {
@@ -121,7 +122,7 @@ function App() {
       >
         <Routes>
           {/* PUBLIC */}
-          <Route path="*" element={<Navigate replace to="/page-not-found"/>} />
+          {/* <Route path="*" element={<Navigate replace to="/page-not-found"/>} /> */}
           <Route path="/" element={<GeneralLayout/>}>
             <Route index element={<Welcome/>} />
             <Route path="/products" element={<Products/>} />

@@ -9,15 +9,14 @@ const socket = io("http://localhost:4000")
 export const Chat = () => {
   const scrollRef = useRef()
   const userId = useSelector(state => state.user.id)
-  const [response, setResponse] = useState(null)
+  const [socketResponse, setSocketResponse] = useState(null)
   
   const [users, setUsers] = useState([])
-  const [selectedUsers, setSelectedUsers] = useState([])
+  // const [selectedUsers, setSelectedUsers] = useState([])
   
   const [chats, setChats] = useState([])
   const [selectedChat, setSelectedChat] = useState(null)
   const [getChats, setGetChats] = useState(false) // temp
-  
   
   const [newMessage, setNewMessage] = useState("")
   
@@ -44,7 +43,7 @@ export const Chat = () => {
     let fetchApi = async () => {
       try {
         const { data } = await nutritivApi.get(
-          `/chats/?messagesQty=2`
+          `/chats/?messagesQty=${20}`
         )
         console.log('# chats :', data)
         setChats(data)
@@ -62,8 +61,23 @@ export const Chat = () => {
   // SOCKET
   useEffect(() => {
     socket.on("message", data => {
-      setResponse(data)
-      console.log('# Socket io res :', data)
+      setSocketResponse(data)
+      // let chatsCopy = [...chats]
+      // let newChats = chatsCopy.map(chat => (
+      //   chat._id === selectedChat._id ? (
+      //     {
+      //       ...chat,
+      //       "messages": [
+      //         ...chat.messages,
+      //         { 
+      //           "text": data, 
+      //           sender: userId
+      //         }
+      //       ]
+      //     }
+      //   ) : chat
+      // ))
+      console.log('# socket-io res :', data)
     })
     return () => socket.disconnect();
   }, []);
@@ -72,27 +86,27 @@ export const Chat = () => {
   // # HANDLERS #
   
   // CREATE CHAT
-  const handleCreateChat = async (e) => {
-    e.preventDefault();
-    try {
-      let members = selectedUsers.map(user => user._id)
-      const { data } = await nutritivApi.post(
-        `/chats/`,
-        { members }
-      )
-      setSelectedChat(data)
-      setChats([data, ...chats])
-      console.log('# create chat /chats/ :', data)
-    } catch(err) {
-      console.error('/chats/:', err)
-    }
-  }
-  const handleUserSelect = (selectedList) => {
-    setSelectedUsers(selectedList)
-  }
-  const handleUserRemove = (selectedList) => {
-    setSelectedUsers(selectedList)
-  }
+  // const handleCreateChat = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     let members = selectedUsers.map(user => user._id)
+  //     const { data } = await nutritivApi.post(
+  //       `/chats/`,
+  //       { members }
+  //     )
+  //     setSelectedChat(data)
+  //     setChats([data, ...chats])
+  //     console.log('# create chat /chats/ :', data)
+  //   } catch(err) {
+  //     console.error('/chats/:', err)
+  //   }
+  // }
+  // const handleUserSelect = (selectedList) => {
+  //   setSelectedUsers(selectedList)
+  // }
+  // const handleUserRemove = (selectedList) => {
+  //   setSelectedUsers(selectedList)
+  // }
   
   // SELECT CHAT
   const handleSelectChat = (e) => {
@@ -110,8 +124,6 @@ export const Chat = () => {
     e.preventDefault();
 
     socket.emit('message', newMessage)
-
-    setNewMessage("");
     
     let chatsCopy = [...chats]
     let newChats = chatsCopy.map(chat => (
@@ -135,7 +147,7 @@ export const Chat = () => {
       behavior: 'smooth',
       block: 'nearest',
     })
-
+    
     try {
       await nutritivApi.post(
         `/chats/message/${selectedChat._id}`,
@@ -143,6 +155,7 @@ export const Chat = () => {
           "text": newMessage
         }
       )
+      setNewMessage("");
       setGetChats(!getChats) // temp
     } catch (err) {
       console.error('# chats/message/:chatId :', err)
@@ -174,6 +187,7 @@ export const Chat = () => {
   }
 
   console.log('# userId :', userId)  
+  console.log('# users :', users)
   
   return (
     <div>
@@ -181,7 +195,7 @@ export const Chat = () => {
         Chats
       </h2>
       {/* CREATE CHAT */}
-      <Multiselect 
+      {/* <Multiselect 
         onSelect={handleUserSelect}
         onRemove={handleUserRemove}
         options={users}
@@ -190,10 +204,7 @@ export const Chat = () => {
       <button onClick={handleCreateChat}>
         Create chatroom
       </button>
-      <br />
-      <h3>
-        Chatrooms
-      </h3>
+      <br /> */}
       {/* SELECT CHAT */}
       {
         chats.map((chat, index) => (
@@ -222,11 +233,23 @@ export const Chat = () => {
           </div>
         ))
       }
+      <br />
+      {/* CHAT MEMBERS */}
+      {
+        selectedChat && users.filter(user => selectedChat.members.includes(user._id)).map(member => (
+          <span key={member._id}>
+            --{member.username}--
+          </span>
+        ))
+      }
+      <br />
+      <br />
       {/* CHAT BOX */}
       <div
         style={{
           background: "lightblue",
           maxHeight: "250px",
+          maxWidth: "400px",
           overflow: "auto",
         }}
       >
@@ -234,33 +257,52 @@ export const Chat = () => {
           selectedChat ? (
             selectedChat.messages.length > 0 ? (
               selectedChat.messages.map(msg => (
-                  <div 
-                    key={msg.id}
-                    ref={scrollRef}
-                  >
-                  {
-                    userId === msg.sender ? (
-                      <p style={{textAlign: "end", margin: 0}}>
-                        {
-                          msg.id ? (
-                            <span role="img">
-                              ✔️
+                <div
+                  key={msg.id}
+                  ref={scrollRef}
+                >                
+                    <div>                      
+                      {
+                        userId === msg.sender ? (
+                          <p style={{textAlign: "end", margin: 0}}>
+                            <span style={{fontWeight: "bold"}}>
+                              You:
                             </span>
-                          ) : (
-
-                            <span role="img">
-                              🕘
+                            <br />
+                            <span>
+                              {
+                                msg.id ? (
+                                  <span role="img">
+                                    ✔️
+                                  </span>
+                                ) : (
+                                  <span role="img">
+                                    🕘
+                                  </span>
+                                )
+                              }
+                              {msg.text}
                             </span>
-                          )
-                        }
-                        {msg.text}
-                      </p>
-                    ) : (
-                      <p>
-                        {msg.text}
-                      </p>
-                    )
-                  }
+                          </p>
+                        ) : (
+                          <p>
+                            <span style={{fontWeight: "bold"}}>
+                              {
+                                users.filter(user => (
+                                  user._id === msg.sender
+                                ))[0].username
+                              }
+                            </span>
+                            :
+                            <br />
+                            <span>
+                              {msg.text}
+                            </span>
+                          </p>
+                        )
+                      }
+                    </div>
+                    <br />
                   <br />
                 </div>
               ))
@@ -294,7 +336,7 @@ export const Chat = () => {
       <br />
       Socket response:
       <pre>
-        {JSON.stringify(response, null, 2)}
+        {JSON.stringify(socketResponse, null, 2)}
       </pre>
       Chats:
       <pre>

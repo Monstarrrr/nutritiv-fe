@@ -10,6 +10,7 @@ const initialState = {
   cartQuantity: 0,
   addresses: [],
   avatar: "",
+  chat: false,
 }
 
 export const userSlice = createSlice({
@@ -29,6 +30,7 @@ export const userSlice = createSlice({
       user.isVerified = action.payload.isVerified;
       user.addresses = action.payload.addresses;
       user.avatar = action.payload.avatar;
+      user.chat = action.payload.chat;
     },
     updateUserCartQuantity: (user, action) => {
       const { cartQuantity } = action.payload;
