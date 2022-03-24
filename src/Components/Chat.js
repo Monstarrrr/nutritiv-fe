@@ -4,7 +4,9 @@ import nutritivApi from '../Api/nutritivApi';
 import Multiselect from 'multiselect-react-dropdown';
 import { useSelector } from 'react-redux';
 
-const socket = io("http://localhost:4000")
+const refreshToken = localStorage.getItem('refresh_token')
+console.log('# refreshToken :', refreshToken)
+const socket = io("http://localhost:4000", { query: { refreshToken }});
 
 export const Chat = () => {
   const scrollRef = useRef()
@@ -16,10 +18,15 @@ export const Chat = () => {
   
   const [chats, setChats] = useState([])
   const [selectedChat, setSelectedChat] = useState(null)
+  const [chatStack, setChatStack] = useState(2)
+  
   const [getChats, setGetChats] = useState(false) // temp
+  const [fetchedAllMessages, setFetchedAllMessages] = useState(false)
   
   const [newMessage, setNewMessage] = useState("")
   
+  const MSG_QTY = 20;
+
   // GET ALL USERS
   useEffect(() => {
     let fetchApi = async () => {
@@ -28,7 +35,6 @@ export const Chat = () => {
           `/users`
         )
         setUsers(data)
-        console.log('# /users :', data)
       } catch(err) {
         console.error(
           '/users:', err
@@ -43,9 +49,8 @@ export const Chat = () => {
     let fetchApi = async () => {
       try {
         const { data } = await nutritivApi.get(
-          `/chats/?messagesQty=${20}`
+          `/chats/?messagesQty=${MSG_QTY}`
         )
-        console.log('# chats :', data)
         setChats(data)
         setSelectedChat(data[0])
         scrollRef.current?.scrollIntoView({
@@ -60,24 +65,28 @@ export const Chat = () => {
   
   // SOCKET
   useEffect(() => {
-    socket.on("message", data => {
-      setSocketResponse(data)
-      // let chatsCopy = [...chats]
-      // let newChats = chatsCopy.map(chat => (
-      //   chat._id === selectedChat._id ? (
-      //     {
-      //       ...chat,
-      //       "messages": [
-      //         ...chat.messages,
-      //         { 
-      //           "text": data, 
-      //           sender: userId
-      //         }
-      //       ]
-      //     }
-      //   ) : chat
-      // ))
-      console.log('# socket-io res :', data)
+    socket.on("message", ({ text, id, sender }) => { // Err: Cannot destructure property 'text' of '_ref' as it is null.
+      setSocketResponse({text, id})
+      console.log('# socket "text" res :', text)
+      console.log('# socket "id" res :', id)
+      let chatsCopy = [...chats]
+      let newChats = chatsCopy.map(chat => (
+        chat._id === selectedChat._id ? (
+          {
+            ...chat,
+            "messages": [
+              ...chat.messages,
+              {
+                text,
+                sender,
+                id
+              }
+            ]
+          }
+        ) : chat
+      ))
+      setChats(newChats)
+      setSelectedChat(newChats.find(chat => chat._id === selectedChat._id))
     })
     return () => socket.disconnect();
   }, []);
@@ -122,8 +131,6 @@ export const Chat = () => {
   // SEND MESSAGE
   const handleSubmitMessage = async (e) => {
     e.preventDefault();
-
-    socket.emit('message', newMessage)
     
     let chatsCopy = [...chats]
     let newChats = chatsCopy.map(chat => (
@@ -143,18 +150,15 @@ export const Chat = () => {
     setChats(newChats)
     setSelectedChat(newChats.find(chat => chat._id === selectedChat._id))
     
-    scrollRef.current?.scrollIntoView({
-      behavior: 'smooth',
-      block: 'nearest',
-    })
-    
     try {
-      await nutritivApi.post(
+      const { data } = await nutritivApi.post(
         `/chats/message/${selectedChat._id}`,
         {
           "text": newMessage
         }
       )
+      const { text, id } = data;
+      socket.emit('message', { text, id, refreshToken })
       setNewMessage("");
       setGetChats(!getChats) // temp
     } catch (err) {
@@ -179,16 +183,31 @@ export const Chat = () => {
       )
       let newChats = chats.filter(chat => chat._id !== idChatToDelete)
       setChats(newChats);
-      console.log('# idChatToDelete :', idChatToDelete)
       selectedChat._id === idChatToDelete && setSelectedChat(newChats[0])
     } catch(err) {
       console.error('/chats/single:', err)
     }
   }
 
-  console.log('# userId :', userId)  
-  console.log('# users :', users)
-  
+  const handleLoadMoreMessages = async () => {
+    try {
+      const { data } = await nutritivApi.get(
+        `/chats/messages/${selectedChat._id}/?stack=${chatStack}&quantity=${MSG_QTY}`,
+      )
+      setSelectedChat({
+        ...selectedChat,
+        "messages": [
+          ...data,
+          ...selectedChat.messages,
+        ]
+      })
+      setChatStack(chatStack + 1)
+      data.length < MSG_QTY && setFetchedAllMessages(true)
+    } catch(err) {
+      console.error('loadMoreMessages /chats/messages/:', err)
+    }
+  }
+
   return (
     <div>
       <h2>
@@ -207,8 +226,8 @@ export const Chat = () => {
       <br /> */}
       {/* SELECT CHAT */}
       {
-        chats.map((chat, index) => (
-          <div key={index} id={index}>
+        chats.map(chat => (
+          <div key={chat._id}>
             <input
               checked={
                 chat._id === selectedChat?._id
@@ -253,6 +272,12 @@ export const Chat = () => {
           overflow: "auto",
         }}
       >
+        <button 
+          onClick={handleLoadMoreMessages}
+          style={{width: '100%', display: fetchedAllMessages && 'none'}}
+        >
+          Load more messages
+        </button>
         {
           selectedChat ? (
             selectedChat.messages.length > 0 ? (
