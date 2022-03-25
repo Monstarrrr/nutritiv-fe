@@ -10,6 +10,8 @@ const socket = io("http://localhost:4000", { query: { refreshToken }});
 
 export const Chat = () => {
   const scrollRef = useRef()
+  const chatsRef = useRef()
+  const selectedChatRef = useRef()
   const userId = useSelector(state => state.user.id)
   const [socketResponse, setSocketResponse] = useState(null)
   
@@ -53,6 +55,7 @@ export const Chat = () => {
         )
         setChats(data)
         setSelectedChat(data[0])
+        console.log('# setSelectedChat(', data[0])
         scrollRef.current?.scrollIntoView({
           block: 'nearest',
         })
@@ -61,17 +64,23 @@ export const Chat = () => {
       }
     }
     fetchApi();
-  }, [getChats]);
+  }, []);
+  
+  // UPDATE CHATS REF FOR SOCKET
+  useEffect(() => {
+    chatsRef.current = chats
+    selectedChatRef.current = selectedChat
+  });
   
   // SOCKET
   useEffect(() => {
-    socket.on("message", ({ text, id, sender }) => { // Err: Cannot destructure property 'text' of '_ref' as it is null.
-      setSocketResponse({text, id})
-      console.log('# socket "text" res :', text)
-      console.log('# socket "id" res :', id)
-      let chatsCopy = [...chats]
-      let newChats = chatsCopy.map(chat => (
-        chat._id === selectedChat._id ? (
+    socket.on("message", ({text, id, sender}) => { // USES DEFAULT STATES (???)
+      console.log('# SOCKET - res :', text, id, sender)
+      setSocketResponse({text, id, sender})
+      console.log('# chatsRef.current :', chatsRef.current ) // []
+      // let chatsCopy = [...chatsRef]
+      let newChats = chatsRef.current.map(chat => (
+        chat._id === selectedChatRef.current._id ? (
           {
             ...chat,
             "messages": [
@@ -86,7 +95,7 @@ export const Chat = () => {
         ) : chat
       ))
       setChats(newChats)
-      setSelectedChat(newChats.find(chat => chat._id === selectedChat._id))
+      setSelectedChat(newChats.find(chat => chat._id === selectedChatRef.current._id))
     })
     return () => socket.disconnect();
   }, []);
@@ -127,7 +136,7 @@ export const Chat = () => {
   const handleNewMessage = (e) => {
     setNewMessage(e.target.value)
   }
-
+  
   // SEND MESSAGE
   const handleSubmitMessage = async (e) => {
     e.preventDefault();
@@ -141,7 +150,8 @@ export const Chat = () => {
             ...chat.messages,
             { 
               "text": newMessage, 
-              sender: userId
+              sender: userId,
+              id: "0",
             }
           ]
         }
@@ -149,7 +159,7 @@ export const Chat = () => {
     ))
     setChats(newChats)
     setSelectedChat(newChats.find(chat => chat._id === selectedChat._id))
-    
+
     try {
       const { data } = await nutritivApi.post(
         `/chats/message/${selectedChat._id}`,
@@ -158,9 +168,9 @@ export const Chat = () => {
         }
       )
       const { text, id } = data;
-      socket.emit('message', { text, id, refreshToken })
+      socket.emit('message', { text, id })
       setNewMessage("");
-      setGetChats(!getChats) // temp
+      // setGetChats(!getChats) // temp
     } catch (err) {
       console.error('# chats/message/:chatId :', err)
     }
@@ -207,7 +217,9 @@ export const Chat = () => {
       console.error('loadMoreMessages /chats/messages/:', err)
     }
   }
-
+  
+  console.log('# chats :', chats)
+  
   return (
     <div>
       <h2>
@@ -255,7 +267,7 @@ export const Chat = () => {
       <br />
       {/* CHAT MEMBERS */}
       {
-        selectedChat && users.filter(user => selectedChat.members.includes(user._id)).map(member => (
+        selectedChat?.members && users.filter(user => selectedChat.members.includes(user._id)).map(member => (
           <span key={member._id}>
             --{member.username}--
           </span>
@@ -296,7 +308,7 @@ export const Chat = () => {
                             <br />
                             <span>
                               {
-                                msg.id ? (
+                                msg.id !== 0 ? (
                                   <span role="img">
                                     ✔️
                                   </span>
