@@ -62,10 +62,10 @@ export default function LoginPage() {
           `/auth/login`,
           loginData
         )
-        const { data } = await nutritivApi.get(
+        const { data } = await nutritivApi.get( // temp (memory leak)
           `/users/self`
         )
-        const cartSelf = await nutritivApi.get(
+        const cartSelf = await nutritivApi.get( // temp (memory leak)
           `/carts/self`
         )
         console.log('# cart :', cartSelf.data.cart.totalQuantity)

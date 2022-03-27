@@ -1,22 +1,40 @@
 import React, { useEffect, useRef, useState } from 'react'
-import io from "socket.io-client";
+import { io } from "socket.io-client";
 import nutritivApi from '../Api/nutritivApi';
 import { useSelector } from 'react-redux';
 
+const refreshToken = localStorage.getItem('refresh_token');
+const socket = io("http://localhost:4000", { query: { refreshToken } });
+
 export const Chat = () => {
   const userId = useSelector(state => state.user.id)
-  const chatboxBottomRef = useRef();
-  const [chatList, setChatList] = useState([])
-  const [activeChatInfo, setActiveChatInfo] = useState(null)
-  const [chatContent, setChatContent] = useState(null)
+  // CHATS INFO
+  const [chatsInfos, setChatsInfo] = useState([])
+  const [activeChatId, setActiveChatId] = useState(null)
   
+  // CHATS CONTENT
+  const [chat, setChat] = useState(null)
   const [messageToBeSent, setMessageToBeSent] = useState("")
   const [tempMessageId, setTempMessageId] = useState(0)
+
+  const chatboxBottomRef = useRef();
+  const chatRef = useRef(chat);
   
-  console.log('# chat :', chatContent)
-  console.log('# chatList :', chatList)
-  console.log('# activeChatId :', activeChatInfo)
+  // SOCKET
+  useEffect(() => {
+    chatRef.current = chat
+  });
+  useEffect(() => {
+    socket.on("message", (data) => {
+      console.log('# socket io res :', data)
+    })
+    //
+    return () => {
+      socket.disconnect()
+    }
+  }, []);
   
+
   // GET CHATS INFO
   useEffect(() => {
     let fetchApi = async () => {
@@ -25,8 +43,8 @@ export const Chat = () => {
           `/chats/`
         )
         console.log('# get /chats/ :', data)
-        setChatList(data)
-        setActiveChatInfo(data[0])
+        setChatsInfo(data)
+        setActiveChatId(data[0]._id)
         chatboxBottomRef.current?.scrollIntoView()
       } catch(err) {
         console.error(
@@ -42,29 +60,27 @@ export const Chat = () => {
     let fetchApi = async () => {
       try {
         const { data } = await nutritivApi.get(
-          `/chats/single/${activeChatInfo._id}/?messageQty=${10}` 
+          `/chats/single/${activeChatId}/?messageQty=${10}` 
         )
-        setChatContent(data)
+        setChat(data)
         console.log('# /chats/single/ res :', data)
       } catch(err) {
         console.error('/chats/single/:', err)
       }
     }
-    if(activeChatInfo){
+    if(activeChatId){
       fetchApi();
     }
-  }, [activeChatInfo]);
-  
-  console.log('# messagesCount :', tempMessageId)
+  }, [activeChatId]);
   
   // AUTO SCROLL
   useEffect(() => {
     chatboxBottomRef.current?.scrollIntoView()
-  }, []);
+  }, [chat]);
   
-  // SELECT CHAT
-  const handleSelectedChat = (e) => {
-    // TODO
+  // ACTIVE CHAT
+  const handleActiveChat = (e) => {
+    setActiveChatId(e.target.id)
   }
 
   // SEND MESSAGE
@@ -72,15 +88,34 @@ export const Chat = () => {
     e.preventDefault();
     
     setTempMessageId(tempMessageId + 1)
-    
+    setChat({
+      ...chat,
+      "messages": [
+        ...chat.messages,
+        {
+          "id": tempMessageId,
+          "text": messageToBeSent,
+          "sender": userId,
+          "loading": true
+        }
+      ]
+    })
+    setMessageToBeSent("")
+        
     try {
       const { data } = await nutritivApi.post(
-        `/chats/message/${activeChatInfo._id}`,
+        `/chats/message/${activeChatId}`,
         {
           text: messageToBeSent
         }
       )
-      
+      setChat({
+        ...chat,
+        "messages": [
+          ...chat.messages,
+          {...data}
+        ]
+      })
       console.log('# /chats/message/ :', data)
     } catch(err) {
       console.error('/chats/message/:', err)
@@ -89,52 +124,108 @@ export const Chat = () => {
   const handleMessageToBeSent = (e) => {
     setMessageToBeSent(e.target.value)
   }
-
+  
   return (
     <div>
       <h2>
         Chats
       </h2>
       {
-        chatList.map(chat => (
-          <React.Fragment key={chat._id}>
+        chatsInfos.map(chatInfo => (
+          <React.Fragment key={chatInfo._id}>
             <br />
-            <button 
-              id={chat._id} 
-              onClick={handleSelectedChat}
+            <button
+              id={chatInfo._id} 
+              onClick={handleActiveChat}
+              style={chatInfo._id === activeChatId ? {color: "grey"} : undefined}
             >
-              {
-                chat._id === activeChatInfo?._id && (
-                  <span role="img" aria-label='active' >
-                    ▶
-                  </span>
-                )
-              }
-              {chat._id}
+              {chatInfo._id}
             </button>
-            <br />
-            <br />
+            {
+              chatInfo._id === activeChatId && (
+                <span role="img" aria-label='active' >
+                  ◀
+                </span>
+              )
+            }
           </React.Fragment>
         ))
       }
       <br />
+      <br />
       
       {/* CHATBOX */}
-      <div style={{background: "lightblue", maxHeight: '300px', overflow: 'auto'}}>
+      <div style={{
+        background: "lightblue",
+        display: "flex",
+        flexDirection: "column", 
+        height: '300px', 
+        overflow: 'auto'
+      }}>
         {
-          
+          chat && (
+            <>
+              {
+                chat.messages.length > 0 ? (
+                  chat.messages.map(message => (
+                    message.sender === userId ? (
+                      <p 
+                        key={message.id} 
+                        style={{
+                          alignSelf: "end",
+                          textAlign: "right", 
+                          width: "100%"
+                        }}
+                      >
+                        <span style={{fontWeight: "bold"}}>
+                          You:
+                        </span>
+                        <br />
+                        {message.loading ? (
+                          <span role="status" aria-label='sending'>
+                            🕘
+                          </span>
+                        ) : (
+                          <span role="status" aria-label='sent'>
+                            ✔️
+                          </span>
+                        )}
+                        {message.text}
+                      </p>
+                    ) : (
+                      <p key={message.id} style={{width: "100%"}}>
+                        <span style={{fontWeight: "bold", textAlign: "end"}}>
+                          {message.sender}:
+                        </span>
+                        <br />
+                        {message.text}
+                      </p>
+                    )
+                  ))
+                ) : (
+                  <p>
+                    No messages in {chat._id}.
+                  </p>
+                )
+              }
+              <div ref={chatboxBottomRef} />
+            </>
+          )
         }
         {/* SUBMIT */}
-        <form onSubmit={handleSendMessage} style={{display: 'flex'}}>
-          <input 
-            onChange={handleMessageToBeSent} 
-            style={{flexGrow: 1}}
-            type="text" 
-            value={messageToBeSent} 
-          />
-          <input type="submit" value="send" />
-        </form>
       </div>
+      <form 
+        onSubmit={handleSendMessage} 
+        style={{display: 'flex'}}
+      >
+        <input 
+          onChange={handleMessageToBeSent} 
+          style={{flexGrow: 1}}
+          type="text" 
+          value={messageToBeSent} 
+        />
+        <input type="submit" value="send" />
+      </form>
     </div>
   )
 }
