@@ -4,10 +4,21 @@ import nutritivApi from '../Api/nutritivApi';
 import { useSelector } from 'react-redux';
 
 const refreshToken = localStorage.getItem('refresh_token');
-const socket = io("http://localhost:4000", { query: { refreshToken } });
+// const refreshToken = "ThisIsSomeIncorrectToken"
+const socket = io(
+  "http://localhost:4000",
+  {
+    query: { refreshToken },
+    // transports: ['websocket']
+  },
+);
 
 export const Chat = () => {
+  
   const userId = useSelector(state => state.user.id)
+  
+  const [socketError, setSocketError] = useState(false)
+
   // CHATS INFO
   const [chatsInfos, setChatsInfo] = useState([])
   const [activeChatId, setActiveChatId] = useState(null)
@@ -22,19 +33,39 @@ export const Chat = () => {
   
   // SOCKET
   useEffect(() => {
-    chatRef.current = chat
+    chatRef.current = chat 
   });
+  // SOCKET - MESSAGE
   useEffect(() => {
-    socket.on("message", (data) => {
-      console.log('# socket io res :', data)
+    socket.on("connect_error", err => {
+      console.log(err); // true
+      setSocketError(true)
+    });
+    socket.on("error", err => {
+      console.log(err); // true
+      setSocketError(true)
+    });
+    socket.on("message", ({id, text, sender}) => {
+      console.log('# socket io res :', id, text, sender)
+      !chatRef.current.messages.some(message => message.id === id) && (
+        setChat({
+          ...chatRef.current,
+          "messages": [
+            ...chatRef.current.messages,
+            {
+              id,
+              text,
+              sender,
+            }
+          ]
+        })
+      )
     })
-    //
     return () => {
       socket.disconnect()
     }
   }, []);
   
-
   // GET CHATS INFO
   useEffect(() => {
     let fetchApi = async () => {
@@ -60,7 +91,7 @@ export const Chat = () => {
     let fetchApi = async () => {
       try {
         const { data } = await nutritivApi.get(
-          `/chats/single/${activeChatId}/?messageQty=${10}` 
+          `/chats/single/${activeChatId}/?messagesQty=${10}`
         )
         setChat(data)
         console.log('# /chats/single/ res :', data)
@@ -109,11 +140,14 @@ export const Chat = () => {
           text: messageToBeSent
         }
       )
+      const { text, id } = data;
+      const room = activeChatId;
+      socket.emit('message', {text, id, refreshToken, room})
       setChat({
         ...chat,
         "messages": [
           ...chat.messages,
-          {...data}
+          {...data, loading: false}
         ]
       })
       console.log('# /chats/message/ :', data)
@@ -124,12 +158,23 @@ export const Chat = () => {
   const handleMessageToBeSent = (e) => {
     setMessageToBeSent(e.target.value)
   }
+
+  const handleLoadMoreMessages = async () => {
+    try {
+      const { data } = await nutritivApi.get(
+        `/chats/messages/${chat._id}/?stack=${2}&quantity=${10}`,
+      )
+      console.log('# get more messages /chats/messages/ :', data)
+    } catch(err) {
+      console.error(':', err)
+    }
+  }
   
   return (
     <div>
-      <h2>
-        Chats
-      </h2>
+      {
+        socketError && <h2>AUTHENTICATION ERROR</h2>
+      } 
       {
         chatsInfos.map(chatInfo => (
           <React.Fragment key={chatInfo._id}>
@@ -162,12 +207,14 @@ export const Chat = () => {
         height: '300px', 
         overflow: 'auto'
       }}>
-        {
-          chat && (
-            <>
-              {
-                chat.messages.length > 0 ? (
-                  chat.messages.map(message => (
+        {chat && (
+          <>
+            {chat.messages.length > 0 ? (
+                <>
+                  <button onClick={handleLoadMoreMessages}>
+                    Load more messages...
+                  </button>
+                  {chat.messages.map(message => (
                     message.sender === userId ? (
                       <p 
                         key={message.id} 
@@ -201,17 +248,16 @@ export const Chat = () => {
                         {message.text}
                       </p>
                     )
-                  ))
-                ) : (
-                  <p>
-                    No messages in {chat._id}.
-                  </p>
-                )
-              }
-              <div ref={chatboxBottomRef} />
-            </>
-          )
-        }
+                  ))}
+                </>
+            ) : (
+              <p>
+                No messages in {chat._id}.
+              </p>
+            )}
+            <div ref={chatboxBottomRef} />
+          </>
+        )}
         {/* SUBMIT */}
       </div>
       <form 

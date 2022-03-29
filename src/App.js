@@ -28,7 +28,7 @@ import { ProductPage } from './Components/ProductPage';
 import { Cart } from './Components/Cart';
 import { Welcome } from './Components/Homepage';
 import { PageNotFound } from './Components/PageNotFound';
-import { Chat } from './Components/Chat';
+import { ChatConnection } from './Components/ChatConnection';
 
 // init stripe
 const stripePromise = loadStripe(
@@ -129,7 +129,7 @@ function App() {
             <Route path="/product">
               <Route path=":productTitle" element={<ProductPage/>} />
             </Route>
-            <Route path="/chat" element={<Chat/>} /> 
+            <Route path="/chat" element={<ChatConnection/>} /> 
             <Route path="/cancel" element={<CheckoutCancel/>} /> 
             <Route path="/success" element={<CheckoutSuccess/>} />
             <Route path="/page-not-found" element={<PageNotFound/>} />

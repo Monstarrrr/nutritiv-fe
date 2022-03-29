@@ -7,8 +7,11 @@ export default function RegisterPage() {
     username: "",
     email: "",
     password: "",
-    error: false,
+    loading: false,
+    error: "",
+    success: "",
   });
+  const [test, setTest] = useState("")
   
   const handleChange = (e) => {
     setRegisterData({
@@ -17,30 +20,47 @@ export default function RegisterPage() {
     })
   }
   
-  // const validation = () => {
-  //   setRegisterData({
-  //     ...registerData,
-  //     error: true,
-  //   })
-  // }
+  const validation = () => {
+    setRegisterData({ ...registerData, error: "" })
+    if(
+      !registerData.username || 
+      !registerData.email || 
+      !registerData.password
+    ) {
+      setRegisterData({
+        ...registerData,
+        error: "Please fill in all the fields."
+      })
+      return false
+    }
+    return true
+  }
   
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // const isValid = validation();
+    const isValid = validation();
     
-    // if(isValid) {
-    try {
-      await nutritivApi.post(
-        '/auth/register',
-        registerData
-      )
-    } catch(err) {
-      console.log('# err :', err)
+    if(isValid) {
+      setRegisterData({...registerData, loading: true})
+      try {
+        await nutritivApi.post(
+          '/auth/register',
+          registerData
+        )
+        setRegisterData({
+          ...registerData,
+          success: "Your account has been successfully created."
+        })
+      } catch({ response }) {
+        setRegisterData({
+          ...registerData,
+          loading: false,
+          error: response.data.err
+        })
+      }
     }
   }
-    // }
-  console.log('# registerData :', registerData)
     
   return (
     <div>
@@ -70,9 +90,35 @@ export default function RegisterPage() {
             type="password"
           />
         </label>
+        {
+          registerData.loading && (
+            <p style={{color: "red"}}>
+              <span role="img" aria-label="loading">
+                🕓
+              </span>
+            </p>
+          )
+        }
+        {
+          registerData.error && (
+            <p style={{color: "red"}}>
+              {registerData.error}
+            </p>
+          )
+        }
+        {
+          registerData.success && (
+            <p style={{color: "green"}}>
+              {registerData.success}
+            </p>
+          )
+        }
         <div>
           <button type="submit">Submit</button>
         </div>
+        <pre>
+          {JSON.stringify(test.response, null, 2)}
+        </pre>
       </form>
     </div>
   )
