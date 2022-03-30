@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { io } from "socket.io-client";
 import nutritivApi from '../Api/nutritivApi';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { addMessage, getLastMessageOfRoom } from '../Redux/reducers/messages';
 
 const token = localStorage.getItem('refresh_token');
 // const token = "ThisIsSomeIncorrectToken"
@@ -14,11 +15,13 @@ const socket = io(
 );
 
 export const Chat = () => {
-  
+  const dispatch = useDispatch();
   const userId = useSelector(state => state.user.id)
   
+  const [messageToAdd, setMessageToAdd] = useState(null)
+  
   const [socketError, setSocketError] = useState(false)
-
+  
   // CHATS INFO
   const [chatsInfos, setChatsInfo] = useState([])
   const [activeChatId, setActiveChatId] = useState(null)
@@ -27,31 +30,40 @@ export const Chat = () => {
   const [chat, setChat] = useState(null)
   const [messageToBeSent, setMessageToBeSent] = useState("")
   const [tempMessageId, setTempMessageId] = useState(0)
-
+  
+  const lastMessageOfRoom = useSelector(state => (
+    getLastMessageOfRoom(state, activeChatId)
+  ))
+  
   const chatboxBottomRef = useRef();
   const chatRef = useRef(chat);
   
   useEffect(() => {
     chatRef.current = chat
   });
-  // SOCKETS
+  
+  // ############### //
+  // ### SOCKETS ### //
+
+  // CONNECTIONS TO CHANNELS
   useEffect(() => {
     // MESSAGE
-    socket.on("chatting", ({ id, text, sender }) => {
-      console.log('# socket io res :', id, text, sender)
-      !chatRef.current.messages.some(message => message.id === id) && (
-        setChat({
-          ...chatRef.current,
-          "messages": [
-            ...chatRef.current.messages,
-            {
-              id,
-              text,
-              sender,
-            }
-          ]
-        })
-      )
+    socket.on("chatting", ({ id, text, sender, roomId }) => {
+      console.log('# socket io res :', id, text, sender, roomId)
+      setMessageToAdd({ id, text, sender, roomId })
+      // !chatRef.current.messages.some(message => message.id === id) && (
+      //   setChat({
+      //     ...chatRef.current,
+      //     "messages": [
+      //       ...chatRef.current.messages,
+      //       {
+      //         id,
+      //         text,
+      //         sender,
+      //       }
+      //     ]
+      //   })
+      // )
     });
     // CREATE ROOM
     socket.on("createRoom", ({ roomCreated }) => {
@@ -73,11 +85,43 @@ export const Chat = () => {
       socket.disconnect()
     }
   }, []);
-  // SOCKET CREATE ROOM
-  useEffect(() => {
+  
+  // CREATE ROOM
+  useEffect(() => { // temp --> move to "// ACTIVE CHAT"
     let roomId = activeChatId
     roomId && socket.emit("createRoom", ({ token }))
   }, [activeChatId]);
+  
+  // ADD INCOMING MESSAGES TO REDUX
+  useEffect(() => {
+    let isSubscribed = true;
+    if(messageToAdd && isSubscribed) {
+      dispatch(addMessage(messageToAdd))
+    }
+    return () => { isSubscribed = false }
+  }, [dispatch, messageToAdd]);
+  
+  // ADD CORRESPONDING MESSAGES TO CHAT
+  useEffect(() => {
+    // !chat.messages.some(msg => (
+    //   messagesOfRoom.includes(msgOfRoom => msgOfRoom === msg.id))
+    // ) && (
+      chatRef.current && lastMessageOfRoom && (
+        setChat({
+          ...chatRef.current,
+          "messages": [
+            ...chatRef.current.messages,
+            lastMessageOfRoom
+          ]
+        })
+      )
+      console.log('# lastMessageOfRoom :', lastMessageOfRoom)
+    // )
+  }, [lastMessageOfRoom]);
+
+  console.log('# chat :', chat)
+
+  // ############### //
   
   // GET CHATS INFO
   useEffect(() => {
@@ -99,7 +143,7 @@ export const Chat = () => {
     fetchApi();
   }, []);
 
-  // GET CHAT BY ID
+  // ACTIVE CHAT
   useEffect(() => {
     let fetchApi = async () => {
       try {
@@ -171,7 +215,7 @@ export const Chat = () => {
   const handleMessageToBeSent = (e) => {
     setMessageToBeSent(e.target.value)
   }
-
+  
   const handleLoadMoreMessages = async () => {
     try {
       const { data } = await nutritivApi.get(
@@ -185,6 +229,14 @@ export const Chat = () => {
   
   return (
     <div>
+      <p>lastMessageOfRoom selector :</p>
+      <pre>
+        {JSON.stringify(lastMessageOfRoom, null, 2)}
+      </pre>
+      <p>messageToAdd :</p>
+      <pre>
+        {JSON.stringify(messageToAdd, null, 2)}
+      </pre>
       {
         socketError && <h2 style={{color: 'red'}}>A SOCKET ERROR OCCURED</h2>
       } 
@@ -229,7 +281,8 @@ export const Chat = () => {
                   </button>
                   {chat.messages.map(message => (
                     message.sender === userId ? (
-                      <p 
+                      <p
+                        id={message.id}
                         key={message.id} 
                         style={{
                           alignSelf: "end",
@@ -253,7 +306,11 @@ export const Chat = () => {
                         {message.text}
                       </p>
                     ) : (
-                      <p key={message.id} style={{width: "100%"}}>
+                      <p 
+                        id={message.id} 
+                        key={message.id}
+                        style={{width: "100%"}}
+                      >
                         <span style={{fontWeight: "bold", textAlign: "end"}}>
                           {message.sender}:
                         </span>
