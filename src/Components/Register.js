@@ -11,7 +11,6 @@ export default function RegisterPage() {
     error: "",
     success: "",
   });
-  const [test, setTest] = useState("")
   
   const handleChange = (e) => {
     setRegisterData({
@@ -21,7 +20,12 @@ export default function RegisterPage() {
   }
   
   const validation = () => {
-    setRegisterData({ ...registerData, error: "" })
+    setRegisterData({
+      ...registerData,
+      error: "",
+      success: ""
+    })
+    
     if(
       !registerData.username || 
       !registerData.email || 
@@ -36,6 +40,7 @@ export default function RegisterPage() {
     return true
   }
   
+  // SUBMIT
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -92,10 +97,8 @@ export default function RegisterPage() {
         </label>
         {
           registerData.loading && (
-            <p style={{color: "red"}}>
-              <span role="img" aria-label="loading">
-                🕓
-              </span>
+            <p>
+              Creating account...
             </p>
           )
         }
@@ -116,9 +119,6 @@ export default function RegisterPage() {
         <div>
           <button type="submit">Submit</button>
         </div>
-        <pre>
-          {JSON.stringify(test.response, null, 2)}
-        </pre>
       </form>
     </div>
   )

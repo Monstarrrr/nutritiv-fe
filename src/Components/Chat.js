@@ -3,12 +3,12 @@ import { io } from "socket.io-client";
 import nutritivApi from '../Api/nutritivApi';
 import { useSelector } from 'react-redux';
 
-const refreshToken = localStorage.getItem('refresh_token');
-// const refreshToken = "ThisIsSomeIncorrectToken"
+const token = localStorage.getItem('refresh_token');
+// const token = "ThisIsSomeIncorrectToken"
 const socket = io(
   "http://localhost:4000",
   {
-    query: { refreshToken },
+    query: { token },
     // transports: ['websocket']
   },
 );
@@ -31,21 +31,13 @@ export const Chat = () => {
   const chatboxBottomRef = useRef();
   const chatRef = useRef(chat);
   
-  // SOCKET
   useEffect(() => {
-    chatRef.current = chat 
+    chatRef.current = chat
   });
-  // SOCKET - MESSAGE
+  // SOCKETS
   useEffect(() => {
-    socket.on("connect_error", err => {
-      console.log(err); // true
-      setSocketError(true)
-    });
-    socket.on("error", err => {
-      console.log(err); // true
-      setSocketError(true)
-    });
-    socket.on("message", ({id, text, sender}) => {
+    // MESSAGE
+    socket.on("chatting", ({ id, text, sender }) => {
       console.log('# socket io res :', id, text, sender)
       !chatRef.current.messages.some(message => message.id === id) && (
         setChat({
@@ -60,11 +52,32 @@ export const Chat = () => {
           ]
         })
       )
+    });
+    // CREATE ROOM
+    socket.on("createRoom", ({ roomCreated }) => {
+      console.log('# roomCreated :', roomCreated)
     })
+    // AUTH ERROR
+    socket.on("connect_error", err => {
+      console.log(err);
+      console.log('connect_error')
+      setSocketError(true)
+    });
+    // OTHER ERROR
+    socket.on("error", err => {
+      console.log('error')
+      console.log(err);
+      setSocketError(true)
+    });
     return () => {
       socket.disconnect()
     }
   }, []);
+  // SOCKET CREATE ROOM
+  useEffect(() => {
+    let roomId = activeChatId
+    roomId && socket.emit("createRoom", ({ token }))
+  }, [activeChatId]);
   
   // GET CHATS INFO
   useEffect(() => {
@@ -85,7 +98,7 @@ export const Chat = () => {
     }
     fetchApi();
   }, []);
-  
+
   // GET CHAT BY ID
   useEffect(() => {
     let fetchApi = async () => {
@@ -141,8 +154,8 @@ export const Chat = () => {
         }
       )
       const { text, id } = data;
-      const room = activeChatId;
-      socket.emit('message', {text, id, refreshToken, room})
+      let roomId = activeChatId;
+      socket.emit('chatting', {text, id, token, roomId})
       setChat({
         ...chat,
         "messages": [
@@ -173,7 +186,7 @@ export const Chat = () => {
   return (
     <div>
       {
-        socketError && <h2>AUTHENTICATION ERROR</h2>
+        socketError && <h2 style={{color: 'red'}}>A SOCKET ERROR OCCURED</h2>
       } 
       {
         chatsInfos.map(chatInfo => (
