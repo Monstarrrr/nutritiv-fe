@@ -86,12 +86,6 @@ export const Chat = () => {
     }
   }, []);
   
-  // CREATE ROOM
-  useEffect(() => { // temp --> move to "// ACTIVE CHAT"
-    let roomId = activeChatId
-    roomId && socket.emit("createRoom", ({ token }))
-  }, [activeChatId]);
-  
   // ADD INCOMING MESSAGES TO REDUX
   useEffect(() => {
     let isSubscribed = true;
@@ -145,6 +139,8 @@ export const Chat = () => {
 
   // ACTIVE CHAT
   useEffect(() => {
+    let roomId = activeChatId
+    roomId && socket.emit("createRoom", ({ token }))
     let fetchApi = async () => {
       try {
         const { data } = await nutritivApi.get(
