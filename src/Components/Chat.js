@@ -47,23 +47,13 @@ export const Chat = () => {
 
   // CONNECTIONS TO CHANNELS
   useEffect(() => {
+    socket.on('connect', () => {
+      console.log("Connected to socket-io")
+    })
     // MESSAGE
     socket.on("chatting", ({ id, text, sender, roomId }) => {
       console.log('# socket io res :', id, text, sender, roomId)
       setMessageToAdd({ id, text, sender, roomId })
-      // !chatRef.current.messages.some(message => message.id === id) && (
-      //   setChat({
-      //     ...chatRef.current,
-      //     "messages": [
-      //       ...chatRef.current.messages,
-      //       {
-      //         id,
-      //         text,
-      //         sender,
-      //       }
-      //     ]
-      //   })
-      // )
     });
     // CREATE ROOM
     socket.on("createRoom", ({ roomCreated }) => {
@@ -82,7 +72,9 @@ export const Chat = () => {
       setSocketError(true)
     });
     return () => {
-      socket.disconnect()
+      socket.on('disconnect', () => {
+        console.log("disconnected from socket-io")
+      })
     }
   }, []);
   
@@ -113,8 +105,6 @@ export const Chat = () => {
     // )
   }, [lastMessageOfRoom]);
 
-  console.log('# chat :', chat)
-
   // ############### //
   
   // GET CHATS INFO
@@ -139,8 +129,9 @@ export const Chat = () => {
 
   // ACTIVE CHAT
   useEffect(() => {
-    let roomId = activeChatId
+    let roomId = activeChatId // ?
     roomId && socket.emit("createRoom", ({ token }))
+
     let fetchApi = async () => {
       try {
         const { data } = await nutritivApi.get(
