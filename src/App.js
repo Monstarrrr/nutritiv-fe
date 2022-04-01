@@ -50,17 +50,7 @@ function App() {
         );
         if(isSubscribed) {
           console.log('# /users/self res :', data)
-          dispatch(updateUser({
-            id: data._id,
-            loggedIn: data.loggedIn,
-            username: data.username,
-            email: data.email,
-            isAdmin: data.isAdmin,
-            isVerified: data.isVerified,
-            addresses: data.addressDetails,
-            avatar: data.avatar,
-            chat: data.chat,
-          }))
+          dispatch(updateUser(data))
         }
       } catch(err) {
         console.error('# /users/self :', err)
@@ -77,15 +67,7 @@ function App() {
         const { data } = await nutritivApi.get(
           `/carts/self`,
         );
-        data.cart ? (
-          dispatch(updateUserCartQuantity({
-            cartQuantity: data.cart.totalQuantity,
-          }))
-        ) : (
-          dispatch(updateUserCartQuantity({
-            cartQuantity: 0,
-          }))
-        )
+        dispatch(updateUserCartQuantity(data.cart?.totalQuantity))
         console.log('# checkSelfCartQuantity data :', data)
       } catch(err) {
         console.error('# err', err)

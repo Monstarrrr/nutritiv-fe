@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { storageKeys } from '../Helpers/localStorage';
 import { 
-  updateAuthStatus
+  updateUser
 } from '../Redux/reducers/user';
 
 // # INJECT STORE TO PREVENT IMPORT ISSUES #
@@ -45,9 +45,9 @@ nutritivApi.interceptors.response.use(res => {
     )
   }
   if(res.data.loggedIn) {
-    store.dispatch(updateAuthStatus({
-      loggedIn: res.data.loggedIn,
-    }))
+    store.dispatch(
+      updateUser({loggedIn: res.data.loggedIn})
+    )
   }
   console.log("# Interceptor res :", res);
   return res;

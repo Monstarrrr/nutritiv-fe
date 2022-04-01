@@ -15,14 +15,8 @@ export const Cart = () => {
         const { data } = await nutritivApi.get(
           `/carts/self`
         )
-        data.cart ? (
-          dispatch(updateUserCartQuantity({
-            cartQuantity: data.cart.totalQuantity,
-          }))
-        ) : (
-          dispatch(updateUserCartQuantity({
-            cartQuantity: 0,
-          }))
+        dispatch(
+          updateUserCartQuantity(data.cart?.totalQuantity)
         )
         setCart(data.cart)
       } catch(err) {

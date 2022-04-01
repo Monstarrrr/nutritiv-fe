@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  id: null,
+  _id: null,
   loggedIn: false,
   username: "",
   email: "",
@@ -10,39 +10,21 @@ const initialState = {
   cartQuantity: 0,
   addresses: [],
   avatar: "",
-  chat: false,
+  activeChat: false,
 }
 
 export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    updateAuthStatus: (user, action) => {
-      const { loggedIn } = action.payload;
-      user.loggedIn = loggedIn;
-    },
     updateUser: (user, action) => {
-      user.id = action.payload.id;
-      user.loggedIn = action.payload.loggedIn;
-      user.username = action.payload.username;
-      user.email = action.payload.email;
-      user.isAdmin = action.payload.isAdmin;
-      user.isVerified = action.payload.isVerified;
-      user.addresses = action.payload.addresses;
-      user.avatar = action.payload.avatar;
-      user.chat = action.payload.chat;
+      let values = Object.keys(action.payload)
+      values.forEach(value => {
+        user[value] = action.payload[value]
+      })
     },
     updateUserCartQuantity: (user, action) => {
-      const { cartQuantity } = action.payload;
-      user.cartQuantity = cartQuantity;
-    },
-    updateUserAddresses: (user, action) => {
-      const { addresses } = action.payload;
-      user.addresses = addresses;
-    },
-    updateUserAvatar: (user, action) => {
-      const { avatar } = action.payload;
-      user.avatar = avatar;
+      user.cartQuantity = action.payload;
     },
     deleteUserAddress: (user, action) => {
       const { addressId } = action.payload;
@@ -56,10 +38,7 @@ export const userSlice = createSlice({
 export const {
   updateUser,
   updateUserCartQuantity,
-  updateAuthStatus,
-  updateUserAddresses,
   deleteUserAddress,
-  updateUserAvatar,
   logoutUser,
 } = userSlice.actions;
 

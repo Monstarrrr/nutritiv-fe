@@ -93,9 +93,9 @@ export const ProductPage = () => {
         `carts/addToCart`,
         selectedItem
       );
-      dispatch(updateUserCartQuantity({
-        cartQuantity: data.cart.totalQuantity,
-      }))
+      dispatch(
+        updateUserCartQuantity(data.cart.totalQuantity)
+      )
       setAddedToCart(!addedToCart);
     } catch (err) {
       console.log('# apiAddToCart err :', err)
