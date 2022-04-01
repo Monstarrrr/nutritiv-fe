@@ -63,13 +63,13 @@ export const Chat = () => {
     socket.on("connect_error", err => {
       console.log(err);
       console.log('connect_error')
-      setSocketError(true)
+      setSocketError({error: "connect_error"})
     });
     // OTHER ERROR
     socket.on("error", err => {
       console.log('error')
       console.log(err);
-      setSocketError(true)
+      setSocketError({error: "error"})
     });
     return () => {
       socket.on('disconnect', () => {
@@ -104,7 +104,7 @@ export const Chat = () => {
       console.log('# lastMessageOfRoom :', lastMessageOfRoom)
     // )
   }, [lastMessageOfRoom]);
-
+  
   // ############### //
   
   // GET CHATS INFO
@@ -216,14 +216,6 @@ export const Chat = () => {
   
   return (
     <div>
-      <p>lastMessageOfRoom selector :</p>
-      <pre>
-        {JSON.stringify(lastMessageOfRoom, null, 2)}
-      </pre>
-      <p>messageToAdd :</p>
-      <pre>
-        {JSON.stringify(messageToAdd, null, 2)}
-      </pre>
       {
         socketError && <h2 style={{color: 'red'}}>A SOCKET ERROR OCCURED</h2>
       } 

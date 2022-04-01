@@ -18,8 +18,9 @@ export default function LoginPage() {
     password: "",
     usernameError: false,
     passwordError: false,
+    loading: false,
   })
-  const [invalidLogin, setInvalidLogin] = useState(false)
+  const [invalidLogin, setInvalidLogin] = useState("")
   const loginData = {
     username: loginInput.username,
     password: loginInput.password,
@@ -58,18 +59,22 @@ export default function LoginPage() {
 
     if(isValid) {
       try {
+        setLoginInput({
+          ...loginInput,
+          loading: true,
+        })
         await nutritivApi.post(
           `/auth/login`,
           loginData
         )
-        const { data } = await nutritivApi.get( // temp (memory leak)
+        const { data } = await nutritivApi.get(
           `/users/self`
         )
-        const cartSelf = await nutritivApi.get( // temp (memory leak)
+        const cartSelf = await nutritivApi.get(
           `/carts/self`
         )
         console.log('# cart :', cartSelf.data.cart.totalQuantity)
-        dispatch(updateUser({
+        dispatch(updateUser({ // temp (memory leak)
           loggedIn: data.loggedIn,
           username: data.username,
           email: data.email,
@@ -82,8 +87,16 @@ export default function LoginPage() {
           cartQuantity: cartSelf.data.cart.totalQuantity
         }))
         navigate('/', { replace: true })
-      } catch(err) {
-        setInvalidLogin(true)
+        setLoginInput({
+          ...loginInput,
+          loading: false,
+        })
+      } catch({ response }) {
+        setLoginInput({
+          ...loginInput,
+          loading: false,
+        })
+        setInvalidLogin(response.data.err)
       }
     }
   }
@@ -124,13 +137,20 @@ export default function LoginPage() {
             )
           }
         </label>
+        {
+          loginInput.loading && (
+            <p>
+              Login in...
+            </p>
+          )
+        }
         <div>
           <button type="submit">Submit</button>
         </div>
         {
           invalidLogin && (
             <p style={{color: "red"}}>
-              Incorrect password or username
+              {invalidLogin}
             </p>
           )
         }

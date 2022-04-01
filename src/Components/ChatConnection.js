@@ -3,7 +3,7 @@ import nutritivApi from '../Api/nutritivApi'
 import { Chat } from './Chat'
 
 export const ChatConnection = () => {
-  const [connected, setConnected] = useState(false)
+  const [chatCreated, setChatCreated] = useState(false)
   
   useEffect(() => {
     let fetchApi = async () => {
@@ -11,7 +11,8 @@ export const ChatConnection = () => {
         await nutritivApi.get(
           `/chats/?messagesQty=${1}`
         )
-        setConnected(true)
+        setChatCreated(true)
+        console.log('# Chatroom created :', chatCreated)
         console.log('setConnected(true)')
       } catch(err) {
         console.error(
@@ -19,17 +20,15 @@ export const ChatConnection = () => {
         )
       }
     }
-    !connected && fetchApi();
+    !chatCreated && fetchApi();
   });
-
-  console.log('# connected :', connected)
   
   const handleConnectToChat = async () => {
     try {
       const { data } = await nutritivApi.post(
         `/chats/create`,
       )
-      setConnected(true)
+      setChatCreated(true)
       console.log('# post /chats/create :', data)
     } catch(err) {
       console.error('/chats/create:', err)
@@ -41,7 +40,7 @@ export const ChatConnection = () => {
       <h2>
         Chats
       </h2>
-      {connected ? (
+      {chatCreated ? (
         <Chat />
       ) : (
         <button onClick={handleConnectToChat}>
