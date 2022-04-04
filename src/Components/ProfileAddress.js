@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import React, { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
 import nutritivApi, { 
   } from '../Api/nutritivApi'
 import { updateUser } from '../Redux/reducers/user'

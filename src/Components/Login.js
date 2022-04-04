@@ -20,6 +20,7 @@ export default function LoginPage() {
     usernameError: false,
     passwordError: false,
     loading: false,
+    error: "",
   })
   const [invalidLogin, setInvalidLogin] = useState("")
   const loginData = {
