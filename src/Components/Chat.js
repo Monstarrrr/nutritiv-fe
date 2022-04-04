@@ -15,7 +15,7 @@ const socket = io(
 
 export const Chat = () => {
   const dispatch = useDispatch();
-  const userId = useSelector(state => state.user.id)
+  const userId = useSelector(state => state.user._id)
   
   const [messageToAdd, setMessageToAdd] = useState(null)
   
@@ -213,6 +213,9 @@ export const Chat = () => {
     }
   }
   
+  console.log('# chat :', chat)
+  console.log('# userId :', userId)
+
   return (
     <div>
       {
