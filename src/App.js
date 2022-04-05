@@ -40,41 +40,43 @@ function App() {
   const loggedIn = useSelector(state => state.user.loggedIn)
   
   // ON LOAD
-  // Get user-self info & update store
+  // Fetch user-self info
   useEffect(() => {
     let isSubscribed = true;
-    const checkUserAuth = async () => {
-      try {
-        const { data } = await nutritivApi.get(
-          '/users/self'
-        );
-        if(isSubscribed) {
-          console.log('# /users/self res :', data)
-          dispatch(updateUser(data))
+    
+    if(isSubscribed) {
+      const method = "get"
+      const requestsUrl = ['/users/self', '/carts/self']
+      const requests = requestsUrl.map(url => {
+        return { url, method }
+      })
+      const fetchUserInfo = async () => {
+        function useNull() {
+          return null;
         }
-      } catch(err) {
-        console.error('# /users/self :', err)
+        try {
+          await Promise.all([
+            nutritivApi.request(requests[0]).catch(useNull),
+            nutritivApi.request(requests[1]).catch(useNull),
+          ]).then(function([userSelf, cartSelf]) {
+            dispatch(
+              updateUser(userSelf.data)
+            )
+            dispatch(
+              updateUserCartQuantity(cartSelf.data.cart?.totalQuantity)
+            )
+          }).catch(function([userSelf, cartSelf]) {
+            console.log('# /users/self err :', userSelf)
+            console.log('# /carts/self err :', cartSelf)
+          })
+        } catch(err) {
+          console.log("Could not fetch user info on App initialization")
+        }
       }
-    };
-    checkUserAuth();
+      fetchUserInfo();
+    }
     return () => { isSubscribed = false }
   }, [dispatch]);
-  
-  // Get user-self cart
-  useEffect(() => {
-    const checkSelfCartQuantity = async () => {
-      try {
-        const { data } = await nutritivApi.get(
-          `/carts/self`,
-        );
-        dispatch(updateUserCartQuantity(data.cart?.totalQuantity))
-        console.log('# checkSelfCartQuantity data :', data)
-      } catch(err) {
-        console.error('# err', err)
-      }
-    }
-    checkSelfCartQuantity();
-  }, [dispatch])
   
   // RESTRICTED ROUTES
   const GuestRoutes = () => {

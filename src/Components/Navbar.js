@@ -46,7 +46,12 @@ export default function Navbar() {
             </Link>
             <span>----</span>
             <button onClick={() => navigate('/cart')}>
-              Cart ({user.cartQuantity})
+              Cart 
+              {
+                user?.cartQuantity > 0 && (
+                  <span>({user.cartQuantity})</span>
+                )
+              }
             </button>
             <span>----</span>
             <Logout />
