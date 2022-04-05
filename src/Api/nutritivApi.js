@@ -46,7 +46,7 @@ nutritivApi.interceptors.response.use(res => {
   }
   if(res.data.loggedIn) {
     store.dispatch(
-      updateUser({loggedIn: res.data.loggedIn})
+      updateUser(res.data)
     )
   }
   console.log("# Interceptor res :", res);

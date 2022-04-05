@@ -235,9 +235,6 @@ export const Chat = () => {
   return (
     <div>
       {
-        socketError && <h2 style={{color: 'red'}}>A SOCKET ERROR OCCURED</h2>
-      } 
-      {
         chatsInfos.map(chatInfo => (
           <React.Fragment key={chatInfo._id}>
             <br />
