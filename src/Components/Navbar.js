@@ -4,17 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Logout } from './Logout';
 
 export default function Navbar() {
-  const userSelector = useSelector(state => state.user)
-  const [user, setUser] = useState({
-    loggedIn: false,
-    username: "",
-    cartQuantity: 0,
-    avatar: "",
-  })
-  
-  useEffect(() => {
-    setUser(userSelector)
-  }, [userSelector]);
+  const user = useSelector(state => state.user)
   
   const navigate = useNavigate();
   

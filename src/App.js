@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { 
   // useSelector, 
   useDispatch,
@@ -79,24 +79,34 @@ function App() {
   }, [dispatch]);
   
   // RESTRICTED ROUTES
-  const GuestRoutes = () => {
+  const Restricted = ({ type }) => {
     const isLogged = () => {
-      const user = { loggedIn }
-      return user.loggedIn;
+      console.log('# loggedIn :', loggedIn)
+      return loggedIn;
     }
-    return isLogged() ? (
-      <Navigate replace to="/" /> 
-    ) : <Outlet />;
-  }
-  const UserRoutes = () => {
-    const isLogged = () => {
-      const user = { loggedIn }
-      return user.loggedIn;
+    if(loggedIn !== null) {
+      if(type === "guest") {
+        return isLogged() ? (
+          <Navigate replace to="/" /> 
+        ) : <Outlet />;
+      } else if(type === "user") {
+        return isLogged() ? (
+          <Outlet /> 
+        ) : <Navigate replace to="/" />;
+      }
+    } else {
+      return <h2>Loading...</h2>
     }
-    return isLogged() ? (
-      <Outlet /> 
-    ) : <Navigate replace to="/" />;
   }
+  // const Restricted = () => {
+  //   const isLogged = () => {
+  //     const user = { loggedIn }
+  //     return user.loggedIn;
+  //   }
+  //   return isLogged() ? (
+  //     <Outlet /> 
+  //   ) : <Navigate replace to="/" />;
+  // }
   
   return (
     <BrowserRouter>
@@ -120,11 +130,11 @@ function App() {
             {/* PRIVATE */}
             <Route path="/profile" element={<Profile/>} />
             {/* RESTRICTED - LOGGED */}
-            <Route element={<UserRoutes />}>
+            <Route element={<Restricted type="user" />}>
               <Route path="/cart" element={<Cart/>} />
             </Route>
             {/* RESTRICTED - NOT LOGGED */}
-            <Route element={<GuestRoutes />}>
+            <Route element={<Restricted type="guest" />}>
               <Route path="login" element={<Login/>} />
               <Route path="register" element={<Register/>} />
             </Route>
@@ -133,6 +143,23 @@ function App() {
       </Elements>
     </BrowserRouter>
   );
+}
+
+// RESTRICTED ROUTES
+const Restricted = ({ type, loggedIn }) => {
+  const isLogged = () => {
+    console.log('# loggedIn :', loggedIn)
+    return loggedIn;
+  }
+  if(type === "guest") {
+    return isLogged() ? (
+      <Navigate replace to="/" /> 
+    ) : <Outlet />;
+  } else if(type === "user") {
+    return isLogged() ? (
+      <Outlet /> 
+    ) : <Navigate replace to="/" />;
+  }
 }
 
 export default App;
