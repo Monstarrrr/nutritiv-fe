@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState } from 'react'
+import { useDispatch } from 'react-redux';
 import nutritivApi from '../Api/nutritivApi';
-import { updateUserAvatar } from '../Redux/reducers/user';
+import { updateUser } from '../Redux/reducers/user';
 
 export const ProfileAvatar = ({ userInfo }) => {
   const dispatch = useDispatch();
@@ -22,13 +22,13 @@ export const ProfileAvatar = ({ userInfo }) => {
     formData.append("imageFile", file);
     
     try {
-      const { data } = await nutritivApi.post(
+      const { data: { avatar } } = await nutritivApi.post(
         `/users/addAvatar`,
         formData,
       )
-      dispatch(updateUserAvatar({
-        avatar: data.avatar
-      }))
+      dispatch(
+        updateUser({avatar})
+      )
     } catch (err) {
       console.log('# err :', err)
     }

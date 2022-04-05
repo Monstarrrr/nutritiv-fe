@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+import axios from 'axios';
 import React, { 
   useState, 
   // useEffect 
@@ -13,31 +14,33 @@ export default function LoginPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [loginInput, setLoginInput] = useState({
+  const [login, setLogin] = useState({
     username: "",
     password: "",
     usernameError: false,
     passwordError: false,
+    loading: false,
+    error: "",
   })
-  const [invalidLogin, setInvalidLogin] = useState(false)
+  const [invalidLogin, setInvalidLogin] = useState("")
   const loginData = {
-    username: loginInput.username,
-    password: loginInput.password,
+    username: login.username,
+    password: login.password,
   }
   
   const handleChange = (e) => {
-    setLoginInput({
-      ...loginInput,
+    setLogin({
+      ...login,
       [e.target.name]: e.target.value,
     })
   }
   
   const validation = () => {
-    let usernameError = !loginInput.username
-    let passwordError = !loginInput.password
+    let usernameError = !login.username
+    let passwordError = !login.password
     
-    setLoginInput({
-      ...loginInput,
+    setLogin({
+      ...login,
       usernameError,
       passwordError,
     })
@@ -49,41 +52,48 @@ export default function LoginPage() {
   
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
     // We store and use the return value 
     // because the state won't update yet
     const isValid = validation();
     
-    console.log('# loginData :', loginData)
-
     if(isValid) {
+      function useNull() {
+        return null;
+      }
+      
+      // 1. LOGIN
       try {
+        setLogin({ ...login, loading: true })
         await nutritivApi.post(
           `/auth/login`,
           loginData
         )
-        const { data } = await nutritivApi.get(
-          `/users/self`
-        )
-        const cartSelf = await nutritivApi.get(
-          `carts/self`
-        )
-        console.log('# cart :', cartSelf.data.cart.totalQuantity)
-        dispatch(updateUser({
-          loggedIn: data.loggedIn,
-          username: data.username,
-          email: data.email,
-          isAdmin: data.isAdmin,
-          isVerified: data.isVerified,
-          addresses: data.addressDetails,
-          avatar: data.avatar
-        }))
-        dispatch(updateUserCartQuantity({
-          cartQuantity: cartSelf.data.cart.totalQuantity
-        }))
-        navigate('/', { replace: true })
-      } catch(err) {
-        setInvalidLogin(true)
+        
+        // 2. GET USER INFO
+        const method = "get"
+        const requestsUrl = ['/users/self', '/carts/self']
+        const requests = requestsUrl.map(url => {
+          return { url, method }
+        })
+        
+        await Promise.all([
+          nutritivApi.request(requests[0]).catch(useNull),
+          nutritivApi.request(requests[1]).catch(useNull),
+        ]).then(function([userSelf, cartSelf]) {
+          dispatch(
+            updateUserCartQuantity(cartSelf.data.cart.totalQuantity)
+          )
+          dispatch(
+            updateUser(userSelf.data)
+          )
+          console.log('# cartSelf total quantity :', cartSelf.data.cart.totalQuantity)
+        }).catch(function([userSelf, cartSelf]) {
+          console.log('# userSelf err :', userSelf)
+          console.log('# cartSelf err :', cartSelf)
+        })
+
+      } catch (err) {
+        console.log('# loginData err :', err)
       }
     }
   }
@@ -101,9 +111,9 @@ export default function LoginPage() {
             type="text" 
           />
           {
-            loginInput.usernameError && (
+            login.usernameError && (
               <p style={{color: "red"}}>
-                Please enter a username
+                Please enter your username
               </p>
             )
           }
@@ -117,20 +127,27 @@ export default function LoginPage() {
             type="password"
           />
           {
-            loginInput.passwordError && (
+            login.passwordError && (
               <p style={{color: "red"}}>
-                Please enter a password
+                Please enter your password
               </p>
             )
           }
         </label>
+        {
+          login.loading && (
+            <p>
+              Login in...
+            </p>
+          )
+        }
         <div>
           <button type="submit">Submit</button>
         </div>
         {
           invalidLogin && (
             <p style={{color: "red"}}>
-              Incorrect password or username
+              {invalidLogin}
             </p>
           )
         }

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { storageKeys } from '../Helpers/localStorage';
 import { 
-  updateAuthStatus
+  updateUser
 } from '../Redux/reducers/user';
 
 // # INJECT STORE TO PREVENT IMPORT ISSUES #
@@ -11,10 +11,11 @@ export const injectStore = _store => {
 }
 
 // # API INSTANCE #
-const serverAddress = process.env.REACT_APP_API_ADDRESS
-const serverVersion = process.env.REACT_APP_API_VERSION
+const apiVersion = process.env.REACT_APP_API_VERSION
+const apiAddress = process.env.REACT_APP_API_ADDRESS_FULL
+
 const nutritivApi = axios.create({
-  baseURL: `${serverAddress}/${serverVersion}`,
+  baseURL: `${apiAddress}/${apiVersion}`,
 })
 
 // # INTERCEPTORS #
@@ -35,18 +36,18 @@ nutritivApi.interceptors.response.use(res => {
   // set tokens in localStorage
   if(res.headers.access_token || res.headers.refresh_token) {
     localStorage.setItem(
-      storageKeys.accessToken,
+      'access_token',
       res.headers.access_token
     )
     localStorage.setItem(
-      storageKeys.refreshToken, 
+      'refresh_token',
       res.headers.refresh_token
     )
   }
   if(res.data.loggedIn) {
-    store.dispatch(updateAuthStatus({
-      loggedIn: res.data.loggedIn,
-    }))
+    store.dispatch(
+      updateUser(res.data)
+    )
   }
   console.log("# Interceptor res :", res);
   return res;

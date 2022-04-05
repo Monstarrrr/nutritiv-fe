@@ -42,8 +42,8 @@ export const ProductCard = ({ product }) => {
       }
       <br />
       {
-        product.tags && product.tags.map(tag => (
-          <span>
+        product.tags && product.tags.map((tag, i) => (
+          <span key={i}>
              &nbsp;{tag} /
           </span>
         ))

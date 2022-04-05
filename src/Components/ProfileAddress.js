@@ -1,10 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import React, { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
 import nutritivApi, { 
   } from '../Api/nutritivApi'
-import { 
-  updateUserAddresses,
-} from '../Redux/reducers/user'
+import { updateUser } from '../Redux/reducers/user'
 
 const fields = {
   street: "Street",
@@ -49,9 +47,9 @@ export const ProfileAddress = ({ userInfo }) => {
         `/users/addAddress/`,
         addressInput
       )
-      dispatch(updateUserAddresses({
-        addresses: data.userInfo.addressDetails,
-      }))
+      dispatch(
+        updateUser({addresses: data.userInfo.addressDetails})
+      )
     } catch(err) {
       console.log(err)
     }
@@ -64,9 +62,9 @@ export const ProfileAddress = ({ userInfo }) => {
       const { data } = await nutritivApi.delete(
         `/users/removeAddress/${addressToDelete}`
       )
-      dispatch(updateUserAddresses({
-        addresses: data.addressDetails,
-      }))
+      dispatch(
+        updateUser({addresses: data.addressDetails})
+      )
     } catch (err) {
       console.log('# /users/removeAddress :', err) 
     }

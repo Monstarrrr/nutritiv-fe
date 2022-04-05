@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { 
   // useSelector, 
   useDispatch,
@@ -17,7 +17,7 @@ import {
   updateUser, updateUserCartQuantity,
 } from './Redux/reducers/user';
 import nutritivApi from './Api/nutritivApi';
-import General from './Layouts/GeneralLayout.js';
+import GeneralLayout from './Layouts/GeneralLayout.js';
 import Register from './Components/Register.js';
 import Login from './Components/Login.js';
 import Profile from './Components/Profile';
@@ -26,8 +26,9 @@ import { CheckoutSuccess } from './Components/CheckoutSuccess';
 import { CheckoutCancel } from './Components/CheckoutCancel';
 import { ProductPage } from './Components/ProductPage';
 import { Cart } from './Components/Cart';
-import { Welcome } from './Components/Welcome';
+import { Welcome } from './Components/Homepage';
 import { PageNotFound } from './Components/PageNotFound';
+import { ChatConnection } from './Components/ChatConnection';
 
 // init stripe
 const stripePromise = loadStripe(
@@ -39,77 +40,73 @@ function App() {
   const loggedIn = useSelector(state => state.user.loggedIn)
   
   // ON LOAD
-  // Get user-self info & update store
+  // Fetch user-self info
   useEffect(() => {
     let isSubscribed = true;
-    const checkUserAuth = async () => {
-      try {
-        const { data } = await nutritivApi.get(
-          '/users/self'
-        );
-        if(isSubscribed) {
-          console.log('# /users/self res :', data)
-          dispatch(updateUser({
-            loggedIn: data.loggedIn,
-            username: data.username,
-            email: data.email,
-            isAdmin: data.isAdmin,
-            isVerified: data.isVerified,
-            addresses: data.addressDetails,
-            avatar: data.avatar
-          }))
+    
+    if(isSubscribed) {
+      const method = "get"
+      const requestsUrl = ['/users/self', '/carts/self']
+      const requests = requestsUrl.map(url => {
+        return { url, method }
+      })
+      const fetchUserInfo = async () => {
+        function useNull() {
+          return null;
         }
-      } catch(err) {
-        console.error('# /users/self :', err)
+        try {
+          await Promise.all([
+            nutritivApi.request(requests[0]).catch(useNull),
+            nutritivApi.request(requests[1]).catch(useNull),
+          ]).then(function([userSelf, cartSelf]) {
+            dispatch(
+              updateUser(userSelf.data)
+            )
+            dispatch(
+              updateUserCartQuantity(cartSelf.data.cart?.totalQuantity)
+            )
+          }).catch(function([userSelf, cartSelf]) {
+            console.log('# /users/self err :', userSelf)
+            console.log('# /carts/self err :', cartSelf)
+          })
+        } catch(err) {
+          console.log("Could not fetch user info on App initialization")
+        }
       }
-    };
-    checkUserAuth();
+      fetchUserInfo();
+    }
     return () => { isSubscribed = false }
   }, [dispatch]);
   
-  // Get user-self cart
-  useEffect(() => {
-    const checkSelfCartQuantity = async () => {
-      try {
-        const { data } = await nutritivApi.get(
-          `/carts/self`,
-        );
-        data.cart ? (
-          dispatch(updateUserCartQuantity({
-            cartQuantity: data.cart.totalQuantity,
-          }))
-        ) : (
-          dispatch(updateUserCartQuantity({
-            cartQuantity: 0,
-          }))
-        )
-        console.log('# checkSelfCartQuantity data :', data)
-      } catch(err) {
-        console.error('# err', err)
-      }
-    }
-    checkSelfCartQuantity();
-  }, [dispatch])
-  
   // RESTRICTED ROUTES
-  const GuestRoutes = () => {
+  const Restricted = ({ type }) => {
     const isLogged = () => {
-      const user = { loggedIn }
-      return user.loggedIn;
+      console.log('# loggedIn :', loggedIn)
+      return loggedIn;
     }
-    return isLogged() ? (
-      <Navigate replace to="/" /> 
-    ) : <Outlet />;
-  }
-  const UserRoutes = () => {
-    const isLogged = () => {
-      const user = { loggedIn }
-      return user.loggedIn;
+    if(loggedIn !== null) {
+      if(type === "guest") {
+        return isLogged() ? (
+          <Navigate replace to="/" /> 
+        ) : <Outlet />;
+      } else if(type === "user") {
+        return isLogged() ? (
+          <Outlet /> 
+        ) : <Navigate replace to="/" />;
+      }
+    } else {
+      return <h2>Loading...</h2>
     }
-    return isLogged() ? (
-      <Outlet /> 
-    ) : <Navigate replace to="/" />;
   }
+  // const Restricted = () => {
+  //   const isLogged = () => {
+  //     const user = { loggedIn }
+  //     return user.loggedIn;
+  //   }
+  //   return isLogged() ? (
+  //     <Outlet /> 
+  //   ) : <Navigate replace to="/" />;
+  // }
   
   return (
     <BrowserRouter>
@@ -119,24 +116,25 @@ function App() {
       >
         <Routes>
           {/* PUBLIC */}
-          <Route path="*" element={<Navigate replace to="/page-not-found"/>} />
-          <Route path="/" element={<General/>}>
+          {/* <Route path="*" element={<Navigate replace to="/page-not-found"/>} /> */}
+          <Route path="/" element={<GeneralLayout/>}>
             <Route index element={<Welcome/>} />
             <Route path="/products" element={<Products/>} />
             <Route path="/product">
               <Route path=":productTitle" element={<ProductPage/>} />
             </Route>
+            <Route path="/chat" element={<ChatConnection/>} /> 
             <Route path="/cancel" element={<CheckoutCancel/>} /> 
             <Route path="/success" element={<CheckoutSuccess/>} />
             <Route path="/page-not-found" element={<PageNotFound/>} />
             {/* PRIVATE */}
             <Route path="/profile" element={<Profile/>} />
             {/* RESTRICTED - LOGGED */}
-            <Route element={<UserRoutes />}>
+            <Route element={<Restricted type="user" />}>
               <Route path="/cart" element={<Cart/>} />
             </Route>
             {/* RESTRICTED - NOT LOGGED */}
-            <Route element={<GuestRoutes />}>
+            <Route element={<Restricted type="guest" />}>
               <Route path="login" element={<Login/>} />
               <Route path="register" element={<Register/>} />
             </Route>
@@ -145,6 +143,23 @@ function App() {
       </Elements>
     </BrowserRouter>
   );
+}
+
+// RESTRICTED ROUTES
+const Restricted = ({ type, loggedIn }) => {
+  const isLogged = () => {
+    console.log('# loggedIn :', loggedIn)
+    return loggedIn;
+  }
+  if(type === "guest") {
+    return isLogged() ? (
+      <Navigate replace to="/" /> 
+    ) : <Outlet />;
+  } else if(type === "user") {
+    return isLogged() ? (
+      <Outlet /> 
+    ) : <Navigate replace to="/" />;
+  }
 }
 
 export default App;

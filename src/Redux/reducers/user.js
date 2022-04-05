@@ -1,53 +1,30 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  loggedIn: false,
+  _id: null,
+  loggedIn: null,
   username: "",
   email: "",
   isAdmin: false,
   isVerified: false,
-  cartQuantity: 0,
+  cartQuantity: null,
   addresses: [],
   avatar: "",
+  activeChat: false,
 }
 
 export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    updateAuthStatus: (user, action) => {
-      const { loggedIn } = action.payload;
-      user.loggedIn = loggedIn;
-    },
     updateUser: (user, action) => {
-      const { 
-        loggedIn,
-        username,
-        email,
-        isAdmin,
-        isVerified,
-        addresses,
-        avatar,
-      } = action.payload;
-      user.loggedIn = loggedIn;
-      user.username = username;
-      user.email = email;
-      user.isAdmin = isAdmin;
-      user.isVerified = isVerified;
-      user.addresses = addresses;
-      user.avatar = avatar;
+      let values = Object.keys(action.payload)
+      values.forEach(value => {
+        user[value] = action.payload[value]
+      })
     },
     updateUserCartQuantity: (user, action) => {
-      const { cartQuantity } = action.payload;
-      user.cartQuantity = cartQuantity;
-    },
-    updateUserAddresses: (user, action) => {
-      const { addresses } = action.payload;
-      user.addresses = addresses;
-    },
-    updateUserAvatar: (user, action) => {
-      const { avatar } = action.payload;
-      user.avatar = avatar;
+      user.cartQuantity = action.payload;
     },
     deleteUserAddress: (user, action) => {
       const { addressId } = action.payload;
@@ -55,16 +32,18 @@ export const userSlice = createSlice({
         address => address._id !== addressId
       )
     },
-    logoutUser: () => initialState
+    logoutUser: (user, action) => {
+      return {
+        ...initialState,
+        loggedIn: false
+      }
+    }
   }
 })
 export const {
   updateUser,
   updateUserCartQuantity,
-  updateAuthStatus,
-  updateUserAddresses,
   deleteUserAddress,
-  updateUserAvatar,
   logoutUser,
 } = userSlice.actions;
 
