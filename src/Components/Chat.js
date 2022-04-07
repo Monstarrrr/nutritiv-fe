@@ -218,17 +218,6 @@ export const Chat = () => {
   const handleMessageToBeSent = (e) => {
     setMessageToBeSent(e.target.value)
   }
-  
-  const handleLoadMoreMessages = async () => {
-    try {
-      const { data } = await nutritivApi.get(
-        `/chats/messages/${chat._id}/?stack=${2}&quantity=${10}`,
-      )
-      console.log('# get more messages /chats/messages/ :', data)
-    } catch(err) {
-      console.error(':', err)
-    }
-  }
 
   console.log('# chat :', chat)
   
@@ -270,9 +259,6 @@ export const Chat = () => {
           <>
             {chat.messages.length > 0 ? (
                 <>
-                  <button onClick={handleLoadMoreMessages}>
-                    Load more messages...
-                  </button>
                   {chat.messages.map(message => (
                     message.sender === userId ? (
                       <p
