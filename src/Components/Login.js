@@ -65,6 +65,7 @@ export default function LoginPage() {
           `/auth/login`,
           loginData
         )
+        navigate(-1);
         
         // 2. GET USER INFO
         const method = "get"
@@ -83,12 +84,11 @@ export default function LoginPage() {
           dispatch(
             updateUser(userSelf.data)
           )
-          console.log('# cartSelf total quantity :', cartSelf.data.cart.totalQuantity)
         }).catch(function([userSelf, cartSelf]) {
           console.log('# userSelf err :', userSelf)
           console.log('# cartSelf err :', cartSelf)
         })
-
+      
       } catch (err) {
         console.log('# loginData err :', err)
         setLogin({

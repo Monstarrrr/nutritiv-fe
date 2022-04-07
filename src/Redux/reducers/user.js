@@ -8,6 +8,7 @@ const initialState = {
   isAdmin: false,
   isVerified: false,
   cartQuantity: null,
+  cartSelectionToAdd: null,
   addresses: [],
   avatar: "",
   activeChat: false,
@@ -26,6 +27,9 @@ export const userSlice = createSlice({
     updateUserCartQuantity: (user, action) => {
       user.cartQuantity = action.payload;
     },
+    updateUserCartSelectionToAdd: (user, action) => {
+      user.cartSelectionToAdd = action.payload;
+    },
     deleteUserAddress: (user, action) => {
       const { addressId } = action.payload;
       return user.addresses.filter(
@@ -43,6 +47,7 @@ export const userSlice = createSlice({
 export const {
   updateUser,
   updateUserCartQuantity,
+  updateUserCartSelectionToAdd,
   deleteUserAddress,
   logoutUser,
 } = userSlice.actions;

@@ -1,17 +1,20 @@
 import React, { 
+  useCallback,
   useEffect, 
   useState 
 } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import nutritivApi from '../Api/nutritivApi';
-import { updateUserCartQuantity } from '../Redux/reducers/user';
+import { updateUserCartQuantity, updateUserCartSelectionToAdd } from '../Redux/reducers/user';
 
 export const ProductPage = () => {
   const loggedIn = useSelector(state => state.user.loggedIn)
-  const navigate = useNavigate();
+  const cartSelectionToAdd = useSelector(state => state.user.cartSelectionToAdd)
   const dispatch = useDispatch();
   const { productTitle } = useParams();
+  const navigate = useNavigate();
+
   const [product, setProduct] = useState({
     productItems: []
   })
@@ -24,7 +27,44 @@ export const ProductPage = () => {
   const [countInStock, setCountInStock] = useState(0)
   const [availableQuantity, setAvailableQuantity] = useState(0)
   const [errorOutOfStock, setErrorOutOfStock] = useState(false)
+  const [updateStock, setUpdateStock] = useState(false)
   const [addedToCart, setAddedToCart] = useState(false)
+  
+  console.log('# selectedItem :', selectedItem)
+  
+  // HANDLE ADD TO CART
+  const handleAddToCart = async () => {
+    if(loggedIn){
+      try {
+        const { data } = await nutritivApi.post(
+          `carts/addToCart`,
+          selectedItem
+        );
+        dispatch(
+          updateUserCartQuantity(data.cart.totalQuantity)
+        )
+        dispatch(
+          updateUserCartSelectionToAdd(null)
+        )
+        setUpdateStock(!updateStock);
+        setAddedToCart(true);
+        setSelectedItem(prevState => ({
+          productId: prevState.productId,
+          load: 0,
+          price: 0,
+          quantity: 0,
+        }))
+        setAvailableQuantity(0)
+      } catch (err) {
+        console.log('# apiAddToCart err :', err)
+      }
+    } else {
+      dispatch(
+        updateUserCartSelectionToAdd(selectedItem)
+      )
+      navigate('/login')
+    }
+  }
   
   // GET PRODUCT (by title)
   useEffect(() => {
@@ -35,16 +75,30 @@ export const ProductPage = () => {
         )
         const fetchedProduct = data.Product[0]
         setProduct(fetchedProduct);
-        setSelectedItem(prevState => ({
-          ...prevState,
-          productId: fetchedProduct._id
-        }))
+        if(cartSelectionToAdd?.productId){
+          setSelectedItem(cartSelectionToAdd)
+        } else {
+          setSelectedItem(prevState => ({
+            ...prevState,
+            productId: fetchedProduct._id
+          }))
+        }
       }
       fetchApi();
     } catch (err) {
       console.log('# /products/findByTitle err :', err)
     }
-  }, [productTitle])
+  }, [productTitle, cartSelectionToAdd])
+
+  useEffect(() => {
+    if(
+      cartSelectionToAdd && 
+      selectedItem.productId && 
+      selectedItem.quantity > 0
+    ) {
+      handleAddToCart();
+    }
+  });
   
   // HANDLE SELECTED ITEM
   const handleSelectedItem = (item) => {
@@ -76,7 +130,7 @@ export const ProductPage = () => {
         console.log('# apiGetCountInStock err :', err)
       }
     }
-  }, [addedToCart, product._id]);
+  }, [updateStock, product._id]);
 
   // HANDLE QUANTITY
   const handleSelectedQuantity = (quantity) => {
@@ -88,32 +142,15 @@ export const ProductPage = () => {
     }
   }, [selectedItem.load, countInStock]);
   
-  // HANDLE ADD TO CART
-  const handleAddToCart = async () => {
-    if(loggedIn) {
-      try {
-        const { data } = await nutritivApi.post(
-          `carts/addToCart`,
-          selectedItem
-        );
-        dispatch(
-          updateUserCartQuantity(data.cart.totalQuantity)
-        )
-        setAddedToCart(!addedToCart);
-      } catch (err) {
-        console.log('# apiAddToCart err :', err)
-      }
-    } else {
-      navigate('/login')
-    }
-  }
-  
+  console.log('# availableQuantity :', availableQuantity)
+
   return (
     <>
       <h2>
         { product.title }
       </h2>
       <div>
+        {/* RADIO BUTTON */}
         {
           product.productItems.map((item, i) => (
             <React.Fragment key={i}>
@@ -137,13 +174,13 @@ export const ProductPage = () => {
       {
         errorOutOfStock && <p style={{color: "red"}}>Out of stock</p>
       }
+      {/* DROPDOWN */}
       {
         <select 
           disabled={!availableQuantity}
           id={product._id}
           name="quantity" 
           onChange={(e) => handleSelectedQuantity(e.target.value)}
-          value={selectedItem.quantity}
         >
           {
             (selectedItem.productId && availableQuantity) && (
@@ -165,6 +202,16 @@ export const ProductPage = () => {
       >
         Add to cart
       </button>
+      {
+        addedToCart && (
+          <p style={{color: "green"}}>
+            Successfully added {productTitle}!
+          </p>
+        ) 
+      }
+      {
+        cartSelectionToAdd && <p>Adding {productTitle} to cart...</p>
+      }
     </>
   )
 }
