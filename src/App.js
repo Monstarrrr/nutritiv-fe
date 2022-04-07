@@ -128,9 +128,9 @@ function App() {
             <Route path="/success" element={<CheckoutSuccess/>} />
             <Route path="/page-not-found" element={<PageNotFound/>} />
             {/* PRIVATE */}
-            <Route path="/profile" element={<Profile/>} />
             {/* RESTRICTED - LOGGED */}
             <Route element={<Restricted type="user" />}>
+              <Route path="/profile" element={<Profile/>} />
               <Route path="/cart" element={<Cart/>} />
             </Route>
             {/* RESTRICTED - NOT LOGGED */}
