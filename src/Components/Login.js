@@ -7,7 +7,7 @@ import React, {
   // useEffect 
 } from 'react';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import nutritivApi from '../Api/nutritivApi';
 import { updateUser, updateUserCartQuantity } from '../Redux/reducers/user';
 
@@ -15,7 +15,8 @@ export default function LoginPage() {
   console.log("##### LoginPage render #####");
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const location = useLocation();
+  
   const [login, setLogin] = useState({
     username: "",
     password: "",
@@ -35,6 +36,8 @@ export default function LoginPage() {
       [e.target.name]: e.target.value,
     })
   }
+  
+  console.log('# location :', location)
   
   const validation = () => {
     let usernameError = !login.username
@@ -61,15 +64,17 @@ export default function LoginPage() {
       try {
         setLogin({...login,
           loading: true,
-          error: ""
+          error: "",
         })
         const { data } = await nutritivApi.post(
           `/auth/login`,
           loginData
         )
-        setLogin({...login, 
-          loading: false
+        setLogin({...login,
+          loading: false,
+          error: "",
         })
+        // ASKS FOR 2FA
         setHasTwoFa(data.twoFA)
       } catch (err) {
         console.log('# loginData err :', err)
@@ -117,8 +122,12 @@ export default function LoginPage() {
   const handleSubmitTwoFa = async (e) => {
     e.preventDefault();
     const twoFaToken = localStorage.getItem('twofa_token')
-    console.log('# twoFaToken :', twoFaToken)
+    
     try {
+      setLogin({...login,
+        loading: true,
+        error: "",
+      })
       const { data } = await nutritivApi.post(
         `/auth/totpValidate`,
         {
@@ -130,8 +139,12 @@ export default function LoginPage() {
           }
         }
       )
+      setLogin({...login,
+        loading: false,
+        success: "Login successful!",
+        error: "",
+      })
       getUserInfo();
-      console.log('# post /auth/totpValidate :', data)
     } catch(err) {
       err.response?.data?.err ? (
         setLogin({
@@ -207,7 +220,7 @@ export default function LoginPage() {
       {
         login.loading && (
           <p>
-            Login in...
+            Loading...
           </p>
         )
       }
@@ -215,6 +228,13 @@ export default function LoginPage() {
         login.error && (
           <p style={{color: "red"}}>
             {login.error}
+          </p>
+        )
+      }
+      {
+        login.success && (
+          <p style={{color: "green"}}>
+            {login.success}
           </p>
         )
       }
