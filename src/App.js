@@ -94,7 +94,8 @@ function App() {
             return <Navigate 
               replace 
               to={location.state.from} 
-              state={cartSelection}
+              state={cartSelection} // temp
+              // how to add object "{ cartSelection: ... }" inside of state ?
             />
           } else {
             return <Navigate replace to="/" />

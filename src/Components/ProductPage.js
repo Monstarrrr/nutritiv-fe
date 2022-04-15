@@ -45,7 +45,6 @@ export const ProductPage = () => {
         )
         setUpdateStock(!updateStock);
         setAddedToCart(true);
-        location.state = null;
         setCartSelection(prevState => ({
           productId: prevState.productId,
           load: 0,
@@ -95,14 +94,6 @@ export const ProductPage = () => {
       console.log('# /products/findByTitle err :', err)
     }
   }, [productTitle, location.state])
-
-  console.log('# location.state :', location.state)
-  useEffect(() => {
-    if(location.state?.productId && cartSelection) {
-      handleAddToCart();
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.state?.productId]);
   
   // HANDLE SELECTED ITEM
   const handleSelectedItem = (item) => {
