@@ -23,12 +23,12 @@ export default function Navbar() {
               { user.username }
             </Link>
             <span>----</span>
-            <img 
-              alt="avatar" 
+            <img
+              alt="avatar"
               style={{
                 maxWidth: "30px",
               }}
-              src={user.avatar} 
+              src={user.avatar}
             />
             <span>----</span>
             <Link to="/chat">

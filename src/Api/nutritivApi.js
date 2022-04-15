@@ -44,7 +44,13 @@ nutritivApi.interceptors.response.use(res => {
       res.headers.refresh_token
     )
   }
-  if(res.data.loggedIn) {
+  if(res.headers.twofa_token) {
+    localStorage.setItem(
+      'twofa_token',
+      res.headers.twofa_token
+    )
+  }
+  if(res.data.loggedIn === false) {
     store.dispatch(
       updateUser(res.data)
     )

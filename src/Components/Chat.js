@@ -134,7 +134,7 @@ export const Chat = () => {
         
       } catch(err) {
         console.error(
-          'GET CHATS INFO err:', err
+          '# GET CHATS INFO err:', err
         )
       }
     }
