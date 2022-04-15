@@ -4,21 +4,21 @@ import React, {
   useState 
 } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import nutritivApi from '../Api/nutritivApi';
-import { updateUserCartQuantity, updateUserCartSelectionToAdd } from '../Redux/reducers/user';
+import { updateUserCartQuantity } from '../Redux/reducers/user';
 
 export const ProductPage = () => {
   const loggedIn = useSelector(state => state.user.loggedIn)
-  const cartSelectionToAdd = useSelector(state => state.user.cartSelectionToAdd)
   const dispatch = useDispatch();
   const { productTitle } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [product, setProduct] = useState({
     productItems: []
   })
-  const [selectedItem, setSelectedItem] = useState({
+  const [cartSelection, setCartSelection] = useState({
     // productId: "", <- Added at apiGetProductByTitle()
     load: 0,
     price: 0,
@@ -30,25 +30,23 @@ export const ProductPage = () => {
   const [updateStock, setUpdateStock] = useState(false)
   const [addedToCart, setAddedToCart] = useState(false)
   
-  console.log('# selectedItem :', selectedItem)
-  
+  console.log('# cartSelection :', cartSelection)
+
   // HANDLE ADD TO CART
   const handleAddToCart = async () => {
     if(loggedIn){
       try {
         const { data } = await nutritivApi.post(
           `carts/addToCart`,
-          selectedItem
+          cartSelection
         );
         dispatch(
           updateUserCartQuantity(data.cart.totalQuantity)
         )
-        dispatch(
-          updateUserCartSelectionToAdd(null)
-        )
         setUpdateStock(!updateStock);
         setAddedToCart(true);
-        setSelectedItem(prevState => ({
+        location.state = null;
+        setCartSelection(prevState => ({
           productId: prevState.productId,
           load: 0,
           price: 0,
@@ -59,10 +57,16 @@ export const ProductPage = () => {
         console.log('# apiAddToCart err :', err)
       }
     } else {
-      dispatch(
-        updateUserCartSelectionToAdd(selectedItem)
-      )
-      navigate('/login')
+      navigate(
+        '/login',
+        { state: 
+          { 
+            msg: "Login to add a product to your cart.",
+            cartSelection,
+            from: `/product/${productTitle}`
+          }
+        }
+      );
     }
   }
   
@@ -73,12 +77,14 @@ export const ProductPage = () => {
         const { data } = await nutritivApi.get(
           `/products/findByTitle/${productTitle}`
         )
+        
         const fetchedProduct = data.Product[0]
         setProduct(fetchedProduct);
-        if(cartSelectionToAdd?.productId){
-          setSelectedItem(cartSelectionToAdd)
+
+        if(location.state?.productId){
+          setCartSelection(location.state)
         } else {
-          setSelectedItem(prevState => ({
+          setCartSelection(prevState => ({
             ...prevState,
             productId: fetchedProduct._id
           }))
@@ -88,26 +94,26 @@ export const ProductPage = () => {
     } catch (err) {
       console.log('# /products/findByTitle err :', err)
     }
-  }, [productTitle, cartSelectionToAdd])
+  }, [productTitle, location.state])
 
+  console.log('# location.state :', location.state)
   useEffect(() => {
-    if(
-      cartSelectionToAdd && 
-      selectedItem.productId && 
-      selectedItem.quantity > 0
-    ) {
+    if(location.state?.productId && cartSelection) {
       handleAddToCart();
     }
-  });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.state?.productId]);
   
   // HANDLE SELECTED ITEM
   const handleSelectedItem = (item) => {
     if(countInStock >= item.load) { 
       item.quantity = 1
       setErrorOutOfStock(false)
-    } else { setErrorOutOfStock(true) }
+    } else { 
+      setErrorOutOfStock(true) 
+    }
     const { load, price, quantity } = item;
-    setSelectedItem(prevState => ({
+    setCartSelection(prevState => ({
       ...prevState,
       load,
       price,
@@ -131,18 +137,16 @@ export const ProductPage = () => {
       }
     }
   }, [updateStock, product._id]);
-
+  
   // HANDLE QUANTITY
   const handleSelectedQuantity = (quantity) => {
-    setSelectedItem(prevState => ({...prevState, quantity}))
+    setCartSelection(prevState => ({...prevState, quantity}))
   }
   useEffect(() => {
-    if(selectedItem.load && countInStock){
-      setAvailableQuantity(Math.floor(countInStock / selectedItem.load))
+    if(cartSelection.load && countInStock){
+      setAvailableQuantity(Math.floor(countInStock / cartSelection.load))
     }
-  }, [selectedItem.load, countInStock]);
-  
-  console.log('# availableQuantity :', availableQuantity)
+  }, [cartSelection.load, countInStock]);
 
   return (
     <>
@@ -183,7 +187,7 @@ export const ProductPage = () => {
           onChange={(e) => handleSelectedQuantity(e.target.value)}
         >
           {
-            (selectedItem.productId && availableQuantity) && (
+            (cartSelection.productId && availableQuantity) && (
               [...Array(availableQuantity)].map((e, i) => (
                 <option 
                   key={i}
@@ -197,7 +201,7 @@ export const ProductPage = () => {
         </select>
       }
       <button
-        disabled={!selectedItem.quantity}
+        disabled={!cartSelection.quantity}
         onClick={handleAddToCart}
       >
         Add to cart
@@ -210,7 +214,7 @@ export const ProductPage = () => {
         ) 
       }
       {
-        cartSelectionToAdd && <p>Adding {productTitle} to cart...</p>
+        cartSelection && <p>Adding {productTitle} to cart...</p>
       }
     </>
   )

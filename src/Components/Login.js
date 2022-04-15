@@ -31,13 +31,15 @@ export default function LoginPage() {
   }
   const [hasTwoFa, setHasTwoFa] = useState(false)
   
+  useEffect(() => {
+    console.log('# location :', location)
+  }, [location]);
+
   const handleChange = (e) => {
     setLogin({...login,
       [e.target.name]: e.target.value,
     })
   }
-  
-  console.log('# location :', location)
   
   const validation = () => {
     let usernameError = !login.username
@@ -74,8 +76,12 @@ export default function LoginPage() {
           loading: false,
           error: "",
         })
-        // ASKS FOR 2FA
-        setHasTwoFa(data.twoFA)
+        // ASK FOR 2FA or REDIRECT
+        data.twoFA ? (
+          setHasTwoFa(data.twoFA)
+        ) : (
+          getUserInfo()
+        )
       } catch (err) {
         console.log('# loginData err :', err)
         setLogin({...login,
@@ -109,14 +115,13 @@ export default function LoginPage() {
         dispatch(
           updateUser(userSelf.data)
         )
-        navigate("/");
       }).catch(function([userSelf, cartSelf]) {
         console.log('# userSelf err :', userSelf)
         console.log('# cartSelf err :', cartSelf)
       })
     }
     fetchApi();
-  }, [dispatch, navigate])
+  }, [dispatch])
   
   // SUBMIT 2FA CODE
   const handleSubmitTwoFa = async (e) => {
@@ -128,7 +133,7 @@ export default function LoginPage() {
         loading: true,
         error: "",
       })
-      const { data } = await nutritivApi.post(
+      await nutritivApi.post(
         `/auth/totpValidate`,
         {
           token: login.twoFaCode
@@ -163,6 +168,9 @@ export default function LoginPage() {
   return (
     <div>
       <h2>Login page</h2>
+      {
+        location.state?.msg && <p style={{color: "orange"}}>{location.state.msg}</p>
+      }
       {hasTwoFa ? (
         <>
           <p>Enter your 2FA code</p>

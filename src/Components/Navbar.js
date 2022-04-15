@@ -16,6 +16,10 @@ export default function Navbar() {
         PRODUCTS
       </Link>
       <span>----</span>
+      <Link to="/chat">
+        CHAT
+      </Link>
+      <span>----</span>
       {
         user.loggedIn ? (
           <>
@@ -30,10 +34,6 @@ export default function Navbar() {
               }}
               src={user.avatar}
             />
-            <span>----</span>
-            <Link to="/chat">
-              CHAT
-            </Link>
             <span>----</span>
             <button onClick={() => navigate('/cart')}>
               Cart 
