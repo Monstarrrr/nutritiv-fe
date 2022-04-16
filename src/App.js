@@ -83,6 +83,7 @@ function App() {
   const Restricted = ({ type }) => {
     const location = useLocation();
     const cartSelection = location.state?.cartSelection;
+    console.log('# APP.JS - cartSelection :', cartSelection)
     const isLogged = () => {
       console.log('# loggedIn :', loggedIn)
       return loggedIn;
@@ -93,8 +94,8 @@ function App() {
           if(location.state?.from) {
             return <Navigate 
               replace 
-              to={location.state.from} 
-              state={cartSelection} // temp
+              to={location.state.from}
+              state={{cartSelection: cartSelection}} // temp
               // how to add object "{ cartSelection: ... }" inside of state ?
             />
           } else {

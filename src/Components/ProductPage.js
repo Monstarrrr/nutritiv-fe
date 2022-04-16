@@ -1,5 +1,4 @@
-import React, { 
-  useCallback,
+import React, {
   useEffect, 
   useState 
 } from 'react'
@@ -26,25 +25,31 @@ export const ProductPage = () => {
   })
   const [countInStock, setCountInStock] = useState(0)
   const [availableQuantity, setAvailableQuantity] = useState(0)
-  const [errorOutOfStock, setErrorOutOfStock] = useState(false)
   const [updateStock, setUpdateStock] = useState(false)
-  const [addedToCart, setAddedToCart] = useState(false)
   
-  console.log('# cartSelection :', cartSelection)
-
+  const [loadingAdding, setLoadingAdding] = useState(false)
+  const [successAddedToCart, setSuccessAddedToCart] = useState(false)
+  const [errorOutOfStock, setErrorOutOfStock] = useState(false)
+  
+  console.log('# location.state :', location.state)
+  
   // HANDLE ADD TO CART
-  const handleAddToCart = async () => {
+  const handleAddToCart = async (loc) => {
+    const selection = loc?.cartSelection ? loc.cartSelection : cartSelection
+    
     if(loggedIn){
+      setLoadingAdding(true)
       try {
         const { data } = await nutritivApi.post(
           `carts/addToCart`,
-          cartSelection
+          selection
         );
         dispatch(
           updateUserCartQuantity(data.cart.totalQuantity)
         )
         setUpdateStock(!updateStock);
-        setAddedToCart(true);
+        setLoadingAdding(false)
+        setSuccessAddedToCart(true);
         setCartSelection(prevState => ({
           productId: prevState.productId,
           load: 0,
@@ -53,6 +58,7 @@ export const ProductPage = () => {
         }))
         setAvailableQuantity(0)
       } catch (err) {
+        setLoadingAdding(false)
         console.log('# apiAddToCart err :', err)
       }
     } else {
@@ -68,6 +74,14 @@ export const ProductPage = () => {
       );
     }
   }
+  
+  useEffect(() => {
+    if(location.state?.cartSelection?.productId) {
+      setCartSelection(location.state.cartSelection);
+      handleAddToCart({cartSelection: location.state.cartSelection});
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   
   // GET PRODUCT (by title)
   useEffect(() => {
@@ -97,6 +111,7 @@ export const ProductPage = () => {
   
   // HANDLE SELECTED ITEM
   const handleSelectedItem = (item) => {
+    setSuccessAddedToCart(false)
     if(countInStock >= item.load) { 
       item.quantity = 1
       setErrorOutOfStock(false)
@@ -139,6 +154,8 @@ export const ProductPage = () => {
     }
   }, [cartSelection.load, countInStock]);
 
+  console.log('# countInStock :', countInStock)
+
   return (
     <>
       <h2>
@@ -149,7 +166,8 @@ export const ProductPage = () => {
         {
           product.productItems.map((item, i) => (
             <React.Fragment key={i}>
-              <input 
+              <input
+                checked={cartSelection.load === item.load}
                 id={`${product._id}${item.load}`} 
                 name={product._id}
                 onChange={() => handleSelectedItem({
@@ -191,21 +209,24 @@ export const ProductPage = () => {
           }
         </select>
       }
+      {/* BUTTON */}
       <button
         disabled={!cartSelection.quantity}
         onClick={handleAddToCart}
       >
         Add to cart
       </button>
+      {/* SUCCESS */}
       {
-        addedToCart && (
+        successAddedToCart && (
           <p style={{color: "green"}}>
             Successfully added {productTitle}!
           </p>
         ) 
       }
+      {/* LOADING */}
       {
-        cartSelection && <p>Adding {productTitle} to cart...</p>
+        loadingAdding && <p>Adding {productTitle} to cart...</p>
       }
     </>
   )

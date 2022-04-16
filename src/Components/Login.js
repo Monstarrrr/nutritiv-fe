@@ -14,7 +14,6 @@ import { updateUser, updateUserCartQuantity } from '../Redux/reducers/user';
 export default function LoginPage() {
   console.log("##### LoginPage render #####");
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const location = useLocation();
   
   const [login, setLogin] = useState({
