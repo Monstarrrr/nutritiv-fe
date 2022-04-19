@@ -200,9 +200,6 @@ export const Chat = () => {
           text: messageToBeSent
         }
       )
-      const { text, id } = data;
-      let roomId = activeChatId;
-      socket.emit('chatting', {text, id, token, roomId})
       setChat({
         ...chat,
         "messages": [
@@ -210,7 +207,9 @@ export const Chat = () => {
           {...data, loading: false}
         ]
       })
-      console.log('# /chats/message/ :', data)
+      const { text, id } = data;
+      let roomId = activeChatId;
+      socket.emit('chatting', {text, id, token, roomId})
     } catch(err) {
       console.error('/chats/message/:', err)
     }
