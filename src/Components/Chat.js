@@ -140,8 +140,6 @@ export const Chat = () => {
     }
     fetchApi();
   }, []);
-  
-  console.log('# allUsersNames :', allUsers)
 
   // ACTIVE CHAT
   useEffect(() => {
@@ -217,11 +215,12 @@ export const Chat = () => {
   const handleMessageToBeSent = (e) => {
     setMessageToBeSent(e.target.value)
   }
-
-  console.log('# chat :', chat)
   
   return (
     <div>
+      {
+        socketError && <p style={{color: "red"}}>There was an error with socket.io</p>
+      }
       {
         chatsInfos.map(chatInfo => (
           <React.Fragment key={chatInfo._id}>
