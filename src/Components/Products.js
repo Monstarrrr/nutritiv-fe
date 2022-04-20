@@ -149,11 +149,13 @@ export const Products = () => {
     setFilterByTextInput(
       e.target.value.toLowerCase()
     )
+    setPage(1);
   }
   const handleFilterByShapeInput = (e) => {
     setFilterByShapeInput(
       e.target.value.toLowerCase()
     )
+    setPage(1);
   }
   const handleChangeActivePage = (e, val) => {
     setPage(val)
@@ -172,12 +174,16 @@ export const Products = () => {
         prevState.filter(tag => tag !== e.target.name)
       )
     ))
+    setPage(1);
   }
   const handleOrderByPrice = () => {
     sortedByPrice ? (
       sortedByPrice === "asc" ? setSortedByPrice("desc") : setSortedByPrice("")
     ) : setSortedByPrice("asc")
+    setPage(1);
   }
+
+  console.log('# page :', page)
 
   return (
     <div id="products">
