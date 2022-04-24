@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 export const Welcome = () => {
   
   const loggedIn = useSelector(state => state.user.loggedIn)
-  
+
   return (
     <div>
       <br />

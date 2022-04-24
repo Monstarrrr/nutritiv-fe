@@ -110,18 +110,9 @@ function App() {
         ) : <Navigate replace to="/" />;
       }
     } else {
-      return <h2>Loading...</h2>
+      return <h2>Loading user data...</h2>
     }
   }
-  // const Restricted = () => {
-  //   const isLogged = () => {
-  //     const user = { loggedIn }
-  //     return user.loggedIn;
-  //   }
-  //   return isLogged() ? (
-  //     <Outlet /> 
-  //   ) : <Navigate replace to="/" />;
-  // }
   
   return (
     <BrowserRouter>
@@ -158,23 +149,6 @@ function App() {
       </Elements>
     </BrowserRouter>
   );
-}
-
-// RESTRICTED ROUTES
-const Restricted = ({ type, loggedIn }) => {
-  const isLogged = () => {
-    console.log('# loggedIn :', loggedIn)
-    return loggedIn;
-  }
-  if(type === "guest") {
-    return isLogged() ? (
-      <Navigate replace to="/" /> 
-    ) : <Outlet />;
-  } else if(type === "user") {
-    return isLogged() ? (
-      <Outlet /> 
-    ) : <Navigate replace to="/" />;
-  }
 }
 
 export default App;

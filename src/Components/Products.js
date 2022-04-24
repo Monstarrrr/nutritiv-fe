@@ -183,8 +183,6 @@ export const Products = () => {
     setPage(1);
   }
 
-  console.log('# page :', page)
-
   return (
     <div id="products">
       {

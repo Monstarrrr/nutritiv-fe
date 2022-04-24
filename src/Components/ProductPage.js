@@ -189,7 +189,7 @@ export const ProductPage = () => {
       }
       {/* DROPDOWN */}
       {
-        <select 
+        <select
           disabled={!availableQuantity}
           id={product._id}
           name="quantity" 
