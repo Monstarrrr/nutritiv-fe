@@ -95,8 +95,7 @@ function App() {
             return <Navigate 
               replace 
               to={location.state.from}
-              state={{cartSelection: cartSelection}} // temp
-              // how to add object "{ cartSelection: ... }" inside of state ?
+              state={{cartSelection: cartSelection}}
             />
           } else {
             return <Navigate replace to="/" />
