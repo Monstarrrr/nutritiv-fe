@@ -1,24 +1,10 @@
 import React, { useEffect } from 'react';
-import { 
-  // useSelector, 
-  useDispatch,
-  useSelector,
-} from "react-redux";
-import { 
-  BrowserRouter,
-  Routes,
-  Route,
-  Navigate,
-  Outlet,
-  useLocation,
-} from 'react-router-dom';
-import { Elements } from '@stripe/react-stripe-js';
+import { useDispatch, useSelector } from "react-redux";
+import { BrowserRouter, Routes, Route, useLocation, Navigate, Outlet } from 'react-router-dom';
 import { loadStripe } from '@stripe/stripe-js';
-import {
-  updateUser, updateUserCartQuantity,
-} from './Redux/reducers/user';
+import { updateUser, updateUserCartQuantity } from './Redux/reducers/user';
 import nutritivApi from './Api/nutritivApi';
-import GeneralLayout from './Layouts/GeneralLayout.js';
+import { Elements } from '@stripe/react-stripe-js';
 import Register from './Components/Register.js';
 import Login from './Components/Login.js';
 import Profile from './Components/Profile';
@@ -30,6 +16,8 @@ import { Cart } from './Components/Cart';
 import { Welcome } from './Components/Homepage';
 import { PageNotFound } from './Components/PageNotFound';
 import { ChatConnection } from './Components/ChatConnection';
+import { AnimatePresence } from 'framer-motion';
+import Navbar from './Components/Navbar';
 
 // init stripe
 const stripePromise = loadStripe(
@@ -39,6 +27,7 @@ const stripePromise = loadStripe(
 function App() {
   const dispatch = useDispatch();
   const loggedIn = useSelector(state => state.user.loggedIn)
+  const location = useLocation();
 
   // ON LOAD
   // Fetch user-self info
@@ -81,7 +70,6 @@ function App() {
   
   // RESTRICTED ROUTES
   const Restricted = ({ type }) => {
-    const location = useLocation();
     const cartSelection = location.state?.cartSelection;
     console.log('# APP.JS - cartSelection :', cartSelection)
     const isLogged = () => {
@@ -114,15 +102,16 @@ function App() {
   }
   
   return (
-    <BrowserRouter>
-      <Elements
-        stripe={stripePromise}
-        // options={stripeOptions}
-      >
-        <Routes>
+    <Elements
+      stripe={stripePromise}
+      // options={stripeOptions}
+    >
+      <Navbar />
+      <AnimatePresence>
+        <Routes location={location} key={location.pathname}>
           {/* PUBLIC */}
           {/* <Route path="*" element={<Navigate replace to="/page-not-found"/>} /> */}
-          <Route path="/" element={<GeneralLayout/>}>
+          {/* <Route path="/" element={<GeneralLayout/>}> */}
             <Route index element={<Welcome/>} />
             <Route path="/products" element={<Products/>} />
             <Route path="/product">
@@ -143,10 +132,10 @@ function App() {
               <Route path="login" element={<Login/>} />
               <Route path="register" element={<Register/>} />
             </Route>
-          </Route>
+          {/* </Route> */}
         </Routes>
-      </Elements>
-    </BrowserRouter>
+      </AnimatePresence>
+    </Elements>
   );
 }
 

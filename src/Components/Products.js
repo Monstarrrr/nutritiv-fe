@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import nutritivApi from '../Api/nutritivApi';
 import { ProductCard } from './ProductCard';
 import { Pagination } from '@mui/material';
+import { motion } from 'framer-motion';
 
 export const Products = () => {  
   console.log("###########-Products-###########")
@@ -182,9 +183,17 @@ export const Products = () => {
     ) : setSortedByPrice("asc")
     setPage(1);
   }
-
+  
   return (
-    <div id="products">
+    <motion.div 
+      initial={{ x: "100vw" }}
+      animate={{ x: 0 }}
+      transition={{
+        default: { duration: 1 },
+        delay: 0,
+      }}
+      id="products"
+    >
       {
         loading ? (
           <h2>
@@ -271,6 +280,6 @@ export const Products = () => {
           </>
         )
       }
-    </div>
+    </motion.div>
   )
 }
