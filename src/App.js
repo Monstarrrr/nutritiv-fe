@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import { BrowserRouter, Routes, Route, useLocation, Navigate, Outlet } from 'react-router-dom';
+import { Routes, Route, useLocation, Navigate, Outlet } from 'react-router-dom';
 import { loadStripe } from '@stripe/stripe-js';
 import { updateUser, updateUserCartQuantity } from './Redux/reducers/user';
 import nutritivApi from './Api/nutritivApi';
@@ -107,7 +107,7 @@ function App() {
       // options={stripeOptions}
     >
       <Navbar />
-      <AnimatePresence>
+      <AnimatePresence exitBeforeEnter>
         <Routes location={location} key={location.pathname}>
           {/* PUBLIC */}
           {/* <Route path="*" element={<Navigate replace to="/page-not-found"/>} /> */}

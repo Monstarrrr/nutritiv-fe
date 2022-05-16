@@ -7,11 +7,19 @@ export const Welcome = () => {
   
   const loggedIn = useSelector(state => state.user.loggedIn)
   
+  const array = [
+    "Hello",
+    "hi",
+    "hola",
+    "salut",
+    "yo"
+  ]
+  
   const pageAnimation = {
     exit: {
-      x: "-100vw",
+      opacity: 0,
       transition: {
-        default: { duration: 1 },
+        default: { duration: 0.4 },
       },
     },
   }
@@ -23,19 +31,13 @@ export const Welcome = () => {
     >
       <br />
       <div>
-        <motion.h2
-          className={styles.title}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          style={{ height: "200px" }}
-        >
+        <h2 className={styles.title}>
           <motion.span
-            transition={{duration: 0.2}}
             whileHover={{opacity: 0.5}}
           >
             Homepage
           </motion.span>
-        </motion.h2>
+        </h2>
       </div>
       {
         !loggedIn && (

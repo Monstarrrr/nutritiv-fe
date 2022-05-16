@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import nutritivApi from '../Api/nutritivApi';
 import { ProductCard } from './ProductCard';
 import { Pagination } from '@mui/material';
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 
 export const Products = () => {  
   console.log("###########-Products-###########")
@@ -185,12 +185,11 @@ export const Products = () => {
   }
   
   return (
-    <motion.div 
-      initial={{ x: "100vw" }}
-      animate={{ x: 0 }}
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
       transition={{
-        default: { duration: 1 },
-        delay: 0,
+        default: { duration: 0.5 },
       }}
       id="products"
     >
@@ -200,7 +199,11 @@ export const Products = () => {
             Loading products...
           </h2>
         ) : (
-          <>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1 }}
+          >
             <br />
             {/* TITLE FILTER - TEXTBOX */}
             <input 
@@ -249,14 +252,17 @@ export const Products = () => {
               ))
             }
             {/* PRODUCTS - CARDS */}
+            {/* <motion.div layout> */}
             {
-              productsToDisplay && productsToDisplay.map(product => (
+              productsToDisplay && productsToDisplay.map((product, i) => (
                 <ProductCard
+                  index={i}
                   key={product._id}
                   product={product}
                 />
               ))
             }
+            {/* </motion.div>  */}
             <Pagination
               count={numberOfPages}
               page={page}
@@ -277,7 +283,7 @@ export const Products = () => {
                 <option value="30">30</option>
               </select>
             </form>
-          </>
+          </motion.div>
         )
       }
     </motion.div>
