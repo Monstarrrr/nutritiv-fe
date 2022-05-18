@@ -1,21 +1,21 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import { Routes, Route, useLocation, Navigate, Outlet } from 'react-router-dom';
+import { Routes, Route, useLocation, Navigate, Outlet, useSearchParams, useNavigate } from 'react-router-dom';
 import { loadStripe } from '@stripe/stripe-js';
 import { updateUser, updateUserCartQuantity } from './Redux/reducers/user';
 import nutritivApi from './Api/nutritivApi';
 import { Elements } from '@stripe/react-stripe-js';
-import Register from './Components/Register.js';
-import Login from './Components/Login.js';
-import Profile from './Components/Profile';
-import { Products } from './Components/Products';
-import { CheckoutSuccess } from './Components/CheckoutSuccess';
-import { CheckoutCancel } from './Components/CheckoutCancel';
-import { ProductPage } from './Components/ProductPage';
-import { Cart } from './Components/Cart';
+import Register from './Components/Authentication/Register.js';
+import Login from './Components/Authentication/Login.js';
+import Profile from './Components/Profile/Profile';
+import { Products } from './Components/Products/Products';
+import { CheckoutSuccess } from './Components/Payment/CheckoutSuccess';
+import { CheckoutCancel } from './Components/Payment/CheckoutCancel';
+import { ProductPage } from './Components/Products/ProductPage';
+import { Cart } from './Components/Payment/Cart';
 import { Welcome } from './Components/Homepage';
 import { PageNotFound } from './Components/PageNotFound';
-import { ChatConnection } from './Components/ChatConnection';
+import { ChatConnection } from './Components/Chat/ChatConnection';
 import { AnimatePresence } from 'framer-motion';
 import Navbar from './Components/Navbar';
 
@@ -25,15 +25,24 @@ const stripePromise = loadStripe(
 );
 
 function App() {
+  const [getUserInfo, setGetUserInfo] = useState(false);
   const dispatch = useDispatch();
   const loggedIn = useSelector(state => state.user.loggedIn)
   const location = useLocation();
-
+  const navigate = useNavigate();
+  // oAuth
+  const [searchParams] = useSearchParams();
+  const oAuthStatus = searchParams.get('status');
+  const oAuthStatusCode = searchParams.get('statusCode');
+  const oAuthMessage = searchParams.get('message');
+  const oAuthUsername = searchParams.get('username')
+  const oAuthAccessToken = searchParams.get('accessToken');
+  
   // ON LOAD
   // Fetch user-self info
   useEffect(() => {
     let isSubscribed = true;
-    
+
     if(isSubscribed) {
       const method = "get"
       const requestsUrl = ['/users/self', '/carts/self']
@@ -66,8 +75,35 @@ function App() {
       fetchUserInfo();
     }
     return () => { isSubscribed = false }
-  }, [dispatch]);
+  }, [dispatch, getUserInfo]);
   
+  // Validate oAuth
+  useEffect(() => {
+    if(oAuthStatus === "successLogin") {
+      console.log("Condition success oAuth");
+      let fetchApi = async () => {
+        try {
+          await nutritivApi.get(
+            `/auth/login/validateOauth?accessToken=${oAuthAccessToken}`
+          )
+          setGetUserInfo(prevState => !prevState)
+        } catch(err) {
+          console.error(
+            '/auth/login/validateOauth:', err
+          )
+        }
+      }
+      fetchApi();
+    } else if(oAuthStatus === "failed") {
+      navigate(
+        '/login', 
+        { state: { msg: oAuthMessage, username: oAuthUsername } }
+      )
+    }
+  }, [navigate, oAuthAccessToken, oAuthMessage, oAuthStatus, oAuthUsername]);
+
+  console.log('# getUserInfo :', getUserInfo)
+
   // RESTRICTED ROUTES
   const Restricted = ({ type }) => {
     const cartSelection = location.state?.cartSelection;

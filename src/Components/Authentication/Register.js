@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import nutritivApi from '../Api/nutritivApi';
+import nutritivApi from '../../Api/nutritivApi';
 
 export default function RegisterPage() {
   

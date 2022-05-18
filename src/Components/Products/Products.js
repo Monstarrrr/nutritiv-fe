@@ -1,10 +1,10 @@
 /* eslint-disable no-unused-vars */ // Temp
 import React, { useEffect, useState } from 'react'
 
-import nutritivApi from '../Api/nutritivApi';
+import nutritivApi from '../../Api/nutritivApi';
 import { ProductCard } from './ProductCard';
 import { Pagination } from '@mui/material';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, LayoutGroup, motion } from 'framer-motion';
 
 export const Products = () => {  
   console.log("###########-Products-###########")
@@ -204,85 +204,91 @@ export const Products = () => {
             animate={{ opacity: 1 }}
             transition={{ duration: 1 }}
           >
-            <br />
-            {/* TITLE FILTER - TEXTBOX */}
-            <input 
-              onChange={handleProductsFilter}
-              placeholder="Search a product..."
-              type="text" 
-            />
-            {/* SHAPE FILTER - DROPDOWN */}
-            <form>
-              <select 
-                onChange={handleFilterByShapeInput}
-                name="shapeFilter"
+            <LayoutGroup>
+              <br />
+              {/* TITLE FILTER - TEXTBOX */}
+              <input 
+                onChange={handleProductsFilter}
+                placeholder="Search a product..."
+                type="text" 
+              />
+              {/* SHAPE FILTER - DROPDOWN */}
+              <form>
+                <select 
+                  onChange={handleFilterByShapeInput}
+                  name="shapeFilter"
+                >
+                  <option value="">Shape</option>
+                  <option value="capsules">Capsule</option>
+                  <option value="powder">Powder</option>
+                </select>
+              </form>
+              {/* PRICE SORTER - BUTTON */}
+              <button
+                onClick={handleOrderByPrice}
               >
-                <option value="">Shape</option>
-                <option value="capsules">Capsule</option>
-                <option value="powder">Powder</option>
-              </select>
-            </form>
-            {/* PRICE SORTER - BUTTON */}
-            <button
-              onClick={handleOrderByPrice}
-            >
-              Sorted by price
+                Sorted by price
+                {
+                  sortedByPrice && (sortedByPrice === "asc" ? (
+                    <span> ▲ </span>
+                  ) : (
+                    <span> ▼ </span>
+                  ))
+                }
+              </button>
+              {/* TAGS FILTER - CHECKBOXES */}
               {
-                sortedByPrice && (sortedByPrice === "asc" ? (
-                  <span> ▲ </span>
-                ) : (
-                  <span> ▼ </span>
+                allTags && allTags.map((tag, i) => (
+                  <div key={i}>
+                    <input 
+                      defaultChecked={false}
+                      name={tag}
+                      onClick={handleFilterByTags}
+                      type="checkbox"
+                    />
+                    <label htmlFor={tag}>
+                      {tag}
+                    </label>
+                  </div>
                 ))
               }
-            </button>
-            {/* TAGS FILTER - CHECKBOXES */}
-            {
-              allTags && allTags.map((tag, i) => (
-                <div key={i}>
-                  <input 
-                    defaultChecked={false}
-                    name={tag}
-                    onClick={handleFilterByTags}
-                    type="checkbox"
-                  />
-                  <label htmlFor={tag}>
-                    {tag}
-                  </label>
-                </div>
-              ))
-            }
-            {/* PRODUCTS - CARDS */}
-            {/* <motion.div layout> */}
-            {
-              productsToDisplay && productsToDisplay.map((product, i) => (
-                <ProductCard
-                  index={i}
-                  key={product._id}
-                  product={product}
+              {/* PRODUCTS - CARDS */}
+              {/* <motion.div layout> */}
+              <AnimatePresence>
+                {
+                  productsToDisplay && productsToDisplay.map((product, i) => (
+                    <ProductCard
+                      index={i}
+                      key={product._id}
+                      product={product}
+                    />
+                  ))
+                }
+              </AnimatePresence>
+              <motion.div layout>
+                {/* </motion.div>  */}
+                <Pagination
+                  count={numberOfPages}
+                  page={page}
+                  onChange={handleChangeActivePage}
                 />
-              ))
-            }
-            {/* </motion.div>  */}
-            <Pagination
-              count={numberOfPages}
-              page={page}
-              onChange={handleChangeActivePage}
-            />
-            {/* PRODUCTS PER PAGE - DROPDOWN */}
-            <form>
-              <label htmlFor="productsPerPage">
-                Products per page: 
-              </label>
-              <select 
-                onChange={handleChangeProductsPerPage}
-                id="selectProductsPerPage"
-                name="productsPerPage" 
-              >
-                <option value="5">5</option>
-                <option value="15">15</option>
-                <option value="30">30</option>
-              </select>
-            </form>
+                {/* PRODUCTS PER PAGE - DROPDOWN */}
+                <form>
+                  <label htmlFor="productsPerPage">
+                    Products per page: 
+                  </label>
+                  <select 
+                    onChange={handleChangeProductsPerPage}
+                    id="selectProductsPerPage"
+                    name="productsPerPage" 
+                  >
+                    <option value="5">5</option>
+                    <option value="15">15</option>
+                    <option value="30">30</option>
+                  </select>
+                </form>
+              </motion.div>
+            </LayoutGroup>
           </motion.div>
         )
       }

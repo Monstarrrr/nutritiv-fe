@@ -1,6 +1,6 @@
 import React from 'react'
-import nutritivApi from '../Api/nutritivApi'
-import { storageKeys } from '../Helpers/localStorage';
+import nutritivApi from '../../Api/nutritivApi'
+import { storageKeys } from '../../Helpers/localStorage';
 
 export const Logout = () => {
   

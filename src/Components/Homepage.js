@@ -1,19 +1,10 @@
 import React from 'react'
 import { useSelector } from 'react-redux';
 import styles from './Homepage.module.scss';
-import { AnimatePresence, motion } from 'framer-motion';
 
 export const Welcome = () => {
   
   const loggedIn = useSelector(state => state.user.loggedIn)
-  
-  const array = [
-    "Hello",
-    "hi",
-    "hola",
-    "salut",
-    "yo"
-  ]
   
   const pageAnimation = {
     exit: {
@@ -25,18 +16,18 @@ export const Welcome = () => {
   }
   
   return (
-    <motion.div 
+    <div 
       variants={pageAnimation} 
       exit="exit"
     >
       <br />
       <div>
         <h2 className={styles.title}>
-          <motion.span
-            whileHover={{opacity: 0.5}}
+          <span
+            whilehover={{opacity: 0.5}}
           >
             Homepage
-          </motion.span>
+          </span>
         </h2>
       </div>
       {
@@ -46,6 +37,6 @@ export const Welcome = () => {
           </div>
         )
       }
-    </motion.div>
+    </div>
   )
 }

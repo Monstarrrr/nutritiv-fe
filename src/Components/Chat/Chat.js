@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { io } from "socket.io-client";
-import nutritivApi from '../Api/nutritivApi';
+import nutritivApi from '../../Api/nutritivApi';
 import { useDispatch, useSelector } from 'react-redux';
-import { addMessage, getLastMessageOfRoom } from '../Redux/reducers/messages';
+import { addMessage, getLastMessageOfRoom } from '../../Redux/reducers/messages';
 
 const token = localStorage.getItem('refresh_token');
 const socket = io(
