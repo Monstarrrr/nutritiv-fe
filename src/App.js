@@ -25,15 +25,15 @@ const stripePromise = loadStripe(
 );
 
 function App() {
-  const [getUserInfo, setGetUserInfo] = useState(false);
+  const [gettingUserInfo, setGettingUserInfo] = useState(false);
   const dispatch = useDispatch();
   const loggedIn = useSelector(state => state.user.loggedIn)
   const location = useLocation();
   const navigate = useNavigate();
-  // oAuth
+  
   const [searchParams] = useSearchParams();
   const oAuthStatus = searchParams.get('status');
-  const oAuthStatusCode = searchParams.get('statusCode');
+  // const oAuthStatusCode = searchParams.get('statusCode');
   const oAuthMessage = searchParams.get('message');
   const oAuthUsername = searchParams.get('username')
   const oAuthAccessToken = searchParams.get('accessToken');
@@ -75,7 +75,7 @@ function App() {
       fetchUserInfo();
     }
     return () => { isSubscribed = false }
-  }, [dispatch, getUserInfo]);
+  }, [dispatch, gettingUserInfo]);
   
   // Validate oAuth
   useEffect(() => {
@@ -86,7 +86,7 @@ function App() {
           await nutritivApi.get(
             `/auth/login/validateOauth?accessToken=${oAuthAccessToken}`
           )
-          setGetUserInfo(prevState => !prevState)
+          setGettingUserInfo(prevState => !prevState)
         } catch(err) {
           console.error(
             '/auth/login/validateOauth:', err
@@ -94,6 +94,11 @@ function App() {
         }
       }
       fetchApi();
+    } else if(oAuthStatus === "successRegistration") {
+      navigate(
+        '/login', 
+        { state: { msg: oAuthMessage, username: oAuthUsername } }
+      )
     } else if(oAuthStatus === "failed") {
       navigate(
         '/login', 
@@ -102,7 +107,7 @@ function App() {
     }
   }, [navigate, oAuthAccessToken, oAuthMessage, oAuthStatus, oAuthUsername]);
 
-  console.log('# getUserInfo :', getUserInfo)
+  console.log('# gettingtUserInfo :', gettingUserInfo)
 
   // RESTRICTED ROUTES
   const Restricted = ({ type }) => {

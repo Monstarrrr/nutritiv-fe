@@ -23,8 +23,8 @@ export const Products = () => {
   const [filterByTextInput, setFilterByTextInput] = useState("")
   const [filterByShapeInput, setFilterByShapeInput] = useState("")
   const [filterByTagsInput, setFilterByTagsInput] = useState([])
-  const [filterByPriceMinInput, setFilterByPriceMinInput] = useState(0)
-  const [filterByPriceMaxInput, setFilterByPriceMaxInput] = useState(0)
+  // const [filterByPriceMinInput, setFilterByPriceMinInput] = useState(0)
+  // const [filterByPriceMaxInput, setFilterByPriceMaxInput] = useState(0)
   const [sortedByPrice, setSortedByPrice] = useState("")
   const [sortedByPriceStatus, setSortedByPriceStatus] = useState("")
   
@@ -256,13 +256,23 @@ export const Products = () => {
               {/* <motion.div layout> */}
               <AnimatePresence>
                 {
-                  productsToDisplay && productsToDisplay.map((product, i) => (
-                    <ProductCard
-                      index={i}
-                      key={product._id}
-                      product={product}
-                    />
-                  ))
+                  (productsToDisplay?.length > 0) ? (
+                    productsToDisplay.map((product, i) => (
+                      <ProductCard
+                        index={i}
+                        key={product._id}
+                        product={product}
+                      />
+                    ))
+                  ) : (
+                    <motion.p
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                    >
+                      No product(s) found.
+                    </motion.p>
+                  )
                 }
               </AnimatePresence>
               <motion.div layout>
