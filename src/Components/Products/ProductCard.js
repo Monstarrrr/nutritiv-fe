@@ -19,8 +19,8 @@ export const ProductCard = ({ product, index }) => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ 
-        duration: 0.8, 
-        // delay: index * 0.05 
+        duration: 0.32,
+        delay: index * 0.05
       }}
     >
       {/* GENERAL INFO */}

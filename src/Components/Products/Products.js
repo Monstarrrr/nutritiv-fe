@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import nutritivApi from '../../Api/nutritivApi';
 import { ProductCard } from './ProductCard';
 import { Pagination } from '@mui/material';
-import { AnimatePresence, LayoutGroup, motion } from 'framer-motion';
+import { AnimatePresence, LayoutGroup, motion, Reorder } from 'framer-motion';
 
 export const Products = () => {  
   console.log("###########-Products-###########")
@@ -256,7 +256,7 @@ export const Products = () => {
               {/* <motion.div layout> */}
               <AnimatePresence>
                 {
-                  (productsToDisplay?.length > 0) ? (
+                  productsToDisplay?.length > 0 ? (
                     productsToDisplay.map((product, i) => (
                       <ProductCard
                         index={i}

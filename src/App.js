@@ -97,15 +97,31 @@ function App() {
     } else if(oAuthStatus === "successRegistration") {
       navigate(
         '/login', 
-        { state: { msg: oAuthMessage, username: oAuthUsername } }
+        { state: 
+          { 
+            msg: oAuthMessage, 
+            username: oAuthUsername 
+          } 
+        }
       )
     } else if(oAuthStatus === "failed") {
       navigate(
         '/login', 
-        { state: { msg: oAuthMessage, username: oAuthUsername } }
+        { state: 
+          { 
+            msg: oAuthMessage, 
+            username: oAuthUsername 
+          } 
+        }
       )
     }
-  }, [navigate, oAuthAccessToken, oAuthMessage, oAuthStatus, oAuthUsername]);
+  }, [
+    navigate, 
+    oAuthAccessToken, 
+    oAuthMessage, 
+    oAuthStatus, 
+    oAuthUsername
+  ]);
 
   console.log('# gettingtUserInfo :', gettingUserInfo)
 
