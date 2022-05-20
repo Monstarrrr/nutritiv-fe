@@ -235,6 +235,8 @@ export default function LoginPage() {
           <OAuth provider="google"/>
           <br />
           <OAuth provider="facebook"/>
+          <br />
+          <OAuth provider="github"/>
         </>
       )}
       {
