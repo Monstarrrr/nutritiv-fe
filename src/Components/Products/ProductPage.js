@@ -200,7 +200,7 @@ export const ProductPage = () => {
         }
       </div>
       {
-        errorOutOfStock && <p style={{color: "red"}}>Out of stock</p>
+        errorOutOfStock && <p style={{color: "red"}}>Not enough stock</p>
       }
       <br />
       {/* DROPDOWN */}
