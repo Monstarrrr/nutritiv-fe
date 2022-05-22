@@ -161,8 +161,23 @@ export const ProductPage = () => {
       <h2>
         { product.title }
       </h2>
+      {
+        product.imgs?.map((img, i) => (
+          <img
+            key={i}
+            src={
+              `${process.env.REACT_APP_S3_ADDRESS}${process.env.REACT_APP_S3_PRODUCTS}${img}`
+            } 
+            alt={`product ${i}`} 
+          />
+        ))
+      }
       <div>
         {/* RADIO BUTTON */}
+        <b>
+          Load:
+        </b>
+        <br />
         {
           product.productItems.map((item, i) => (
             <React.Fragment key={i}>
@@ -187,7 +202,12 @@ export const ProductPage = () => {
       {
         errorOutOfStock && <p style={{color: "red"}}>Out of stock</p>
       }
+      <br />
       {/* DROPDOWN */}
+      <b>
+        Quantity:
+      </b>
+      <br />
       {
         <select
           disabled={!availableQuantity}
@@ -209,6 +229,8 @@ export const ProductPage = () => {
           }
         </select>
       }
+      <br />
+      <br />
       {/* BUTTON */}
       <button
         disabled={!cartSelection.quantity}
