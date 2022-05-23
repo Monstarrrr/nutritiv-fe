@@ -228,7 +228,7 @@ export default function LoginPage() {
               }
             </label>
             <div>
-              <input value="Submit" type="submit" />
+              <input value="Login" type="submit" />
             </div>
             <br />
           </form>

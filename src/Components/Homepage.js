@@ -34,9 +34,18 @@ export const Welcome = () => {
           </p>
           <p style={{color: "green"}}>
             <span role="note" aria-label='checkmark'>
-              ✔️ v1.0
+              ✔️ v1.0.1 - Patch
+              <br />
+              <ul>
+                <li>
+                  Fixed third party authentication link
+                </li>
+              </ul>
+            </span>
+            <br />
+            <span role="note" aria-label='checkmark'>
+              ✔️ v1.0.0 - Major release (no design included)
               <br/>
-              Basic functionalities done for beta release; no design included :
               <ul>
                 <li>
                   Register / Login with email
