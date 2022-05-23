@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import nutritivApi from '../../Api/nutritivApi';
 import { updateUserCartQuantity } from '../../Redux/reducers/user';
+import { motion } from 'framer-motion';
 
 export const ProductPage = () => {
   const loggedIn = useSelector(state => state.user.loggedIn)
@@ -157,7 +158,7 @@ export const ProductPage = () => {
   console.log('# countInStock :', countInStock)
 
   return (
-    <>
+    <motion.div>
       <h2>
         { product.title }
       </h2>
@@ -250,6 +251,6 @@ export const ProductPage = () => {
       {
         loadingAdding && <p>Adding {productTitle} to cart...</p>
       }
-    </>
+    </motion.div>
   )
 }
