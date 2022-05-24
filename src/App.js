@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Routes, Route, useLocation, Navigate, Outlet, useSearchParams, useNavigate } from 'react-router-dom';
 import { loadStripe } from '@stripe/stripe-js';
 import { updateUser, updateUserCartQuantity } from './Redux/reducers/user';
-import nutritivApi from './Api/nutritivApi';
+import nutritivApi, { baseURL } from './Api/nutritivApi';
 import { Elements } from '@stripe/react-stripe-js';
 import Register from './Components/Authentication/Register.js';
 import Login from './Components/Authentication/Login.js';
@@ -13,11 +13,11 @@ import { CheckoutSuccess } from './Components/Payment/CheckoutSuccess';
 import { CheckoutCancel } from './Components/Payment/CheckoutCancel';
 import { ProductPage } from './Components/Products/ProductPage';
 import { Cart } from './Components/Payment/Cart';
-import { Welcome } from './Components/Homepage';
-import { PageNotFound } from './Components/PageNotFound';
+import { Welcome } from './Components/Homepage/Homepage';
+import { PageNotFound } from './Components/PageNotFound/PageNotFound';
 import { ChatConnection } from './Components/Chat/ChatConnection';
 import { AnimatePresence } from 'framer-motion';
-import Navbar from './Components/Navbar';
+import Navbar from './Components/Navbar/Navbar';
 
 // init stripe
 const stripePromise = loadStripe(
@@ -79,7 +79,10 @@ function App() {
   
   // Validate oAuth
   useEffect(() => {
-    if(oAuthStatus === "successLogin") {
+    if(
+      oAuthStatus === "successLogin" || 
+      oAuthStatus === "successRegistration"
+    ) {
       console.log("Condition success oAuth");
       let fetchApi = async () => {
         try {
@@ -94,16 +97,6 @@ function App() {
         }
       }
       fetchApi();
-    } else if(oAuthStatus === "successRegistration") {
-      navigate(
-        '/login', 
-        { state: 
-          { 
-            msg: oAuthMessage, 
-            username: oAuthUsername 
-          } 
-        }
-      )
     } else if(oAuthStatus === "failed") {
       navigate(
         '/login', 

@@ -21,9 +21,11 @@ export const Chat = () => {
   const [socketError, setSocketError] = useState(false)
   
   // CHATS INFO
-  const [chatsInfos, setChatsInfo] = useState([])
+  const [chatsInfos, setChatsInfos] = useState([])
   const [activeChatId, setActiveChatId] = useState(null)
   
+  console.log('# chatsInfos :', chatsInfos)
+
   // CHATS CONTENT
   const [chat, setChat] = useState(null)
   const [messageToAdd, setMessageToAdd] = useState(null)
@@ -124,7 +126,7 @@ export const Chat = () => {
           nutritivApi.request(requests[1]).catch(useNull),
         ]).then(function([chats, users]) {
           setAllUsers(users.data)
-          setChatsInfo(chats.data)
+          setChatsInfos(chats.data)
           setActiveChatId(chats.data[0]._id)
           chatboxBottomRef.current?.scrollIntoView()
         }).catch(function([chats, users]) {
@@ -222,7 +224,7 @@ export const Chat = () => {
         socketError && <p style={{color: "red"}}>There was an error with socket.io</p>
       }
       {
-        chatsInfos.map(chatInfo => (
+        chatsInfos && chatsInfos.map(chatInfo => (
           <React.Fragment key={chatInfo._id}>
             <br />
             <button

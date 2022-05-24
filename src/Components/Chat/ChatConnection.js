@@ -14,12 +14,18 @@ export const ChatConnection = () => {
   useEffect(() => {
     let fetchApi = async () => {
       try {
-        await nutritivApi.get(
+        const { data } = await nutritivApi.get(
           `/chats/`
         )
-        dispatch(
-          updateUser({ hasChat: true })
-        )
+        if(data.success) {
+          dispatch(
+            updateUser({ hasChat: true })
+          )
+        } else {
+          dispatch(
+            updateUser({ hasChat: false })
+          )
+        }
       } catch(err) {
         console.log(
           '/chats/?messagesQty=1', err

@@ -26,13 +26,14 @@ export const Welcome = () => {
           <p>
             <b>Important note(s):</b>
           </p>
-          <p style={{color: "brown"}}>
+          <div style={{color: "brown"}}>
             <span role="note" aria-label='note'>
               ⚠️
             </span> 
             This project is work in progress, but feel free to look around & create an account.
-          </p>
-          <p style={{color: "green"}}>
+          </div>
+          <br />
+          <div style={{color: "green"}}>
             <span role="note" aria-label='checkmark'>
               ✔️ v1.0.1 - Patch
               <br />
@@ -73,7 +74,7 @@ export const Welcome = () => {
                 </li>
               </ul>
             </span>
-          </p>
+          </div>
         </div>
         <h2 className={styles.title}>
           <span
