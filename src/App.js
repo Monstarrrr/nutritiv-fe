@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Routes, Route, useLocation, Navigate, Outlet, useSearchParams, useNavigate } from 'react-router-dom';
 import { loadStripe } from '@stripe/stripe-js';
 import { updateUser, updateUserCartQuantity } from './Redux/reducers/user';
-import nutritivApi, { baseURL } from './Api/nutritivApi';
+import nutritivApi from './Api/nutritivApi';
 import { Elements } from '@stripe/react-stripe-js';
 import Register from './Components/Authentication/Register.js';
 import Login from './Components/Authentication/Login.js';
@@ -80,7 +80,7 @@ function App() {
   // Validate oAuth
   useEffect(() => {
     if(
-      oAuthStatus === "successLogin" || 
+      oAuthStatus === "successLogin" ||
       oAuthStatus === "successRegistration"
     ) {
       console.log("Condition success oAuth");
@@ -115,9 +115,7 @@ function App() {
     oAuthStatus, 
     oAuthUsername
   ]);
-
-  console.log('# gettingtUserInfo :', gettingUserInfo)
-
+  
   // RESTRICTED ROUTES
   const Restricted = ({ type }) => {
     const cartSelection = location.state?.cartSelection;

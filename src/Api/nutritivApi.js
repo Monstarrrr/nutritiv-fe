@@ -24,6 +24,8 @@ const nutritivApi = axios.create({
 nutritivApi.interceptors.request.use(req => {
   const refreshToken = localStorage.getItem(storageKeys.refreshToken);
   const accessToken = localStorage.getItem(storageKeys.accessToken);
+  console.log('# accessToken :', accessToken)
+  console.log('# refreshToken :', refreshToken)
   req.headers.access_token = accessToken;
   req.headers.refresh_token = refreshToken;
   console.log("# Interceptor req :", req)
@@ -49,6 +51,12 @@ nutritivApi.interceptors.response.use(res => {
     localStorage.setItem(
       'twofa_token',
       res.headers.twofa_token
+    )
+  }
+  if(res.headers.new_twofa_token) {
+    localStorage.setItem(
+      'new_twofa_token',
+      res.headers.new_twofa_token
     )
   }
   if(res.data.loggedIn === false) {

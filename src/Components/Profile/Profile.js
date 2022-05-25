@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { ProfileTFA } from './ProfileTFA';
 import { ProfileAddress } from './ProfileAddress';
 import { ProfileAvatar } from './ProfileAvatar';
 import { ProfileEmail } from './ProfileEmail';
@@ -29,31 +30,41 @@ export default function Profile() {
   return (
     <div>
       <h1>Profile</h1>
+      
       <hr />
       <ProfileAvatar 
         userInfo={userInfo} 
       />
       <br />
+      
       <hr />
       <ProfileUsername 
         userInfo={userInfo} 
       />
       <br />
+      
       <hr />
       <ProfileEmail 
         userInfo={userInfo} 
       />
       <br />
+      
       <hr />
       <ProfilePassword />
       <br />
+      
+      <hr />
+      <ProfileTFA userInfo={userInfo} />
+      <br />
+
       <hr />
       <ProfileAddress userInfo={userInfo} />
       <br />
+
       <hr />
-      {/* Is admin: {userInfo.isAdmin?.toString()} */}
+      Is admin: {userInfo.isAdmin?.toString()}
       <br />
-      {/* Is verified: {userInfo.isVerified?.toString()} */}
+      Is verified: {userInfo.isVerified?.toString()}
       <br />
     </div>
   )

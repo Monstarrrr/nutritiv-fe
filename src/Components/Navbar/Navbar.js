@@ -1,17 +1,16 @@
-import React, { useEffect } from 'react';
-import { useMotionValue, useSpring, useTransform } from 'framer-motion';
+import React from 'react';
+import { useMotionValue, useTransform } from 'framer-motion';
 import { useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { Logout } from '../Authentication/Logout';
 import { motion } from 'framer-motion';
-import styles from './Navbar.module.scss';
 
 export default function Navbar() {
   const user = useSelector(state => state.user)
   const navigate = useNavigate();
   
   const y = useMotionValue(0);
-  const width = useTransform(y, [-10, 300], [0, 100])
+  const width = useTransform(y, [-10, 300], ["0vw", "98vw"])
   const scale = useTransform(y, [0, 100], [1, 1.5])
   
   return (
@@ -26,7 +25,12 @@ export default function Navbar() {
       >
         TEST
       </motion.div> */}
-      <Link className='test' to="/">HOMEPAGE</Link>
+      <Link 
+        className='test' 
+        to="/"
+      >
+        HOMEPAGE
+      </Link>
       <span>----</span>
       <Link to="/products">
         PRODUCTS
