@@ -52,6 +52,9 @@ export const ProfileTFA = ({ userInfo }) => {
       )
       setInputTFA(initialInputTFA)
       setTFAStatus("enabled")
+      dispatch(
+        updateUser({hasTFA: true})
+      )
     } catch(err) {
       console.error(':', err)
     }
@@ -71,6 +74,8 @@ export const ProfileTFA = ({ userInfo }) => {
       dispatch(
         updateUser({hasTFA: false})
       )
+      setTFAStatus("disabled")
+      setQrCode(null)
       setInputTFA(initialInputTFA)
       console.log('# post /auth/disable2FA :', data)
     } catch(err) {
