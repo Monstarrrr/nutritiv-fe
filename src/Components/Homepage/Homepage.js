@@ -2,6 +2,36 @@ import React from 'react'
 import { useSelector } from 'react-redux';
 import styles from './Homepage.module.scss';
 
+const releases = [
+  {
+    version: "v1.1.1",
+    note: "",
+    changes: [
+      "2FA Authentication (Enable/Disable + Recovery codes)",
+    ]
+  },
+  {
+    version: "v1.0.1",
+    note: "Patch",
+    changes: [
+      "Fixed third party authentication link",
+    ],
+  },
+  {
+    version: "v1.0.0",
+    note: "First release (no design included)",
+    changes: [
+      "Register / Login with email",
+      "Register / Login with third party websites",
+      "Edit profile information",
+      "Displaying & filtering products",
+      "Add to cart / Remove from cart",
+      "Buy products with stripe (using test credit card)",
+      "Real-time chat",
+    ],
+  },
+]
+
 export const Welcome = () => {
   
   const loggedIn = useSelector(state => state.user.loggedIn)
@@ -14,7 +44,7 @@ export const Welcome = () => {
       },
     },
   }
-  
+
   return (
     <div 
       variants={pageAnimation} 
@@ -34,55 +64,37 @@ export const Welcome = () => {
           </div>
           <br />
           <div style={{color: "green"}}>
-            <span role="note" aria-label='checkmark'>
-              ✔️ v1.0.1 - Patch
-              <br />
-              <ul>
-                <li>
-                  Fixed third party authentication link
-                </li>
-              </ul>
-            </span>
-            <br />
-            <span role="note" aria-label='checkmark'>
-              ✔️ v1.0.0 - Major release (no design included)
-              <br/>
-              <ul>
-                <li>
-                  Register / Login with email
-                </li>
-                <li>
-                  Register / Login with third party websites
-                </li>
-                <li>
-                  2FA Authentication
-                </li>
-                <li>
-                  Edit profile information
-                </li>
-                <li>
-                  Displaying & filtering products
-                </li>
-                <li>
-                  Add to cart / Remove from cart
-                </li>
-                <li>
-                  Buy products with stripe (using test credit card)
-                </li>
-                <li>
-                  Real-time chat
-                </li>
-              </ul>
-            </span>
+            {
+              releases.map(release => (
+                <>
+                  <span role="note" aria-label='checkmark'>
+                    ✔️
+                  </span>
+                  <span>
+                    - {release.version}
+                  </span>
+                  <br />
+                  <ul>
+                    {
+                      release.changes.map(change => (
+                        <li>
+                          {change}
+                        </li>
+                      ))
+                    }
+                  </ul>
+                </>
+              ))
+            }
           </div>
         </div>
-        <h2 className={styles.title}>
+        <h1 className={styles.title}>
           <span
             whilehover={{opacity: 0.5}}
           >
             Homepage
           </span>
-        </h2>
+        </h1>
       </div>
       {
         !loggedIn && (

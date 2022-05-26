@@ -174,7 +174,7 @@ export default function LoginPage() {
   
   return (
     <div>
-      <h2>Login page</h2>
+      <h1>Login page</h1>
       {
         location.state?.msg && <p style={{color: "orange"}}>{location.state.msg}</p>
       }
