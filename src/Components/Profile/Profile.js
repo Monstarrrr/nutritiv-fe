@@ -10,16 +10,10 @@ import { ProfileUsername } from './ProfileUsername';
 export default function Profile() {
   const user = useSelector(state => state.user)
   const [userInfo, setUserInfo] = useState({})
-  
-  // const [newEmail, setNewEmail] = useState(null)
-  
+
   useEffect(() => {
     setUserInfo(user)
   }, [user]);
-  
-  // const handleChangeEmail = (e) => {
-  //   setNewEmail(e.target.value)
-  // }
   
   return (
     <div>
