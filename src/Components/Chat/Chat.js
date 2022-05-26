@@ -59,7 +59,7 @@ export const Chat = () => {
     });
     // CREATE ROOM
     socket.on("createRoom", ({ roomCreated }) => {
-      console.log('# roomCreated :', roomCreated)
+      // console.log('# roomCreated :', roomCreated)
     })
     // AUTH ERROR
     socket.on("connect_error", err => {

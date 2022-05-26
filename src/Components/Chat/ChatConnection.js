@@ -52,7 +52,10 @@ export const ChatConnection = () => {
       navigate(
         '/login',
         { state: 
-          { msg: "Please login and start a conversation right away!" }
+          { 
+            msg: "Please login and start a conversation right away!", 
+            from: `/chat`
+          }
         }
       );
     }

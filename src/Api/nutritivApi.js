@@ -28,8 +28,6 @@ const nutritivApi = axios.create({
 nutritivApi.interceptors.request.use(req => {
   const refreshToken = localStorage.getItem(storageKeys.refreshToken);
   const accessToken = localStorage.getItem(storageKeys.accessToken);
-  console.log('# accessToken :', accessToken)
-  console.log('# refreshToken :', refreshToken)
   req.headers.access_token = accessToken;
   req.headers.refresh_token = refreshToken;
   console.log("# Interceptor req :", req)

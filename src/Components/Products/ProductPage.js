@@ -4,7 +4,7 @@ import React, {
 } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
-import nutritivApi from '../../Api/nutritivApi';
+import nutritivApi, { s3URL } from '../../Api/nutritivApi';
 import { updateUserCartQuantity } from '../../Redux/reducers/user';
 import { motion } from 'framer-motion';
 
@@ -31,8 +31,6 @@ export const ProductPage = () => {
   const [loadingAdding, setLoadingAdding] = useState(false)
   const [successAddedToCart, setSuccessAddedToCart] = useState(false)
   const [errorOutOfStock, setErrorOutOfStock] = useState(false)
-  
-  console.log('# location.state :', location.state)
   
   // HANDLE ADD TO CART
   const handleAddToCart = async (loc) => {
@@ -155,8 +153,6 @@ export const ProductPage = () => {
     }
   }, [cartSelection.load, countInStock]);
 
-  console.log('# countInStock :', countInStock)
-
   return (
     <motion.div>
       <h2>
@@ -167,7 +163,7 @@ export const ProductPage = () => {
           <img
             key={i}
             src={
-              `${process.env.REACT_APP_S3_ADDRESS}${process.env.REACT_APP_S3_PRODUCTS}${img}`
+              `${s3URL}${img}`
             } 
             alt={`product ${i}`} 
           />

@@ -3,14 +3,13 @@ import axios from 'axios';
 import React, { 
   useCallback,
   useEffect,
-  useState, 
-  // useEffect 
+  useState,
 } from 'react';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import nutritivApi from '../../Api/nutritivApi';
 import { updateUser, updateUserCartQuantity } from '../../Redux/reducers/user';
-import { GoogleAuth, OAuth } from './OAuth';
+import { OAuth } from './OAuth';
 
 export default function LoginPage() {
   console.log("##### LoginPage render #####");

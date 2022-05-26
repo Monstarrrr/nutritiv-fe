@@ -30,13 +30,15 @@ function App() {
   const loggedIn = useSelector(state => state.user.loggedIn)
   const location = useLocation();
   const navigate = useNavigate();
+
+  console.log('# location.state :', location.state)
   
   const [searchParams] = useSearchParams();
   const oAuthStatus = searchParams.get('status');
-  // const oAuthStatusCode = searchParams.get('statusCode');
   const oAuthMessage = searchParams.get('message');
   const oAuthUsername = searchParams.get('username')
   const oAuthAccessToken = searchParams.get('accessToken');
+  // const oAuthStatusCode = searchParams.get('statusCode');
   
   // ON LOAD
   // Fetch user-self info
@@ -97,6 +99,7 @@ function App() {
         }
       }
       fetchApi();
+      // navigate('/')
     } else if(oAuthStatus === "failed") {
       navigate(
         '/login', 
