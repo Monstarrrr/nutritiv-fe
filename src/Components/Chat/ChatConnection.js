@@ -32,7 +32,7 @@ export const ChatConnection = () => {
         )
       }
     }
-    !hasChat && fetchApi();
+    loggedIn && !hasChat && fetchApi();
   });
   
   const handleConnectToChat = async () => {
