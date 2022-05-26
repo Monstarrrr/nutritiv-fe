@@ -7,7 +7,7 @@ const releases = [
     version: "v1.1.1",
     note: "",
     changes: [
-      "2FA Authentication (Enable/Disable + Recovery codes)",
+      "2FA Authentication (Enable/Disable)",
     ]
   },
   {
