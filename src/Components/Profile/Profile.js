@@ -11,17 +11,11 @@ export default function Profile() {
   const user = useSelector(state => state.user)
   const [userInfo, setUserInfo] = useState({})
   
-  // const [newUsername, setNewUsername] = useState(null)
   // const [newEmail, setNewEmail] = useState(null)
   
   useEffect(() => {
     setUserInfo(user)
   }, [user]);
-  
-  // HANDLERS
-  // const handleChangeUsername = (e) => {
-  //   setNewUsername(e.target.value)
-  // }
   
   // const handleChangeEmail = (e) => {
   //   setNewEmail(e.target.value)
