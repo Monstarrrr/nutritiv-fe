@@ -71,7 +71,7 @@ export const Welcome = () => {
                     ✔️
                   </span>
                   <span>
-                    - {release.version}
+                    {release.version} - {release.note}
                   </span>
                   <br />
                   <ul>
