@@ -37,7 +37,7 @@ export default function Navbar() {
       </Link>
       <span>----</span>
       <Link to="/chat">
-        CHAT
+        CHATS
       </Link>
       <span>----</span>
       {

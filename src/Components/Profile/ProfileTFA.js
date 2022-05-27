@@ -14,34 +14,34 @@ export const ProfileTFA = ({ userInfo }) => {
   const [qrCode, setQrCode] = useState(null)
   const [inputTFA, setInputTFA] = useState(initialInputTFA)
   
-  // Check 2FA status
+  // Check TFA status
   useEffect(() => {
-    setTFAStatus(userInfo.has2FA ? "enabled" : "disabled")
-  }, [userInfo.has2FA]);
+    setTFAStatus(userInfo.hasTFA ? "enabled" : "disabled")
+  }, [userInfo.hasTFA]);
   
   // Request qrCode
   const handleEnableTFA = async (e) => {
     e.preventDefault();
     try {
       const { data } = await nutritivApi.post(
-        `/auth/totpSecret`,
+        `/auth/TFASecret`,
       )
       setQrCode(data)
-      console.log('# post /auth/totpSecret :', data)
+      console.log('# post /auth/TFASecret :', data)
     } catch(err) {
-      console.error('/auth/totpSecret:', err)
+      console.error('/auth/TFASecret:', err)
     }
   }
   
-  // Enable 2FA
+  // Enable TFA
   const handleSubmitEnableTFA = async (e) => {
     e.preventDefault();
     const newTwoFaToken = localStorage.getItem('new_twofa_token')
     try {
       await nutritivApi.post(
-        `/auth/enable2FA`,
+        `/auth/enableTFA`,
         {
-          token: inputTFA.code,
+          code: inputTFA.code,
           password: inputTFA.password,
         },
         {
@@ -60,14 +60,14 @@ export const ProfileTFA = ({ userInfo }) => {
     }
   }
   
-  // Disable 2FA
+  // Disable TFA
   const handleDisableTFA = async (e) => {
     e.preventDefault();
     try {
       const { data } = await nutritivApi.post(
-        `/auth/disable2FA`,
+        `/auth/disableTFA`,
         {
-          token: inputTFA.code,
+          code: inputTFA.code,
           password: inputTFA.password,
         },
       )
@@ -77,9 +77,9 @@ export const ProfileTFA = ({ userInfo }) => {
       setTFAStatus("disabled")
       setQrCode(null)
       setInputTFA(initialInputTFA)
-      console.log('# post /auth/disable2FA :', data)
+      console.log('# post /auth/disableTFA :', data)
     } catch(err) {
-      console.error('/auth/disable2FA:', err)
+      console.error('/auth/disableTFA:', err)
     }
   }
   
@@ -95,20 +95,20 @@ export const ProfileTFA = ({ userInfo }) => {
   return (
     <div>
       <h3>
-        2 Factor Authentication (2FA)
+        2 Factor Authentication (TFA)
       </h3>
       { 
         TFAStatus === "enabled" ? (
           <>
             <p style={{color: "green"}}>
-              2FA is enabled.
+              TFA is enabled.
             </p>
             <form onSubmit={handleDisableTFA}>
               <input
                 name="code" 
                 onChange={handleChange}
                 value={inputTFA.code}
-                placeholder='2FA Code' 
+                placeholder='TFA Code' 
                 type="text"
               />
               <input 
@@ -132,14 +132,14 @@ export const ProfileTFA = ({ userInfo }) => {
                 alt="QR code"
               />
               <p>
-                Scan the QRCode with 2FA Google Authenticator and enter the code below:
+                Scan the QRCode with TFA Google Authenticator and enter the code below:
               </p>
               <form onSubmit={handleSubmitEnableTFA}>
                 <input
                   name="code" 
                   onChange={handleChange}
                   value={inputTFA.code}
-                  placeholder='2FA Code' 
+                  placeholder='TFA Code' 
                   type="text"
                 />
                 <input 
@@ -150,7 +150,7 @@ export const ProfileTFA = ({ userInfo }) => {
                   type="password" 
                 />
                 <input 
-                  value="Enable 2FA !" 
+                  value="Enable TFA !" 
                   type="submit" 
                 />
               </form>
@@ -158,7 +158,7 @@ export const ProfileTFA = ({ userInfo }) => {
           ) : (
             <>
               <p style={{color: "orange"}}>
-                2FA is disabled.
+                TFA is disabled.
               </p>
               <button onClick={handleEnableTFA}>
                 Enable

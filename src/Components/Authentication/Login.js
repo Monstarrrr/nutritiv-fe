@@ -140,7 +140,7 @@ export default function LoginPage() {
         error: "",
       })
       await nutritivApi.post(
-        `/auth/totpValidate`,
+        `/auth/TFAValidation`,
         {
           token: login.twoFaCode
         },

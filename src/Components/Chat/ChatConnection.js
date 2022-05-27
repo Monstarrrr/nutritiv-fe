@@ -8,6 +8,7 @@ import { Chat } from './Chat'
 export const ChatConnection = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const isAdmin = useSelector(state => state.user.isAdmin)
   const loggedIn = useSelector(state => state.user.loggedIn)
   const hasChat = useSelector(state => state.user.hasChat)
   
@@ -64,7 +65,7 @@ export const ChatConnection = () => {
   return (
     <div>
       <h2>
-        Chats
+        Chat(s)
       </h2>
       {hasChat ? (
         <Chat />

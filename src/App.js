@@ -30,7 +30,7 @@ function App() {
   const loggedIn = useSelector(state => state.user.loggedIn)
   const location = useLocation();
   const navigate = useNavigate();
-
+  
   console.log('# location.state :', location.state)
   
   const [searchParams] = useSearchParams();
@@ -99,7 +99,7 @@ function App() {
         }
       }
       fetchApi();
-      // navigate('/')
+      navigate('/')
     } else if(oAuthStatus === "failed") {
       navigate(
         '/login', 
