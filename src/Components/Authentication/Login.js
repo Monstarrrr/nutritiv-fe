@@ -142,7 +142,7 @@ export default function LoginPage() {
       await nutritivApi.post(
         `/auth/TFAValidation`,
         {
-          token: login.twoFaCode
+          code: login.twoFaCode
         },
         {
           headers: {

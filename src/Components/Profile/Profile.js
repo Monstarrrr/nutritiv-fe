@@ -6,6 +6,7 @@ import { ProfileAvatar } from './ProfileAvatar';
 import { ProfileEmail } from './ProfileEmail';
 import { ProfilePassword } from './ProfilePassword';
 import { ProfileUsername } from './ProfileUsername';
+import { ProfileDelete } from './ProfileDelete';
 
 export default function Profile() {
   const user = useSelector(state => state.user)
@@ -47,6 +48,10 @@ export default function Profile() {
 
       <hr />
       <ProfileAddress userInfo={userInfo} />
+      <br />
+
+      <hr />
+      <ProfileDelete userInfo={userInfo} />
       <br />
 
       <hr />

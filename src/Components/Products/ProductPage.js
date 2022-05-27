@@ -75,37 +75,44 @@ export const ProductPage = () => {
   }
   
   useEffect(() => {
-    if(location.state?.cartSelection?.productId) {
-      setCartSelection(location.state.cartSelection);
-      handleAddToCart({cartSelection: location.state.cartSelection});
+    let isMounted = true;
+    if(isMounted) {
+      if(location.state?.cartSelection?.productId) {
+        setCartSelection(location.state.cartSelection);
+        handleAddToCart({cartSelection: location.state.cartSelection});
+      }
     }
+    return () => { isMounted = false }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   
   // GET PRODUCT (by title)
   useEffect(() => {
+    let isMounted = true;
     try {
       async function fetchApi() {
         const { data } = await nutritivApi.get(
           `/products/findByTitle/${productTitle}`
         )
-        
-        const fetchedProduct = data.Product[0]
-        setProduct(fetchedProduct);
-
-        if(location.state?.productId){
-          setCartSelection(location.state)
-        } else {
-          setCartSelection(prevState => ({
-            ...prevState,
-            productId: fetchedProduct._id
-          }))
+        if(isMounted){
+          const fetchedProduct = data.Product[0]
+          setProduct(fetchedProduct);
+          
+          if(location.state?.productId){
+            setCartSelection(location.state)
+          } else {
+            setCartSelection(prevState => ({
+              ...prevState,
+              productId: fetchedProduct._id
+            }))
+          }
         }
       }
       fetchApi();
     } catch (err) {
       console.log('# /products/findByTitle err :', err)
     }
+    return () => { isMounted = false }
   }, [productTitle, location.state])
   
   // HANDLE SELECTED ITEM
@@ -128,19 +135,23 @@ export const ProductPage = () => {
 
   // GET STOCK
   useEffect(() => {
+    let isMounted = true;
     if(product._id) {
       try {
         async function fetchApi() {
           const { data } = await nutritivApi.get(
             `/products/countInStock/${product._id}`
           );
-          setCountInStock(data.countInStock)
+          if(isMounted){
+            setCountInStock(data.countInStock)
+          }
         }
         fetchApi();
       } catch (err) {
         console.log('# apiGetCountInStock err :', err)
       }
     }
+    return () => { isMounted = false }
   }, [updateStock, product._id]);
   
   // HANDLE QUANTITY

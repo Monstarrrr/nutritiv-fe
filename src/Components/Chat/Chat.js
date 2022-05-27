@@ -240,7 +240,7 @@ export const Chat = () => {
           There was an error with socket.io
         </p>
       )}
-      {chatsInfos && chatsInfos.map(chatInfo => (
+      {isAdmin && chatsInfos && chatsInfos.map(chatInfo => (
         <React.Fragment key={chatInfo._id}>
           <br />
           {isAdmin && (
@@ -333,7 +333,8 @@ export const Chat = () => {
         style={{display: 'flex'}}
       >
         <input 
-          onChange={handleMessageToBeSent} 
+          onChange={handleMessageToBeSent}
+          placeholder="Type something..." 
           style={{flexGrow: 1}}
           type="text" 
           value={messageToBeSent} 

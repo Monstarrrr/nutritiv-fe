@@ -4,6 +4,13 @@ import styles from './Homepage.module.scss';
 
 const releases = [
   {
+    version: "v1.2.1",
+    note: "",
+    changes: [
+      "Account Deletion",
+    ]
+  },
+  {
     version: "v1.1.1",
     note: "",
     changes: [
@@ -12,14 +19,14 @@ const releases = [
   },
   {
     version: "v1.0.1",
-    note: "Patch",
+    note: "",
     changes: [
       "Fixed third party authentication link",
     ],
   },
   {
     version: "v1.0.0",
-    note: "First release (no design included)",
+    note: "- Alpha release (no design included)",
     changes: [
       "Register / Login with email",
       "Register / Login with third party websites",
@@ -65,25 +72,25 @@ export const Welcome = () => {
           <br />
           <div style={{color: "green"}}>
             {
-              releases.map(release => (
-                <>
+              releases.map((release, i) => (
+                <React.Fragment key={i}>
                   <span role="note" aria-label='checkmark'>
                     ✔️
                   </span>
                   <span>
-                    {release.version} - {release.note}
+                    {release.version} {release.note}
                   </span>
                   <br />
                   <ul>
                     {
-                      release.changes.map(change => (
-                        <li>
+                      release.changes.map((change, i) => (
+                        <li key={i}>
                           {change}
                         </li>
                       ))
                     }
                   </ul>
-                </>
+                </React.Fragment>
               ))
             }
           </div>
