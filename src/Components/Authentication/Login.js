@@ -15,10 +15,12 @@ export default function LoginPage() {
   console.log("##### LoginPage render #####");
   const dispatch = useDispatch();
   const location = useLocation();
-  
+  const navigate = useNavigate();
+
   const [login, setLogin] = useState({
     username: "",
     password: "",
+    emailForgotPassword: "",
     twoFaCode: "",
     loading: false,
     success: "",
@@ -29,8 +31,8 @@ export default function LoginPage() {
     password: login.password,
   }
   const [hasTFA, setHasTFA] = useState(false)
-  
-  
+  const [showForgotPassword, setShowForgotPassword] = useState(false)
+
   useEffect(() => {
     console.log('# location :', location)
     if(location.state?.username) {
@@ -40,7 +42,7 @@ export default function LoginPage() {
       }))
     }
   }, [location]);
-
+  
   const handleChange = (e) => {
     setLogin({...login,
       [e.target.name]: e.target.value,
@@ -188,12 +190,14 @@ export default function LoginPage() {
             />
             <input value="Submit" type="submit" />
           </form>
+          <button onClick={() => navigate('/forgot-2FA')}>
+            Forgot 2FA
+          </button>
         </>
       ) : (
         <>
           <form onSubmit={ handleSubmit }>
             <label>
-              <p>Username</p>
               <input 
                 name="username" 
                 onChange={ handleChange } 
@@ -210,7 +214,6 @@ export default function LoginPage() {
               }
             </label>
             <label>
-              <p>Password</p>
               <input 
                 name="password" 
                 onChange={ handleChange }
@@ -231,6 +234,14 @@ export default function LoginPage() {
             </div>
             <br />
           </form>
+          {
+            <button onClick={() => navigate('/forgot-password')}>
+              Forgot password
+            </button>
+          }
+          <br/><br />
+          or
+          <br/><br />
           <OAuth provider="google"/>
           <br />
           <OAuth provider="facebook"/>

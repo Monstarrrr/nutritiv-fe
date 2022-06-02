@@ -18,6 +18,8 @@ import { PageNotFound } from './Components/PageNotFound/PageNotFound';
 import { ChatConnection } from './Components/Chat/ChatConnection';
 import { AnimatePresence } from 'framer-motion';
 import Navbar from './Components/Navbar/Navbar';
+import { ForgotPassword } from './Components/Authentication/ForgotPassword';
+import { ForgotTFA } from './Components/Authentication/ForgotTFA';
 
 // init stripe
 const stripePromise = loadStripe(
@@ -182,6 +184,8 @@ function App() {
             <Route element={<Restricted type="guest" />}>
               <Route path="login" element={<Login/>} />
               <Route path="register" element={<Register/>} />
+              <Route path="forgot-password" element={<ForgotPassword/>} />
+              <Route path="forgot-2FA" element={<ForgotTFA/>} />
             </Route>
           {/* </Route> */}
         </Routes>
