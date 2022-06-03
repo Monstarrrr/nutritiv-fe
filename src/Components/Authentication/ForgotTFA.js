@@ -7,7 +7,8 @@ export const ForgotTFA = () => {
   const [recoverySuccessfull, setRecoverySuccessfull] = useState(false)
   const [qrCodeUrl, setQrCodeUrl] = useState("")
   const [qrCodeSecret, setQrCodeSecret] = useState("")
-  
+  const [error, setError] = useState("")
+
   const handleForgotPassword = async (e) => {
     e.preventDefault();
     const twoFaToken = localStorage.getItem('twofa_token');
@@ -26,6 +27,7 @@ export const ForgotTFA = () => {
         setQrCodeSecret(data.qrCodeSecret)
       }
     } catch(err) {
+      setError(err.response?.data?.err)
       console.error('/auth/login:', err)
     }
   }
@@ -48,7 +50,6 @@ export const ForgotTFA = () => {
             <QrCodeTFA 
               qrCodeUrl={qrCodeUrl}
               qrCodeSecret={qrCodeSecret}
-              // setTFAStatus
             />
           </>
         ) : (
@@ -64,6 +65,9 @@ export const ForgotTFA = () => {
             <input value="Recover 2FA" type="submit"/>
           </form>
         )
+      }
+      {
+        error && <p style={{color: "red"}}>{error}</p>
       }
     </>
   )

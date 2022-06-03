@@ -31,8 +31,7 @@ export default function LoginPage() {
     password: login.password,
   }
   const [hasTFA, setHasTFA] = useState(false)
-  const [showForgotPassword, setShowForgotPassword] = useState(false)
-
+  
   useEffect(() => {
     console.log('# location :', location)
     if(location.state?.username) {
@@ -93,7 +92,8 @@ export default function LoginPage() {
       } catch (err) {
         console.log('# loginData err :', err)
         setLogin({...login,
-          error: "Incorrect credentials"
+          loading: false,
+          error: err.response?.data?.info?.message
         })
       }
     }
@@ -162,11 +162,13 @@ export default function LoginPage() {
       err.response?.data?.err ? (
         setLogin({
           ...login,
+          loading: false,
           error: err.response.data.err
         })
       ) : (
         setLogin({
           ...login,
+          loading: false,
           error: "There was an error on our end, please try again in 1 minute."
         })
       )

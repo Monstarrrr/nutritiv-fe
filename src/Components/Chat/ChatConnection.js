@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import nutritivApi from '../../Api/nutritivApi'
@@ -11,6 +11,7 @@ export const ChatConnection = () => {
   const isAdmin = useSelector(state => state.user.isAdmin)
   const loggedIn = useSelector(state => state.user.loggedIn)
   const hasChat = useSelector(state => state.user.hasChat)
+  const [error, setError] = useState("")
   
   useEffect(() => {
     let fetchApi = async () => {
@@ -47,6 +48,7 @@ export const ChatConnection = () => {
         )
         console.log('# post /chats/create :', data)
       } catch(err) {
+        setError(err.response?.data?.err)
         console.log('/chats/create:', err)
       }
     } else {
@@ -61,6 +63,8 @@ export const ChatConnection = () => {
       );
     }
   }
+
+  console.log('# error :', error)
   
   return (
     <div>
@@ -74,6 +78,10 @@ export const ChatConnection = () => {
           Connect
         </button>
       )}
+      {/* Error */}
+      {
+        error && <p style={{color: "red"}}>{error}</p>
+      }
     </div>
   )
 }

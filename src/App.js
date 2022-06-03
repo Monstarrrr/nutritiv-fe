@@ -42,6 +42,17 @@ function App() {
   const oAuthAccessToken = searchParams.get('accessToken');
   // const oAuthStatusCode = searchParams.get('statusCode');
   
+  useEffect(() => {
+    const titleWithoutSpecials = location.pathname.replace(/[^a-zA-Z ]/g, "");
+    if(titleWithoutSpecials){
+      console.log('# titleWithoutSpecials :', titleWithoutSpecials)
+      const fixedTitle = titleWithoutSpecials[0].toUpperCase() + titleWithoutSpecials.substring(1);
+      document.title = `Nutritiv | ${fixedTitle}`
+    } else {
+      document.title = "Nutritiv | Homepage"
+    }
+  }, [location.pathname]);
+
   // ON LOAD
   // Fetch user-self info
   useEffect(() => {

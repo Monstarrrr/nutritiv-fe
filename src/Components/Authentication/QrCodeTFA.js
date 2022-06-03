@@ -38,6 +38,8 @@ const initialInputTFA = {
 export const QrCodeTFA = ({ qrCodeUrl, qrCodeSecret, setTFAStatus }) => {
   const qrCodeRef = useRef(null);
   const [inputTFA, setInputTFA] = useState(initialInputTFA)
+  const [error, setError] = useState("")
+  
   const dispatch = useDispatch();
   
   console.log('# qrCodeUrl :', qrCodeUrl)
@@ -81,6 +83,7 @@ export const QrCodeTFA = ({ qrCodeUrl, qrCodeSecret, setTFAStatus }) => {
         setTFAStatus("enabled")
       }
     } catch(err) {
+      setError(err.response?.data?.err)
       console.error(':', err)
     }
     return () => { isMounted = false }
@@ -120,6 +123,9 @@ export const QrCodeTFA = ({ qrCodeUrl, qrCodeSecret, setTFAStatus }) => {
           type="submit" 
         />
       </form>
+      {
+        error && <p style={{color: "red"}}>{error}</p>
+      }
     </>
   )
 }

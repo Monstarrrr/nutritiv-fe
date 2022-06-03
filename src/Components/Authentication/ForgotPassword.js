@@ -3,7 +3,7 @@ import nutritivApi from '../../Api/nutritivApi';
 
 export const ForgotPassword = () => {
   const [email, setEmail] = useState("")
-  
+  const [error, setError] = useState("")
   
   const handleForgotPassword = async (e) => {
     e.preventDefault();
@@ -12,9 +12,10 @@ export const ForgotPassword = () => {
         `/auth/forget_pwd`,
         { email }
       )
-      console.log('# get /auth/login :', data)
+      console.log('# get /auth/forget_pwd :', data)
     } catch(err) {
-      console.error('/auth/login:', err)
+      setError(err.response?.data?.err)
+      console.error('/auth/forget_pwd:', err)
     }
   }
   
@@ -37,6 +38,7 @@ export const ForgotPassword = () => {
         />
         <input value="Set new password" type="submit"/>
       </form>
+      {error && <p style={{color: "red"}}>{error}</p>}
     </>
   )
 }

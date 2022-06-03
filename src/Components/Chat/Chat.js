@@ -106,6 +106,8 @@ export const Chat = () => {
       console.log('# lastMessageOfRoom :', lastMessageOfRoom)
     // )
   }, [lastMessageOfRoom]);
+
+  console.log('# socketError :', socketError)
   
   // ############### //
   

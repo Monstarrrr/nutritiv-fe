@@ -18,6 +18,8 @@ export const ProfileTFA = () => {
   const [qrCodeSecret, setQrCodeSecret] = useState(null)
   const [inputTFA, setInputTFA] = useState(initialInputTFA)
   
+  const [error, setError] = useState("")
+  
   // Check TFA status
   useEffect(() => {
     setTFAStatus(userInfo.hasTFA ? "enabled" : "disabled")
@@ -34,6 +36,7 @@ export const ProfileTFA = () => {
       setQrCodeSecret(data.qrCodeSecret)
       console.log('# post /auth/TFASecret :', data)
     } catch(err) {
+      setError(err.response?.data?.err)
       console.error('/auth/TFASecret:', err)
     }
   }
@@ -57,6 +60,7 @@ export const ProfileTFA = () => {
       setInputTFA(initialInputTFA)
       console.log('# post /auth/disableTFA :', data)
     } catch(err) {
+      setError(err.response?.data?.err)
       console.error('/auth/disableTFA:', err)
     }
   }
@@ -118,6 +122,9 @@ export const ProfileTFA = () => {
             </>
           )
         )
+      }
+      {
+        error && <p style={{ color: "red" }}>{error}</p>
       }
     </div>
   )
