@@ -187,10 +187,11 @@ export const Chat = () => {
       "messages": [
         ...chat.messages,
         {
-          "id": tempMessageId,
-          "text": messageToBeSent,
-          "sender": userId,
-          "loading": true
+          id: tempMessageId,
+          text: messageToBeSent,
+          sender: userId,
+          loading: true,
+          error: false,
         }
       ]
     })
@@ -207,13 +208,29 @@ export const Chat = () => {
         ...chat,
         "messages": [
           ...chat.messages,
-          {...data, loading: false}
+          {
+            ...data, 
+            loading: false
+          }
         ]
       })
       const { text, id } = data;
       let roomId = activeChatId;
       socket.emit('chatting', {text, id, token, roomId})
     } catch(err) {
+      setChat({
+        ...chat,
+        "messages": [
+          ...chat.messages,
+          {
+            id: tempMessageId,
+            text: messageToBeSent,
+            sender: userId,
+            loading: false,
+            error: true,
+          }
+        ]
+      })
       console.error('/chats/message/ :', err)
     }
   }
@@ -297,9 +314,15 @@ export const Chat = () => {
                             🕘
                           </span>
                         ) : (
-                          <span role="status" aria-label='sent'>
-                            ✔️
-                          </span>
+                          message.error ? (
+                            <span role="status" aria-label='sent'>
+                              ❌
+                            </span>
+                          ) : (
+                            <span role="status" aria-label='sent'>
+                              ✔️
+                            </span>
+                          )
                         )}
                         {message.text}
                       </p>
