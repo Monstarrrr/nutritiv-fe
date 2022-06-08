@@ -1,6 +1,9 @@
+import { OrbitControls } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
-import React from 'react'
+import React, { Suspense } from 'react'
 import { useSelector } from 'react-redux';
+import Shoe from '../Models/Shoe';
+import BluePill from '../Models/Shoe';
 import styles from './Homepage.module.scss';
 
 const releases = [
@@ -106,13 +109,29 @@ export const Homepage = () => {
       
       {/* THREE JS TESTING */}
       
-      <div style={{height: "500px", width: "500px"}}>
+      <div style={{
+          background: "darkblue", 
+          height: "500px", 
+          width: "500px"
+      }}>
         <Canvas>
-          <mesh>
-            <directionalLight color="red" position={[0,0,5]} />
-            <boxGeometry attach='geometry' args={[2,2,2]}/>
-            <meshLambertMaterial  />
-          </mesh>
+          <Suspense fallback={null}>
+            <Shoe />
+            <ambientLight />
+            <spotLight 
+              angle={0.1} 
+              castShadow
+              intensity={0.2}
+              penumbra={1}
+              position={[10,15,10]}
+            /> 
+            <OrbitControls 
+              autoRotate
+              enablePan
+              enableZoom={false}
+              enableRotate 
+            />
+          </Suspense>
         </Canvas>
       </div>
       
