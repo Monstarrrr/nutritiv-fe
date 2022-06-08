@@ -22,8 +22,6 @@ export const ForgotPassword = () => {
   const handleChange = (e) => {
     setEmail(e.target.value)  
   }
-
-  console.log('# email :', email)
   
   return (
     <>

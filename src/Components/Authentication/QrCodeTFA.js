@@ -1,6 +1,7 @@
 import QRCodeStyling from 'qr-code-styling';
 import React, { useEffect, useRef, useState } from 'react'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import nutritivApi from '../../Api/nutritivApi';
 import { updateUser } from '../../Redux/reducers/user';
 
@@ -37,12 +38,12 @@ const initialInputTFA = {
 
 export const QrCodeTFA = ({ qrCodeUrl, qrCodeSecret, setTFAStatus }) => {
   const qrCodeRef = useRef(null);
+  const navigate = useNavigate();
+  const isLoggedIn = useSelector(state => state.user.loggedIn)
   const [inputTFA, setInputTFA] = useState(initialInputTFA)
   const [error, setError] = useState("")
   
   const dispatch = useDispatch();
-  
-  console.log('# qrCodeUrl :', qrCodeUrl)
 
   useEffect(() => {
     qrCode.append(qrCodeRef.current);
@@ -80,7 +81,10 @@ export const QrCodeTFA = ({ qrCodeUrl, qrCodeSecret, setTFAStatus }) => {
           You will be asked to type them if you loose access to your device.\n
           ${data.TFARecovery.join(" ")}`
         )
-        setTFAStatus("enabled")
+        setTFAStatus && setTFAStatus("enabled")
+        if(!isLoggedIn) {
+          navigate('/login')
+        }
       }
     } catch(err) {
       setError(err.response?.data?.err)

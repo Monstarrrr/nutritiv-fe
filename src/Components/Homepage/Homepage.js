@@ -1,4 +1,5 @@
-import React from 'react'
+import { Canvas } from '@react-three/fiber';
+import React, { useRef } from 'react'
 import { useSelector } from 'react-redux';
 import styles from './Homepage.module.scss';
 
@@ -39,8 +40,7 @@ const releases = [
   },
 ]
 
-export const Welcome = () => {
-  
+export const Homepage = () => {
   const loggedIn = useSelector(state => state.user.loggedIn)
   
   const pageAnimation = {
@@ -103,6 +103,20 @@ export const Welcome = () => {
           </span>
         </h1>
       </div>
+      
+      {/* THREE JS TESTING */}
+      
+      <div style={{height: "500px", width: "500px"}}>
+        <Canvas>
+          <mesh>
+            <directionalLight color="red" position={[0,0,5]} />
+            <boxGeometry attach='geometry' args={[2,2,2]}/>
+            <meshLambertMaterial  />
+          </mesh>
+        </Canvas>
+      </div>
+      
+      {/* ---------------- */}
       {
         !loggedIn && (
           <div>

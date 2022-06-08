@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import nutritivApi from '../../Api/nutritivApi'
 import { updateUser } from '../../Redux/reducers/user'
-import QRCodeStyling from "qr-code-styling";
 import { QrCodeTFA } from '../Authentication/QrCodeTFA';
 
 const initialInputTFA = {

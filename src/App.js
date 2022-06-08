@@ -13,13 +13,14 @@ import { CheckoutSuccess } from './Components/Payment/CheckoutSuccess';
 import { CheckoutCancel } from './Components/Payment/CheckoutCancel';
 import { ProductPage } from './Components/Products/ProductPage';
 import { Cart } from './Components/Payment/Cart';
-import { Welcome } from './Components/Homepage/Homepage';
+import { Homepage } from './Components/Homepage/Homepage';
 import { PageNotFound } from './Components/PageNotFound/PageNotFound';
 import { ChatConnection } from './Components/Chat/ChatConnection';
 import { AnimatePresence } from 'framer-motion';
 import Navbar from './Components/Navbar/Navbar';
 import { ForgotPassword } from './Components/Authentication/ForgotPassword';
 import { ForgotTFA } from './Components/Authentication/ForgotTFA';
+import { ResetPassword } from './Components/Authentication/ResetPassword';
 
 // init stripe
 const stripePromise = loadStripe(
@@ -40,8 +41,8 @@ function App() {
   const oAuthMessage = searchParams.get('message');
   const oAuthUsername = searchParams.get('username')
   const oAuthAccessToken = searchParams.get('accessToken');
-  // const oAuthStatusCode = searchParams.get('statusCode');
   
+  // App titles
   useEffect(() => {
     const titleWithoutSpecials = location.pathname.replace(/[^a-zA-Z ]/g, "");
     if(titleWithoutSpecials){
@@ -52,7 +53,7 @@ function App() {
       document.title = "Nutritiv | Homepage"
     }
   }, [location.pathname]);
-
+  
   // ON LOAD
   // Fetch user-self info
   useEffect(() => {
@@ -92,7 +93,7 @@ function App() {
     return () => { isSubscribed = false }
   }, [dispatch, gettingUserInfo]);
   
-  // Validate oAuth
+  // oAuth
   useEffect(() => {
     if(
       oAuthStatus === "successLogin" ||
@@ -123,7 +124,7 @@ function App() {
           } 
         }
       )
-    }
+    } 
   }, [
     navigate, 
     oAuthAccessToken, 
@@ -174,9 +175,10 @@ function App() {
       <AnimatePresence exitBeforeEnter>
         <Routes location={location} key={location.pathname}>
           {/* PUBLIC */}
-          {/* <Route path="*" element={<Navigate replace to="/page-not-found"/>} /> */}
           {/* <Route path="/" element={<GeneralLayout/>}> */}
-            <Route index element={<Welcome/>} />
+            {/* <Route index element={<Welcome/>} /> */}
+            <Route path="/" element={<Navigate replace to="/welcome"/>} />
+            <Route path="/welcome" element={<Homepage/>} />
             <Route path="/products" element={<Products/>} />
             <Route path="/product">
               <Route path=":productTitle" element={<ProductPage/>} />
@@ -196,6 +198,7 @@ function App() {
               <Route path="login" element={<Login/>} />
               <Route path="register" element={<Register/>} />
               <Route path="forgot-password" element={<ForgotPassword/>} />
+              <Route path="reset-password" element={<ResetPassword/>} />
               <Route path="forgot-2FA" element={<ForgotTFA/>} />
             </Route>
           {/* </Route> */}

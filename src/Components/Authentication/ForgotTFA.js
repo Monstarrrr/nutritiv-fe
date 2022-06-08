@@ -35,9 +35,6 @@ export const ForgotTFA = () => {
   const handleChange = (e) => {
     setRecoveryWords(e.target.value.split(" "))
   }
-  
-  console.log('# qrCodeUrl :', qrCodeUrl)
-  console.log('# qrCodeSecret :', qrCodeSecret)
 
   return (
     <>
