@@ -1,5 +1,5 @@
 import { Canvas } from '@react-three/fiber';
-import React, { useRef } from 'react'
+import React from 'react'
 import { useSelector } from 'react-redux';
 import styles from './Homepage.module.scss';
 
