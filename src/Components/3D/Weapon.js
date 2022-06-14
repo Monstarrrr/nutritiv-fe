@@ -11,10 +11,11 @@ import { useGLTF } from '@react-three/drei'
 
 export default function Model({ ...props }) {
   const group = useRef();
+  const { position } = props;
   const { nodes, materials } = useGLTF('/weapon.gltf')
   return (
     <>
-      <group position={[0,1,0]} scale={0.01} ref={group} {...props} dispose={null}>
+      <group position={position} scale={0.01} ref={group} {...props} dispose={null}>
         <group rotation={[-Math.PI / 2, 0, 0]}>
           <group rotation={[Math.PI / 2, 0, 0]}>
             <group position={[2.46, 11.56, -51.89]} rotation={[-Math.PI / 2, 0, 0]} scale={100}>

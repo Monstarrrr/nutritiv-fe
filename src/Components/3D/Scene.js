@@ -17,14 +17,11 @@ softShadows({
 })
 
 export const Scene = () => {
-  const directionalLightRef = useRef();
-  // const spotLightRef2 = useRef();
-  // const spotLightRef3 = useRef();
-  // const spotLightRef4 = useRef();
-  useHelper(directionalLightRef, DirectionalLightHelper, 'cyan')
-  // useHelper(spotLightRef2, SpotLightHelper, 'yellow')
-  // useHelper(spotLightRef3, SpotLightHelper, 'green')
-  // useHelper(spotLightRef4, SpotLightHelper, 'pink')
+  const directionalLightRef1 = useRef();
+  const directionalLightRef2 = useRef();
+  useHelper(directionalLightRef1, DirectionalLightHelper)
+  useHelper(directionalLightRef2, DirectionalLightHelper)
+  // useHelper(spotLightRef, SpotLightHelper, 'pink')
   
   // On every frame change
   useFrame(state => {
@@ -41,31 +38,46 @@ export const Scene = () => {
       />
       
       {/* MODEL */}
-      <Model />
+      <Model position={[0, 0.5, 0]}/>
       
       {/* GROUND */}
-      <Plane receiveShadow rotation-x={-Math.PI / 2} position={[0, -0.5, 0]} args={[10, 10, 4, 4]}>
+      {/* <Plane receiveShadow rotation-x={-Math.PI / 2} position={[0, -1.7, 0]} args={[10, 10, 4, 4]}>
         <meshBasicMaterial opacity={0.5} />
-      </Plane>
-      <Plane receiveShadow rotation-x={-Math.PI / 2} position={[0, -0.5, 0]} args={[10, 10, 4, 4]}>
+      </Plane> */}
+      {/* SHADOW */}
+      <Plane receiveShadow rotation-x={-Math.PI / 2} position={[0, -1.7, 0]} args={[10, 10, 4, 4]}>
         <shadowMaterial opacity={0.5} />
       </Plane>
       
       {/* LIGHTS */}
+      {/* RIGHT */}
       <directionalLight
         castShadow
         intensity={2}
-        position={[10,10,0]}
-        ref={directionalLightRef}
+        position={[3, 5, -0.2]}
+        ref={directionalLightRef1}
         shadow-mapSize-width={1024}
         shadow-mapSize-height={1024}
-        shadow-camera-far={50}
+        shadow-camera-far={30}
         shadow-camera-left={-10}
         shadow-camera-right={10}
         shadow-camera-top={10}
         shadow-camera-bottom={-10}
       />
-      
+      {/* LEFT */}
+      <directionalLight
+        castShadow
+        intensity={2}
+        position={[-3, 5, 0.3]}
+        ref={directionalLightRef2}
+        shadow-mapSize-width={1024}
+        shadow-mapSize-height={1024}
+        shadow-camera-far={30}
+        shadow-camera-left={-10}
+        shadow-camera-right={10}
+        shadow-camera-top={10}
+        shadow-camera-bottom={-10}
+      />
 
       {/* <spotLight
         angle={angleToRadians(40)} 
