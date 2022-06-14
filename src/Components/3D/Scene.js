@@ -116,8 +116,8 @@ export const Scene = () => {
         autoRotate
         autoRotateSpeed={1}
         enablePan
-        enableZoom={true}
-        enableRotate
+        enableZoom={false}
+        enableRotate={true}
         makeDefault
       />
       
