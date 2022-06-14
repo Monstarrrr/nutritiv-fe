@@ -1,4 +1,4 @@
-import { Environment, OrbitControls, PerspectiveCamera, useHelper } from '@react-three/drei'
+import { Environment, OrbitControls, PerspectiveCamera, Plane, softShadows, useHelper } from '@react-three/drei'
 import React, { Suspense, useRef } from 'react'
 import Model from './Weapon'
 import { 
@@ -8,12 +8,20 @@ import {
 import { useFrame } from '@react-three/fiber';
 import angleToRadians from '../../Helpers/angleToRadians';
 
+softShadows({
+  frustum: 3.75,
+  size: 0.005,
+  near: 9.5,
+  samples: 30,
+  rings: 11, // Rings (default: 11) must be a int
+})
+
 export const Scene = () => {
-  const spotLightRef1 = useRef();
-  const spotLightRef2 = useRef();
-  const spotLightRef3 = useRef();
-  const spotLightRef4 = useRef();
-  // useHelper(spotLightRef1, SpotLightHelper, 'cyan')
+  const directionalLightRef = useRef();
+  // const spotLightRef2 = useRef();
+  // const spotLightRef3 = useRef();
+  // const spotLightRef4 = useRef();
+  useHelper(directionalLightRef, DirectionalLightHelper, 'cyan')
   // useHelper(spotLightRef2, SpotLightHelper, 'yellow')
   // useHelper(spotLightRef3, SpotLightHelper, 'green')
   // useHelper(spotLightRef4, SpotLightHelper, 'pink')
@@ -26,18 +34,6 @@ export const Scene = () => {
   return (
     <Suspense fallback={null}>
       
-      {/* ENVIRONMENT */}
-      <Environment
-        background
-      >
-        <mesh>
-          <sphereGeometry args={[10, 20, 20]} />
-          <meshBasicMaterial
-            color="black"
-            side={BackSide}
-          />
-        </mesh>
-      </Environment>
       {/* CAMERA */}
       <PerspectiveCamera
         makeDefault
@@ -48,65 +44,60 @@ export const Scene = () => {
       <Model />
       
       {/* GROUND */}
-      <group>
-        <mesh
-          receiveShadow
-          rotation={[-Math.PI/2, 0, 0]} 
-          position={[0, -2.3, 0]}
-        >
-          <planeBufferGeometry 
-            attach='geometry' 
-            args={[12,12]} 
-          />
-          <meshStandardMaterial 
-            attach='material'
-            color="black"
-          />
-        </mesh>
-      </group>
+      <Plane receiveShadow rotation-x={-Math.PI / 2} position={[0, -0.5, 0]} args={[10, 10, 4, 4]}>
+        <meshBasicMaterial opacity={0.5} />
+      </Plane>
+      <Plane receiveShadow rotation-x={-Math.PI / 2} position={[0, -0.5, 0]} args={[10, 10, 4, 4]}>
+        <shadowMaterial opacity={0.5} />
+      </Plane>
       
       {/* LIGHTS */}
-      <spotLight
-        angle={angleToRadians(40)} 
+      <directionalLight
         castShadow
-        decay={2}
-        distance={20}
-        penumbra={1}
-        position={[-6,1.5,0]}
-        power={3}
-        ref={spotLightRef1}
+        intensity={2}
+        position={[10,10,0]}
+        ref={directionalLightRef}
+        shadow-mapSize-width={1024}
+        shadow-mapSize-height={1024}
+        shadow-camera-far={50}
+        shadow-camera-left={-10}
+        shadow-camera-right={10}
+        shadow-camera-top={10}
+        shadow-camera-bottom={-10}
       />
-      <spotLight
+      
+
+      {/* <spotLight
         angle={angleToRadians(40)} 
         castShadow
         decay={2}
-        distance={20}
+        distance={16}
         penumbra={1}
         position={[6,1.5,0]}
-        power={3}
+        power={10}
         ref={spotLightRef2}
       />
       <spotLight
         angle={angleToRadians(40)} 
         castShadow
         decay={2}
-        distance={20}
+        distance={14}
         penumbra={1}
         position={[0,1.5,-6]}
-        power={3}
+        power={10}
         ref={spotLightRef3}
       />
       <spotLight
         angle={angleToRadians(40)} 
         castShadow
         decay={2}
-        distance={20}
+        distance={11}
         penumbra={1}
         position={[0,1.5,6]}
-        power={3}
+        power={10}
         ref={spotLightRef4}
-      />
-      {/* <ambientLight intensity={0.2}/> */}
+      /> */}
+      {/* <ambientLight intensity={1}/> */}
       
       {/* CONTROLS */}
       <OrbitControls

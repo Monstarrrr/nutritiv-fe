@@ -5,8 +5,6 @@ import { useSelector } from 'react-redux';
 import styles from './Homepage.module.scss';
 import { Scene } from '../3D/Scene';
 
-softShadows();
-
 const releases = [
   {
     version: "v1.2.1",
@@ -108,7 +106,6 @@ export const Homepage = () => {
       </div>
       
       {/* THREE JS TESTING */}
-      
       <div style={{
           background: "transparent", 
           height: "500px", 
@@ -122,6 +119,7 @@ export const Homepage = () => {
           }}
           shadows
         >
+          {/* <SoftShadowsScene /> */}
           <Scene />
         </Canvas>
       </div>

@@ -8,14 +8,13 @@ title: AKS-74U PBS/АКС-74У ПБС
 
 import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
-import angleToRadians from '../../Helpers/angleToRadians';
 
 export default function Model({ ...props }) {
   const group = useRef();
   const { nodes, materials } = useGLTF('/weapon.gltf')
   return (
     <>
-      <group scale={0.01} ref={group} {...props} dispose={null}>
+      <group position={[0,1,0]} scale={0.01} ref={group} {...props} dispose={null}>
         <group rotation={[-Math.PI / 2, 0, 0]}>
           <group rotation={[Math.PI / 2, 0, 0]}>
             <group position={[2.46, 11.56, -51.89]} rotation={[-Math.PI / 2, 0, 0]} scale={100}>
