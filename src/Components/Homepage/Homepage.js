@@ -1,10 +1,11 @@
-import { OrbitControls } from '@react-three/drei';
+import React from 'react';
+import { softShadows } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
-import React, { Suspense } from 'react'
 import { useSelector } from 'react-redux';
-import Shoe from '../Models/Shoe';
-import BluePill from '../Models/Shoe';
 import styles from './Homepage.module.scss';
+import { Scene } from '../3D/Scene';
+
+softShadows();
 
 const releases = [
   {
@@ -45,7 +46,6 @@ const releases = [
 
 export const Homepage = () => {
   const loggedIn = useSelector(state => state.user.loggedIn)
-  
   const pageAnimation = {
     exit: {
       opacity: 0,
@@ -110,28 +110,19 @@ export const Homepage = () => {
       {/* THREE JS TESTING */}
       
       <div style={{
-          background: "darkblue", 
+          background: "transparent", 
           height: "500px", 
           width: "500px"
       }}>
-        <Canvas>
-          <Suspense fallback={null}>
-            <Shoe />
-            <ambientLight />
-            <spotLight 
-              angle={0.1} 
-              castShadow
-              intensity={0.2}
-              penumbra={1}
-              position={[10,15,10]}
-            /> 
-            <OrbitControls 
-              autoRotate
-              enablePan
-              enableZoom={false}
-              enableRotate 
-            />
-          </Suspense>
+        <Canvas 
+          camera={{ 
+            fov: 50, 
+            near: 1, 
+            far: 50
+          }}
+          shadows
+        >
+          <Scene />
         </Canvas>
       </div>
       
