@@ -9,10 +9,10 @@ title: AKS-74U PBS/АКС-74У ПБС
 import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
 
-export default function Model({ ...props }) {
+export default function WeaponModel({ ...props }) {
   const group = useRef();
   const { position } = props;
-  const { nodes, materials } = useGLTF('/weapon.gltf')
+  const { nodes, materials } = useGLTF('/weapon/weapon.gltf')
   return (
     <>
       <group position={position} scale={0.01} ref={group} {...props} dispose={null}>

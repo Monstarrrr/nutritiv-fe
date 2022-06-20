@@ -1,5 +1,4 @@
 import React from 'react';
-import { softShadows } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import { useSelector } from 'react-redux';
 import styles from './Homepage.module.scss';
@@ -111,15 +110,7 @@ export const Homepage = () => {
           height: "500px", 
           width: "500px"
       }}>
-        <Canvas 
-          camera={{ 
-            fov: 50, 
-            near: 1, 
-            far: 50
-          }}
-          shadows
-        >
-          {/* <SoftShadowsScene /> */}
+        <Canvas shadows>
           <Scene />
         </Canvas>
       </div>

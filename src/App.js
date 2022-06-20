@@ -34,8 +34,6 @@ function App() {
   const location = useLocation();
   const navigate = useNavigate();
   
-  console.log('# location.state :', location.state)
-  
   const [searchParams] = useSearchParams();
   const oAuthStatus = searchParams.get('status');
   const oAuthMessage = searchParams.get('message');
@@ -46,7 +44,6 @@ function App() {
   useEffect(() => {
     const titleWithoutSpecials = location.pathname.replace(/[^a-zA-Z ]/g, "");
     if(titleWithoutSpecials){
-      console.log('# titleWithoutSpecials :', titleWithoutSpecials)
       const fixedTitle = titleWithoutSpecials[0].toUpperCase() + titleWithoutSpecials.substring(1);
       document.title = `Nutritiv | ${fixedTitle}`
     } else {
@@ -57,6 +54,8 @@ function App() {
   // ON LOAD
   // Fetch user-self info
   useEffect(() => {
+    console.log("useEffect() fetch");
+
     let isSubscribed = true;
 
     if(isSubscribed) {
@@ -95,6 +94,7 @@ function App() {
   
   // oAuth
   useEffect(() => {
+    console.log("useEffect() oAuth");
     if(
       oAuthStatus === "successLogin" ||
       oAuthStatus === "successRegistration"
@@ -124,7 +124,7 @@ function App() {
           } 
         }
       )
-    } 
+    }
   }, [
     navigate, 
     oAuthAccessToken, 
@@ -135,8 +135,8 @@ function App() {
   
   // RESTRICTED ROUTES
   const Restricted = ({ type }) => {
+    console.log("RESTRICTED ROUTE RENDER");
     const cartSelection = location.state?.cartSelection;
-    console.log('# APP.JS - cartSelection :', cartSelection)
     const isLogged = () => {
       console.log('# loggedIn :', loggedIn)
       return loggedIn;
