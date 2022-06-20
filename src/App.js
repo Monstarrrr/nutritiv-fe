@@ -57,7 +57,7 @@ function App() {
     console.log("useEffect() fetch");
 
     let isSubscribed = true;
-
+    
     if(isSubscribed) {
       const method = "get"
       const requestsUrl = ['/users/self', '/carts/self']
@@ -134,7 +134,7 @@ function App() {
   ]);
   
   // RESTRICTED ROUTES
-  const Restricted = ({ type }) => {
+  const Restricted = ({ routeType }) => {
     console.log("RESTRICTED ROUTE RENDER");
     const cartSelection = location.state?.cartSelection;
     const isLogged = () => {
@@ -142,11 +142,11 @@ function App() {
       return loggedIn;
     }
     if(loggedIn !== null) {
-      if(type === "guest") {
+      if(routeType === "guest") {
         if(isLogged()){
           if(location.state?.from) {
-            return <Navigate 
-              replace 
+            return <Navigate
+              replace
               to={location.state.from}
               state={{cartSelection: cartSelection}}
             />
@@ -156,9 +156,9 @@ function App() {
         } else {
           return <Outlet />;
         }
-      } else if(type === "user") {
+      } else if(routeType === "user") {
         return isLogged() ? (
-          <Outlet /> 
+          <Outlet />
         ) : <Navigate replace to="/" />;
       }
     } else {
@@ -189,17 +189,17 @@ function App() {
             <Route path="/page-not-found" element={<PageNotFound/>} />
             {/* PRIVATE */}
             {/* RESTRICTED - USER */}
-            <Route element={<Restricted type="user" />}>
+            <Route element={<Restricted routeType="user" />}>
               <Route path="/profile" element={<Profile/>} />
               <Route path="/cart" element={<Cart/>} />
             </Route>
             {/* RESTRICTED - GUEST */}
-            <Route element={<Restricted type="guest" />}>
-              <Route path="login" element={<Login/>} />
-              <Route path="register" element={<Register/>} />
-              <Route path="forgot-password" element={<ForgotPassword/>} />
-              <Route path="reset-password" element={<ResetPassword/>} />
-              <Route path="forgot-2FA" element={<ForgotTFA/>} />
+            <Route element={<Restricted routeType="guest" />}>
+              <Route path="/login" element={<Login/>} />
+              <Route path="/register" element={<Register/>} />
+              <Route path="/forgot-password" element={<ForgotPassword/>} />
+              <Route path="/reset-password" element={<ResetPassword/>} />
+              <Route path="/forgot-2FA" element={<ForgotTFA/>} />
             </Route>
           {/* </Route> */}
         </Routes>

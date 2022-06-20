@@ -20,13 +20,14 @@ export const store = createStore(
 // INJECT STORE TO USE IT IN AXIOS INTERCEPTORS
 injectStore(store);
 
-const root = createRoot(document.getElementById('root'))
+const container = document.getElementById('root');
+const root = createRoot(container);
 root.render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <Provider store={store}>
       <BrowserRouter>
         <App />
       </BrowserRouter>
     </Provider>
-  </React.StrictMode>,
+  // </React.StrictMode>,
 );

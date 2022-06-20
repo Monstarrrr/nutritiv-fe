@@ -261,14 +261,19 @@ export const Chat = () => {
         <React.Fragment key={chatInfo._id}>
           <br />
           {isAdmin && (
-            <button id={chatInfo._id} onClick={handleDeleteChat}>X</button>
+            <button 
+              id={chatInfo._id} 
+              onClick={handleDeleteChat}
+            >
+              X
+            </button>
           )}
           <button
             id={chatInfo._id} 
             onClick={handleActiveChat}
             style={chatInfo._id === activeChatId ? {color: "grey"} : undefined}
           >
-            {chatInfo._id}
+            {chatInfo.name}
           </button>
           {chatInfo._id === activeChatId && (
             <span role="img" aria-label='active' >
