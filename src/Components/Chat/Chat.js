@@ -19,13 +19,11 @@ export const Chat = () => {
   
   const [allUsers, setAllUsers] = useState(null)
   
-  const [socketError, setSocketError] = useState(false)
+  const [socketError, setSocketError] = useState("")
   
   // CHATS INFO
   const [chatsInfos, setChatsInfos] = useState([])
   const [activeChatId, setActiveChatId] = useState(null)
-  
-  console.log('# chatsInfos :', chatsInfos)
   
   // CHATS CONTENT
   const [chat, setChat] = useState(null)
@@ -50,11 +48,11 @@ export const Chat = () => {
   // CONNECTIONS TO CHANNELS
   useEffect(() => {
     socket.on('connect', () => {
-      console.log("Connected to socket-io")
+      console.log("socket-io | connected")
     })
     // MESSAGE
     socket.on("chatting", ({ id, text, sender, roomId }) => {
-      console.log('# socket io res :', id, text, sender, roomId)
+      console.log('# socket-io | chatting res :', id, text, sender, roomId)
       setMessageToAdd({ id, text, sender, roomId })
     });
     // CREATE ROOM
@@ -63,19 +61,19 @@ export const Chat = () => {
     })
     // AUTH ERROR
     socket.on("connect_error", err => {
+      console.log('socket-io | connection error .:')
       console.log(err);
-      console.log('connect_error')
-      setSocketError({error: "connect_error"})
+      setSocketError(err.message)
     });
     // OTHER ERROR
     socket.on("error", err => {
-      console.log('error')
+      console.log('socket-io | error .:')
       console.log(err);
-      setSocketError({error: "error"})
+      setSocketError(err.message)
     });
     return () => {
       socket.on('disconnect', () => {
-        console.log("disconnected from socket-io")
+        console.log("socket-io | disconnected")
       })
     }
   }, []);

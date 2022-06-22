@@ -8,7 +8,6 @@ import { Chat } from './Chat'
 export const ChatConnection = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const isAdmin = useSelector(state => state.user.isAdmin)
   const loggedIn = useSelector(state => state.user.loggedIn)
   const hasChat = useSelector(state => state.user.hasChat)
   const [error, setError] = useState("")
@@ -63,8 +62,6 @@ export const ChatConnection = () => {
       );
     }
   }
-
-  console.log('# error :', error)
   
   return (
     <div>

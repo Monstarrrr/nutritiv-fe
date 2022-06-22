@@ -23,6 +23,7 @@ injectStore(store);
 const container = document.getElementById('root');
 const root = createRoot(container);
 root.render(
+  // StrictMode causing bugs in React v18
   // <React.StrictMode>
     <Provider store={store}>
       <BrowserRouter>

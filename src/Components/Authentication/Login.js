@@ -3,6 +3,7 @@ import axios from 'axios';
 import React, { 
   useCallback,
   useEffect,
+  useRef,
   useState,
 } from 'react';
 import { useDispatch } from 'react-redux';
@@ -16,7 +17,7 @@ export default function LoginPage() {
   const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
-
+  
   const [login, setLogin] = useState({
     username: "",
     password: "",
@@ -26,14 +27,16 @@ export default function LoginPage() {
     success: "",
     error: "",
   })
-  const loginData = {
+  const loginDataRef = useRef();
+  loginDataRef.current = {
     username: login.username,
     password: login.password,
   }
+
   const [hasTFA, setHasTFA] = useState(false)
-  
+
+  // Auto-set login credentials
   useEffect(() => {
-    console.log('# location :', location)
     if(location.state?.username) {
       setLogin(prevState => ({
         ...prevState, 
@@ -42,12 +45,7 @@ export default function LoginPage() {
     }
   }, [location]);
   
-  const handleChange = (e) => {
-    setLogin({...login,
-      [e.target.name]: e.target.value,
-    })
-  }
-  
+  // Form validation
   const validation = () => {
     let usernameError = !login.username
     let passwordError = !login.password
@@ -58,44 +56,94 @@ export default function LoginPage() {
       error: ""
     })
     
-    // returns true only if both are false
     return !usernameError && !passwordError
   }
   
-  const handleSubmit = async (e) => {
+  const onLoad = () => {
+    if (window.grecaptcha) {
+      window.grecaptcha.render(
+        "recaptcha", 
+        {
+          badge: "bottomright",
+          callback: onCaptchaCompleted,
+          size: "invisible",
+          sitekey: "6Lekw4sgAAAAAIY_DQO_d8uE7fOBQr-g9lqEOqGP",
+          theme: "light",
+          // expiredCallback: onCaptchaExpired,
+          // errorCallback: onCaptchaError
+        }
+      );
+    } else {
+      console.error("Could not load grecaptcha");
+    }
+  }
+  
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://www.google.com/recaptcha/api.js";
+    script.async = true;
+    script.defer = true;
+    document.body.appendChild(script);
+    
+    window.addEventListener("load", onLoad);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  
+  const onCaptchaCompleted = async (captchaToken) => {
+    // LOGIN
+    try {
+      setLogin({...login,
+        loading: true,
+        error: "",
+      })
+      // Add captchaToken to the req body
+      let req = {
+        ...loginDataRef.current,
+        captcha: captchaToken
+      }
+
+      const { data } = await nutritivApi.post(
+        `/auth/login`,
+        req
+      )
+      setLogin({...login,
+        loading: false,
+        error: "",
+      })
+
+      // ASK FOR 2FA or REDIRECT
+      data.hasTFA ? (
+        setHasTFA(data.hasTFA)
+      ) : (
+        getUserInfo()
+      )
+
+    } catch (err) {
+      console.log('# loginData err :', err)
+      setLogin({...login,
+        loading: false,
+        error: err.response?.data?.info?.message
+      })
+    }
+  };
+  
+  const handleChange = (e) => {
+    setLogin({...login,
+      [e.target.name]: e.target.value,
+    })
+  }
+  
+  const handleSubmit = e => {
     e.preventDefault();
+    
     // We store and use the return value 
     // because the state won't update yet
     const isValid = validation();
     
     if(isValid) {
-      // LOGIN
-      try {
-        setLogin({...login,
-          loading: true,
-          error: "",
-        })
-        const { data } = await nutritivApi.post(
-          `/auth/login`,
-          loginData
-        )
-        setLogin({...login,
-          loading: false,
-          error: "",
-        })
-        // ASK FOR 2FA or REDIRECT
-        data.hasTFA ? (
-          setHasTFA(data.hasTFA)
-        ) : (
-          getUserInfo()
-        )
-      } catch (err) {
-        console.log('# loginData err :', err)
-        setLogin({...login,
-          loading: false,
-          error: err.response?.data?.info?.message
-        })
-      }
+      // reCAPTCHA
+      window.grecaptcha.execute();
     }
   }
   
@@ -232,7 +280,11 @@ export default function LoginPage() {
               }
             </label>
             <div>
-              <input value="Login" type="submit" />
+              <input
+                value="Login"
+                type="submit" 
+              />
+              <div id="recaptcha"/>
             </div>
             <br />
           </form>

@@ -54,7 +54,6 @@ function App() {
   // ON LOAD
   // Fetch user-self info
   useEffect(() => {
-    console.log("useEffect() fetch");
 
     let isSubscribed = true;
     
@@ -94,7 +93,6 @@ function App() {
   
   // oAuth
   useEffect(() => {
-    console.log("useEffect() oAuth");
     if(
       oAuthStatus === "successLogin" ||
       oAuthStatus === "successRegistration"
@@ -135,7 +133,6 @@ function App() {
   
   // RESTRICTED ROUTES
   const Restricted = ({ routeType }) => {
-    console.log("RESTRICTED ROUTE RENDER");
     const cartSelection = location.state?.cartSelection;
     const isLogged = () => {
       console.log('# loggedIn :', loggedIn)
