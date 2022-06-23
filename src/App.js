@@ -21,6 +21,8 @@ import Navbar from './Components/Navbar/Navbar';
 import { ForgotPassword } from './Components/Authentication/ForgotPassword';
 import { ForgotTFA } from './Components/Authentication/ForgotTFA';
 import { ResetPassword } from './Components/Authentication/ResetPassword';
+import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3';
+import './App.scss';
 
 // init stripe
 const stripePromise = loadStripe(
@@ -168,39 +170,43 @@ function App() {
       stripe={stripePromise}
       // options={stripeOptions}
     >
-      <Navbar />
-      <AnimatePresence exitBeforeEnter>
-        <Routes location={location} key={location.pathname}>
-          {/* PUBLIC */}
-          {/* <Route path="/" element={<GeneralLayout/>}> */}
-            {/* <Route index element={<Welcome/>} /> */}
-            <Route path="/" element={<Navigate replace to="/welcome"/>} />
-            <Route path="/welcome" element={<Homepage/>} />
-            <Route path="/products" element={<Products/>} />
-            <Route path="/product">
-              <Route path=":productTitle" element={<ProductPage/>} />
-            </Route>
-            <Route path="/chat" element={<ChatConnection/>} /> 
-            <Route path="/cancel" element={<CheckoutCancel/>} /> 
-            <Route path="/success" element={<CheckoutSuccess/>} />
-            <Route path="/page-not-found" element={<PageNotFound/>} />
-            {/* PRIVATE */}
-            {/* RESTRICTED - USER */}
-            <Route element={<Restricted routeType="user" />}>
-              <Route path="/profile" element={<Profile/>} />
-              <Route path="/cart" element={<Cart/>} />
-            </Route>
-            {/* RESTRICTED - GUEST */}
-            <Route element={<Restricted routeType="guest" />}>
-              <Route path="/login" element={<Login/>} />
-              <Route path="/register" element={<Register/>} />
-              <Route path="/forgot-password" element={<ForgotPassword/>} />
-              <Route path="/reset-password" element={<ResetPassword/>} />
-              <Route path="/forgot-2FA" element={<ForgotTFA/>} />
-            </Route>
-          {/* </Route> */}
-        </Routes>
-      </AnimatePresence>
+      <GoogleReCaptchaProvider
+        reCaptchaKey='6Lekw4sgAAAAAIY_DQO_d8uE7fOBQr-g9lqEOqGP'
+      >
+        <Navbar />
+        <AnimatePresence exitBeforeEnter>
+          <Routes location={location} key={location.pathname}>
+            {/* PUBLIC */}
+            {/* <Route path="/" element={<GeneralLayout/>}> */}
+              {/* <Route index element={<Welcome/>} /> */}
+              <Route path="/" element={<Navigate replace to="/welcome"/>} />
+              <Route path="/welcome" element={<Homepage/>} />
+              <Route path="/products" element={<Products/>} />
+              <Route path="/product">
+                <Route path=":productTitle" element={<ProductPage/>} />
+              </Route>
+              <Route path="/chat" element={<ChatConnection/>} /> 
+              <Route path="/cancel" element={<CheckoutCancel/>} /> 
+              <Route path="/success" element={<CheckoutSuccess/>} />
+              <Route path="/page-not-found" element={<PageNotFound/>} />
+              {/* PRIVATE */}
+              {/* RESTRICTED - USER */}
+              <Route element={<Restricted routeType="user" />}>
+                <Route path="/profile" element={<Profile/>} />
+                <Route path="/cart" element={<Cart/>} />
+              </Route>
+              {/* RESTRICTED - GUEST */}
+              <Route element={<Restricted routeType="guest" />}>
+                <Route path="/login" element={<Login/>} />
+                <Route path="/register" element={<Register/>} />
+                <Route path="/forgot-password" element={<ForgotPassword/>} />
+                <Route path="/reset-password" element={<ResetPassword/>} />
+                <Route path="/forgot-2FA" element={<ForgotTFA/>} />
+              </Route>
+            {/* </Route> */}
+          </Routes>
+        </AnimatePresence>
+      </GoogleReCaptchaProvider>
     </Elements>
   );
 }

@@ -11,12 +11,14 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import nutritivApi from '../../Api/nutritivApi';
 import { updateUser, updateUserCartQuantity } from '../../Redux/reducers/user';
 import { OAuth } from './OAuth';
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 
 export default function LoginPage() {
   console.log("##### LoginPage render #####");
   const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
+  const { executeRecaptcha } = useGoogleReCaptcha();
   
   const [login, setLogin] = useState({
     username: "",
@@ -27,17 +29,17 @@ export default function LoginPage() {
     success: "",
     error: "",
   })
-  const loginDataRef = useRef();
+  const loginData = useRef(null);
   const [hasTFA, setHasTFA] = useState(false)
   
   // onEveryRender
   useEffect(() => {
-    loginDataRef.current = {
+    loginData.current = {
       username: login.username,
       password: login.password,
     }  
   });
-
+  
   // Auto-set login credentials
   useEffect(() => {
     if(location.state?.username) {
@@ -63,7 +65,7 @@ export default function LoginPage() {
   }
 
   // GET USER INFO
-  const getUserInfo = useCallback(() => {
+  const getUserInfo = () => {
     function useNull() {
       return null;
     }
@@ -92,77 +94,7 @@ export default function LoginPage() {
       })
     }
     fetchApi();
-  }, [dispatch])
-  
-  const onCaptchaCompleted = useCallback(async (captchaToken) => {
-    // LOGIN
-    try {
-      setLogin({...login,
-        loading: true,
-        error: "",
-      })
-      // Add captchaToken to the req body
-      let req = {
-        ...loginDataRef.current,
-        captcha: captchaToken
-      }
-
-      const { data } = await nutritivApi.post(
-        `/auth/login`,
-        req
-      )
-      setLogin({...login,
-        loading: false,
-        error: "",
-      })
-
-      // ASK FOR 2FA or REDIRECT
-      data.hasTFA ? (
-        setHasTFA(data.hasTFA)
-      ) : (
-        getUserInfo()
-      )
-
-    } catch (err) {
-      console.log('# loginData err :', err)
-      setLogin({...login,
-        loading: false,
-        error: err.response?.data?.info?.message
-      })
-    }
-  }, [getUserInfo, login]);
-
-  const onLoad = useCallback(() => {
-    if (window.grecaptcha) {
-      window.grecaptcha.render(
-        "recaptcha",
-        {
-          badge: "bottomright",
-          callback: onCaptchaCompleted,
-          size: "invisible",
-          sitekey: "6Lekw4sgAAAAAIY_DQO_d8uE7fOBQr-g9lqEOqGP",
-          theme: "light",
-          // expiredCallback: onCaptchaExpired,
-          // errorCallback: onCaptchaError
-        }
-      );
-    } else {
-      console.error("Could not load grecaptcha");
-    }
-  }, [onCaptchaCompleted]);
-
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.src = "https://www.google.com/recaptcha/api.js";
-    script.async = true;
-    script.defer = true;
-    document.body.appendChild(script);
-    window.addEventListener("load", onLoad);
-    
-    return () => {
-      window.removeEventListener('load', onLoad);
-    }
-  }, [onLoad]);
+  }
   
   const handleChange = (e) => {
     setLogin({...login,
@@ -170,16 +102,58 @@ export default function LoginPage() {
     })
   }
   
-  const handleSubmit = e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // reCAPTCHA
+    if (!executeRecaptcha) {
+      setLogin({
+        ...login,
+        error: "reCaptcha couldn't be loaded, please try again or contact the support."
+      })
+      return;
+    }
+    const reCaptchaToken = await executeRecaptcha();
     
     // We store and use the return value 
     // because the state won't update yet
     const isValid = validation();
     
     if(isValid) {
-      // reCAPTCHA
-      window.grecaptcha.execute();
+      // LOGIN
+      try {
+        setLogin({...login,
+          loading: true,
+          error: "",
+        })
+        
+        const req = {
+          ...loginData.current,
+          captcha: reCaptchaToken
+        }
+        const { data } = await nutritivApi.post(
+          `/auth/login`,
+          req
+        )
+        setLogin({...login,
+          loading: false,
+          error: "",
+        })
+
+        // ASK FOR 2FA or REDIRECT
+        data.hasTFA ? (
+          setHasTFA(data.hasTFA)
+        ) : (
+          getUserInfo()
+        )
+
+      } catch (err) {
+        console.log('# loginData err :', err)
+        setLogin({...login,
+          loading: false,
+          error: err.response?.data?.info?.message
+        })
+      }
     }
   }
   
