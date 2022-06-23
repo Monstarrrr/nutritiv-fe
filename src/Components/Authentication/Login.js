@@ -28,12 +28,15 @@ export default function LoginPage() {
     error: "",
   })
   const loginDataRef = useRef();
-  loginDataRef.current = {
-    username: login.username,
-    password: login.password,
-  }
-
   const [hasTFA, setHasTFA] = useState(false)
+  
+  // onEveryRender
+  useEffect(() => {
+    loginDataRef.current = {
+      username: login.username,
+      password: login.password,
+    }  
+  });
 
   // Auto-set login credentials
   useEffect(() => {
@@ -58,39 +61,40 @@ export default function LoginPage() {
     
     return !usernameError && !passwordError
   }
-  
-  const onLoad = () => {
-    if (window.grecaptcha) {
-      window.grecaptcha.render(
-        "recaptcha", 
-        {
-          badge: "bottomright",
-          callback: onCaptchaCompleted,
-          size: "invisible",
-          sitekey: "6Lekw4sgAAAAAIY_DQO_d8uE7fOBQr-g9lqEOqGP",
-          theme: "light",
-          // expiredCallback: onCaptchaExpired,
-          // errorCallback: onCaptchaError
-        }
-      );
-    } else {
-      console.error("Could not load grecaptcha");
-    }
-  }
-  
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.src = "https://www.google.com/recaptcha/api.js";
-    script.async = true;
-    script.defer = true;
-    document.body.appendChild(script);
-    
-    window.addEventListener("load", onLoad);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // GET USER INFO
+  const getUserInfo = useCallback(() => {
+    function useNull() {
+      return null;
+    }
+    let fetchApi = async () => {
+      const method = "get"
+      const requestsUrl = ['/users/self', '/carts/self']
+      const requests = requestsUrl.map(url => {
+        return { url, method }
+      })
+      
+      await Promise.all([
+        nutritivApi.request(requests[0]).catch(useNull),
+        nutritivApi.request(requests[1]).catch(useNull),
+      ]).then(function([userSelf, cartSelf]) {
+        if(cartSelf.data.cart){
+          dispatch(
+            updateUserCartQuantity(cartSelf.data.cart.totalQuantity)
+          )
+        }
+        dispatch(
+          updateUser(userSelf.data)
+        )
+      }).catch(function([userSelf, cartSelf]) {
+        console.log('# userSelf err :', userSelf)
+        console.log('# cartSelf err :', cartSelf)
+      })
+    }
+    fetchApi();
+  }, [dispatch])
   
-  const onCaptchaCompleted = async (captchaToken) => {
+  const onCaptchaCompleted = useCallback(async (captchaToken) => {
     // LOGIN
     try {
       setLogin({...login,
@@ -126,7 +130,39 @@ export default function LoginPage() {
         error: err.response?.data?.info?.message
       })
     }
-  };
+  }, [getUserInfo, login]);
+
+  const onLoad = useCallback(() => {
+    if (window.grecaptcha) {
+      window.grecaptcha.render(
+        "recaptcha",
+        {
+          badge: "bottomright",
+          callback: onCaptchaCompleted,
+          size: "invisible",
+          sitekey: "6Lekw4sgAAAAAIY_DQO_d8uE7fOBQr-g9lqEOqGP",
+          theme: "light",
+          // expiredCallback: onCaptchaExpired,
+          // errorCallback: onCaptchaError
+        }
+      );
+    } else {
+      console.error("Could not load grecaptcha");
+    }
+  }, [onCaptchaCompleted]);
+
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://www.google.com/recaptcha/api.js";
+    script.async = true;
+    script.defer = true;
+    document.body.appendChild(script);
+    window.addEventListener("load", onLoad);
+    
+    return () => {
+      window.removeEventListener('load', onLoad);
+    }
+  }, [onLoad]);
   
   const handleChange = (e) => {
     setLogin({...login,
@@ -146,38 +182,6 @@ export default function LoginPage() {
       window.grecaptcha.execute();
     }
   }
-  
-  // GET USER INFO
-  const getUserInfo = useCallback(() => {
-    function useNull() {
-      return null;
-    }
-    let fetchApi = async () => {
-      const method = "get"
-      const requestsUrl = ['/users/self', '/carts/self']
-      const requests = requestsUrl.map(url => {
-        return { url, method }
-      })
-      
-      await Promise.all([
-        nutritivApi.request(requests[0]).catch(useNull),
-        nutritivApi.request(requests[1]).catch(useNull),
-      ]).then(function([userSelf, cartSelf]) {
-        if(cartSelf.data.cart){
-          dispatch(
-            updateUserCartQuantity(cartSelf.data.cart.totalQuantity)
-          )
-        }
-        dispatch(
-          updateUser(userSelf.data)
-        )
-      }).catch(function([userSelf, cartSelf]) {
-        console.log('# userSelf err :', userSelf)
-        console.log('# cartSelf err :', cartSelf)
-      })
-    }
-    fetchApi();
-  }, [dispatch])
   
   // SUBMIT 2FA CODE
   const handleSubmitTwoFa = async (e) => {
