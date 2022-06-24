@@ -40,8 +40,9 @@ function App() {
   const [searchParams] = useSearchParams();
   const oAuthStatus = searchParams.get('status');
   const oAuthMessage = searchParams.get('message');
-  const oAuthUsername = searchParams.get('username')
-  const oAuthAccessToken = searchParams.get('accessToken');
+  const oAuthUsername = searchParams.get('username');
+  const oAuthAccessToken = searchParams.get('oAuthToken');
+  const registrationToken = searchParams.get('verificationToken');
   
   // App titles
   useEffect(() => {
@@ -94,8 +95,8 @@ function App() {
     return () => { isSubscribed = false }
   }, [dispatch, gettingUserInfo]);
   
-  // oAuth
   useEffect(() => {
+    // oAUTH
     if(
       oAuthStatus === "successLogin" ||
       oAuthStatus === "successRegistration"
@@ -125,14 +126,43 @@ function App() {
           } 
         }
       )
+    // VERIFY REGISTRATION
+    } else if(registrationToken) {
+      let isMounted = true;
+      let fetchApi = async () => {
+        console.log('# registrationToken :', registrationToken)
+        try {
+          const { data } = await nutritivApi.post(
+            `/auth/verify_email/?token=${registrationToken}`
+          )
+          console.log('# isMounted :', isMounted)
+          if(isMounted){
+            navigate(
+              '/login',
+              { state:
+                {
+                  msg: "Account verified, you can login.",
+                  status: "success",
+                }
+              }
+            )
+          }
+        } catch(err) {
+          console.error(
+            'auth/verify_email:', err
+          )
+        }
+      }
+      fetchApi();
     }
   }, [
-    navigate, 
-    oAuthAccessToken, 
-    oAuthMessage, 
-    oAuthStatus, 
-    oAuthUsername
-  ]);
+      navigate, 
+      oAuthAccessToken, 
+      oAuthMessage, 
+      oAuthStatus, 
+      oAuthUsername, 
+      registrationToken
+    ]);
   
   // RESTRICTED ROUTES
   const Restricted = ({ routeType }) => {

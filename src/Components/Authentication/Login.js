@@ -14,7 +14,7 @@ import { OAuth } from './OAuth';
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 
 export default function LoginPage() {
-  console.log("##### LoginPage render #####");
+
   const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
@@ -106,7 +106,7 @@ export default function LoginPage() {
     e.preventDefault();
     
     // reCAPTCHA
-    if (!executeRecaptcha) {
+    if(!executeRecaptcha) {
       setLogin({
         ...login,
         error: "reCaptcha couldn't be loaded, please try again or contact the support."
@@ -205,7 +205,15 @@ export default function LoginPage() {
     <div>
       <h1>Login page</h1>
       {
-        location.state?.msg && <p style={{color: "orange"}}>{location.state.msg}</p>
+        location.state?.msg && (
+          <p 
+            style={{
+              color: location.state?.status === "success" ? "green" : "orange"
+            }}
+          >
+            {location.state.msg}
+          </p>
+        )
       }
       {hasTFA ? (
         <>
