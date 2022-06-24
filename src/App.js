@@ -17,12 +17,13 @@ import { Homepage } from './Components/Homepage/Homepage';
 import { PageNotFound } from './Components/PageNotFound/PageNotFound';
 import { ChatConnection } from './Components/Chat/ChatConnection';
 import { AnimatePresence } from 'framer-motion';
-import Navbar from './Components/Navbar/Navbar';
+import Navbar from './Components/Header/Navbar';
 import { ForgotPassword } from './Components/Authentication/ForgotPassword';
 import { ForgotTFA } from './Components/Authentication/ForgotTFA';
 import { ResetPassword } from './Components/Authentication/ResetPassword';
 import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3';
 import './App.scss';
+import { Footer } from './Footer/Footer';
 
 // init stripe
 const stripePromise = loadStripe(
@@ -206,6 +207,7 @@ function App() {
             {/* </Route> */}
           </Routes>
         </AnimatePresence>
+        <Footer />
       </GoogleReCaptchaProvider>
     </Elements>
   );
