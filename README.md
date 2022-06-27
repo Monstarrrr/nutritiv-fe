@@ -1,6 +1,6 @@
 # NUTRITIV-FE
 
-[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/Monstarrrr/nutritiv-fe.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/Monstarrrr/nutritiv-fe/context:javascript)
+[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/Monstarrrr/nutritiv-fe.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/Monstarrrr/nutritiv-fe/context:javascript) ![W3C Validation](https://img.shields.io/w3c-validation/html?targetUrl=https%3A%2F%2Fnutritiv-staging.herokuapp.com%2Flogin)
 
 ## Available Scripts
 
