@@ -1,5 +1,7 @@
 # NUTRITIV-FE
 
+[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/Monstarrrr/nutritiv-fe.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/Monstarrrr/nutritiv-fe/context:javascript)
+
 ## Available Scripts
 
 In the project directory, you can run:
