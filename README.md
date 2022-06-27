@@ -1,8 +1,10 @@
 # NUTRITIV-FE
 
 [![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/Monstarrrr/nutritiv-fe.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/Monstarrrr/nutritiv-fe/context:javascript) 
-![W3C Validation](https://img.shields.io/w3c-validation/html?targetUrl=https%3A%2F%2Fnutritiv-staging.herokuapp.com%2Flogin) 
-![Lines of code](https://img.shields.io/tokei/lines/github/Monstarrrr/nutritiv-fe)
+![W3C Validation](https://img.shields.io/w3c-validation/html?targetUrl=https%3A%2F%2Fnutritiv-staging.herokuapp.com%2Flogin)  
+![GitHub commit activity](https://img.shields.io/github/commit-activity/w/monstarrrr/nutritiv-fe) 
+![GitHub last commit](https://img.shields.io/github/last-commit/monstarrrr/nutritiv-fe?color=blue&label=last%20updated) 
+![Lines of code](https://img.shields.io/tokei/lines/github/Monstarrrr/nutritiv-fe) 
 
 ## Available Scripts
 
