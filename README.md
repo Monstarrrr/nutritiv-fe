@@ -1,7 +1,9 @@
 # NUTRITIV-FE
 
-[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/Monstarrrr/nutritiv-fe.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/Monstarrrr/nutritiv-fe/context:javascript) 
-![W3C Validation](https://img.shields.io/w3c-validation/html?targetUrl=https%3A%2F%2Fnutritiv-staging.herokuapp.com%2Flogin)  
+<img src="https://img.shields.io/badge/-ReactJs-61DAFB?logo=react&logoColor=white&style=for-the-badge"/>  
+
+[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/Monstarrrr/nutritiv-fe.svg?logo=lgtm&logoWidth=18&color=lightgreen)](https://lgtm.com/projects/g/Monstarrrr/nutritiv-fe/context:javascript) 
+![W3C Validation](https://img.shields.io/w3c-validation/html?targetUrl=https%3A%2F%2Fnutritiv-staging.herokuapp.com%2Flogin&color=lightgreen)  
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/w/monstarrrr/nutritiv-fe) 
 ![GitHub last commit](https://img.shields.io/github/last-commit/monstarrrr/nutritiv-fe?color=blue&label=last%20updated) 
 ![Lines of code](https://img.shields.io/tokei/lines/github/Monstarrrr/nutritiv-fe) 
