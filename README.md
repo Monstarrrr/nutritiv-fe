@@ -1,12 +1,12 @@
 # NUTRITIV-FE
 
-<img src="https://img.shields.io/badge/-ReactJs-61DAFB?logo=react&logoColor=white&style=for-the-badge"/>  
+[![](https://img.shields.io/badge/-ReactJs-61DAFB?logo=react&logoColor=black&style=flat)](https://reactjs.org/) 
 
-[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/Monstarrrr/nutritiv-fe.svg?logo=lgtm&logoWidth=18&color=lightgreen)](https://lgtm.com/projects/g/Monstarrrr/nutritiv-fe/context:javascript) 
-![W3C Validation](https://img.shields.io/w3c-validation/html?targetUrl=https%3A%2F%2Fnutritiv-staging.herokuapp.com%2Flogin&color=lightgreen)  
-![GitHub commit activity](https://img.shields.io/github/commit-activity/w/monstarrrr/nutritiv-fe) 
-![GitHub last commit](https://img.shields.io/github/last-commit/monstarrrr/nutritiv-fe?color=blue&label=last%20updated) 
-![Lines of code](https://img.shields.io/tokei/lines/github/Monstarrrr/nutritiv-fe) 
+[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/Monstarrrr/nutritiv-fe.svg?logo=lgtm&logoWidth=18&color=lemon)](https://lgtm.com/projects/g/Monstarrrr/nutritiv-fe/?mode=list) 
+[![W3C Validation](https://img.shields.io/w3c-validation/html?targetUrl=https%3A%2F%2Fnutritiv-staging.herokuapp.com%2Flogin&color=lemon)](https://validator.w3.org/nu/?doc=https%3A%2F%2Fnutritiv-staging.herokuapp.com%2F)  
+[![GitHub commit activity](https://img.shields.io/github/commit-activity/w/monstarrrr/nutritiv-fe)](#) 
+[![GitHub last commit](https://img.shields.io/github/last-commit/monstarrrr/nutritiv-fe?color=blue&label=last%20updated)](#) 
+[![Lines of code](https://img.shields.io/tokei/lines/github/Monstarrrr/nutritiv-fe)](#) 
 
 ## Available Scripts
 
