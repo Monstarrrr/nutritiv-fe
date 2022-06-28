@@ -1,7 +1,7 @@
-import { Environment, OrbitControls, PerspectiveCamera, Plane, softShadows, Sparkles, useHelper } from '@react-three/drei'
+import { Environment, OrbitControls, PerspectiveCamera, Plane, softShadows } from '@react-three/drei'
 import React, { Suspense, useRef } from 'react'
 import { useFrame } from '@react-three/fiber';
-import WeaponModel from './WeaponModel';
+import WaterPill from './pills/WaterPill';
 
 softShadows({
   frustum: 3.75,
@@ -25,22 +25,32 @@ export const Scene = () => {
   
   return (
     <Suspense fallback={null}>
-      
       {/* CAMERA */}
       <PerspectiveCamera
         makeDefault
         fov={65}
-        position={[10, 1, 0]}
+        position={[0.1, 0, 0.3]}
       />
-
+      
+      {/* CONTROLS */}
+      <OrbitControls
+        autoRotate
+        autoRotateSpeed={2}
+        enablePan
+        enableZoom={false}
+        enableRotate={true}
+        makeDefault
+        target={[0, 0, 0.04]}
+      />
+      
       {/* ENVIRONMENT */}
       {/* <Environment 
         background
         files={'https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/2k/evening_road_01_2k.hdr'}
       /> */}
-
+      
       {/* MODEL */}
-      <WeaponModel position={[0, 0.5, 0]}/>
+      <WaterPill position={[0, 0, 0]}/>
       
       {/* GROUND */}
       {/* <Plane receiveShadow rotation-x={-Math.PI / 2} position={[0, -1.7, 0]} args={[10, 10, 4, 4]}>
@@ -53,7 +63,7 @@ export const Scene = () => {
       
       {/* LIGHTS */}
       {/* RIGHT */}
-      <directionalLight
+      {/* <directionalLight
         castShadow
         intensity={2}
         position={[3, 5, -0.2]}
@@ -65,9 +75,9 @@ export const Scene = () => {
         shadow-camera-right={10}
         shadow-camera-top={10}
         shadow-camera-bottom={-10}
-      />
+      /> */}
       {/* LEFT */}
-      <directionalLight
+      {/* <directionalLight
         castShadow
         intensity={2}
         position={[-3, 5, 0.3]}
@@ -79,6 +89,9 @@ export const Scene = () => {
         shadow-camera-right={10}
         shadow-camera-top={10}
         shadow-camera-bottom={-10}
+      /> */}
+      <pointLight 
+        position={[0, 0, 0]}
       />
       
       {/* 
@@ -94,17 +107,6 @@ export const Scene = () => {
       />
       */}
       <ambientLight intensity={1}/> 
-      
-      {/* CONTROLS */}
-      <OrbitControls
-        autoRotate
-        autoRotateSpeed={1}
-        enablePan
-        enableZoom={true}
-        enableRotate={true}
-        makeDefault
-      />
-      
     </Suspense>
   )
 }
