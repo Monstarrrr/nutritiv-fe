@@ -7,11 +7,11 @@ import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
 import angleToRadians from '../../../Helpers/angleToRadians'
 
-export default function WaterPill({ ...props }) {
+export default function Model({ ...props }) {
   const group = useRef()
   const { nodes, materials } = useGLTF('/water-pill.glb')
   return (
-    <group rotation={[angleToRadians(30),0,0]} ref={group} {...props} dispose={null}>
+    <group scale={10} rotation={[angleToRadians(30),0,0]} ref={group} {...props} dispose={null}>
       <group position={[0.002,0,0.004]}>
         <mesh castShadow geometry={nodes.Sphere.geometry} material={materials['lambert2.003']} position={[0.01, 0.02, 0.01]} scale={0.01} />
         <mesh castShadow geometry={nodes.Sphere001.geometry} material={materials['lambert2.003']} position={[0.01, 0.01, -0.01]} rotation={[1.84, 0, 0]} scale={0.01} />
