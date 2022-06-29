@@ -1,7 +1,9 @@
-import { Environment, OrbitControls, PerspectiveCamera, Plane, softShadows } from '@react-three/drei'
+import { Environment, OrbitControls, PerspectiveCamera, Plane, softShadows, Sphere, useHelper } from '@react-three/drei'
 import React, { Suspense, useRef } from 'react'
+import { PointLightHelper, SpotLightHelper, DirectionalLightHelper } from 'three';
 import { useFrame } from '@react-three/fiber';
 import WaterPill from './pills/WaterPill';
+import angleToRadians from '../../Helpers/angleToRadians';
 
 softShadows({
   frustum: 3.75,
@@ -12,11 +14,12 @@ softShadows({
 })
 
 export const Scene = () => {
-  const directionalLightRef1 = useRef();
-  const directionalLightRef2 = useRef();
-  // useHelper(directionalLightRef1, DirectionalLightHelper, 1, "red")
-  // useHelper(directionalLightRef2, DirectionalLightHelper, 1, "cyan")
-  // useHelper(spotLightRef, SpotLightHelper, 'pink')
+  const pointLightRef = useRef();
+  const spotLightHelperRef = useRef();
+  const directionalLightRef = useRef();
+  useHelper(pointLightRef, PointLightHelper, 1, "cyan")
+  useHelper(spotLightHelperRef, SpotLightHelper, "red")
+  useHelper(directionalLightRef, DirectionalLightHelper, 1, "yellow")
   
   // On every frame change
   useFrame(state => {
@@ -34,13 +37,13 @@ export const Scene = () => {
       
       {/* CONTROLS */}
       <OrbitControls
-        autoRotate
+        // autoRotate
         autoRotateSpeed={2}
         enablePan
-        enableZoom={false}
+        enableZoom={true}
         enableRotate={true}
         makeDefault
-        target={[0, 0, 0.04]}
+        target={[0, 0, 0]}
       />
       
       {/* ENVIRONMENT */}
@@ -50,63 +53,63 @@ export const Scene = () => {
       /> */}
       
       {/* MODEL */}
-      <WaterPill position={[0, 0, 0]}/>
+      <WaterPill />
       
       {/* GROUND */}
-      {/* <Plane receiveShadow rotation-x={-Math.PI / 2} position={[0, -1.7, 0]} args={[10, 10, 4, 4]}>
-        <meshBasicMaterial opacity={0.5} />
-      </Plane> */}
+      <Plane 
+        receiveShadow 
+        args={[10, 10, 4, 4]}
+        position={[0, -0.2, 0]} 
+        rotation-x={-Math.PI / 2} 
+      >
+        <meshPhysicalMaterial opacity={0.5} />
+      </Plane>
       {/* SHADOW */}
-      <Plane receiveShadow rotation-x={-Math.PI / 2} position={[0, -1.7, 0]} args={[10, 10, 4, 4]}>
+      <Plane 
+        args={[10, 10, 4, 4]}
+        position={[0, -0.2, 0]} 
+        receiveShadow
+        rotation-x={-Math.PI / 2} 
+      >
         <shadowMaterial opacity={0.5} />
       </Plane>
       
       {/* LIGHTS */}
-      {/* RIGHT */}
-      {/* <directionalLight
-        castShadow
-        intensity={2}
-        position={[3, 5, -0.2]}
-        ref={directionalLightRef1}
-        shadow-mapSize-width={1024}
-        shadow-mapSize-height={1024}
-        shadow-camera-far={30}
-        shadow-camera-left={-10}
-        shadow-camera-right={10}
-        shadow-camera-top={10}
-        shadow-camera-bottom={-10}
-      /> */}
-      {/* LEFT */}
-      {/* <directionalLight
-        castShadow
-        intensity={2}
-        position={[-3, 5, 0.3]}
-        ref={directionalLightRef2}
-        shadow-mapSize-width={1024}
-        shadow-mapSize-height={1024}
-        shadow-camera-far={30}
-        shadow-camera-left={-10}
-        shadow-camera-right={10}
-        shadow-camera-top={10}
-        shadow-camera-bottom={-10}
-      /> */}
-      <pointLight 
-        position={[0, 0, 0]}
-      />
-      
-      {/* 
       <spotLight
-        angle={angleToRadians(40)} 
+        angle={angleToRadians(30)}
         castShadow
-        decay={2}
-        distance={16}
-        penumbra={1}
-        position={[6,1.5,0]}
-        power={10}
-        ref={spotLightRef}
+        distance={2}
+        decay={1}
+        intensity={1}
+        penumbra={0.6}
+        position={[0, 0.4, 0]}
+        ref={spotLightHelperRef}
+        shadow-mapSize-width={1024}
+        shadow-mapSize-height={1024}
+        shadow-camera-far={30}
+        shadow-camera-left={-10}
+        shadow-camera-right={10}
+        shadow-camera-top={10}
+        shadow-camera-bottom={-10}
       />
-      */}
-      <ambientLight intensity={1}/> 
+      <directionalLight
+        intensity={0.3}
+        distance={0.1}
+        scale={1}
+        ref={directionalLightRef}
+        position={[0, 1, 0]}
+        castShadow={true}
+      />
+      <pointLight
+        intensity={4}
+        distance={0.1}
+        scale={0.02}
+        ref={pointLightRef}
+        position={[0, 0, 0]}
+        castShadow={false}
+      />
+     
+      {/* <ambientLight intensity={0.3}/>  */}
     </Suspense>
   )
 }
