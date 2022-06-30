@@ -1,5 +1,5 @@
-import { Environment, OrbitControls, PerspectiveCamera, Plane, softShadows, useHelper } from '@react-three/drei'
-import React, { Suspense, useRef } from 'react'
+import { Environment, OrbitControls, PerspectiveCamera, Plane, softShadows, Stats, useHelper } from '@react-three/drei'
+import React, { Suspense, useEffect, useRef } from 'react'
 import Model from './pills/WaterPill';
 import { 
   BackSide, 
@@ -17,22 +17,30 @@ softShadows({
 })
 
 export const Scene = () => {
-  const directionalLightRef = useRef();
-  const spotLightRef1 = useRef();
-  const spotLightRef2 = useRef();
-  const spotLightRef3 = useRef();
+  const modelRotation = useRef(0);
+  const orbitControlsRef = useRef(null);
+  const directionalLightRef = useRef(null);
+  const spotLightRef1 = useRef(null);
+  const spotLightRef2 = useRef(null);
+  const spotLightRef3 = useRef(null);
   // useHelper(directionalLightRef, DirectionalLightHelper, 1, "yellow")
-  useHelper(spotLightRef1, SpotLightHelper, 'cyan')
-  useHelper(spotLightRef2, SpotLightHelper, 'pink')
-  useHelper(spotLightRef3, SpotLightHelper, 'white')
+  // useHelper(spotLightRef1, SpotLightHelper, 'cyan')
+  // useHelper(spotLightRef2, SpotLightHelper, 'pink')
+  // useHelper(spotLightRef3, SpotLightHelper, 'white')
   
   // On every frame change
   useFrame(state => {
-    // console.log('# test :', centerRef)
+    const { x, y } = state.mouse;
+    if(!!orbitControlsRef.current){
+      orbitControlsRef.current.setAzimuthalAngle(angleToRadians(- x * 90));
+      orbitControlsRef.current.setPolarAngle(angleToRadians(y * 10 + 90));
+      orbitControlsRef.current.update();
+    }
   })
   
   return (
     <Suspense fallback={null}>
+      <Stats />
       
       {/* CAMERA */}
       <PerspectiveCamera
@@ -40,8 +48,19 @@ export const Scene = () => {
         position={[7, 1, 0]}
       />
       
+      {/* CONTROLS */}
+      <OrbitControls
+        autoRotate
+        autoRotateSpeed={2}
+        enablePan={false}
+        enableZoom={true}
+        // enableRotate
+        makeDefault
+        ref={orbitControlsRef}
+      />
+      
       {/* MODEL */}
-      <Model />
+      <Model forwardRef={modelRotation} />
       
       {/* GROUND */}
       {/* <Plane receiveShadow rotation-x={-Math.PI / 2} position={[0, -1.7, 0]} args={[10, 10, 4, 4]}>
@@ -98,17 +117,6 @@ export const Scene = () => {
         ref={spotLightRef3}
       />
       <ambientLight intensity={0.2}/>
-      
-      {/* CONTROLS */}
-      <OrbitControls
-        autoRotate
-        autoRotateSpeed={2}
-        enablePan
-        enableZoom={true}
-        enableRotate
-        makeDefault
-      />
-      
     </Suspense>
   )
 }
