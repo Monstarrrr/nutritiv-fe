@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { useSelector } from 'react-redux';
 import styles from './Homepage.module.scss';
@@ -43,6 +43,7 @@ const releases = [
 
 export const Homepage = () => {
   const loggedIn = useSelector(state => state.user.loggedIn)
+  
   const pageAnimation = {
     exit: {
       opacity: 0,

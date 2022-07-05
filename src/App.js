@@ -132,7 +132,7 @@ function App() {
       let fetchApi = async () => {
         console.log('# registrationToken :', registrationToken)
         try {
-          const { data } = await nutritivApi.put(
+          await nutritivApi.put(
             `/auth/verify_email/?token=${registrationToken}`
           )
           console.log('# isMounted :', isMounted)

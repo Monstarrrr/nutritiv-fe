@@ -1,10 +1,8 @@
 import { Environment, OrbitControls, PerspectiveCamera, Plane, softShadows, Stats, useHelper } from '@react-three/drei'
-import React, { Suspense, useEffect, useRef } from 'react'
-import Model from './pills/WaterPill';
-import { 
-  BackSide, 
-  SpotLightHelper, 
-  DirectionalLightHelper } from 'three';
+import React, { Suspense, useRef } from 'react'
+import JellyModel from './models/Jelly';
+import PillModel from './models/Pill';
+import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 import angleToRadians from '../../Helpers/angleToRadians';
 
@@ -16,26 +14,28 @@ softShadows({
   rings: 11, // Rings (default: 11) must be a int
 })
 
-export const Scene = () => {
+export const Scene = ({ hovered }) => {
   const modelRotation = useRef(0);
   const orbitControlsRef = useRef(null);
   const directionalLightRef = useRef(null);
   const spotLightRef1 = useRef(null);
   const spotLightRef2 = useRef(null);
   const spotLightRef3 = useRef(null);
-  // useHelper(directionalLightRef, DirectionalLightHelper, 1, "yellow")
-  // useHelper(spotLightRef1, SpotLightHelper, 'cyan')
-  // useHelper(spotLightRef2, SpotLightHelper, 'pink')
-  // useHelper(spotLightRef3, SpotLightHelper, 'white')
+  useHelper(directionalLightRef, THREE.DirectionalLightHelper, 1, "yellow")
+  useHelper(spotLightRef1, THREE.SpotLightHelper, 'cyan')
+  useHelper(spotLightRef2, THREE.SpotLightHelper, 'pink')
+  useHelper(spotLightRef3, THREE.SpotLightHelper, 'white')
   
   // On every frame change
   useFrame(state => {
-    const { x, y } = state.mouse;
-    if(!!orbitControlsRef.current){
-      orbitControlsRef.current.setAzimuthalAngle(angleToRadians(- x * 90));
-      orbitControlsRef.current.setPolarAngle(angleToRadians(y * 10 + 90));
-      orbitControlsRef.current.update();
-    }
+    
+    // Mouse tracking movement
+    // const { x, y } = state.mouse;
+    // if(!!orbitControlsRef.current){
+    //   orbitControlsRef.current.setAzimuthalAngle(angleToRadians(- x * 90));
+    //   orbitControlsRef.current.setPolarAngle(angleToRadians(y * 50 + 90));
+    //   orbitControlsRef.current.update();
+    // }
   })
   
   return (
@@ -51,30 +51,44 @@ export const Scene = () => {
       {/* CONTROLS */}
       <OrbitControls
         autoRotate
-        autoRotateSpeed={2}
+        autoRotateSpeed={hovered ? 0 : 2}
         enablePan={false}
         enableZoom={true}
-        // enableRotate
+        minPolarAngle={angleToRadians(-90)}
+        maxPolarAngle={angleToRadians(100)}
         makeDefault
         ref={orbitControlsRef}
       />
       
       {/* MODEL */}
-      <Model forwardRef={modelRotation} />
+      {/* <JellyModel forwardRef={modelRotation} /> */}
+      <PillModel forwardRef={modelRotation} />
       
+      <Environment
+        background={false}
+        // preset="sunset"
+        files={['px.png', 'nx.png', 'py.png', 'ny.png', 'pz.png', 'nz.png']}
+        path="/hdri/venice/"
+      >
+        <mesh scale={100}>
+          <sphereGeometry args={[1, 64, 64]} />
+          <meshBasicMaterial color="grey" side={THREE.BackSide} />
+        </mesh>
+      </Environment>
+
       {/* GROUND */}
       {/* <Plane receiveShadow rotation-x={-Math.PI / 2} position={[0, -1.7, 0]} args={[10, 10, 4, 4]}>
         <meshBasicMaterial opacity={0.5} />
       </Plane> */}
       {/* SHADOW */}
-      <Plane receiveShadow rotation-x={-Math.PI / 2} position={[0, -1.7, 0]} args={[10, 10, 4, 4]}>
+      <Plane receiveShadow rotation-x={-Math.PI / 2} position={[0, -1.9, 0]} args={[10, 10, 4, 4]}>
         <shadowMaterial opacity={0.5} />
       </Plane>
       
       {/* LIGHTS */}
       <directionalLight
         castShadow
-        intensity={2}
+        intensity={3}
         position={[0, 6, 0]}
         ref={directionalLightRef}
         shadow-mapSize-width={1024}
@@ -85,12 +99,12 @@ export const Scene = () => {
         shadow-camera-top={10}
         shadow-camera-bottom={-10}
       />
-
-      <spotLight
+      
+      {/* <spotLight
         angle={angleToRadians(10)} 
         // castShadow
         decay={2}
-        distance={7}
+        distance={4}
         penumbra={1}
         position={[0, 0, -4]}
         power={10}
@@ -100,7 +114,7 @@ export const Scene = () => {
         angle={angleToRadians(10)} 
         // castShadow
         decay={2}
-        distance={7}
+        distance={4}
         penumbra={1}
         position={[4, 0, 0]}
         power={10}
@@ -110,13 +124,13 @@ export const Scene = () => {
         angle={angleToRadians(10)} 
         // castShadow
         decay={2}
-        distance={7}
+        distance={4}
         penumbra={1}
         position={[-4, 0, 0]}
         power={10}
         ref={spotLightRef3}
-      />
-      <ambientLight intensity={0.2}/>
+      /> */}
+      {/* <ambientLight intensity={0.2}/> */}
     </Suspense>
   )
 }
