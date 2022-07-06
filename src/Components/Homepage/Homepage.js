@@ -6,14 +6,28 @@ import { Scene } from '../3D/Scene';
 
 const releases = [
   {
-    version: "v1.2.1",
+    version: "v1.4.0",
+    note: "",
+    changes: [
+      "3D models",
+    ]
+  },
+  {
+    version: "v1.3.0",
+    note: "",
+    changes: [
+      "ReCaptcha",
+    ]
+  },
+  {
+    version: "v1.2.0",
     note: "",
     changes: [
       "Account Deletion",
     ]
   },
   {
-    version: "v1.1.1",
+    version: "v1.1.0",
     note: "",
     changes: [
       "2FA Authentication (Enable/Disable)",

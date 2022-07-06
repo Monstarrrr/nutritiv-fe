@@ -18,15 +18,15 @@ export const Scene = ({ type }) => {
   const modelRotation = useRef(0);
   const orbitControlsRef = useRef(null);
   const directionalLightRef = useRef(null);
-  const spotLightRef1 = useRef(null);
-  const spotLightRef2 = useRef(null);
-  const spotLightRef3 = useRef(null);
+  // const spotLightRef1 = useRef(null);
+  // const spotLightRef2 = useRef(null);
+  // const spotLightRef3 = useRef(null);
   const pointLightRef = useRef(null);
-  useHelper(directionalLightRef, THREE.DirectionalLightHelper, 1, "yellow")
-  useHelper(spotLightRef1, THREE.SpotLightHelper, 'cyan')
-  useHelper(spotLightRef2, THREE.SpotLightHelper, 'pink')
-  useHelper(spotLightRef3, THREE.SpotLightHelper, 'white')
-  useHelper(pointLightRef, THREE.PointLightHelper, 'red')
+  // useHelper(directionalLightRef, THREE.DirectionalLightHelper, 1, "yellow")
+  // useHelper(spotLightRef1, THREE.SpotLightHelper, 'cyan')
+  // useHelper(spotLightRef2, THREE.SpotLightHelper, 'pink')
+  // useHelper(spotLightRef3, THREE.SpotLightHelper, 'white')
+  // useHelper(pointLightRef, THREE.PointLightHelper, 'red')
   
   // On every frame change
   useFrame(state => {
