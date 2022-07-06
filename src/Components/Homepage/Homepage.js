@@ -112,7 +112,16 @@ export const Homepage = () => {
           width: "500px"
       }}>
         <Canvas shadows>
-          <Scene />
+          <Scene type="pill" />
+        </Canvas>
+      </div>
+      <div style={{
+          background: "transparent", 
+          height: "500px", 
+          width: "500px"
+      }}>
+        <Canvas shadows>
+          <Scene type="jelly" />
         </Canvas>
       </div>
       

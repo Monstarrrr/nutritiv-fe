@@ -14,17 +14,19 @@ softShadows({
   rings: 11, // Rings (default: 11) must be a int
 })
 
-export const Scene = ({ hovered }) => {
+export const Scene = ({ type }) => {
   const modelRotation = useRef(0);
   const orbitControlsRef = useRef(null);
   const directionalLightRef = useRef(null);
   const spotLightRef1 = useRef(null);
   const spotLightRef2 = useRef(null);
   const spotLightRef3 = useRef(null);
+  const pointLightRef = useRef(null);
   useHelper(directionalLightRef, THREE.DirectionalLightHelper, 1, "yellow")
   useHelper(spotLightRef1, THREE.SpotLightHelper, 'cyan')
   useHelper(spotLightRef2, THREE.SpotLightHelper, 'pink')
   useHelper(spotLightRef3, THREE.SpotLightHelper, 'white')
+  useHelper(pointLightRef, THREE.PointLightHelper, 'red')
   
   // On every frame change
   useFrame(state => {
@@ -40,35 +42,46 @@ export const Scene = ({ hovered }) => {
   
   return (
     <Suspense fallback={null}>
-      <Stats />
       
       {/* CAMERA */}
       <PerspectiveCamera
         makeDefault
-        position={[7, 1, 0]}
+        position={[
+          type === "pill" ? 7 : 9, 
+          1, 
+          0
+        ]}
       />
       
       {/* CONTROLS */}
       <OrbitControls
         autoRotate
-        autoRotateSpeed={hovered ? 0 : 2}
+        autoRotateSpeed={2}
         enablePan={false}
         enableZoom={true}
-        minPolarAngle={angleToRadians(-90)}
+        minDistance={type === "pill" ? 5 : 7}
+        maxDistance={type === "pill" ? 7 : 9}
+        minPolarAngle={angleToRadians(70)}
         maxPolarAngle={angleToRadians(100)}
         makeDefault
         ref={orbitControlsRef}
       />
       
       {/* MODEL */}
-      {/* <JellyModel forwardRef={modelRotation} /> */}
-      <PillModel forwardRef={modelRotation} />
+      {
+        type === "jelly" ? (
+          <JellyModel forwardRef={modelRotation} /> 
+        ) : (
+          <PillModel forwardRef={modelRotation} />
+        )
+      }
       
       <Environment
         background={false}
-        // preset="sunset"
+        // preset="park"
         files={['px.png', 'nx.png', 'py.png', 'ny.png', 'pz.png', 'nz.png']}
         path="/hdri/venice/"
+        intensity={0.5}
       >
         <mesh scale={100}>
           <sphereGeometry args={[1, 64, 64]} />
@@ -98,6 +111,12 @@ export const Scene = ({ hovered }) => {
         shadow-camera-right={10}
         shadow-camera-top={10}
         shadow-camera-bottom={-10}
+      />
+      
+      <pointLight 
+        intensity={20}
+        position={[0,0,0]}
+        ref={pointLightRef}
       />
       
       {/* <spotLight
