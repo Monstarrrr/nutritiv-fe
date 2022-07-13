@@ -2,18 +2,19 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { Logout } from '../Authentication/Logout';
+import styles from './Navbar.module.scss';
 
 export default function Navbar() {
   const user = useSelector(state => state.user)
   const navigate = useNavigate();
   
   return (
-    <nav>
+    <nav className={styles.navbar}>
       <Link 
         className='test' 
         to="/"
       >
-        HOMEPAGE
+        HOME
       </Link>
       <span>----</span>
       <Link to="/products">

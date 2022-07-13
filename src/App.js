@@ -22,8 +22,9 @@ import { ForgotPassword } from './Components/Authentication/ForgotPassword';
 import { ForgotTFA } from './Components/Authentication/ForgotTFA';
 import { ResetPassword } from './Components/Authentication/ResetPassword';
 import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3';
-import './App.scss';
 import { Footer } from './Footer/Footer';
+import { ReleaseNotes } from './Components/Releases/ReleaseNotes';
+import './App.scss';
 
 // init stripe
 const stripePromise = loadStripe(
@@ -44,8 +45,8 @@ function App() {
   const oAuthAccessToken = searchParams.get('oAuthToken');
   const registrationToken = searchParams.get('verificationToken');
   
-  // App titles
   useEffect(() => {
+    // App titles
     const titleWithoutSpecials = location.pathname.replace(/[^a-zA-Z ]/g, "");
     if(titleWithoutSpecials){
       const fixedTitle = titleWithoutSpecials[0].toUpperCase() + titleWithoutSpecials.substring(1);
@@ -217,6 +218,7 @@ function App() {
                 <Route path=":productTitle" element={<ProductPage/>} />
               </Route>
               <Route path="/chat" element={<ChatConnection/>} /> 
+              <Route path="/releases" element={<ReleaseNotes/>} />
               <Route path="/cancel" element={<CheckoutCancel/>} /> 
               <Route path="/success" element={<CheckoutSuccess/>} />
               <Route path="/page-not-found" element={<PageNotFound/>} />
