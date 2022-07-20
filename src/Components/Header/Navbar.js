@@ -11,17 +11,34 @@ export default function Navbar() {
   return (
     <nav className={styles.navbar}>
       <Link 
-        className='test' 
-        to="/"
+        className={styles.test} 
+        to="/welcome"
+      >
+        <img 
+          alt="nutritiv logo"
+          src="/logo.png"
+          className={styles.logo}
+        />
+      </Link>
+      <span>----</span>
+      <Link 
+        className={styles.test} 
+        to="/welcome"
       >
         HOME
       </Link>
       <span>----</span>
-      <Link to="/products">
+      <Link 
+        to="/products"
+        className={styles.test} 
+      >
         PRODUCTS
       </Link>
       <span>----</span>
-      <Link to="/chat">
+      <Link 
+        to="/chat"
+        className={styles.test} 
+      >
         CHATS
       </Link>
       <span>----</span>

@@ -2,5 +2,18 @@
 @import 'src/Helpers/mixins';
 
 .navbar {
-  // background-color: rgba(20,122,165,1);
+  align-items: center;
+  display: flex;
+  position: absolute;
+  max-width: 1280px;
+  margin: 0 auto;
+  width: 100%;
+  height: 60px;
+  left: 0;
+  right: 0;
+  top: 0;
+}
+
+.logo {
+  max-height: 50px;  
 }
