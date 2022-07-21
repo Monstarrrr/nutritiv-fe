@@ -1,25 +1,25 @@
 export const config = {
   primaryColor: "#020047",
   secondaryColor: "#147aa5",
-  accentColorStrong: "##15f1ff",
+  accentColorStrong: "#15f1ff",
   accentColorWeak: "#205088",
   
   lightContrastColor: "#F2F2F2",
   darkContrastColor: "#0e1014",
-  lightTransparentColor: `rgba(255, 255, 255, 0.25)`,
+  lightTransparentColor: `rgba(255, 255, 255, 0.1)`,
   
   successColor: "#198754",
   infoColor: "#141270",
   inactiveColor: "#9d9ccc",
   warningColor: "#ffc107",
   errorColor: "#dc3545",
-  
+
   xsFontsize: "12px",
   smFontsize: "14px",
   mdFontsize: "18px",
   lgFontsize: "24px",
   xlFontsize: "32px",
-
+  
   xsSpacing: "4px",
   smSpacing: "8px",
   mdSpacing: "12px",
@@ -33,6 +33,7 @@ export const config = {
   
   xsBorder: "1px solid",
   smBorder: "2px solid",
+  mdBorder: "4px solid",
 }
 
 export const tokens = {
@@ -43,9 +44,9 @@ export const tokens = {
     accentStrong: `${config.accentColorStrong}`,
     accentWeak: `${config.accentColorWeak}`,
     
-    lightContrast: `${config.lightContrast}`,
-    darkContrast: `${config.darkContrast}`,
-    lightTransparent: `${config.lightTransparentColor}`,
+    contrastLight: `${config.lightContrast}`,
+    contrastDark: `${config.darkContrast}`,
+    transparentLight: `${config.lightTransparentColor}`,
     transparent: `transparent`,
     
     success: `${config.successColor}`,
@@ -53,7 +54,7 @@ export const tokens = {
     inactive: `${config.inactiveColor}`,
     warning: `${config.warningColor}`,
     error: `${config.errorColor}`,
-    
+        
     // SPECIFIC
     titleColor: `${config.lightContrastColor}`,
     paragraphColor: `${config.lightTransparentColor}`,
@@ -73,6 +74,7 @@ export const tokens = {
     fontSize: {
       xs: `${config.xsFontsize}`,
       sm: `${config.smFontsize}`,
+      md: `${config.mdFontsize}`,
       lg: `${config.lgFontsize}`,
       xl: `${config.xlFontsize}`,
     },
@@ -115,6 +117,7 @@ export const tokens = {
   border: {
     xs: `${config.xsBorder}`,
     sm: `${config.smBorder}`,
+    md: `${config.mdBorder}`,
   },
   borderRadius: {
     default: `${config.mdRadius}`,
@@ -130,7 +133,7 @@ export const tokens = {
     medium: "medium",
     small: "small",
   },
-  maxWidths: {
+  maxWidth: {
     sm: "544px",
     md: "768px",
     large: "1012px",
