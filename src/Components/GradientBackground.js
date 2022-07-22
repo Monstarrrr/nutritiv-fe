@@ -19,7 +19,7 @@ export const GradientBackground = ({ ...props }) => {
     background-size: 100% 100%;
     position: absolute;
     left: 0;
-    top: 0;
+    top: -${tokens.navHeight};
     width: 100%;
     height: 100%;
     z-index: -1;

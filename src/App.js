@@ -26,6 +26,8 @@ import { Footer } from './Footer/Footer';
 import { ReleaseNotes } from './Components/Releases/ReleaseNotes';
 import { Global, css } from '@emotion/react';
 import './App.scss';
+import { tokens } from './Helpers/styleTokens';
+import { PageContainer } from './Components/PageContainer';
 
 // init stripe
 const stripePromise = loadStripe(
@@ -210,34 +212,83 @@ function App() {
         <Global 
           styles={
             css`
-              /* body {
-                height: 4000px; // temp
-                margin: 0 auto;
-                position: relative;
+              body {
+                background: ${tokens.color.primary};
+                color: ${tokens.color.contrastLight};
+                font-family: 'Roboto', sans-serif;
               }
-              .grecaptcha-badge { 
-                visibility: hidden;
-              } */
             `
           }
         />
           <Navbar />
           <AnimatePresence exitBeforeEnter>
-            <Routes location={location} key={location.pathname}>
+            <Routes
+              location={location} 
+              key={location.pathname}
+            >
               {/* PUBLIC */}
               {/* <Route path="/" element={<GeneralLayout/>}> */}
                 {/* <Route index element={<Welcome/>} /> */}
                 <Route path="/" element={<Navigate replace to="/welcome"/>} />
                 <Route path="/welcome" element={<Homepage/>} />
-                <Route path="/products" element={<Products/>} />
+                <Route 
+                  path="/products" 
+                  element={
+                    <PageContainer>
+                      <Products/>
+                    </PageContainer>
+                  }
+                />
                 <Route path="/product">
-                  <Route path=":productTitle" element={<ProductPage/>} />
+                  <Route 
+                    path=":productTitle" 
+                    element={
+                      <PageContainer>
+                        <ProductPage/>
+                      </PageContainer>
+                    }
+                  />
                 </Route>
-                <Route path="/chat" element={<ChatConnection/>} /> 
-                <Route path="/releases" element={<ReleaseNotes/>} />
-                <Route path="/cancel" element={<CheckoutCancel/>} /> 
-                <Route path="/success" element={<CheckoutSuccess/>} />
-                <Route path="/page-not-found" element={<PageNotFound/>} />
+                <Route 
+                  path="/chat" 
+                  element={
+                    <PageContainer>
+                      <ChatConnection/>
+                    </PageContainer>
+                  } 
+                /> 
+                <Route 
+                  path="/releases" 
+                  element={
+                    <PageContainer>
+                      <ReleaseNotes/>
+                    </PageContainer>
+                  } 
+                />
+                <Route 
+                  path="/cancel" 
+                  element={
+                    <PageContainer>
+                      <CheckoutCancel/>
+                    </PageContainer>
+                  } 
+                /> 
+                <Route 
+                  path="/success" 
+                  element={
+                    <PageContainer>
+                      <CheckoutSuccess/>
+                    </PageContainer>
+                  } 
+                />
+                <Route 
+                  path="/page-not-found" 
+                  element={
+                    <PageContainer>
+                      <PageNotFound/>
+                    </PageContainer>
+                  } 
+                />
                 {/* PRIVATE */}
                 {/* RESTRICTED - USER */}
                 <Route element={<Restricted routeType="user" />}>

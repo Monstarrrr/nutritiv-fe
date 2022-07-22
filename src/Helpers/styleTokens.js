@@ -24,7 +24,8 @@ export const config = {
   smSpacing: "8px",
   mdSpacing: "12px",
   lgSpacing: "16px",
-  xlSpacing: "20px",
+  xlSpacing: "24px",
+  xxlSpacing: "42px",
   
   xsRadius: "0px",
   smRadius: "4px",
@@ -44,8 +45,8 @@ export const tokens = {
     accentStrong: `${config.accentColorStrong}`,
     accentWeak: `${config.accentColorWeak}`,
     
-    contrastLight: `${config.lightContrast}`,
-    contrastDark: `${config.darkContrast}`,
+    contrastLight: `${config.lightContrastColor}`,
+    contrastDark: `${config.darkContrastColor}`,
     transparentLight: `${config.lightTransparentColor}`,
     transparent: `transparent`,
     
@@ -68,6 +69,7 @@ export const tokens = {
     md: `${config.mdSpacing}`,
     lg: `${config.lgSpacing}`,
     xl: `${config.xlSpacing}`,
+    xxl: `${config.xxlSpacing}`,
   },
   
   font: {
@@ -79,7 +81,9 @@ export const tokens = {
       xl: `${config.xlFontsize}`,
     },
     fontWeight: {
-      normal: "400",
+      thin: "100",
+      light: "300",
+      normal: "500",
       bold: "700",
       extrabold: "900",
     },
@@ -136,8 +140,8 @@ export const tokens = {
   maxWidth: {
     sm: "544px",
     md: "768px",
-    large: "1012px",
-    xlarge: "1280px",
+    lg: "1012px",
+    xl: "1280px",
   },
   
   listStyleType: {
@@ -145,4 +149,7 @@ export const tokens = {
     disc: "disc",
     decimal: "decimal",
   },
+
+  // Specifics
+  navHeight: "120px",
 }

@@ -2,10 +2,19 @@
 import React from 'react';
 import { GradientBackground } from '../GradientBackground';
 import styled from '@emotion/styled';
+import { tokens } from '../../Helpers/styleTokens';
 
 export const Homepage = () => {
-
+  
   // Styles
+  const ContentContainer = styled.div`
+    left: 0;
+    margin: 0 auto;
+    max-width: ${tokens.maxWidth.xl};
+    position: absolute;
+    right: 0;
+    top: ${tokens.navHeight};
+  `
   const VideoContainer = styled.div`
     position: absolute;
     left: 0;
@@ -14,7 +23,14 @@ export const Homepage = () => {
   `
   
   return (
-    <div>
+    <>
+      <ContentContainer>
+        <h2>
+          Homepage
+        </h2>
+
+      </ContentContainer>
+      
       <GradientBackground
         firstColor="secondary"
         secondColor="primary"
@@ -50,6 +66,6 @@ export const Homepage = () => {
           <Scene type="pill" />
         </Canvas>
       </div> */}
-    </div>
+    </>
   )
 }
