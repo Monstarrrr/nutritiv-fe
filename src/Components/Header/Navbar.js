@@ -24,6 +24,45 @@ export default function Navbar() {
     setHighlighted(location.pathname)
   }, [location.pathname]);
   
+  const DelayLink = (props) => {
+    const { label, delay, replace, to } = props;
+    let timeout = null;
+    let navigate = useNavigate();
+    let location = useLocation();
+    
+    const NavLink = styled(({active, ...props }) => <Link {...props} />)`
+      font-size: ${tokens.font.fontSize.sm};
+      pointer-events: ${props => 
+        props.active && `none`
+      };
+      user-select: none;
+      z-index: 1;
+    `
+
+    useEffect(() => {
+      return () => {
+        if (timeout) {
+          clearTimeout(timeout);
+        }
+      };
+    }, [timeout]);
+    
+    const handleClick = e => {
+      if (location?.pathname === to) return;
+      e.preventDefault();
+  
+      timeout = setTimeout(() => {
+        navigate(to, { replace })
+      }, delay);
+    };
+    
+    return (
+      <NavLink to={to} onClick={handleClick}>
+        {label}
+      </NavLink>
+    )
+  }
+
   // Styles
   const LogoSide = styled.div``
   const NavSide = styled.div``
@@ -88,7 +127,7 @@ export default function Navbar() {
       user-select: none;
     };
   `
-  const NavLink = styled(({active, ...props }) => <Link {...props} />)`
+  const DelayedLink = styled(({active, ...props }) => <DelayLink {...props} />)`
     font-size: ${tokens.font.fontSize.sm};
     pointer-events: ${props => 
       props.active && `none`
@@ -96,7 +135,7 @@ export default function Navbar() {
     user-select: none;
     z-index: 1;
   `
-  
+
   return (
     <Nav>
       <LogoSide>
@@ -124,12 +163,15 @@ export default function Navbar() {
                 setHighlighted(location.pathname)
               }}
             >
-              <NavLink
+              <DelayedLink
                 active={location.pathname === item.link}
+                delay={
+                  location.pathname === navLinksItems[0].link ? 200 : 0
+                }
+                label={item.label}
+                replace={false}
                 to={item.link}
-              >
-                {item.label}
-              </NavLink>
+              />
               {
                 hovered === item.link && (
                   <motion.div

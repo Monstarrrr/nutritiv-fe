@@ -221,7 +221,7 @@ function App() {
           }
         />
           <Navbar />
-          <AnimatePresence exitBeforeEnter>
+          <AnimatePresence exitBeforeEnter={false}>
             <Routes
               location={location} 
               key={location.pathname}
