@@ -28,6 +28,7 @@ import { Global, css } from '@emotion/react';
 import './App.scss';
 import { tokens } from './Helpers/styleTokens';
 import { PageContainer } from './Components/PageContainer';
+import { GradientBackground } from './Components/GradientBackground';
 
 // init stripe
 const stripePromise = loadStripe(
@@ -98,7 +99,7 @@ function App() {
     }
     return () => { isSubscribed = false }
   }, [dispatch, gettingUserInfo]);
-  
+
   useEffect(() => {
     // oAUTH
     if(
@@ -213,15 +214,26 @@ function App() {
           styles={
             css`
               body {
-                background: ${tokens.color.primary};
+                background: white;
                 color: ${tokens.color.contrastLight};
                 font-family: 'Roboto', sans-serif;
               }
             `
           }
         />
+        <GradientBackground
+          firstColor="secondary"
+          secondColor="primary"
+          initial={{
+            "backgroundPosition": "100% 0px",
+          }}
+          exit={{
+            "backgroundPosition": "100% -1250px",
+          }}
+          transition={{ duration: 0.5 }}
+        />
           <Navbar />
-          <AnimatePresence exitBeforeEnter={false}>
+          <AnimatePresence exitBeforeEnter>
             <Routes
               location={location} 
               key={location.pathname}

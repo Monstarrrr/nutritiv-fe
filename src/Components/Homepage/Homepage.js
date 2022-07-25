@@ -1,6 +1,5 @@
 /** @jsxImportSource @emotion/react */
 import React from 'react';
-import { GradientBackground } from '../GradientBackground';
 import styled from '@emotion/styled';
 import { tokens } from '../../Helpers/styleTokens';
 
@@ -30,18 +29,6 @@ export const Homepage = () => {
         </h2>
 
       </ContentContainer>
-      
-      <GradientBackground
-        firstColor="secondary"
-        secondColor="primary"
-        initial={{
-          "backgroundPosition": "100% 0px",
-        }}
-        exit={{
-          "backgroundPosition": "100% -1250px",
-        }}
-        transition={{ duration: 0.5 }}
-      />
       <VideoContainer>
         <video width="100%" height="100%" autoPlay loop muted playsInline>
           <source src="/video_iceberg.webm" type="video/webm" />
