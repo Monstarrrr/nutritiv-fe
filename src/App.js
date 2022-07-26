@@ -28,7 +28,7 @@ import { Global, css } from '@emotion/react';
 import './App.scss';
 import { tokens } from './Helpers/styleTokens';
 import { PageContainer } from './Components/PageContainer';
-import { GradientBackground } from './Components/GradientBackground';
+import { Background } from './Components/GradientBackground';
 
 // init stripe
 const stripePromise = loadStripe(
@@ -221,16 +221,14 @@ function App() {
             `
           }
         />
-        <GradientBackground
-          firstColor="secondary"
-          secondColor="primary"
-          initial={{
-            "backgroundPosition": "100% 0px",
+        <Background
+          initial={false}
+          firstColor={tokens.color.secondary}
+          secondColor={tokens.color.primary}
+          transition={{ 
+            duration: 0.6, 
+            ease: "easeInOut"
           }}
-          exit={{
-            "backgroundPosition": "100% -1250px",
-          }}
-          transition={{ duration: 0.5 }}
         />
           <Navbar />
           <AnimatePresence exitBeforeEnter>

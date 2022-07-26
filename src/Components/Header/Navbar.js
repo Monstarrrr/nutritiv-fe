@@ -5,15 +5,19 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { tokens } from '../../Helpers/styleTokens';
 import { Logout } from '../Authentication/Logout';
 // import styled from '@emotion/styled';
-import styled from 'styled-components'
 import { AnimatePresence, motion } from 'framer-motion';
 import { DelayLink } from '../DelayLink';
+import { SearchIcon } from '../Icons/SearchIcon';
+import styled from '@emotion/styled';
+import { CartIcon } from '../Icons/CartIcon';
+import { CounterIcon } from '../Icons/CounterIcon';
+import { css } from '@emotion/react';
 
 // Styles
 const LogoSide = styled.div``
 const NavSide = styled.div``
 const ProfileSide = styled.div``
-const LinkWrapper = styled(({active, ...props }) => <motion.div {...props} />)`
+const NavLinkWrapper = styled(({active, ...props }) => <motion.div {...props} />)`
   cursor: pointer;
   position: relative;
 `
@@ -49,7 +53,7 @@ const Nav = styled(motion.nav)`
     justify-content: center;
     flex: 2;
     text-transform: uppercase;
-    ${LinkWrapper} {
+    ${NavLinkWrapper} {
       align-items: center;
       cursor: pointer;
       display: flex;
@@ -73,6 +77,10 @@ const LogoLink = styled(({active, ...props }) => <Link {...props} />)`
     user-select: none;
   };
 `
+const ProfileLink = styled(({active, ...props}) => <Link {...props} />)`
+  margin: 0 ${tokens.spacing.md};
+  position: relative;
+`
 const DelayedLink = styled(({active, ...props }) => <DelayLink {...props} />)`
   font-size: ${tokens.font.fontSize.sm};
   pointer-events: ${props => 
@@ -82,10 +90,13 @@ const DelayedLink = styled(({active, ...props }) => <DelayLink {...props} />)`
   z-index: 1;
 `
 
+const IconContainer = styled.div`
+  height: ${tokens.font.fontSize.lg};
+`
+
 export default function Navbar() {
   const user = useSelector(state => state.user)
   const location = useLocation();
-  const navigate = useNavigate();
   const [hovered, setHovered] = useState("");
   const [active, setActive] = useState(location.pathname);
   
@@ -95,10 +106,14 @@ export default function Navbar() {
     {link: "/chat", label: "Chats"}
   ]
 
+  useEffect(() => {
+    setActive(location.pathname);
+  }, [location.pathname]);
+
   return (
     <Nav>
       <LogoSide>
-        <LinkWrapper>
+        <NavLinkWrapper>
           <LogoLink
             active={location.pathname === "/welcome"}
             to="/welcome"
@@ -108,12 +123,12 @@ export default function Navbar() {
               src="/logo.png"
             />
           </LogoLink>
-        </LinkWrapper>
+        </NavLinkWrapper>
       </LogoSide>
       
       <NavSide>
         {navLinksItems.map(item => (
-          <LinkWrapper
+          <NavLinkWrapper
             key={item.link}
             onClick={() => setActive(item.link)}
             onMouseEnter={() => setHovered(item.link)}
@@ -179,44 +194,76 @@ export default function Navbar() {
                 }}
               />
             )}
-          </LinkWrapper>
+          </NavLinkWrapper>
         ))}
       </NavSide>
       
       <ProfileSide>
-        {
-          user.loggedIn ? (
-            <>
-              <Link to="/profile">
-                { user.username }
-              </Link>
-              <span>----</span>
-              <img
-                alt="avatar"
-                style={{
-                  maxWidth: "30px",
-                }}
-                src={user.avatar}
-              />
-              <span>----</span>
-              <button onClick={() => navigate('/cart')}>
-                Cart 
-                {
+        {user.loggedIn ? (
+          <>
+            <ProfileLink 
+              active={location.pathname === "/products"}
+              to="/products"
+            >
+              <IconContainer>
+                <SearchIcon
+                  color={tokens.color.contrastLight}
+                  strokeWidth={2}
+                />
+              </IconContainer>
+            </ProfileLink>
+            {/* <Link to="/profile">
+              { user.username }
+            </Link> */}
+            {/* <img
+              alt="avatar"
+              style={{
+                maxWidth: "30px",
+              }}
+              src={user.avatar}
+            /> */}
+            <ProfileLink to={'/cart'}>
+              <IconContainer>
+                <CartIcon
+                  color={tokens.color.contrastLight}
+                  strokeWidth={2}
+                />
+                {/* {
                   user?.cartQuantity > 0 && (
                     <span>({user.cartQuantity})</span>
-                  )
-                }
-              </button>
-              <span>----</span>
-              <Logout />
-            </>
-          ) : (
-            <>
-              <Link to="/register">Register</Link>
-              <Link to="/login">Login</Link>
-            </>
-          )
-        }
+                    )
+                  } */}
+              </IconContainer>
+              {
+                user?.cartQuantity > 0 && (
+                  <IconContainer
+                    css={css`
+                      position: absolute;
+                      top: -5px;
+                      right: -12px;
+                    `}
+                  >
+                    <CounterIcon
+                      backgroundColor={tokens.color.accentStrong}
+                      count={user.cartQuantity}
+                      relativeFontSize="60"
+                      strokeWidth={2}
+                      textColor={tokens.color.contrastDark}
+                      height="85%"
+                      width="85%"
+                    />
+                  </IconContainer>
+                )
+              }
+            </ProfileLink>
+            {/* <Logout /> */}
+          </>
+        ) : (
+          <>
+            <Link to="/register">Register</Link>
+            <Link to="/login">Login</Link>
+          </>
+        )}
       </ProfileSide>
     </Nav>
   )

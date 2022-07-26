@@ -1,10 +1,9 @@
 import { motion } from 'framer-motion';
 import styled from '@emotion/styled'
-import { tokens } from '../Helpers/styleTokens';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
-const Background = styled(motion.div)`
+const StyledBackground = styled(motion.div)`
     background-size: 100% 100%;
     bottom: 0;
     position: absolute;
@@ -15,9 +14,9 @@ const Background = styled(motion.div)`
     z-index: -1;
   `;
 
-export const GradientBackground = ({ ...props }) => {
+export const Background = ({ ...props }) => {
   const { 
-    firstColor, secondColor, initial, exit, transition 
+    firstColor, secondColor, initial, transition 
   } = props;
 
   const location = useLocation();
@@ -25,16 +24,12 @@ export const GradientBackground = ({ ...props }) => {
   
   const variants = {
     homepage: { 
-      backgroundImage: "linear-gradient(180deg, rgba(20,122,165,1) 0px, rgba(20,122,165,1) 650px, rgba(2,0,71,1) 1250px)",
-      transition: { 
-        duration: 1 
-      }
+      backgroundImage: `linear-gradient(180deg, ${firstColor} 0px, ${firstColor} 650px, ${secondColor} 1250px)`,
+      transition: transition
     },
     default: {
-      backgroundImage: "linear-gradient(180deg, rgba(20,122,165,1) 0px, rgba(20,122,165,1) 0px, rgba(2,0,71,1) 0px)",
-      transition: { 
-        duration: 1
-      } 
+      backgroundImage: `linear-gradient(180deg, ${firstColor} 0px, ${firstColor} 0px, ${secondColor} 0px)`,
+      transition: transition
     }
   };
   
@@ -42,12 +37,10 @@ export const GradientBackground = ({ ...props }) => {
     setHomepage(location.pathname === "/welcome")
   }, [location.pathname]);
   
-  console.log('# homepage :', homepage)
-  
   return (
-    <Background
+    <StyledBackground
       variants={variants}
-      initial={false}
+      initial={initial}
       animate={homepage ? 'homepage' : 'default'}
     />
   )
