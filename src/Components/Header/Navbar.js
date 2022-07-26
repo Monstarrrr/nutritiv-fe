@@ -245,12 +245,8 @@ export default function Navbar() {
                   >
                     <CounterIcon
                       backgroundColor={tokens.color.accentStrong}
-                      count={user.cartQuantity}
-                      relativeFontSize="60"
-                      strokeWidth={2}
                       textColor={tokens.color.contrastDark}
-                      height="85%"
-                      width="85%"
+                      count={user.cartQuantity}
                     />
                   </IconContainer>
                 )

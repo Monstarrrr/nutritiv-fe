@@ -13,7 +13,7 @@ export const config = {
   inactiveColor: "#9d9ccc",
   warningColor: "#ffc107",
   errorColor: "#dc3545",
-
+  
   xsFontsize: "12px",
   smFontsize: "14px",
   mdFontsize: "18px",
