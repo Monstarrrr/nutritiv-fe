@@ -1,10 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { tokens } from '../../Helpers/styleTokens';
-import { Logout } from '../Authentication/Logout';
-// import styled from '@emotion/styled';
+import { Link, useLocation } from 'react-router-dom';
+import { mediaQueries, mediaQuery, tokens } from '../../Helpers/styleTokens';
 import { AnimatePresence, motion } from 'framer-motion';
 import { DelayLink } from '../DelayLink';
 import { SearchIcon } from '../Icons/SearchIcon';
@@ -12,6 +10,9 @@ import styled from '@emotion/styled';
 import { CartIcon } from '../Icons/CartIcon';
 import { CounterIcon } from '../Icons/CounterIcon';
 import { css } from '@emotion/react';
+import { ChatIcon } from '../Icons/ChatIcon';
+import { useLayoutEffect } from 'react';
+import { Logout } from '../Authentication/Logout';
 
 // Styles
 const LogoSide = styled.div``
@@ -20,6 +21,7 @@ const ProfileSide = styled.div``
 const NavLinkWrapper = styled(({active, ...props }) => <motion.div {...props} />)`
   cursor: pointer;
   position: relative;
+  user-select: none;
 `
 const Nav = styled(motion.nav)`
   align-items: center;
@@ -34,8 +36,16 @@ const Nav = styled(motion.nav)`
   position: absolute;
   right: 0;
   top: 0;
-  user-select: none;
   width: 100%;
+  /* ${mediaQuery[2]} {
+    background: green;
+  }
+  ${mediaQuery[3]} {
+    background: blue;
+  }
+  ${mediaQueries({
+    background: ["transparent", "transparent", "transparent", "transparent"]
+  })} */
   ${LogoSide}, ${NavSide}, ${ProfileSide} {
     align-items: center;
     display: flex;
@@ -78,20 +88,16 @@ const LogoLink = styled(({active, ...props }) => <Link {...props} />)`
   };
 `
 const ProfileLink = styled(({active, ...props}) => <Link {...props} />)`
+  height: 24px;
   margin: 0 ${tokens.spacing.md};
   position: relative;
 `
-const DelayedLink = styled(({active, ...props }) => <DelayLink {...props} />)`
-  font-size: ${tokens.font.fontSize.sm};
-  pointer-events: ${props => 
-    props.active && `none`
-  };
-  user-select: none;
-  z-index: 1;
-`
-
 const IconContainer = styled.div`
   height: ${tokens.font.fontSize.lg};
+`
+const Avatar = styled.img`
+  height: 100%;
+  width: 100%;
 `
 
 export default function Navbar() {
@@ -102,13 +108,14 @@ export default function Navbar() {
   
   const navLinksItems = [
     {link: "/welcome", label: "Home"},
-    {link: "/products", label: "Products"},
-    {link: "/chat", label: "Chats"}
+    {link: "/products", label: "Shop"},
+    {link: "/contact", label: "Contact"}
   ]
-
-  useEffect(() => {
+  
+  useLayoutEffect(() => {
     setActive(location.pathname);
-  }, [location.pathname]);
+    window.scrollTo({top: 0, left: 0, behavior: "smooth"})
+  }, [location.hash, location.pathname]);
 
   return (
     <Nav>
@@ -129,19 +136,20 @@ export default function Navbar() {
       <NavSide>
         {navLinksItems.map(item => (
           <NavLinkWrapper
+            active={location.pathname === item.link}
             key={item.link}
             onClick={() => setActive(item.link)}
             onMouseEnter={() => setHovered(item.link)}
             onMouseLeave={() => setHovered(null)}
           >
-            <DelayedLink
+            <DelayLink
               active={location.pathname === item.link}
               delay={210}
               label={item.label}
               replace={false}
               to={item.link}
+              smooth={true}
             />
-            
             <AnimatePresence>
               {hovered === item.link && (
                 <motion.div
@@ -215,24 +223,12 @@ export default function Navbar() {
             {/* <Link to="/profile">
               { user.username }
             </Link> */}
-            {/* <img
-              alt="avatar"
-              style={{
-                maxWidth: "30px",
-              }}
-              src={user.avatar}
-            /> */}
             <ProfileLink to={'/cart'}>
               <IconContainer>
                 <CartIcon
                   color={tokens.color.contrastLight}
                   strokeWidth={2}
                 />
-                {/* {
-                  user?.cartQuantity > 0 && (
-                    <span>({user.cartQuantity})</span>
-                    )
-                  } */}
               </IconContainer>
               {
                 user?.cartQuantity > 0 && (
@@ -252,7 +248,27 @@ export default function Navbar() {
                 )
               }
             </ProfileLink>
-            {/* <Logout /> */}
+            <ProfileLink
+              active={location.pathname === "/profile"}
+              to="/profile"
+            >
+              <IconContainer>
+                <ChatIcon
+                  color={tokens.color.contrastLight}
+                  strokeWidth={2}
+                />
+              </IconContainer>
+            </ProfileLink>
+            <ProfileLink
+              active={location.pathname === "/profile"}
+              to="/profile"
+            >
+              <Avatar
+                alt="avatar"
+                src={user.avatar}
+              />
+            </ProfileLink>
+            <Logout />
           </>
         ) : (
           <>

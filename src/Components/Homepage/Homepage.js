@@ -2,6 +2,7 @@
 import React from 'react';
 import styled from '@emotion/styled';
 import { tokens } from '../../Helpers/styleTokens';
+import { css } from '@emotion/react';
 
 export const Homepage = () => {
   
@@ -34,6 +35,16 @@ export const Homepage = () => {
           <source src="/video_iceberg.webm" type="video/webm" />
         </video>
       </VideoContainer>
+
+      <div 
+        css={css`
+          position: absolute;
+          bottom: 0;
+        `}
+        id="contact"
+      >
+        Contact
+      </div>
       
       {/* temp
         <video autoPlay loop width="1080" height="1080">

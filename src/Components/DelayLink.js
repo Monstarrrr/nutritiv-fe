@@ -4,18 +4,17 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { tokens } from "../Helpers/styleTokens";
 
 export const DelayLink = (props) => {
-  const { label, delay, replace, to } = props;
+  const { label, delay, replace, to, active } = props;
   let timeout = null;
   let navigate = useNavigate();
   let location = useLocation();
   
-  const NavLink = styled(({active, ...props }) => <Link {...props} />)`
+  const NavLink = styled(Link)`
     font-size: ${tokens.font.fontSize.sm};
     pointer-events: ${props => 
-      props.active && `none`
+      props.active ? "none" : "initial"
     };
-    user-select: none;
-    z-index: 1;
+    z-index: 2;
   `
   
   useEffect(() => {
@@ -37,7 +36,7 @@ export const DelayLink = (props) => {
   };
   
   return (
-    <NavLink to={to} onClick={handleClick}>
+    <NavLink to={to} active={active} onClick={handleClick}>
       {label}
     </NavLink>
   )

@@ -1,4 +1,20 @@
-export const config = {
+import facepaint from "facepaint"
+
+const breakpoints = [
+  576, // 0
+  768, // 1
+  992, // 2
+  1200 // 3
+]
+export const mediaQuery = breakpoints.map(bp => 
+  `@media (min-width: ${bp}px)`
+)
+export const mediaQueries = facepaint(
+  mediaQuery,
+  {overlap: true}
+)
+
+const config = {
   primaryColor: "#020047",
   secondaryColor: "#147aa5",
   accentColorStrong: "#15f1ff",
@@ -151,5 +167,5 @@ export const tokens = {
   },
 
   // Specifics
-  navHeight: "120px",
+  navHeight: "100px",
 }

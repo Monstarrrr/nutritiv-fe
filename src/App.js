@@ -29,6 +29,7 @@ import './App.scss';
 import { tokens } from './Helpers/styleTokens';
 import { PageContainer } from './Components/PageContainer';
 import { Background } from './Components/GradientBackground';
+import { Contact } from './Components/Contact/Contact';
 
 // init stripe
 const stripePromise = loadStripe(
@@ -239,79 +240,67 @@ function App() {
               {/* PUBLIC */}
               {/* <Route path="/" element={<GeneralLayout/>}> */}
                 {/* <Route index element={<Welcome/>} /> */}
-                <Route path="/" element={<Navigate replace to="/welcome"/>} />
-                <Route path="/welcome" element={<Homepage/>} />
-                <Route 
-                  path="/products" 
-                  element={
-                    <PageContainer>
-                      <Products/>
-                    </PageContainer>
-                  }
+                <Route path="/" element={
+                    <Navigate replace to="/welcome"/>
+                  } 
                 />
+                <Route 
+                  path="/welcome" 
+                  element={<Homepage/>} 
+                />
+                <Route path="/contact" element={
+                  <PageContainer><Contact/></PageContainer>
+                }/>
+                <Route path="/products" element={
+                  <PageContainer><Products/></PageContainer>
+                }/>
                 <Route path="/product">
-                  <Route 
-                    path=":productTitle" 
-                    element={
-                      <PageContainer>
-                        <ProductPage/>
-                      </PageContainer>
-                    }
-                  />
+                  <Route path=":productTitle" element={
+                    <PageContainer><ProductPage/></PageContainer>
+                  }/>
                 </Route>
-                <Route 
-                  path="/chat" 
-                  element={
-                    <PageContainer>
-                      <ChatConnection/>
-                    </PageContainer>
-                  } 
-                /> 
-                <Route 
-                  path="/releases" 
-                  element={
-                    <PageContainer>
-                      <ReleaseNotes/>
-                    </PageContainer>
-                  } 
-                />
-                <Route 
-                  path="/cancel" 
-                  element={
-                    <PageContainer>
-                      <CheckoutCancel/>
-                    </PageContainer>
-                  } 
-                /> 
-                <Route 
-                  path="/success" 
-                  element={
-                    <PageContainer>
-                      <CheckoutSuccess/>
-                    </PageContainer>
-                  } 
-                />
-                <Route 
-                  path="/page-not-found" 
-                  element={
-                    <PageContainer>
-                      <PageNotFound/>
-                    </PageContainer>
-                  } 
-                />
+                <Route path="/chat" element={
+                  <PageContainer><ChatConnection/></PageContainer>
+                }/> 
+                <Route path="/releases" element={
+                  <PageContainer><ReleaseNotes/></PageContainer>
+                }/>
+                <Route path="/cancel" element={
+                  <PageContainer><CheckoutCancel/></PageContainer>
+                }/>
+                <Route path="/success" element={
+                  <PageContainer><CheckoutSuccess/></PageContainer>
+                }/>
+                <Route path="/page-not-found" element={
+                  <PageContainer><PageNotFound/></PageContainer>
+                }/>
                 {/* PRIVATE */}
                 {/* RESTRICTED - USER */}
                 <Route element={<Restricted routeType="user" />}>
-                  <Route path="/profile" element={<Profile/>} />
-                  <Route path="/cart" element={<Cart/>} />
+                  <Route path="/profile" element={
+                    <PageContainer><Profile/></PageContainer>
+                  }/>
+                  <Route path="/cart" element={
+                    <PageContainer><Cart/></PageContainer>
+                  }/>
                 </Route>
                 {/* RESTRICTED - GUEST */}
                 <Route element={<Restricted routeType="guest" />}>
-                  <Route path="/login" element={<Login/>} />
-                  <Route path="/register" element={<Register/>} />
-                  <Route path="/forgot-password" element={<ForgotPassword/>} />
-                  <Route path="/reset-password" element={<ResetPassword/>} />
-                  <Route path="/forgot-2FA" element={<ForgotTFA/>} />
+                  <Route path="/login" element={
+                    <PageContainer><Login/></PageContainer>
+                  }/>
+                  <Route path="/register" element={
+                    <PageContainer><Register/></PageContainer>
+                  }/>
+                  <Route path="/forgot-password" element={
+                    <PageContainer><ForgotPassword/></PageContainer>
+                  }/>
+                  <Route path="/reset-password" element={
+                    <PageContainer><ResetPassword/></PageContainer>
+                  }/>
+                  <Route path="/forgot-2FA" element={
+                    <PageContainer><ForgotTFA/></PageContainer>
+                  }/>
                 </Route>
               {/* </Route> */}
             </Routes>
