@@ -10,7 +10,6 @@ export const DelayLink = (props) => {
   let location = useLocation();
   
   const NavLink = styled(Link)`
-    font-size: ${tokens.font.fontSize.sm};
     pointer-events: ${props => 
       props.active ? "none" : "initial"
     };

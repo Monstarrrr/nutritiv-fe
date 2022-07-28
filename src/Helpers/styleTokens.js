@@ -19,6 +19,7 @@ const config = {
   secondaryColor: "#147aa5",
   accentColorStrong: "#15f1ff",
   accentColorWeak: "#205088",
+  accentColorTransparent: "rgba(21, 241, 255, 0.4)",
   
   lightContrastColor: "#F2F2F2",
   darkContrastColor: "#0e1014",
@@ -41,12 +42,14 @@ const config = {
   mdSpacing: "12px",
   lgSpacing: "16px",
   xlSpacing: "24px",
-  xxlSpacing: "42px",
+  xxlSpacing: "32px",
+  maxSpacing: "46px",
   
   xsRadius: "0px",
   smRadius: "4px",
   mdRadius: "8px",
   lgRadius: "12px",
+  maxRadius: "999px",
   
   xsBorder: "1px solid",
   smBorder: "2px solid",
@@ -60,6 +63,7 @@ export const tokens = {
     secondary: `${config.secondaryColor}`,
     accentStrong: `${config.accentColorStrong}`,
     accentWeak: `${config.accentColorWeak}`,
+    accentTransparent: `${config.accentColorTransparent}`,
     
     contrastLight: `${config.lightContrastColor}`,
     contrastDark: `${config.darkContrastColor}`,
@@ -86,6 +90,7 @@ export const tokens = {
     lg: `${config.lgSpacing}`,
     xl: `${config.xlSpacing}`,
     xxl: `${config.xxlSpacing}`,
+    max: `${config.maxSpacing}`,
   },
   
   font: {
@@ -99,9 +104,10 @@ export const tokens = {
     fontWeight: {
       thin: "100",
       light: "300",
-      normal: "500",
+      regular: "400",
+      medium: "500",
       bold: "700",
-      extrabold: "900",
+      black: "900",
     },
     fontFamily: {
       sans: ['"source sans pro"', "helvetica", "arial", "sans-serif"],
@@ -140,11 +146,13 @@ export const tokens = {
     md: `${config.mdBorder}`,
   },
   borderRadius: {
-    default: `${config.mdRadius}`,
+    default: `${config.maxRadius}`,
     none: "0",
     xs: `${config.xsRadius}`,
+    sm: `${config.smRadius}`,
     md: `${config.mdRadius}`,
     lg: `${config.lgRadius}`,
+    max: `${config.maxRadius}`,
     round: "50%",
   },
   

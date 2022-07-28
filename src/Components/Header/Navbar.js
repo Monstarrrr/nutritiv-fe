@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 import { mediaQueries, mediaQuery, tokens } from '../../Helpers/styleTokens';
@@ -13,6 +13,7 @@ import { css } from '@emotion/react';
 import { ChatIcon } from '../Icons/ChatIcon';
 import { useLayoutEffect } from 'react';
 import { Logout } from '../Authentication/Logout';
+import { NutriButton } from '../NutriButton';
 
 // Styles
 const LogoSide = styled.div``
@@ -28,6 +29,7 @@ const Nav = styled(motion.nav)`
   border-bottom: ${tokens.border.sm};
   border-color: ${tokens.color.transparentLight};
   display: flex;
+  font-size: ${tokens.font.fontSize.sm};
   height: ${tokens.navHeight};
   justify-content: space-between;
   left: 0;
@@ -52,7 +54,7 @@ const Nav = styled(motion.nav)`
     height: 100%;
     a {
       color: ${tokens.color.contrastLight};
-      font-weight: ${tokens.font.fontWeight.bold};
+      font-weight: ${tokens.font.fontWeight.medium};
       text-decoration: none;
     }
   };
@@ -69,7 +71,7 @@ const Nav = styled(motion.nav)`
       display: flex;
       height: 100%;
       a {
-        padding: 0 ${tokens.spacing.xxl};
+        padding: 0 ${tokens.spacing.max};
         line-height: ${tokens.navHeight};
       }
     }
@@ -98,6 +100,9 @@ const IconContainer = styled.div`
 const Avatar = styled.img`
   height: 100%;
   width: 100%;
+`
+const LoginLink = styled(Link)`
+  padding: ${tokens.spacing.md} ${tokens.spacing.xxl};
 `
 
 export default function Navbar() {
@@ -249,8 +254,8 @@ export default function Navbar() {
               }
             </ProfileLink>
             <ProfileLink
-              active={location.pathname === "/profile"}
-              to="/profile"
+              active={location.pathname === "/chat"}
+              to="/chat"
             >
               <IconContainer>
                 <ChatIcon
@@ -272,8 +277,18 @@ export default function Navbar() {
           </>
         ) : (
           <>
-            <Link to="/register">Register</Link>
-            <Link to="/login">Login</Link>
+            <LoginLink to="/login">
+              Login
+            </LoginLink>
+            <NutriButton
+              wave
+              type="filled"
+              label="Register"
+              rounded={tokens.borderRadius.sm} 
+              to="/register"
+            >
+              Register
+            </NutriButton>
           </>
         )}
       </ProfileSide>

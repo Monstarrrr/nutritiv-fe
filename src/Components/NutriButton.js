@@ -1,25 +1,75 @@
+/** @jsxImportSource @emotion/react */
 import React from "react"
 import { tokens } from "../Helpers/styleTokens";
 import styled from "@emotion/styled"
-import { css } from "@emotion/react"
+import { css, keyframes } from "@emotion/react"
+import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
-const { 
-  color, font, borderRadius, spacing
-} = tokens;
+const waveAnimation = keyframes`
+  from {
+    background-position-x: 0%;
+  }
+  to {
+    background-position-x: -300%;
+  }
+`
 
 export const NutriButton = ({ ...props }) => {
+  const navigate = useNavigate();
+  // type:      'filled'  | none
+  // rounded:   any       | none
+  // disabled:  true      | [false]
+  // size:      'small'   | none
+  // accent:    'confirm' | 'info' | 'warning' | 'error' | none
   
-  const StyledButton = styled.button`
-    border-radius: ${borderRadius.default};
-    background-color: ${color.transparent};
+  const handleClick = () => {
+    navigate('/register');
+  }
+  
+  const StyledLabel = styled.label`
+    cursor: pointer;
+    ${props => {
+      return (
+        props.wave && (
+          css`
+            filter: invert(1);
+            color: #ea0e00;
+            mix-blend-mode: difference;
+          `
+        )
+      )
+    }}
+  `
+
+  const StyledButton = styled(motion.button)`
+    border-radius: ${tokens.borderRadius.default};
     border: none;
     cursor: pointer;
+    font-weight: ${tokens.font.fontWeight.medium};
     outline: none;
-    /* &:hover {
-      box-shadow: inset 0 0 0 100em rgb(0 0 0 / 10%);
-    }
-    width: ${props => props.block === "block" ? "100%" : ""}; */
     
+    /* type */;
+    ${props => {
+      return (
+        props.type === "filled" ? (
+        css`
+          background: ${tokens.color.accentStrong};
+          color: ${tokens.color.contrastDark};
+          border: none;
+          /* &:hover {
+            box-shadow: inset 0 0 0 100em rgb(0 0 0 / 10%);
+          } */
+        `
+      ) : (
+        css`
+          background-color: ${tokens.color.transparent};
+          color: ${tokens.color.contrastLight};
+          border: 1px solid ${tokens.color.accentTransparent};
+        `
+      ))
+    }};
+
     /* disabled */;
     ${props => {
       return (
@@ -35,180 +85,87 @@ export const NutriButton = ({ ...props }) => {
     
     /* rounded */
     ${props => {
-      return (
-        ((typeof props.rounded === "boolean") && props.rounded) ? (
-          css`
-            border-radius: ${borderRadius.default};
-          `
-        ) : (
-          css`
-            border-radius: ${props.rounded};
-          `
-        )
-      )
+      return props.rounded ? (css`
+        border-radius: ${props.rounded};
+      `) : (css`
+        border-radius: ${tokens.borderRadius.default};
+      `)
     }}
     
     /* size */;
     ${props => {
       return (
-        props.size === "small" &&
+        props.size === "small" ? (
         css`
-          padding: ${spacing.sm};
-          font-size: ${font.fontSize.sm};
+          padding: calc(${tokens.spacing.md} / 2) ${tokens.spacing.lg};
+          font-size: ${tokens.font.fontSize.xs};
         `
-      )
-    }}
-    ${props => {
-      return (
-        props.size === "medium" &&
+      ) : (
         css`
-          padding: ${spacing.lg};
-          font-size: ${font.fontSize.lg};
+          padding: calc(${tokens.spacing.xl} / 2) ${tokens.spacing.xxl};
+          font-size: ${tokens.font.fontSize.sm};
         `
-      )
+      ))
     }}
-    ${props => {
-      return (
-        props.size === "large" &&
-        css`
-          padding: ${spacing.xl};
-          font-size: ${font.fontSize.xl};
-        `
-      )
-    }}
-    ${props => {
-      return (
-        props.size &&
-        css`
-          padding: ${props.size / 2 + "px"} ${props.size + "px"};
-          font-size: ${props.size + "px"};
-        `
-      )
-    }}
-    
+
     /* accent */;
     ${props => {
       return (
-        props.accent === "secondary" &&
+        props.accent === "confirm" &&
         css`
-          background: ${color.secondary};
-          color: ${color.buttonColorSecondary};
+          background-color: ${tokens.color.secondary};
+          color: ${tokens.color.buttonColorSecondary};
         `
       )
     }};
+    
+    /* Wave effect */
     ${props => {
       return (
-        props.accent === "primary" &&
-        css`
-          background: ${color.primary};
-          color: #fff;
-        `
-      )
-    }};
-    ${props => {
-      return (
-        props.accent === "warning" &&
-        css`
-          background: ${color.warning};
-          color: #fff;
-        `
-      )
-    }};
-    ${props => {
-      return (
-        props.accent === "success" &&
-        css`
-          background: ${color.success};
-          color: #fff;
-        `
-      )
-    }};
-    ${props => {
-      return (
-        props.accent === "info" &&
-        css`
-          background: ${color.info};
-          color: #fff;
-        `
-      )
-    }};
-    ${props => {
-      return (
-        props.accent === "error" &&
-        css`
-          background: ${color.error};
-          color: #fff;
-        `
-      )
-    }};
-  
-    /* type */;
-    ${props => {
-      return (
-        props.type === "light" &&
-        css`
-          color: ${props.color ? props.color : "#fff"};
-          border: 1px solid ${props.color ? props.color
-            : props.accent === "secondary" ? color.secondary
-            : props.accent === "error" ? color.error
-            : props.accent === "info" ? color.info
-            : props.accent === "warning" ? color.warning
-            : props.accent === "success" ? color.success
-            : color.primary
-          };
-        `
-      )
-    }};
-    ${props => {
-      return (
-        props.type === "ghost" &&
-        css`
-          background: ${color.transaprantBackground};
-          color: ${props.color ? props.color
-            : props.accent === "secondary" ? color.secondary
-            : props.accent === "error" ? color.error
-            : props.accent === "info" ? color.info
-            : props.accent === "warning" ? color.warning
-            : props.accent === "success" ? color.success
-            : color.primary
-          };
-          border: none;
-        `
-      )
-    }};
-    ${props => {
-      return (
-        props.type === "hallow" &&
-        css`
-          background: ${color.transparent};
-          color: ${props.color ? props.color
-            : props.accent === "secondary" ? color.secondary
-            : props.accent === "error" ? color.error
-            : props.accent === "info" ? color.info
-            : props.accent === "warning" ? color.warning
-            : props.accent === "success" ? color.success
-            : color.primary
-          };
-          border: 1px solid ${props.color ? props.color
-            : props.accent === "secondary" ? color.secondary
-            : props.accent === "error" ? color.error
-            : props.accent === "info" ? color.info
-            : props.accent === "warning" ? color.warning
-            : props.accent === "success" ? color.success
-            : color.primary
-          };
-        `
+        props.wave && (
+          css`
+            background-color: ${tokens.color.accentStrong};
+            background: url("https://nutritiv.s3.eu-west-3.amazonaws.com/assets/wave.svg") repeat-x ${tokens.color.accentStrong};
+            background-position-x: 0%;
+            background-position-y: 0%;
+            background-size: auto;
+            background-clip: border-box;
+            background-size: 300% 100%;
+            background-position-x: 0;
+            background-position-y: ${tokens.spacing.max};
+            transition: background-position-y 0.4s ease;
+            animation: ${waveAnimation} 5s infinite linear;
+            animation-play-state: running;
+            animation-play-state: paused;
+            &:hover {
+              background-position-x: 0;
+              background-position-y: 6px;
+              animation-play-state: running;
+            }
+          `
+        )
       )
     }}
   `
-
+  
   return (
     <StyledButton
+      whileHover={{
+        filter: "brightness(1.1)"
+      }}
+      whileTap={{
+        opacity: 0.8,
+        animationDuration: "2s"
+      }}
+      transition={{
+        duration: 0.2
+      }}
+      onClick={() => handleClick()}
       {...props}
-      style={{ ...props }}
-      onClick={e => props.onClick(e)}
     >
-      {props.label}
+      <StyledLabel {...props}>
+        {props.label}
+      </StyledLabel>
     </StyledButton>
   )
 }
