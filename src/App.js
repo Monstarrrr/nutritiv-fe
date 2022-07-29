@@ -29,7 +29,7 @@ import './App.scss';
 import { tokens } from './Helpers/styleTokens';
 import { PageContainer } from './Components/PageContainer';
 import { Background } from './Components/GradientBackground';
-import { Contact } from './Components/Contact/Contact';
+import { AboutUs } from './Components/AboutUs/AboutUs';
 
 // init stripe
 const stripePromise = loadStripe(
@@ -248,8 +248,8 @@ function App() {
                   path="/welcome" 
                   element={<Homepage/>} 
                 />
-                <Route path="/contact" element={
-                  <PageContainer><Contact/></PageContainer>
+                <Route path="/about-us" element={
+                  <PageContainer><AboutUs/></PageContainer>
                 }/>
                 <Route path="/products" element={
                   <PageContainer><Products/></PageContainer>

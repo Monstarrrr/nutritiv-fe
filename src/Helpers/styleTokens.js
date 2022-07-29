@@ -3,8 +3,8 @@ import facepaint from "facepaint"
 const breakpoints = [
   576, // 0
   768, // 1
-  992, // 2
-  1200 // 3
+  924, // 2
+  1280 // 3
 ]
 export const mediaQuery = breakpoints.map(bp => 
   `@media (min-width: ${bp}px)`
@@ -17,6 +17,7 @@ export const mediaQueries = facepaint(
 const config = {
   primaryColor: "#020047",
   secondaryColor: "#147aa5",
+  // secondaryColor: "#08597c",
   accentColorStrong: "#15f1ff",
   accentColorWeak: "#205088",
   accentColorTransparent: "rgba(21, 241, 255, 0.4)",

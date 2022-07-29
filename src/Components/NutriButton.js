@@ -124,24 +124,16 @@ export const NutriButton = ({ ...props }) => {
       return (
         props.wave && (
           css`
+            animation: ${waveAnimation};
+            animation-iteration-count: infinite;
+            animation-timing-function: linear;
+            animation-play-state: running;
+            background: url("https://nutritiv.s3.eu-west-3.amazonaws.com/assets/wave.svg") repeat-x;
             background-color: ${tokens.color.accentStrong};
-            background: url("https://nutritiv.s3.eu-west-3.amazonaws.com/assets/wave.svg") repeat-x ${tokens.color.accentStrong};
-            background-position-x: 0%;
-            background-position-y: 0%;
-            background-size: auto;
             background-clip: border-box;
             background-size: 300% 100%;
             background-position-x: 0;
-            background-position-y: ${tokens.spacing.max};
-            transition: background-position-y 0.4s ease;
-            animation: ${waveAnimation} 5s infinite linear;
-            animation-play-state: running;
-            animation-play-state: paused;
-            &:hover {
-              background-position-x: 0;
-              background-position-y: 6px;
-              animation-play-state: running;
-            }
+            background-position-y: 6px;
           `
         )
       )
@@ -150,15 +142,24 @@ export const NutriButton = ({ ...props }) => {
   
   return (
     <StyledButton
+      initial={{
+        animationDuration: "5s",
+        filter: "brightness(1.15)",
+        backgroundPositionY: "100px",
+      }}
+      animate={{
+        backgroundPositionY: "6px",
+      }}
       whileHover={{
-        filter: "brightness(1.1)"
+        animationDuration: "2s",
+        filter: "brightness(1)",
       }}
       whileTap={{
         opacity: 0.8,
-        animationDuration: "2s"
+        backgroundPositionY: "-100px",
       }}
       transition={{
-        duration: 0.2
+        duration: 0.25
       }}
       onClick={() => handleClick()}
       {...props}

@@ -38,14 +38,13 @@ const Nav = styled(motion.nav)`
   position: absolute;
   right: 0;
   top: 0;
-  width: 100%;
-  /* ${mediaQuery[2]} {
-    background: green;
-  }
+  padding: 0 ${tokens.spacing.xl};
+  width: auto;
   ${mediaQuery[3]} {
-    background: blue;
+    padding: 0;
+    width: 100%;
   }
-  ${mediaQueries({
+  /* ${mediaQueries({
     background: ["transparent", "transparent", "transparent", "transparent"]
   })} */
   ${LogoSide}, ${NavSide}, ${ProfileSide} {
@@ -62,17 +61,21 @@ const Nav = styled(motion.nav)`
     flex: 1;
   };
   ${NavSide} {
-    justify-content: center;
-    flex: 2;
-    text-transform: uppercase;
-    ${NavLinkWrapper} {
-      align-items: center;
-      cursor: pointer;
+    display: none;
+    ${mediaQuery[2]} {
       display: flex;
-      height: 100%;
-      a {
-        padding: 0 ${tokens.spacing.max};
-        line-height: ${tokens.navHeight};
+      justify-content: center;
+      flex: 2;
+      text-transform: uppercase;
+      ${NavLinkWrapper} {
+        align-items: center;
+        cursor: pointer;
+        display: flex;
+        height: 100%;
+        a {
+          padding: 0 ${tokens.spacing.max};
+          line-height: ${tokens.navHeight};
+        }
       }
     }
   };
@@ -102,7 +105,16 @@ const Avatar = styled.img`
   width: 100%;
 `
 const LoginLink = styled(Link)`
-  padding: ${tokens.spacing.md} ${tokens.spacing.xxl};
+  display: none;
+  ${mediaQuery[2]} {
+    display: initial;
+    padding: ${tokens.spacing.md} ${tokens.spacing.xxl};
+    transition: opacity ease 0.25s;
+    &:hover {
+      opacity: 0.8;
+      transition: opacity ease 0.25s;
+    }
+  }
 `
 
 export default function Navbar() {
@@ -114,7 +126,7 @@ export default function Navbar() {
   const navLinksItems = [
     {link: "/welcome", label: "Home"},
     {link: "/products", label: "Shop"},
-    {link: "/contact", label: "Contact"}
+    {link: "/about-us", label: "About us"},
   ]
   
   useLayoutEffect(() => {
@@ -277,7 +289,15 @@ export default function Navbar() {
           </>
         ) : (
           <>
-            <LoginLink to="/login">
+            <LoginLink 
+              to="/login"
+              whileHover={{
+                opacity: 0.8
+              }}
+              transition={{
+                duration: 0.25
+              }}
+            >
               Login
             </LoginLink>
             <NutriButton
@@ -291,6 +311,9 @@ export default function Navbar() {
             </NutriButton>
           </>
         )}
+        {/* <MobileNav>
+        
+        </MobileNav> */}
       </ProfileSide>
     </Nav>
   )

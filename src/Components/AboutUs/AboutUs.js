@@ -1,9 +1,9 @@
 import React from 'react'
 
-export const Contact = () => {
+export const AboutUs = () => {
   return (
     <div>
-      Contact
+      The team
     </div>
   )
 }
