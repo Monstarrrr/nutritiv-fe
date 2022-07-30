@@ -19,7 +19,7 @@ import { NutriButton } from '../NutriButton';
 const LogoSide = styled.div``
 const NavSide = styled.div``
 const ProfileSide = styled.div``
-const NavLinkWrapper = styled(({active, ...props }) => <motion.div {...props} />)`
+const NavLinkWrapper = styled(motion.div)`
   cursor: pointer;
   position: relative;
   user-select: none;
@@ -83,7 +83,7 @@ const Nav = styled(motion.nav)`
     justify-content: end;
   };
 `
-const LogoLink = styled(({active, ...props }) => <Link {...props} />)`
+const LogoLink = styled(Link)`
   pointer-events: ${props => 
     props.active && `none`
   };
@@ -92,7 +92,7 @@ const LogoLink = styled(({active, ...props }) => <Link {...props} />)`
     user-select: none;
   };
 `
-const ProfileLink = styled(({active, ...props}) => <Link {...props} />)`
+const ProfileLink = styled(Link)`
   height: 24px;
   margin: 0 ${tokens.spacing.md};
   position: relative;
@@ -114,6 +114,13 @@ const LoginLink = styled(Link)`
       opacity: 0.8;
       transition: opacity ease 0.25s;
     }
+  }
+`
+
+const MenuButton = styled.div`
+  margin-left: ${tokens.spacing.xl};
+  ${mediaQuery[2]} {
+    display: none;
   }
 `
 
@@ -139,7 +146,7 @@ export default function Navbar() {
       <LogoSide>
         <NavLinkWrapper>
           <LogoLink
-            active={location.pathname === "/welcome"}
+            active={location.pathname === "/welcome" ? 1 : undefined}
             to="/welcome"
           >
             <img
@@ -153,14 +160,14 @@ export default function Navbar() {
       <NavSide>
         {navLinksItems.map(item => (
           <NavLinkWrapper
-            active={location.pathname === item.link}
+            active={location.pathname === item.link ? 1 : undefined}
             key={item.link}
             onClick={() => setActive(item.link)}
             onMouseEnter={() => setHovered(item.link)}
             onMouseLeave={() => setHovered(null)}
           >
             <DelayLink
-              active={location.pathname === item.link}
+              active={location.pathname === item.link ? 1 : undefined}
               delay={210}
               label={item.label}
               replace={false}
@@ -266,7 +273,7 @@ export default function Navbar() {
               }
             </ProfileLink>
             <ProfileLink
-              active={location.pathname === "/chat"}
+              active={location.pathname === "/chat" ? 1 : undefined}
               to="/chat"
             >
               <IconContainer>
@@ -277,7 +284,7 @@ export default function Navbar() {
               </IconContainer>
             </ProfileLink>
             <ProfileLink
-              active={location.pathname === "/profile"}
+              active={location.pathname === "/profile" ? 1 : undefined}
               to="/profile"
             >
               <Avatar
@@ -291,7 +298,7 @@ export default function Navbar() {
           <>
             <LoginLink 
               to="/login"
-              whileHover={{
+              whilehover={{
                 opacity: 0.8
               }}
               transition={{
@@ -301,7 +308,7 @@ export default function Navbar() {
               Login
             </LoginLink>
             <NutriButton
-              wave
+              wave={1}
               type="filled"
               label="Register"
               rounded={tokens.borderRadius.sm} 
@@ -311,6 +318,15 @@ export default function Navbar() {
             </NutriButton>
           </>
         )}
+        {/* MOBILE MENU */}
+        <MenuButton>
+          <IconContainer>
+            <ChatIcon
+              color={tokens.color.contrastLight}
+              strokeWidth={2}
+              />
+          </IconContainer>
+        </MenuButton>
         {/* <MobileNav>
         
         </MobileNav> */}

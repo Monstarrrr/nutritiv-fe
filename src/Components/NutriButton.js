@@ -11,7 +11,7 @@ const waveAnimation = keyframes`
     background-position-x: 0%;
   }
   to {
-    background-position-x: -300%;
+    background-position-x: -400%;
   }
 `
 
@@ -131,7 +131,7 @@ export const NutriButton = ({ ...props }) => {
             background: url("https://nutritiv.s3.eu-west-3.amazonaws.com/assets/wave.svg") repeat-x;
             background-color: ${tokens.color.accentStrong};
             background-clip: border-box;
-            background-size: 300% 100%;
+            background-size: 400% 100%;
             background-position-x: 0;
             background-position-y: 6px;
           `
@@ -143,7 +143,7 @@ export const NutriButton = ({ ...props }) => {
   return (
     <StyledButton
       initial={{
-        animationDuration: "5s",
+        animationDuration: "6.5s",
         filter: "brightness(1.15)",
         backgroundPositionY: "100px",
       }}
@@ -151,7 +151,7 @@ export const NutriButton = ({ ...props }) => {
         backgroundPositionY: "6px",
       }}
       whileHover={{
-        animationDuration: "2s",
+        animationDuration: "3.25s",
         filter: "brightness(1)",
       }}
       whileTap={{
@@ -159,7 +159,7 @@ export const NutriButton = ({ ...props }) => {
         backgroundPositionY: "-100px",
       }}
       transition={{
-        duration: 0.25
+        duration: 0.12
       }}
       onClick={() => handleClick()}
       {...props}
