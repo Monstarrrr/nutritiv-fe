@@ -176,5 +176,9 @@ export const tokens = {
   },
 
   // Specifics
-  navHeight: "100px",
+  navHeight: {
+    xl: "100px",
+    md: "72px",
+    sm: "60px",
+  }
 }

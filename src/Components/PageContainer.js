@@ -8,6 +8,6 @@ export const PageContainer = styled.div`
   margin: 0 auto;
   position: absolute;
   right: 0;
-  top: ${tokens.navHeight};
+  top: ${tokens.navHeight.xl};
   width: 100%;
 `

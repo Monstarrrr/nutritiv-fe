@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import React from "react"
-import { tokens } from "../Helpers/styleTokens";
+import { mediaQuery, tokens } from "../Helpers/styleTokens";
 import styled from "@emotion/styled"
 import { css, keyframes } from "@emotion/react"
 import { motion } from "framer-motion";
@@ -97,13 +97,16 @@ export const NutriButton = ({ ...props }) => {
       return (
         props.size === "small" ? (
         css`
-          padding: calc(${tokens.spacing.md} / 2) ${tokens.spacing.lg};
+          padding: calc(${tokens.spacing.xs} / 2) ${tokens.spacing.md};
           font-size: ${tokens.font.fontSize.xs};
         `
       ) : (
         css`
-          padding: calc(${tokens.spacing.xl} / 2) ${tokens.spacing.xxl};
+          padding: ${tokens.spacing.sm} ${tokens.spacing.xl};
           font-size: ${tokens.font.fontSize.sm};
+          ${mediaQuery[1]} {
+            padding: calc(${tokens.spacing.xl} / 2) ${tokens.spacing.xxl};
+          }
         `
       ))
     }}

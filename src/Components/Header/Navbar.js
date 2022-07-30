@@ -14,6 +14,7 @@ import { ChatIcon } from '../Icons/ChatIcon';
 import { useLayoutEffect } from 'react';
 import { Logout } from '../Authentication/Logout';
 import { NutriButton } from '../NutriButton';
+import { MenuIcon } from '../Icons/MenuIcon';
 
 // Styles
 const LogoSide = styled.div``
@@ -30,7 +31,7 @@ const Nav = styled(motion.nav)`
   border-color: ${tokens.color.transparentLight};
   display: flex;
   font-size: ${tokens.font.fontSize.sm};
-  height: ${tokens.navHeight};
+  height: ${tokens.navHeight.md};
   justify-content: space-between;
   left: 0;
   max-width: ${tokens.maxWidth.xl};
@@ -38,11 +39,14 @@ const Nav = styled(motion.nav)`
   position: absolute;
   right: 0;
   top: 0;
-  padding: 0 ${tokens.spacing.xl};
+  padding: 0 ${tokens.spacing.md};
   width: auto;
+  ${mediaQuery[1]} {
+    height: ${tokens.navHeight.xl};
+    padding: 0 ${tokens.spacing.xl};
+  }
   ${mediaQuery[3]} {
     padding: 0;
-    width: 100%;
   }
   /* ${mediaQueries({
     background: ["transparent", "transparent", "transparent", "transparent"]
@@ -74,7 +78,7 @@ const Nav = styled(motion.nav)`
         height: 100%;
         a {
           padding: 0 ${tokens.spacing.max};
-          line-height: ${tokens.navHeight};
+          line-height: ${tokens.navHeight.xl};
         }
       }
     }
@@ -87,9 +91,13 @@ const LogoLink = styled(Link)`
   pointer-events: ${props => 
     props.active && `none`
   };
+  display: flex;
   img {
-    height: 50px;
+    height: 36px;
     user-select: none;
+    ${mediaQueries({
+      height: ["42px", "42px", "46px", "50px"]
+    })}
   };
 `
 const ProfileLink = styled(Link)`
@@ -118,7 +126,12 @@ const LoginLink = styled(Link)`
 `
 
 const MenuButton = styled.div`
-  margin-left: ${tokens.spacing.xl};
+  margin-left: ${tokens.spacing.md};
+  padding: ${tokens.spacing.sm};
+  cursor: pointer;
+  ${mediaQuery[1]} {
+    margin-left: ${tokens.spacing.xl};
+  }
   ${mediaQuery[2]} {
     display: none;
   }
@@ -321,10 +334,10 @@ export default function Navbar() {
         {/* MOBILE MENU */}
         <MenuButton>
           <IconContainer>
-            <ChatIcon
+            <MenuIcon
               color={tokens.color.contrastLight}
               strokeWidth={2}
-              />
+            />
           </IconContainer>
         </MenuButton>
         {/* <MobileNav>

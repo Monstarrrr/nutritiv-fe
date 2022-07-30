@@ -13,7 +13,7 @@ export const Homepage = () => {
     max-width: ${tokens.maxWidth.xl};
     position: absolute;
     right: 0;
-    top: ${tokens.navHeight};
+    top: ${tokens.navHeight.xl};
   `
   const VideoContainer = styled.div`
     position: absolute;
