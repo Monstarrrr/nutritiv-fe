@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 import { mediaQueries, mediaQuery, tokens } from '../../Helpers/styleTokens';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -11,10 +11,10 @@ import { CartIcon } from '../Icons/CartIcon';
 import { CounterIcon } from '../Icons/CounterIcon';
 import { css } from '@emotion/react';
 import { ChatIcon } from '../Icons/ChatIcon';
-import { useLayoutEffect } from 'react';
 import { Logout } from '../Authentication/Logout';
 import { NutriButton } from '../NutriButton';
 import { MenuIcon } from '../Icons/MenuIcon';
+import { openNavbarMenu, toggleNavbarMenu } from '../../Redux/reducers/modals';
 
 // Styles
 const LogoSide = styled.div``
@@ -139,21 +139,21 @@ const MenuButton = styled.div`
 
 export default function Navbar() {
   const user = useSelector(state => state.user)
+  const dispatch = useDispatch();
   const location = useLocation();
   const [hovered, setHovered] = useState("");
   const [active, setActive] = useState(location.pathname);
   
   const navLinksItems = [
-    {link: "/welcome", label: "Home"},
-    {link: "/products", label: "Shop"},
-    {link: "/about-us", label: "About us"},
+    {link: "/welcome", label: "Home", delay: 0},
+    {link: "/welcome", hash: "#contact", label: "About us", delay: 0},
+    {link: "/products", label: "Shop", delay: 0},
   ]
   
-  useLayoutEffect(() => {
-    setActive(location.pathname);
-    window.scrollTo({top: 0, left: 0, behavior: "smooth"})
-  }, [location.hash, location.pathname]);
-
+  const handleOpenMenu = () => {
+    dispatch(openNavbarMenu())
+  }
+  
   return (
     <Nav>
       <LogoSide>
@@ -173,22 +173,30 @@ export default function Navbar() {
       <NavSide>
         {navLinksItems.map(item => (
           <NavLinkWrapper
-            active={location.pathname === item.link ? 1 : undefined}
-            key={item.link}
-            onClick={() => setActive(item.link)}
-            onMouseEnter={() => setHovered(item.link)}
+            active={
+              (location.pathname === item.link
+              && location.hash === item.hash)
+              ? 1 : undefined
+            }
+            key={item.link + (item.hash ? item.hash : "")}
+            onClick={() => setActive(item.link + (item.hash ? item.hash : ""))}
+            onMouseEnter={() => setHovered(item.link + (item.hash ? item.hash : ""))}
             onMouseLeave={() => setHovered(null)}
           >
             <DelayLink
-              active={location.pathname === item.link ? 1 : undefined}
-              delay={210}
+              active={
+                (location.pathname === item.link
+                && location.hash === item.hash)
+                ? 1 : undefined
+              }
+              delay={item.delay}
               label={item.label}
               replace={false}
-              to={item.link}
+              to={{pathname: item.link, hash: item.hash}}
               smooth={true}
             />
             <AnimatePresence>
-              {hovered === item.link && (
+              {hovered === item.link + (item.hash ? item.hash : "") && (
                 <motion.div
                   transition={{
                     layout: {
@@ -217,7 +225,7 @@ export default function Navbar() {
                 />
               )}
             </AnimatePresence>
-            {active === item.link && (
+            {active === item.link + (item.hash ? item.hash : "") && (
               <motion.div
                 key="navside-underline"
                 layoutId='navside-underline'
@@ -332,7 +340,7 @@ export default function Navbar() {
           </>
         )}
         {/* MOBILE MENU */}
-        <MenuButton>
+        <MenuButton onClick={() => handleOpenMenu()}>
           <IconContainer>
             <MenuIcon
               color={tokens.color.contrastLight}
@@ -340,9 +348,6 @@ export default function Navbar() {
             />
           </IconContainer>
         </MenuButton>
-        {/* <MobileNav>
-        
-        </MobileNav> */}
       </ProfileSide>
     </Nav>
   )

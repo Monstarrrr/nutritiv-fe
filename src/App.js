@@ -30,6 +30,7 @@ import { tokens } from './Helpers/styleTokens';
 import { PageContainer } from './Components/PageContainer';
 import { Background } from './Components/GradientBackground';
 import { AboutUs } from './Components/AboutUs/AboutUs';
+import { NavbarMenu } from './Components/Header/NavbarMenu';
 
 // init stripe
 const stripePromise = loadStripe(
@@ -39,7 +40,8 @@ const stripePromise = loadStripe(
 function App() {
   const [gettingUserInfo, setGettingUserInfo] = useState(false);
   const dispatch = useDispatch();
-  const loggedIn = useSelector(state => state.user.loggedIn)
+  const loggedIn = useSelector(state => state.user.loggedIn);
+  const navbarMenu = useSelector(state => state.modals.navbarMenu);
   const location = useLocation();
   const navigate = useNavigate();
   
@@ -232,6 +234,7 @@ function App() {
           }}
         />
           <Navbar />
+          <NavbarMenu open={navbarMenu} />
           <AnimatePresence exitBeforeEnter>
             <Routes
               location={location} 

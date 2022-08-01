@@ -1,26 +1,36 @@
 /** @jsxImportSource @emotion/react */
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from '@emotion/styled';
 import { tokens } from '../../Helpers/styleTokens';
 import { css } from '@emotion/react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+
+const ContentContainer = styled.div`
+  left: 0;
+  margin: 0 auto;
+  max-width: ${tokens.maxWidth.xl};
+  position: absolute;
+  right: 0;
+  top: ${tokens.navHeight.xl};
+`
+const VideoContainer = styled.div`
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 400px;
+`
 
 export const Homepage = () => {
+  const location = useLocation();
   
-  // Styles
-  const ContentContainer = styled.div`
-    left: 0;
-    margin: 0 auto;
-    max-width: ${tokens.maxWidth.xl};
-    position: absolute;
-    right: 0;
-    top: ${tokens.navHeight.xl};
-  `
-  const VideoContainer = styled.div`
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 400px;
-  `
+  useEffect(() => {
+    const hash = location.hash
+    // Check if there is a hash and if an element with that id exists
+    const el = hash && document.getElementById(hash.slice(1))
+    if (el) {
+      el.scrollIntoView({behavior: "smooth"})
+    }
+  }, [location.hash])
   
   return (
     <>
@@ -28,7 +38,6 @@ export const Homepage = () => {
         <h2>
           Homepage
         </h2>
-
       </ContentContainer>
       <VideoContainer>
         <video width="100%" height="100%" autoPlay loop muted playsInline>

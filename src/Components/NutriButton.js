@@ -15,13 +15,14 @@ const waveAnimation = keyframes`
   }
 `
 
-export const NutriButton = ({ ...props }) => {
+export const NutriButton = React.memo(function NutriButton(props) {
   const navigate = useNavigate();
   // type:      'filled'  | none
   // rounded:   any       | none
   // disabled:  true      | [false]
   // size:      'small'   | none
   // accent:    'confirm' | 'info' | 'warning' | 'error' | none
+  // wave:      '1'       | none
   
   const handleClick = () => {
     navigate('/register');
@@ -172,4 +173,4 @@ export const NutriButton = ({ ...props }) => {
       </StyledLabel>
     </StyledButton>
   )
-}
+})
