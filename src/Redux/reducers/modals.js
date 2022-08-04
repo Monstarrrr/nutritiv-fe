@@ -1,24 +1,24 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  navbarMenu: false,
+  mobileNavMenu: false,
 }
 
 export const modalsSlice = createSlice({
   name: 'modal',
   initialState,
   reducers: {
-    closeNavbarMenu: (modals) => {
-      modals.navbarMenu = false
+    closeMobileNavMenu: (modals) => {
+      modals.mobileNavMenu = false
     },
-    openNavbarMenu: (modals) => {
-      modals.navbarMenu = true
+    openMobileNavMenu: (modals) => {
+      modals.mobileNavMenu = true
     },
   }
 })
 export const {
-  closeNavbarMenu,
-  openNavbarMenu
+  closeMobileNavMenu,
+  openMobileNavMenu
 } = modalsSlice.actions;
 
 export default modalsSlice.reducer;

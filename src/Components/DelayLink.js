@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 export const DelayLink = (props) => {
-  const { label, delay, replace, to, active, hash } = props;
+  const { label, delay, replace, to, active } = props;
   let timeout = null;
   let navigate = useNavigate();
   let location = useLocation();
@@ -26,7 +26,6 @@ export const DelayLink = (props) => {
   const handleClick = e => {
     if (
       location?.pathname === to
-      && location?.hash === hash
     ) return;
     if (e.defaultPrevented) return;
     e.preventDefault();
@@ -35,9 +34,9 @@ export const DelayLink = (props) => {
       navigate(to, { replace })
     }, delay);
   };
-  
+
   return (
-    <NavLink to={to} hash={hash} active={active} onClick={handleClick}>
+    <NavLink to={to} active={active} onClick={handleClick}>
       {label}
     </NavLink>
   )

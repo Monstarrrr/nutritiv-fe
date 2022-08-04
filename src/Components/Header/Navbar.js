@@ -14,7 +14,7 @@ import { ChatIcon } from '../Icons/ChatIcon';
 import { Logout } from '../Authentication/Logout';
 import { NutriButton } from '../NutriButton';
 import { MenuIcon } from '../Icons/MenuIcon';
-import { openNavbarMenu, toggleNavbarMenu } from '../../Redux/reducers/modals';
+import { openMobileNavMenu } from '../../Redux/reducers/modals';
 
 // Styles
 const LogoSide = styled.div``
@@ -41,6 +41,7 @@ const Nav = styled(motion.nav)`
   top: 0;
   padding: 0 ${tokens.spacing.md};
   width: auto;
+  z-index: 9;
   ${mediaQuery[1]} {
     height: ${tokens.navHeight.xl};
     padding: 0 ${tokens.spacing.xl};
@@ -84,7 +85,11 @@ const Nav = styled(motion.nav)`
     }
   };
   ${ProfileSide} {
-    justify-content: end;
+    display: none;
+    ${mediaQuery[2]} {
+      display: flex;
+      justify-content: end;
+    }
   };
 `
 const LogoLink = styled(Link)`
@@ -137,6 +142,19 @@ const MenuButton = styled.div`
   }
 `
 
+const MobileSide = styled.div`
+  display: flex;
+  ${mediaQuery[2]} {
+    display: none;
+  }
+`
+
+const navLinksItems = [
+  {link: "/welcome", label: "Home", delay: 0},
+  {link: "/about-us", label: "About us", delay: 0},
+  {link: "/shop", label: "Shop", delay: 0},
+]
+
 export default function Navbar() {
   const user = useSelector(state => state.user)
   const dispatch = useDispatch();
@@ -144,14 +162,9 @@ export default function Navbar() {
   const [hovered, setHovered] = useState("");
   const [active, setActive] = useState(location.pathname);
   
-  const navLinksItems = [
-    {link: "/welcome", label: "Home", delay: 0},
-    {link: "/welcome", hash: "#contact", label: "About us", delay: 0},
-    {link: "/products", label: "Shop", delay: 0},
-  ]
   
   const handleOpenMenu = () => {
-    dispatch(openNavbarMenu())
+    dispatch(openMobileNavMenu())
   }
   
   return (
@@ -173,30 +186,22 @@ export default function Navbar() {
       <NavSide>
         {navLinksItems.map(item => (
           <NavLinkWrapper
-            active={
-              (location.pathname === item.link
-              && location.hash === item.hash)
-              ? 1 : undefined
-            }
-            key={item.link + (item.hash ? item.hash : "")}
-            onClick={() => setActive(item.link + (item.hash ? item.hash : ""))}
-            onMouseEnter={() => setHovered(item.link + (item.hash ? item.hash : ""))}
+            active={location.pathname === item.link ? 1 : undefined}
+            key={item.link}
+            onClick={() => setActive(item.link)}
+            onMouseEnter={() => setHovered(item.link)}
             onMouseLeave={() => setHovered(null)}
           >
             <DelayLink
-              active={
-                (location.pathname === item.link
-                && location.hash === item.hash)
-                ? 1 : undefined
-              }
+              active={location.pathname === item.link ? 1 : undefined}
               delay={item.delay}
               label={item.label}
               replace={false}
-              to={{pathname: item.link, hash: item.hash}}
+              to={item.link}
               smooth={true}
             />
             <AnimatePresence>
-              {hovered === item.link + (item.hash ? item.hash : "") && (
+              {hovered === item.link && (
                 <motion.div
                   transition={{
                     layout: {
@@ -224,29 +229,29 @@ export default function Navbar() {
                   }}
                 />
               )}
+              {active === item.link && (
+                <motion.div
+                  key="navside-underline"
+                  layoutId='navside-underline'
+                  transition={{
+                    layout: {
+                      duration: 0.2,
+                      ease: "easeOut",
+                    }
+                  }}
+                  style={{
+                    background: tokens.color.accentStrong,
+                    position: "absolute",
+                    left: 0,
+                    bottom: "-2px",
+                    right: 0,
+                    height: "2px",
+                    width: "100%",
+                    zIndex: 0,
+                  }}
+                />
+              )}
             </AnimatePresence>
-            {active === item.link + (item.hash ? item.hash : "") && (
-              <motion.div
-                key="navside-underline"
-                layoutId='navside-underline'
-                transition={{
-                  layout: {
-                    duration: 0.2,
-                    ease: "easeOut",
-                  }
-                }}
-                style={{
-                  background: tokens.color.accentStrong,
-                  position: "absolute",
-                  left: 0,
-                  bottom: "-2px",
-                  right: 0,
-                  height: "2px",
-                  width: "100%",
-                  zIndex: 0,
-                }}
-              />
-            )}
           </NavLinkWrapper>
         ))}
       </NavSide>
@@ -255,8 +260,8 @@ export default function Navbar() {
         {user.loggedIn ? (
           <>
             <ProfileLink 
-              active={location.pathname === "/products"}
-              to="/products"
+              active={location.pathname === "/shop" ? 1 : undefined}
+              to="/shop"
             >
               <IconContainer>
                 <SearchIcon
@@ -339,7 +344,20 @@ export default function Navbar() {
             </NutriButton>
           </>
         )}
-        {/* MOBILE MENU */}
+      </ProfileSide>
+      
+      <MobileSide>
+        {user.loggedIn === false && (
+          <NutriButton
+            wave={1}
+            type="filled"
+            label="Register"
+            rounded={tokens.borderRadius.sm} 
+            to="/register"
+          >
+            Register
+          </NutriButton>
+        )}
         <MenuButton onClick={() => handleOpenMenu()}>
           <IconContainer>
             <MenuIcon
@@ -348,7 +366,7 @@ export default function Navbar() {
             />
           </IconContainer>
         </MenuButton>
-      </ProfileSide>
+      </MobileSide>
     </Nav>
   )
 }

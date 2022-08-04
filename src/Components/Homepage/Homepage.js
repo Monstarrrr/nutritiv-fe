@@ -5,19 +5,18 @@ import { tokens } from '../../Helpers/styleTokens';
 import { css } from '@emotion/react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
-const ContentContainer = styled.div`
-  left: 0;
+const HomepageContentContainer = styled.div`
   margin: 0 auto;
   max-width: ${tokens.maxWidth.xl};
-  position: absolute;
-  right: 0;
-  top: ${tokens.navHeight.xl};
+  overflow: auto;
+  padding-top: ${tokens.navHeight.xl};
 `
 const VideoContainer = styled.div`
   position: absolute;
   left: 0;
   right: 0;
   top: 400px;
+  z-index: 0;
 `
 
 export const Homepage = () => {
@@ -34,26 +33,47 @@ export const Homepage = () => {
   
   return (
     <>
-      <ContentContainer>
+      <HomepageContentContainer>
         <h2>
           Homepage
         </h2>
-      </ContentContainer>
-      <VideoContainer>
-        <video width="100%" height="100%" autoPlay loop muted playsInline>
+        <h2>
+          Homepage
+        </h2>
+        <h2>
+          Homepage
+        </h2>
+        <h2>
+          Homepage
+        </h2>
+        <h2>
+          Homepage
+        </h2>
+        <h2>
+          Homepage
+        </h2>
+        <h2>
+          Homepage
+        </h2>
+        <h2>
+          Homepage
+        </h2>
+      </HomepageContentContainer>
+      <VideoContainer
+        id="iceberg-container"
+      >
+        <video
+          autoPlay
+          id="iceberg-video"
+          loop
+          muted
+          playsInline
+          height="100%"
+          width="100%"
+        >
           <source src="/video_iceberg.webm" type="video/webm" />
         </video>
       </VideoContainer>
-
-      <div 
-        css={css`
-          position: absolute;
-          bottom: 0;
-        `}
-        id="contact"
-      >
-        Contact
-      </div>
       
       {/* temp
         <video autoPlay loop width="1080" height="1080">

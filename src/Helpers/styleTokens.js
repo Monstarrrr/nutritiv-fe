@@ -3,7 +3,7 @@ import facepaint from "facepaint"
 const breakpoints = [
   576, // 0
   768, // 1
-  924, // 2
+  1024, // 2
   1280 // 3
 ]
 export const mediaQuery = breakpoints.map(bp => 
@@ -15,9 +15,9 @@ export const mediaQueries = facepaint(
 )
 
 const config = {
-  primaryColor: "#020047",
-  secondaryColor: "#147aa5",
-  // secondaryColor: "#08597c",
+  primaryColor: "rgba(2, 0, 71, 1)",
+  secondaryColor: "rgba(20, 122, 165, 1)",
+  secondaryColorTransparent: "rgba(20,122,165, 0.3)",
   accentColorStrong: "#15f1ff",
   accentColorWeak: "#205088",
   accentColorTransparent: "rgba(21, 241, 255, 0.4)",
@@ -50,6 +50,8 @@ const config = {
   smRadius: "4px",
   mdRadius: "8px",
   lgRadius: "12px",
+  xlRadius: "24px",
+  xxlRadius: "42px",
   maxRadius: "999px",
   
   xsBorder: "1px solid",
@@ -62,6 +64,7 @@ export const tokens = {
     // GENERAL
     primary: `${config.primaryColor}`,
     secondary: `${config.secondaryColor}`,
+    secondaryTransparent: `${config.secondaryColorTransparent}`,
     accentStrong: `${config.accentColorStrong}`,
     accentWeak: `${config.accentColorWeak}`,
     accentTransparent: `${config.accentColorTransparent}`,
@@ -69,7 +72,7 @@ export const tokens = {
     contrastLight: `${config.lightContrastColor}`,
     contrastDark: `${config.darkContrastColor}`,
     transparentLight: `${config.lightTransparentColor}`,
-    transparent: `transparent`,
+    transparent: `rgba(0, 0, 0, 0)`,
     
     success: `${config.successColor}`,
     info: `${config.infoColor}`,
@@ -153,6 +156,8 @@ export const tokens = {
     sm: `${config.smRadius}`,
     md: `${config.mdRadius}`,
     lg: `${config.lgRadius}`,
+    xl: `${config.xlRadius}`,
+    xxl: `${config.xxlRadius}`,
     max: `${config.maxRadius}`,
     round: "50%",
   },
