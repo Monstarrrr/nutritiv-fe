@@ -219,7 +219,7 @@ function App() {
               }
               body {
                 background: black;
-                color: ${tokens.color.contrastLight};
+                color: ${tokens.color.contrastDark};
                 font-family: 'Roboto', sans-serif;
                 position: relative;
               }
@@ -230,6 +230,7 @@ function App() {
               }
               #root {
                 height: 100%;
+                overflow: hidden;
                 > div {
                   max-width: none;
                 }
@@ -241,7 +242,7 @@ function App() {
           duration={0.4}
           firstColor={tokens.color.secondary}
           secondColor={tokens.color.primary}
-          initial={false}
+          minimizedColor={tokens.color.contrastLight}
         />
         <NavbarMenu open={mobileNavMenu} />
         <AnimatePresence exitBeforeEnter>

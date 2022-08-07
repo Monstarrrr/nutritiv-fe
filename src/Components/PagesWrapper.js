@@ -12,20 +12,26 @@ import { GradientBackground } from './GradientBackground'
 import Navbar from './Header/Navbar'
 
 const Pages = styled(motion.div)`
-  overflow: auto;
+  background-size: 100% 100%;
+  background-origin: border-box;
+  color: ${tokens.color.contrastLight};
+  overflow: ${props => (
+    props.minimized ? "hidden" : "auto"
+  )};
   position: relative;
   scale: 1;
   width: 100%;
-  background-size: 100% 100%;
   &:after {
-    display: ${props => (props.minimized ? "initial" : "none")};
+    display: ${props => (
+      props.minimized ? "initial" : "none")
+    };
     bottom: 0;
     left: 0;
     right: 0;
+    top: 0;
     content: "";
     height: 100%;
     position: absolute;
-    top: 0;
     width: 100%;
     z-index: 10;
   }
@@ -33,6 +39,7 @@ const Pages = styled(motion.div)`
 
 export const PagesWrapper = ({ minimized }) => {
   const dispatch = useDispatch();
+  const location = useLocation();
   
   const handleMobileNavMenu = () => {
     minimized && dispatch(
@@ -42,23 +49,36 @@ export const PagesWrapper = ({ minimized }) => {
   
   const pagesVariants = {
     minimized: {
-      backgroundColor: tokens.color.primary,
-      border: `${tokens.border.md} ${tokens.color.accentTransparent}`,
+      // backgroundColor: tokens.color.primary,
+      backgroundImage: location.pathname === "/welcome" ? (
+        "linear-gradient(rgba(20, 122, 165, 1) 0px, rgba(20, 122, 165, 1) 600px, rgba(2, 0, 71, 1) 1250px)"
+      ) : (
+        "linear-gradient(rgba(20, 122, 165, 1) 0px, rgba(20, 122, 165, 1) 0px, rgba(2, 0, 71, 1) 0px)"
+      ),
       borderRadius: tokens.borderRadius.xxl,
       height: `100vh`,
       translateX: '-50vw',
       scale: 0.75,
+      transition: {
+        backgroundImage: {
+          duration: 0
+        }
+      }
     },
     normalSize: {
       backgroundColor: tokens.color.transparent,
-      border: "none",
-      borderRadius: "none",
+      backgroundImage: location.pathname === "/welcome" ? (
+        "linear-gradient(rgba(20, 122, 165, 0) 0px, rgba(20, 122, 165, 0) 600px, rgba(2, 0, 71, 0) 1250px)"
+      ) : (
+        "linear-gradient(rgba(20, 122, 165, 1) 0px, rgba(20, 122, 165, 1) 0px, rgba(2, 0, 71, 1) 0px)"
+      ),
+      borderRadius: 0,
       height: `100%`,
       translateX: 0,
       scale: 1,
       transition: {
         height: {
-          delay: 3,
+          delay: 1,
         },
       },
     },

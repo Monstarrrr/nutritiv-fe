@@ -18,7 +18,7 @@ const StyledBackground = styled(motion.div)`
 
 export const GradientBackground = ({ ...props }) => {
   const { 
-    firstColor, secondColor, initial, duration 
+    firstColor, secondColor, minimizedColor, duration 
   } = props;
   
   const minimized = useSelector(state => state.modals.mobileNavMenu);
@@ -42,10 +42,9 @@ export const GradientBackground = ({ ...props }) => {
     },
     minimized: {
       // backgroundImage: `linear-gradient(180deg, ${firstColor} 0px, ${firstColor} 0px, ${firstColor} 0px)`,
-      backgroundImage: `linear-gradient(180deg, ${firstColor} 0px, ${firstColor} 0px, ${tokens.color.contrastDark} 0px)`,
+      backgroundImage: `linear-gradient(180deg, ${firstColor} 0px, ${firstColor} 0px, ${minimizedColor} 0px)`,
       transition: {
-        duration: duration,
-        ease: "easeOut"
+        duration: 0,
       }
     }
   };
@@ -58,7 +57,7 @@ export const GradientBackground = ({ ...props }) => {
     <StyledBackground
       id="gradient-background"
       variants={variants}
-      initial={initial}
+      initial={false}
       animate={minimized ? 'minimized' : (homepage ? 'homepage' : 'default')}
     />
   )
