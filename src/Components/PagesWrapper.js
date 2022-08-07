@@ -2,35 +2,47 @@
 import styled from '@emotion/styled'
 import { motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { Outlet, useLocation } from 'react-router-dom'
 import { Footer } from '../Footer/Footer'
 import { tokens } from '../Helpers/styleTokens'
+import { closeMobileNavMenu } from '../Redux/reducers/modals'
 import { GradientBackground } from './GradientBackground'
 import Navbar from './Header/Navbar'
 
 const Pages = styled(motion.div)`
   overflow: auto;
+  position: relative;
   scale: 1;
   width: 100%;
   background-size: 100% 100%;
-  z-index: -1;
+  &:after {
+    display: ${props => (props.minimized ? "initial" : "none")};
+    bottom: 0;
+    left: 0;
+    right: 0;
+    content: "";
+    height: 100%;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 10;
+  }
 `
 
 export const PagesWrapper = ({ minimized }) => {
+  const dispatch = useDispatch();
   
-  const location = useLocation();
-  const [homepage, setHomepage] = useState(false);
-
-  useEffect(() => {
-    setHomepage(
-      location.pathname === "/welcome" 
-      // && location.hash !== "menu"
+  const handleMobileNavMenu = () => {
+    minimized && dispatch(
+      closeMobileNavMenu()
     )
-  }, [location.hash, location.pathname]);
+  }
   
   const pagesVariants = {
     minimized: {
-      // background: tokens.color.primary,
+      backgroundColor: tokens.color.primary,
       border: `${tokens.border.md} ${tokens.color.accentTransparent}`,
       borderRadius: tokens.borderRadius.xxl,
       height: `100vh`,
@@ -38,8 +50,11 @@ export const PagesWrapper = ({ minimized }) => {
       scale: 0.75,
     },
     normalSize: {
-      background: tokens.color.transparent,
+      backgroundColor: tokens.color.transparent,
+      border: "none",
+      borderRadius: "none",
       height: `100%`,
+      translateX: 0,
       scale: 1,
       transition: {
         height: {
@@ -51,9 +66,11 @@ export const PagesWrapper = ({ minimized }) => {
   
   return (
     <Pages
-      minimized={minimized ? 1 : undefined}
+      animate={minimized ? 'minimized' : 'normalSize'}
       variants={pagesVariants}
-      animate={minimized ? 'minimized' : 'normalResize'}
+      initial={false}
+      minimized={minimized ? 1 : undefined}
+      onClick={() => handleMobileNavMenu()}
     >
       <Navbar />
       <Outlet />

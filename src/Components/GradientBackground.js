@@ -3,6 +3,7 @@ import styled from '@emotion/styled'
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { tokens } from '../Helpers/styleTokens';
 
 const StyledBackground = styled(motion.div)`
   background-size: 100% 100%;
@@ -40,7 +41,8 @@ export const GradientBackground = ({ ...props }) => {
       }
     },
     minimized: {
-      backgroundImage: `linear-gradient(180deg, ${firstColor} 0px, ${firstColor} 0px, ${firstColor} 0px)`,
+      // backgroundImage: `linear-gradient(180deg, ${firstColor} 0px, ${firstColor} 0px, ${firstColor} 0px)`,
+      backgroundImage: `linear-gradient(180deg, ${firstColor} 0px, ${firstColor} 0px, ${tokens.color.contrastDark} 0px)`,
       transition: {
         duration: duration,
         ease: "easeOut"
@@ -57,7 +59,7 @@ export const GradientBackground = ({ ...props }) => {
       id="gradient-background"
       variants={variants}
       initial={initial}
-      animate={homepage ? 'homepage' : 'default'}
+      animate={minimized ? 'minimized' : (homepage ? 'homepage' : 'default')}
     />
   )
 }
