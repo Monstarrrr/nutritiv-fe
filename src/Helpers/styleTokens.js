@@ -52,6 +52,7 @@ const config = {
   lgRadius: "12px",
   xlRadius: "24px",
   xxlRadius: "42px",
+  xxxlRadius: "58px",
   maxRadius: "999px",
   
   xsBorder: "1px solid",
@@ -158,6 +159,7 @@ export const tokens = {
     lg: `${config.lgRadius}`,
     xl: `${config.xlRadius}`,
     xxl: `${config.xxlRadius}`,
+    xxxl: `${config.xxxlRadius}`,
     max: `${config.maxRadius}`,
     round: "50%",
   },

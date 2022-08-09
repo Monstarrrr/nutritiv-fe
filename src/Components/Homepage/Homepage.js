@@ -2,8 +2,7 @@
 import React, { useEffect } from 'react';
 import styled from '@emotion/styled';
 import { tokens } from '../../Helpers/styleTokens';
-import { css } from '@emotion/react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 const HomepageContentContainer = styled.div`
   margin: 0 auto;

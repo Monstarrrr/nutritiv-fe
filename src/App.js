@@ -231,6 +231,8 @@ function App() {
               #root {
                 height: 100%;
                 overflow: hidden;
+                perspective: 3000px;
+                perspective-origin: -100% 50%;
                 > div {
                   max-width: none;
                 }
@@ -248,7 +250,7 @@ function App() {
         <AnimatePresence exitBeforeEnter>
           <Routes
             location={location} 
-            key={location.pathname}
+            key={location.key}
           >
             <Route path="" element={
               <PagesWrapper minimized={mobileNavMenu}/>

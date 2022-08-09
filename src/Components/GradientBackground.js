@@ -29,19 +29,18 @@ export const GradientBackground = ({ ...props }) => {
     homepage: { 
       backgroundImage: `linear-gradient(180deg, ${firstColor} 0px, ${firstColor} 600px, ${secondColor} 1100px)`,
       transition: {
-        duration: duration,
+        duration: 0.4,
         ease: "easeOut"
       }
     },
     default: {
       backgroundImage: `linear-gradient(180deg, ${firstColor} 0px, ${firstColor} 0px, ${secondColor} 0px)`,
       transition: {
-        duration: duration,
+        duration: 0.4,
         ease: "easeOut"
       }
     },
     minimized: {
-      // backgroundImage: `linear-gradient(180deg, ${firstColor} 0px, ${firstColor} 0px, ${firstColor} 0px)`,
       backgroundImage: `linear-gradient(180deg, ${firstColor} 0px, ${firstColor} 0px, ${minimizedColor} 0px)`,
       transition: {
         duration: 0,
@@ -50,9 +49,9 @@ export const GradientBackground = ({ ...props }) => {
   };
   
   useEffect(() => {
-    setHomepage(location.pathname === "/welcome" && location.hash !== "menu")
-  }, [location.hash, location.pathname]);
-  
+    setHomepage(location.pathname === "/welcome")
+  }, [location.pathname]);
+
   return (
     <StyledBackground
       id="gradient-background"
