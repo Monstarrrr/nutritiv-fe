@@ -250,7 +250,7 @@ function App() {
         <AnimatePresence exitBeforeEnter>
           <Routes
             location={location} 
-            key={location.key}
+            key={location.pathname}
           >
             <Route path="" element={
               <PagesWrapper minimized={mobileNavMenu}/>

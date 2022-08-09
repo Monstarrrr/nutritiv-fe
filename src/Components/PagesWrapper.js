@@ -152,7 +152,7 @@ export const PagesWrapper = ({ minimized }) => {
       initial={
         minimized ? "initial" : false
       }
-      exit="exit"
+      exit={minimized && "exit"}
       minimized={minimized ? 1 : undefined}
       onClick={() => handleMobileNavMenu()}
       variants={pagesVariants}

@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { AnimatePresence, motion } from 'framer-motion';
 import styled from '@emotion/styled';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { closeMobileNavMenu } from '../../Redux/reducers/modals';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { tokens } from '../../Helpers/styleTokens';
 import { CloseIcon } from '../Icons/CloseIcon';
 
@@ -62,56 +62,12 @@ const links = [
 ]
 
 export const NavbarMenu = ({ open }) => {
-  const [leavingShadow, setLeavingShadow] = useState(false)
-  
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const location = useLocation();
   
   const handleCloseMenu = () => {
     dispatch(closeMobileNavMenu());
   }
-  
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setLeavingShadow(false);
-    }, 200);
-    return () => clearTimeout(timer);
-  }, [location.pathname]);
-  
-  const handleClick = (link) => {
-    if(location.pathname !== link) {
-      setLeavingShadow(true);
-      navigate(link)
-    }
-  }
-  
-  console.log('# location.pathname :', location.pathname)
-  console.log('# leavingShadow :', leavingShadow)
-  
-  // const variants = {
-  //   initial: {
-  //     opacity: 1,
-  //     scale: 1,
-  //     x: '-57vw',
-  //   },
-  //   shadowIn: {
-  //     opacity: 1,
-  //     scale: 1,
-  //     x: '-57vw',
-  //     transition: {
-  //       duration: 0
-  //     }
-  //   },
-  //   shadowOut: {
-  //     opacity: 0,
-  //     scale: 0.8,
-  //     x: '-54vw',
-  //     transition: {
-  //       duration: 0.2
-  //     }
-  //   }
-  // }
   
   return (
     <AnimatePresence>
@@ -146,13 +102,12 @@ export const NavbarMenu = ({ open }) => {
           </Header>
           <ul>
             {links.map(link => (
-              <button 
-                onClick={() => handleClick(link.to)}
+              <Link
                 key={link.to}
                 to={link.to} 
               >
                 {link.label}
-              </button>
+              </Link>
             ))}
           </ul>
         </Container>
