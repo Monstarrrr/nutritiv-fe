@@ -159,11 +159,13 @@ export const NutriButton = React.memo(function NutriButton(props) {
         filter: "brightness(1)",
       }}
       whileTap={{
-        opacity: 0.8,
         backgroundPositionY: "-100px",
       }}
       transition={{
-        duration: 0.12
+        backgroundPositionY: {
+          duration: 0.125
+        },
+        duration: 0
       }}
       onClick={() => handleClick()}
       {...props}

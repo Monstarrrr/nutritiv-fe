@@ -8,7 +8,7 @@ import { Elements } from '@stripe/react-stripe-js';
 import Register from './Components/Authentication/Register.js';
 import Login from './Components/Authentication/Login.js';
 import Profile from './Components/Profile/Profile';
-import { Products } from './Components/Products/Products';
+import { Shop } from './Components/Products/Shop';
 import { CheckoutSuccess } from './Components/Payment/CheckoutSuccess';
 import { CheckoutCancel } from './Components/Payment/CheckoutCancel';
 import { ProductPage } from './Components/Products/ProductPage';
@@ -17,20 +17,19 @@ import { Homepage } from './Components/Homepage/Homepage';
 import { PageNotFound } from './Components/PageNotFound/PageNotFound';
 import { ChatConnection } from './Components/Chat/ChatConnection';
 import { AnimatePresence } from 'framer-motion';
-import Navbar from './Components/Header/Navbar';
 import { ForgotPassword } from './Components/Authentication/ForgotPassword';
 import { ForgotTFA } from './Components/Authentication/ForgotTFA';
 import { ResetPassword } from './Components/Authentication/ResetPassword';
 import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3';
-import { Footer } from './Footer/Footer';
 import { ReleaseNotes } from './Components/Releases/ReleaseNotes';
 import { Global, css } from '@emotion/react';
 import './App.scss';
 import { tokens } from './Helpers/styleTokens';
 import { PageContainer } from './Components/PageContainer';
-import { Background } from './Components/GradientBackground';
 import { AboutUs } from './Components/AboutUs/AboutUs';
 import { NavbarMenu } from './Components/Header/NavbarMenu';
+import { PagesWrapper } from './Components/PagesWrapper';
+import { GradientBackground } from './Components/GradientBackground';
 
 // init stripe
 const stripePromise = loadStripe(
@@ -41,7 +40,7 @@ function App() {
   const [gettingUserInfo, setGettingUserInfo] = useState(false);
   const dispatch = useDispatch();
   const loggedIn = useSelector(state => state.user.loggedIn);
-  const navbarMenu = useSelector(state => state.modals.navbarMenu);
+  const mobileNavMenu = useSelector(state => state.modals.mobileNavMenu);
   const location = useLocation();
   const navigate = useNavigate();
   
@@ -176,7 +175,6 @@ function App() {
   const Restricted = ({ routeType }) => {
     const cartSelection = location.state?.cartSelection;
     const isLogged = () => {
-      console.log('# loggedIn :', loggedIn)
       return loggedIn;
     }
     if(loggedIn !== null) {
@@ -216,99 +214,118 @@ function App() {
         <Global 
           styles={
             css`
+              * {
+                max-width: ${tokens.maxWidth.xl};
+              }
               body {
-                background: white;
-                color: ${tokens.color.contrastLight};
+                background: black;
+                color: ${tokens.color.contrastDark};
                 font-family: 'Roboto', sans-serif;
+                position: relative;
+              }
+              html, body, 
+              #iceberg-container, #iceberg-video,
+              #root, #gradient-background {
+                max-width: none;
+              }
+              #root {
+                height: 100%;
+                overflow: hidden;
+                perspective: 3000px;
+                perspective-origin: -100% 50%;
+                > div {
+                  max-width: none;
+                }
               }
             `
           }
         />
-        <Background
-          initial={false}
+        <GradientBackground
+          duration={0.4}
           firstColor={tokens.color.secondary}
           secondColor={tokens.color.primary}
-          transition={{ 
-            duration: 0.6, 
-            ease: "easeInOut"
-          }}
+          minimizedColor={tokens.color.contrastLight}
         />
-          <Navbar />
-          <NavbarMenu open={navbarMenu} />
-          <AnimatePresence exitBeforeEnter>
-            <Routes
-              location={location} 
-              key={location.pathname}
-            >
+        <NavbarMenu open={mobileNavMenu} />
+        <AnimatePresence exitBeforeEnter>
+          <Routes
+            location={location} 
+            key={location.key}
+          >
+            <Route path="" element={
+              <PagesWrapper minimized={mobileNavMenu}/>
+            }>
               {/* PUBLIC */}
-              {/* <Route path="/" element={<GeneralLayout/>}> */}
-                {/* <Route index element={<Welcome/>} /> */}
-                <Route path="/" element={
-                    <Navigate replace to="/welcome"/>
-                  } 
-                />
-                <Route 
-                  path="/welcome" 
-                  element={<Homepage/>} 
-                />
-                <Route path="/about-us" element={
-                  <PageContainer><AboutUs/></PageContainer>
+              <Route
+                path="/"
+                element={<Navigate to="/welcome" replace/>}
+              />
+              <Route
+                path="*"
+                element={<Navigate to="/page-not-found" replace/>}
+              />
+              <Route
+                index
+                path="/welcome"
+                element={<Homepage/>}
+              />
+              <Route path="/about-us" element={
+                <PageContainer><AboutUs/></PageContainer>
+              }/>
+              <Route path="/shop" element={
+                <PageContainer><Shop/></PageContainer>
+              }/>
+              <Route path="/product">
+                <Route path=":productTitle" element={
+                  <PageContainer><ProductPage/></PageContainer>
                 }/>
-                <Route path="/products" element={
-                  <PageContainer><Products/></PageContainer>
+              </Route>
+              <Route path="/chat" element={
+                <PageContainer><ChatConnection/></PageContainer>
+              }/> 
+              <Route path="/releases" element={
+                <PageContainer><ReleaseNotes/></PageContainer>
+              }/>
+              <Route path="/cancel" element={
+                <PageContainer><CheckoutCancel/></PageContainer>
+              }/>
+              <Route path="/success" element={
+                <PageContainer><CheckoutSuccess/></PageContainer>
+              }/>
+              <Route path="/page-not-found" element={
+                <PageContainer><PageNotFound/></PageContainer>
+              }/>
+              {/* PRIVATE */}
+              {/* RESTRICTED - USER */}
+              <Route element={<Restricted routeType="user" />}>
+                <Route path="/profile" element={
+                  <PageContainer><Profile/></PageContainer>
                 }/>
-                <Route path="/product">
-                  <Route path=":productTitle" element={
-                    <PageContainer><ProductPage/></PageContainer>
-                  }/>
-                </Route>
-                <Route path="/chat" element={
-                  <PageContainer><ChatConnection/></PageContainer>
-                }/> 
-                <Route path="/releases" element={
-                  <PageContainer><ReleaseNotes/></PageContainer>
+                <Route path="/cart" element={
+                  <PageContainer><Cart/></PageContainer>
                 }/>
-                <Route path="/cancel" element={
-                  <PageContainer><CheckoutCancel/></PageContainer>
+              </Route>
+              {/* RESTRICTED - GUEST */}
+              <Route element={<Restricted routeType="guest" />}>
+                <Route path="/login" element={
+                  <PageContainer><Login/></PageContainer>
                 }/>
-                <Route path="/success" element={
-                  <PageContainer><CheckoutSuccess/></PageContainer>
+                <Route path="/register" element={
+                  <PageContainer><Register/></PageContainer>
                 }/>
-                <Route path="/page-not-found" element={
-                  <PageContainer><PageNotFound/></PageContainer>
+                <Route path="/forgot-password" element={
+                  <PageContainer><ForgotPassword/></PageContainer>
                 }/>
-                {/* PRIVATE */}
-                {/* RESTRICTED - USER */}
-                <Route element={<Restricted routeType="user" />}>
-                  <Route path="/profile" element={
-                    <PageContainer><Profile/></PageContainer>
-                  }/>
-                  <Route path="/cart" element={
-                    <PageContainer><Cart/></PageContainer>
-                  }/>
-                </Route>
-                {/* RESTRICTED - GUEST */}
-                <Route element={<Restricted routeType="guest" />}>
-                  <Route path="/login" element={
-                    <PageContainer><Login/></PageContainer>
-                  }/>
-                  <Route path="/register" element={
-                    <PageContainer><Register/></PageContainer>
-                  }/>
-                  <Route path="/forgot-password" element={
-                    <PageContainer><ForgotPassword/></PageContainer>
-                  }/>
-                  <Route path="/reset-password" element={
-                    <PageContainer><ResetPassword/></PageContainer>
-                  }/>
-                  <Route path="/forgot-2FA" element={
-                    <PageContainer><ForgotTFA/></PageContainer>
-                  }/>
-                </Route>
-              {/* </Route> */}
-            </Routes>
-          </AnimatePresence>
-          <Footer />
+                <Route path="/reset-password" element={
+                  <PageContainer><ResetPassword/></PageContainer>
+                }/>
+                <Route path="/forgot-2FA" element={
+                  <PageContainer><ForgotTFA/></PageContainer>
+                }/>
+              </Route>
+            </Route>
+          </Routes>
+        </AnimatePresence>
       </GoogleReCaptchaProvider>
     </Elements>
   );

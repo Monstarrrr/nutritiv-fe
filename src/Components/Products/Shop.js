@@ -6,7 +6,7 @@ import { ProductCard } from './ProductCard';
 import { Pagination } from '@mui/material';
 import { AnimatePresence, LayoutGroup, motion, Reorder } from 'framer-motion';
 
-export const Products = () => {  
+export const Shop = () => {  
   console.log("###########-Products-###########")
   
   const [allProducts, setAllProducts] = useState([])
