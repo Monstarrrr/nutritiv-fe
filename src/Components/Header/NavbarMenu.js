@@ -90,11 +90,11 @@ export const NavbarMenu = ({ open }) => {
     <AnimatePresence>
       {open && (
         <Container>
-          <Shadow
+          {/* <Shadow
             variants={variants}
             animate={leavingShadow ? "shadowOut" : "shadowIn"}
             initial="initial"
-          />
+          /> */}
           <div onClick={() => handleCloseMenu()}>
             Close
           </div>
