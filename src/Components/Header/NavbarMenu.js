@@ -4,9 +4,13 @@ import styled from '@emotion/styled';
 import { useDispatch, useSelector } from 'react-redux';
 import { closeMobileNavMenu } from '../../Redux/reducers/modals';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { tokens } from '../../Helpers/styleTokens';
+import { CloseIcon } from '../Icons/CloseIcon';
 
 const Container = styled.div`
   background: transparent;
+  display: flex;
+  flex-direction: column;
   position: absolute;
   top: 0;
   bottom: 0;
@@ -26,6 +30,29 @@ const Shadow = styled(motion.div)`
   transform: translateX(-57vw);
   background: #0012734f;
   border-radius: 54px;
+`
+
+const LeftSide = styled.div``
+const RightSide = styled.div``
+const Header = styled(motion.div)`
+  display: flex;
+  height: 11vh;
+  margin: 0 15px;
+  justify-content: space-between;
+  ${LeftSide}, ${RightSide} {
+    align-items: center;
+    display: flex;
+    svg {
+      cursor: pointer;
+    }
+  }
+`
+const LogoLink = styled(Link)`
+  display: flex;
+  align-items: center;
+  img {
+    height: 36px;
+  }
 `
 
 const links = [
@@ -62,29 +89,29 @@ export const NavbarMenu = ({ open }) => {
   console.log('# location.pathname :', location.pathname)
   console.log('# leavingShadow :', leavingShadow)
   
-  const variants = {
-    initial: {
-      opacity: 1,
-      scale: 1,
-      x: '-57vw',
-    },
-    shadowIn: {
-      opacity: 1,
-      scale: 1,
-      x: '-57vw',
-      transition: {
-        duration: 0
-      }
-    },
-    shadowOut: {
-      opacity: 0,
-      scale: 0.8,
-      x: '-54vw',
-      transition: {
-        duration: 0.2
-      }
-    }
-  }
+  // const variants = {
+  //   initial: {
+  //     opacity: 1,
+  //     scale: 1,
+  //     x: '-57vw',
+  //   },
+  //   shadowIn: {
+  //     opacity: 1,
+  //     scale: 1,
+  //     x: '-57vw',
+  //     transition: {
+  //       duration: 0
+  //     }
+  //   },
+  //   shadowOut: {
+  //     opacity: 0,
+  //     scale: 0.8,
+  //     x: '-54vw',
+  //     transition: {
+  //       duration: 0.2
+  //     }
+  //   }
+  // }
   
   return (
     <AnimatePresence>
@@ -95,9 +122,28 @@ export const NavbarMenu = ({ open }) => {
             animate={leavingShadow ? "shadowOut" : "shadowIn"}
             initial="initial"
           /> */}
-          <div onClick={() => handleCloseMenu()}>
-            Close
-          </div>
+          <Header>
+            <LeftSide>
+              <LogoLink
+                active={location.pathname === "/welcome" ? 1 : undefined}
+                to="/welcome"
+              >
+                <img
+                  alt="nutritiv logo"
+                  src="/logo.png"
+                />
+              </LogoLink>
+            </LeftSide>
+            <RightSide>
+              <div onClick={() => handleCloseMenu()}>
+                <CloseIcon
+                  color={tokens.color.contrastLight}
+                  height={32}
+                  strokeWidth={2} 
+                />
+              </div>
+            </RightSide>
+          </Header>
           <ul>
             {links.map(link => (
               <button 

@@ -29,14 +29,14 @@ export const GradientBackground = ({ ...props }) => {
     homepage: { 
       backgroundImage: `linear-gradient(180deg, ${firstColor} 0px, ${firstColor} 600px, ${secondColor} 1100px)`,
       transition: {
-        duration: 0.4,
+        duration: duration,
         ease: "easeOut"
       }
     },
     default: {
       backgroundImage: `linear-gradient(180deg, ${firstColor} 0px, ${firstColor} 0px, ${secondColor} 0px)`,
       transition: {
-        duration: 0.4,
+        duration: duration,
         ease: "easeOut"
       }
     },
