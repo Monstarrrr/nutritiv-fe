@@ -1,10 +1,18 @@
+import styled from '@emotion/styled';
 import React from 'react'
 import { useDispatch } from 'react-redux';
 import nutritivApi from '../../Api/nutritivApi'
 import { storageKeys } from '../../Helpers/localStorage';
+import { tokens } from '../../Helpers/styleTokens';
 import { logoutUser } from '../../Redux/reducers/user';
+import { Icon } from '../Icons/Icon';
 
-export const Logout = () => {
+const Container = styled.div`
+  align-items: center;
+  display: flex;
+`
+
+export const Logout = ({ label }) => {
   const dispatch = useDispatch();
   
   const handleLogout = async () => {
@@ -21,10 +29,22 @@ export const Logout = () => {
       console.error(':', err)
     }
   }
-
+  
   return (
-    <button onClick={handleLogout}>
-      Logout
-    </button>
+    <Container onClick={handleLogout}>
+      <Icon
+        name="exit"
+        color={tokens.color.contrastLight}
+        strokeWidth={2}
+        height={23}
+        width={23}
+        style={{marginRight: "10px"}}
+      />
+      {label && (
+        <label>
+          Sign Out
+        </label>
+      )}
+    </Container>
   )
 }

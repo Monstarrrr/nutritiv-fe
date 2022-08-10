@@ -5,15 +5,11 @@ import { Link, useLocation } from 'react-router-dom';
 import { mediaQueries, mediaQuery, tokens } from '../../Helpers/styleTokens';
 import { AnimatePresence, motion } from 'framer-motion';
 import { DelayLink } from '../DelayLink';
-import { SearchIcon } from '../Icons/SearchIcon';
 import styled from '@emotion/styled';
-import { CartIcon } from '../Icons/CartIcon';
-import { CounterIcon } from '../Icons/CounterIcon';
 import { css } from '@emotion/react';
-import { ChatIcon } from '../Icons/ChatIcon';
+import { Icon } from '../Icons/Icon';
 import { Logout } from '../Authentication/Logout';
 import { NutriButton } from '../NutriButton';
-import { MenuIcon } from '../Icons/MenuIcon';
 import { openMobileNavMenu } from '../../Redux/reducers/modals';
 
 // Styles
@@ -264,7 +260,8 @@ export default function Navbar() {
               to="/shop"
             >
               <IconContainer>
-                <SearchIcon
+                <Icon
+                  name="search"
                   color={tokens.color.contrastLight}
                   strokeWidth={2}
                 />
@@ -275,7 +272,8 @@ export default function Navbar() {
             </Link> */}
             <ProfileLink to={'/cart'}>
               <IconContainer>
-                <CartIcon
+                <Icon
+                  name="cart"
                   color={tokens.color.contrastLight}
                   strokeWidth={2}
                 />
@@ -289,8 +287,9 @@ export default function Navbar() {
                       right: -12px;
                     `}
                   >
-                    <CounterIcon
-                      backgroundColor={tokens.color.accentStrong}
+                    <Icon
+                      name="counter"
+                      color={tokens.color.accentStrong}
                       textColor={tokens.color.contrastDark}
                       count={user.cartQuantity}
                     />
@@ -303,9 +302,10 @@ export default function Navbar() {
               to="/chat"
             >
               <IconContainer>
-                <ChatIcon
+                <Icon
                   color={tokens.color.contrastLight}
                   strokeWidth={2}
+                  name="chat"
                 />
               </IconContainer>
             </ProfileLink>
@@ -360,7 +360,8 @@ export default function Navbar() {
         )}
         <MenuButton onClick={() => handleOpenMenu()}>
           <IconContainer>
-            <MenuIcon
+            <Icon
+              name="menu"
               color={tokens.color.contrastLight}
               strokeWidth={2}
             />

@@ -18,32 +18,50 @@ const StyledBackground = styled(motion.div)`
 
 export const GradientBackground = ({ ...props }) => {
   const { 
-    firstColor, secondColor, minimizedColor, duration 
+    firstColor, secondColor, minimizedHomepageColor, minimizedDefaultColor 
   } = props;
   
   const minimized = useSelector(state => state.modals.mobileNavMenu);
   const location = useLocation();
-  const [homepage, setHomepage] = useState(false)
+  const [homepage, setHomepage] = useState(false);
+  const [duration, setDuration] = useState(0);
+  
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if(minimized) {
+        setDuration(0.2)
+      } else {
+        setDuration(0)
+      }
+    }, 400)
+    return () => clearTimeout(timer)
+  }, [minimized]);
   
   const variants = {
     homepage: { 
       backgroundImage: `linear-gradient(180deg, ${firstColor} 0px, ${firstColor} 600px, ${secondColor} 1100px)`,
       transition: {
-        duration: duration,
+        duration: 0.4,
         ease: "easeOut"
       }
     },
     default: {
       backgroundImage: `linear-gradient(180deg, ${firstColor} 0px, ${firstColor} 0px, ${secondColor} 0px)`,
       transition: {
-        duration: duration,
+        duration: 0.4,
         ease: "easeOut"
       }
     },
-    minimized: {
-      backgroundImage: `linear-gradient(180deg, ${firstColor} 0px, ${firstColor} 0px, ${minimizedColor} 0px)`,
+    minimizedHomepage: {
+      backgroundImage: `linear-gradient(180deg, ${firstColor} 0px, ${firstColor} 0px, ${minimizedHomepageColor} 0px)`,
       transition: {
-        duration: 0,
+        duration: duration,
+      }
+    },
+    minimizedDefault: {
+      backgroundImage: `linear-gradient(180deg, ${firstColor} 0px, ${firstColor} 0px, ${minimizedDefaultColor} 0px)`,
+      transition: {
+        duration: duration,
       }
     }
   };
@@ -57,7 +75,13 @@ export const GradientBackground = ({ ...props }) => {
       id="gradient-background"
       variants={variants}
       initial={false}
-      animate={minimized ? 'minimized' : (homepage ? 'homepage' : 'default')}
+      animate={
+        minimized ? (
+          homepage ? 'minimizedHomepage' : 'minimizedDefault'
+        ) : (
+          homepage ? 'homepage' : 'default'
+        )
+      }
     />
   )
 }

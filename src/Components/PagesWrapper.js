@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import styled from '@emotion/styled'
 import { motion } from 'framer-motion'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { Outlet, useLocation } from 'react-router-dom'
 import { Footer } from '../Footer/Footer'
@@ -13,9 +13,6 @@ const Pages = styled(motion.div)`
   background-size: 100% 100%;
   background-origin: border-box;
   color: ${tokens.color.contrastLight};
-  /* overflow: ${props => (
-    props.minimized ? "hidden" : "auto"
-  )}; */
   overflow-y: hidden;
   position: relative;
   transform-style: preserve-3d;
@@ -40,7 +37,19 @@ const Pages = styled(motion.div)`
 export const PagesWrapper = ({ minimized }) => {
   const dispatch = useDispatch();
   const location = useLocation();
+  const [duration, setDuration] = useState(0);
   
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if(minimized) {
+        setDuration(0.22)
+      } else {
+        setDuration(0)
+      }
+    }, 400)
+    return () => clearTimeout(timer)
+  }, [minimized]);
+
   const handleMobileNavMenu = () => {
     minimized && dispatch(
       closeMobileNavMenu()
@@ -53,7 +62,6 @@ export const PagesWrapper = ({ minimized }) => {
       height: `100vh`,
       opacity: 0,
       scale: 0.78,
-      // translateX: "-100vw",
       translateX: "50vw",
       rotateY: "-20deg",
       transformStyle: "preserve-3d",
@@ -62,14 +70,12 @@ export const PagesWrapper = ({ minimized }) => {
     exit: {
       borderRadius: tokens.borderRadius.xxxl,
       opacity: 0,
-      // scale: 0.65,
-      // translateX: '-62vw',
       translateX: "-55vw",
       rotateY: "20deg",
       scale: 0.72,
       transformStyle: "preserve-3d",
       transition: {
-        duration: 0.2
+        duration: 0.22
       }
     },
     normalSizeHomepage: {
@@ -113,28 +119,28 @@ export const PagesWrapper = ({ minimized }) => {
       borderRadius: tokens.borderRadius.xxl,
       height: `100vh`,
       opacity: 1,
-      translateX: '-50vw',
+      translateX: '-44vw',
       scale: 0.75,
       rotateY: "0deg",
       left: "0vw",
       transition: {
         backgroundImage: {
-          duration: 0
+          duration: duration,
         }
       }
     },
     minimizedOtherPage: {
-      backgroundImage: "linear-gradient(rgba(20, 122, 165, 1) 0px, rgba(20, 122, 165, 1) 0px, rgba(2, 0, 71, 1) 0px)",
+      backgroundImage: "linear-gradient(rgba(2, 0, 71, 1) 0px, rgba(2, 0, 71, 1) 600px, rgba(2, 0, 71, 1) 1250px)",
       borderRadius: tokens.borderRadius.xxl,
       height: `100vh`,
       opacity: 1,
-      translateX: '-50vw',
+      translateX: '-44vw',
       scale: 0.75,
       rotateY: "0deg",
       left: "0vw",
       transition: {
         backgroundImage: {
-          duration: 0
+          duration: duration
         }
       }
     }

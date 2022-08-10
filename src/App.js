@@ -241,10 +241,10 @@ function App() {
           }
         />
         <GradientBackground
-          duration={0.4}
           firstColor={tokens.color.secondary}
           secondColor={tokens.color.primary}
-          minimizedColor={tokens.color.primary}
+          minimizedHomepageColor={tokens.color.primary}
+          minimizedDefaultColor={tokens.color.secondary}
         />
         <NavbarMenu open={mobileNavMenu} />
         <AnimatePresence exitBeforeEnter>
