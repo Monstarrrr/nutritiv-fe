@@ -9,9 +9,16 @@ import { tokens } from '../Helpers/styleTokens'
 import { closeMobileNavMenu } from '../Redux/reducers/modals'
 import Navbar from './Header/Navbar'
 
-const Pages = styled(motion.div)`
+const Pages = styled(({homepage, ...props }) => <motion.div {...props} />)`
   background-size: 100% 100%;
   background-origin: border-box;
+  box-shadow: ${props => 
+    props.homepage ? (
+      `0px 0px 33px -5px ${tokens.color.accentWeak}`
+    ) : (
+      `0px 0px 33px -15px ${tokens.color.contrastDark}`
+    )
+  };
   color: ${tokens.color.contrastLight};
   overflow-y: hidden;
   position: relative;
@@ -158,6 +165,7 @@ export const PagesWrapper = ({ minimized }) => {
       initial={
         minimized ? "initial" : false
       }
+      homepage={location.pathname === "/welcome"}
       exit={minimized && "exit"}
       minimized={minimized ? 1 : undefined}
       onClick={() => handleMobileNavMenu()}
