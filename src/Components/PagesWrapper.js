@@ -14,9 +14,9 @@ const Pages = styled(({homepage, ...props }) => <motion.div {...props} />)`
   background-origin: border-box;
   box-shadow: ${props => 
     props.homepage ? (
-      `0px 0px 33px -5px ${tokens.color.accentWeak}`
+      `0px 0px 33px -12px ${tokens.color.secondary}`
     ) : (
-      `0px 0px 33px -15px ${tokens.color.contrastDark}`
+      `0px 0px 33px -18px ${tokens.color.primary}`
     )
   };
   color: ${tokens.color.contrastLight};
