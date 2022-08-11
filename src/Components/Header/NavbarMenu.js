@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import styled from '@emotion/styled';
 import { useDispatch } from 'react-redux';
 import { closeMobileNavMenu } from '../../Redux/reducers/modals';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { tokens } from '../../Helpers/styleTokens';
 import { Icon } from '../Icons/Icon';
 import { useSelector } from 'react-redux';
@@ -16,8 +16,9 @@ const LinksContainer = styled.div``
 const CustomLink = styled(Link)``
 const LinkContainer = styled(({active, ...props }) => <div {...props} />)`
   align-items: center;
+  cursor: pointer;
   display: flex;
-  margin: ${tokens.spacing.md} 0;
+  padding: ${tokens.spacing.md} 0;
   opacity: ${props => 
     props.active ? 1 : 0.65
   };
@@ -28,7 +29,7 @@ const LinkContainer = styled(({active, ...props }) => <div {...props} />)`
     text-decoration: none;
   }
   svg {
-    margin-right: ${tokens.spacing.lg};
+    padding-right: ${tokens.spacing.lg};
     width: auto;
   }
 `
@@ -95,6 +96,7 @@ const links = [
 export const NavbarMenu = ({ open }) => {
   const dispatch = useDispatch();
   const location = useLocation();
+  const navigate = useNavigate();
   const loggedIn = useSelector(state => state.user.loggedIn);
   const [active, setActive] = useState([]);
   
@@ -106,8 +108,9 @@ export const NavbarMenu = ({ open }) => {
   const handleCloseMenu = () => {
     dispatch(closeMobileNavMenu());
   }
-  const handleLinkClick = (e) => {
-    active === e.target.name && dispatch(closeMobileNavMenu());
+  const handleLinkClick = (link) => {
+    navigate(link);
+    active === link && dispatch(closeMobileNavMenu());
   }
 
   return (
@@ -142,17 +145,17 @@ export const NavbarMenu = ({ open }) => {
               {links.map(link => (
                 <LinkContainer 
                   active={active === link.to}
+                  onClick={() => handleLinkClick(link.to)}
                   key={link.to}
                 >
                   <Icon
                     color={tokens.color.contrastLight}
-                    strokeWidth={2}
                     filled={active === link.to}
-                    name={link.icon}
                     height={30}
+                    name={link.icon}
+                    strokeWidth={2}
                   />
                   <CustomLink
-                    onClick={e => handleLinkClick(e)}
                     name={link.to}
                     to={link.to}
                   >
