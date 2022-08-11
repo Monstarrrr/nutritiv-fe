@@ -51,7 +51,7 @@ export const Icon = (props) => {
         xmlns="http://www.w3.org/2000/svg" 
         className="h-6 w-6" 
         fill={filled ? color : "none"} 
-        viewBox={filled ? "0 0 22 22" : "0 0 26 26"} 
+        viewBox={filled ? "0 -1 22 22" : "0 -1 26 26"} 
         stroke={color} 
         strokeWidth={filled ? 0 : strokeWidth}
         height={height || "100%"}
@@ -141,7 +141,7 @@ export const Icon = (props) => {
         xmlns="http://www.w3.org/2000/svg" 
         className="h-6 w-6" 
         fill={filled ? color : "none"}
-        viewBox={filled ? "0 0 23 23" : "0 0 27 27"} 
+        viewBox={filled ? "0 -1 23 23" : "0 -1 27 27"} 
         stroke={color} 
         strokeWidth={filled ? 0 : strokeWidth}
         height={height || "100%"}
@@ -155,13 +155,33 @@ export const Icon = (props) => {
       </svg>
     )
   }
+  if(name === "user") {
+    return (
+      <svg 
+        xmlns="http://www.w3.org/2000/svg" 
+        className="h-6 w-6" 
+        fill={filled ? color : "none"}
+        viewBox={filled ? "0 -1 23 23" : "0 -1 27 27"} 
+        stroke={color} 
+        strokeWidth={filled ? 0 : strokeWidth}
+        height={height || "100%"}
+        width={width || "100%"}
+      >
+        {filled ? (
+          <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+        ) : (
+          <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+        )}
+      </svg>
+    )
+  }
   if(name === "tag") {
     return (
       <svg 
         xmlns="http://www.w3.org/2000/svg" 
         className="h-6 w-6" 
         fill={filled ? color : "none"}
-        viewBox={filled ? "0 0 23 23" : "0 0 27 27"} 
+        viewBox={filled ? "0 -2 23 23" : "0 -2 27 27"} 
         stroke={color}
         strokeWidth={filled ? 0 : strokeWidth}
         height={height || "100%"}

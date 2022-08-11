@@ -19,6 +19,12 @@ const LinkContainer = styled(({active, ...props }) => <div {...props} />)`
   cursor: pointer;
   display: flex;
   padding: ${tokens.spacing.md} 0;
+  padding-right: ${props => 
+    props.active ? `0` : `1px`
+  };
+  font-weight: ${props => 
+    props.active ? `bold` : `normal`
+  };
   opacity: ${props => 
     props.active ? 1 : 0.65
   };
@@ -101,10 +107,12 @@ const SignInContainer = styled(({active, ...props }) => <div {...props} />)`
 
 
 const links = [
-  {to: "/welcome", label: "Home", icon: "home"},
-  {to: "/about-us", label: "About us", icon: "users"},
-  {to: "/shop", label: "Shop", icon: "tag"},
-  {to: "/chat", label: "Chat", icon: "chat"},
+  {to: "/welcome",  label: "Home",     icon: "home",  loggedOut: true,  loggedIn: true},
+  {to: "/about-us", label: "About us", icon: "users", loggedOut: true,  loggedIn: true},
+  {to: "/shop",     label: "Shop",     icon: "tag",   loggedOut: true,  loggedIn: true},
+  {to: "/chat",     label: "Support",  icon: "chat",  loggedOut: true,  loggedIn: true},
+  {to: "/cart",     label: "Cart",     icon: "cart",  loggedOut: false, loggedIn: true},
+  {to: "/profile",  label: "Account",  icon: "user",  loggedOut: false, loggedIn: true},
 ]
 
 export const NavbarMenu = ({ open }) => {
@@ -157,6 +165,7 @@ export const NavbarMenu = ({ open }) => {
             <LeftSide>
               <LogoLink
                 active={location.pathname === "/welcome" ? 1 : undefined}
+                onClick={() => handleInstantLink("/welcome")}
                 to="/welcome"
               >
                 <img
@@ -179,25 +188,27 @@ export const NavbarMenu = ({ open }) => {
           <Navigation>
             <LinksContainer>
               {links.map(link => (
-                <LinkContainer 
-                  active={active === link.to}
-                  onClick={() => handleLinkClick(link.to)}
-                  key={link.to}
-                >
-                  <Icon
-                    color={tokens.color.contrastLight}
-                    filled={active === link.to}
-                    height={26}
-                    name={link.icon}
-                    strokeWidth={2}
-                  />
-                  <CustomLink
-                    name={link.to}
-                    to={link.to}
+                ((loggedIn && link.loggedIn) || (!loggedIn && link.loggedOut)) && (  
+                  <LinkContainer 
+                    active={active === link.to}
+                    onClick={() => handleLinkClick(link.to)}
+                    key={link.to}
                   >
-                    {link.label}
-                  </CustomLink>
-                </LinkContainer>
+                    <Icon
+                      color={tokens.color.contrastLight}
+                      filled={active === link.to}
+                      height={26}
+                      name={link.icon}
+                      strokeWidth={2}
+                    />
+                    <CustomLink
+                      name={link.to}
+                      to={link.to}
+                    >
+                      {link.label}
+                    </CustomLink>
+                  </LinkContainer>
+                )
               ))}
             </LinksContainer>
           </Navigation>
