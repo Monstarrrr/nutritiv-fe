@@ -219,7 +219,7 @@ function App() {
               }
               body {
                 background: black;
-                color: ${tokens.color.contrastDark};
+                color: ${tokens.color.contrastLight};
                 font-family: 'Roboto', sans-serif;
                 position: relative;
               }
@@ -241,25 +241,21 @@ function App() {
           }
         />
         <GradientBackground
-          duration={0.4}
           firstColor={tokens.color.secondary}
           secondColor={tokens.color.primary}
-          minimizedColor={tokens.color.contrastLight}
+          minimizedHomepageColor={tokens.color.primary}
+          minimizedDefaultColor={tokens.color.secondary}
         />
         <NavbarMenu open={mobileNavMenu} />
         <AnimatePresence exitBeforeEnter>
           <Routes
             location={location} 
-            key={location.key}
+            key={location.pathname}
           >
             <Route path="" element={
               <PagesWrapper minimized={mobileNavMenu}/>
             }>
               {/* PUBLIC */}
-              <Route
-                path="/"
-                element={<Navigate to="/welcome" replace/>}
-              />
               <Route
                 path="*"
                 element={<Navigate to="/page-not-found" replace/>}
@@ -295,6 +291,10 @@ function App() {
               <Route path="/page-not-found" element={
                 <PageContainer><PageNotFound/></PageContainer>
               }/>
+              <Route
+                path="/"
+                element={<Navigate to="/welcome" replace/>}
+              />
               {/* PRIVATE */}
               {/* RESTRICTED - USER */}
               <Route element={<Restricted routeType="user" />}>
