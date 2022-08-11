@@ -139,7 +139,9 @@ const MenuButton = styled.div`
 `
 
 const MobileSide = styled.div`
+  align-items: center;
   display: flex;
+  padding: ${tokens.spacing.sm};
   ${mediaQuery[2]} {
     display: none;
   }
@@ -347,7 +349,7 @@ export default function Navbar() {
       </ProfileSide>
       
       <MobileSide>
-        {user.loggedIn === false && (
+        {user.loggedIn === false ? (
           <NutriButton
             wave={1}
             type="filled"
@@ -357,6 +359,31 @@ export default function Navbar() {
           >
             Register
           </NutriButton>
+        ) : (
+          <ProfileLink to="/cart">
+            <IconContainer>
+              <Icon
+                name="cart"
+                color={tokens.color.contrastLight}
+                filled={location.pathname === "/cart"}
+                strokeWidth={2}
+              />
+            </IconContainer>
+            <IconContainer
+              css={css`
+                position: absolute;
+                top: -5px;
+                right: -12px;
+              `}
+            >
+              <Icon
+                name="counter"
+                color={tokens.color.accentStrong}
+                textColor={tokens.color.contrastDark}
+                count={user.cartQuantity}
+              />
+            </IconContainer>
+          </ProfileLink>
         )}
         <MenuButton onClick={() => handleOpenMenu()}>
           <IconContainer>
