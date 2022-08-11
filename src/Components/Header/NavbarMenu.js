@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion';
 import styled from '@emotion/styled';
 import { useDispatch } from 'react-redux';
@@ -24,7 +24,7 @@ const LinkContainer = styled(({active, ...props }) => <div {...props} />)`
   };
   ${CustomLink} {
     color: ${tokens.color.contrastLight};
-    font-size: ${tokens.font.fontSize.md};
+    font-size: ${tokens.font.fontSize.sm};
     flex-shrink: 0;
     text-decoration: none;
   }
@@ -56,7 +56,7 @@ const Container = styled.div`
   ${NavHeader}, ${NavFooter} {
     align-items: center;
     display: flex;
-    height: 12vh;
+    height: 12.5vh;
     justify-content: space-between;
     margin: 0 ${tokens.spacing.xl};
   }
@@ -85,11 +85,25 @@ const Navigation = styled(motion.div)`
   }
 `
 
+const SignInContainer = styled(({active, ...props }) => <div {...props} />)`
+  align-items: center;
+  display: flex;
+  opacity: ${props => 
+    props.active ? 1 : 0.65
+  };
+  label {
+    flex-shrink: 0;
+  }
+  svg {
+    padding-right: ${tokens.spacing.md};
+  }
+`
+
 
 const links = [
   {to: "/welcome", label: "Home", icon: "home"},
   {to: "/about-us", label: "About us", icon: "users"},
-  {to: "/shop", label: "Shop", icon: "cart"},
+  {to: "/shop", label: "Shop", icon: "tag"},
   {to: "/chat", label: "Chat", icon: "chat"},
 ]
 
@@ -100,10 +114,32 @@ export const NavbarMenu = ({ open }) => {
   const loggedIn = useSelector(state => state.user.loggedIn);
   const [active, setActive] = useState([]);
   
+  const timerRef = useRef();
   
   useEffect(() => {
     setActive(location.pathname)
   }, [location.pathname]);
+  
+  
+  // Clear timer from handleInstantLink()
+  useEffect(() => {
+    const timeoutId = timerRef.current;
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, []);
+  
+  const handleInstantLink = (link) => {
+    if(active === link) {
+      dispatch(closeMobileNavMenu());
+    } else {
+      navigate(link)
+      const timer = setTimeout(() => {
+        dispatch(closeMobileNavMenu());
+      }, 300);
+      timerRef.current = timer;
+    }
+  };
   
   const handleCloseMenu = () => {
     dispatch(closeMobileNavMenu());
@@ -133,7 +169,7 @@ export const NavbarMenu = ({ open }) => {
               <div onClick={() => handleCloseMenu()}>
                 <Icon
                   color={tokens.color.contrastLight}
-                  height={32}
+                  height={28}
                   strokeWidth={2}
                   name="close" 
                 />
@@ -151,7 +187,7 @@ export const NavbarMenu = ({ open }) => {
                   <Icon
                     color={tokens.color.contrastLight}
                     filled={active === link.to}
-                    height={30}
+                    height={26}
                     name={link.icon}
                     strokeWidth={2}
                   />
@@ -169,9 +205,21 @@ export const NavbarMenu = ({ open }) => {
             {loggedIn ? (
               <Logout label />
             ) : (
-              <div>
-                
-              </div>
+              <SignInContainer
+                active={active === "/login"}
+                onClick={() => handleInstantLink("/login")}
+              >
+                <Icon
+                  color={tokens.color.contrastLight}
+                  height={25}
+                  strokeWidth={2}
+                  filled
+                  name="login"
+                />
+                <label>
+                  Sign In
+                </label>
+              </SignInContainer>
             )}
           </NavFooter>
         </Container>
