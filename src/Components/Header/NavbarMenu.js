@@ -175,12 +175,28 @@ export const NavbarMenu = ({ open }) => {
               </LogoLink>
             </LeftSide>
             <RightSide>
-              <div onClick={() => handleCloseMenu()}>
-                <Icon
+              <div
+                style={{display: "flex"}}
+                onClick={() => handleInstantLink("/shop")}
+              >
+                <Icon 
+                  name="search" 
                   color={tokens.color.contrastLight}
-                  height={28}
+                  height={26}
+                  resize="0 -3 29 29"
                   strokeWidth={2}
+                  style={{marginRight: "8px"}}
+                />
+              </div>
+              <div
+                style={{display: "flex"}}
+                onClick={() => handleCloseMenu()}
+              >
+                <Icon
                   name="close" 
+                  color={tokens.color.contrastLight}
+                  height={26}
+                  strokeWidth={2}
                 />
               </div>
             </RightSide>

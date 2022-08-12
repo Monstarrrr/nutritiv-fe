@@ -21,6 +21,7 @@ export const Icon = (props) => {
     strokeWidth, 
     width, 
     height,
+    resize,
     count,
     style
   } = props;
@@ -103,11 +104,12 @@ export const Icon = (props) => {
         xmlns="http://www.w3.org/2000/svg" 
         className="h-6 w-6" 
         fill={filled ? color : "none"}
-        viewBox={filled ? "0 0 18 18" : "0 -2 24 24"}
+        viewBox={resize ? resize : (filled ? "0 0 18 18" : "0 -2 24 24")}
         stroke={color}
         strokeWidth={filled ? 0 : strokeWidth}
         height={height || "100%"}
         width={width || "100%"}
+        style={style}
       >
         {filled ? (
           <>
