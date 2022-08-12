@@ -270,9 +270,19 @@ export default function Navbar() {
                 />
               </IconContainer>
             </ProfileLink>
-            {/* <Link to="/profile">
-              { user.username }
-            </Link> */}
+            <ProfileLink
+              active={location.pathname === "/chat" ? 1 : undefined}
+              to="/chat"
+            >
+              <IconContainer>
+                <Icon
+                  name="chat"
+                  color={tokens.color.contrastLight}
+                  filled={location.pathname === "/chat"}
+                  strokeWidth={2}
+                />
+              </IconContainer>
+            </ProfileLink>
             <ProfileLink to={'/cart'}>
               <IconContainer>
                 <Icon
@@ -298,19 +308,6 @@ export default function Navbar() {
                   />
                 </IconContainer>
               )}
-            </ProfileLink>
-            <ProfileLink
-              active={location.pathname === "/chat" ? 1 : undefined}
-              to="/chat"
-            >
-              <IconContainer>
-                <Icon
-                  name="chat"
-                  color={tokens.color.contrastLight}
-                  filled={location.pathname === "/chat"}
-                  strokeWidth={2}
-                />
-              </IconContainer>
             </ProfileLink>
             <ProfileLink
               active={location.pathname === "/profile" ? 1 : undefined}
