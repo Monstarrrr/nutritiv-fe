@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 import { mediaQueries, mediaQuery, tokens } from '../../Helpers/styleTokens';
@@ -152,15 +152,27 @@ const navLinksItems = [
 
 export default function Navbar() {
   const user = useSelector(state => state.user)
+  const minimized = useSelector(state => state.modals.mobileNavMenu);
   const dispatch = useDispatch();
   const location = useLocation();
   const [hovered, setHovered] = useState("");
   const [active, setActive] = useState(location.pathname);
-  
+  const [cartActive, setCartActive] = useState(
+    !minimized ? location.pathname === "/cart" : false
+  )
   
   const handleOpenMenu = () => {
     dispatch(openMobileNavMenu())
   }
+  
+  useEffect(() => {
+    if(minimized && location.pathname === "/cart") {
+      const timer = setTimeout(() => {
+        setCartActive(true);
+      }, 105)
+      return () => clearTimeout(timer);
+    }
+  }, [location.pathname, minimized]);
   
   return (
     <Nav>
@@ -366,7 +378,8 @@ export default function Navbar() {
               <Icon
                 name="cart"
                 color={tokens.color.contrastLight}
-                filled={location.pathname === "/cart"}
+                // filled={location.pathname === "/cart"}
+                filled={cartActive}
                 strokeWidth={2}
               />
             </IconContainer>
