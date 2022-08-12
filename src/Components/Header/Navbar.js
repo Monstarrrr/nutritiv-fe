@@ -146,7 +146,7 @@ const MobileSide = styled.div`
 
 const navLinksItems = [
   {link: "/welcome", label: "Home", delay: 0},
-  {link: "/about-us", label: "About us", delay: 0},
+  {link: "/team", label: "The Team", delay: 0},
   {link: "/shop", label: "Shop", delay: 0},
 ]
 

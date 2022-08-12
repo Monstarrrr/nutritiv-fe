@@ -264,7 +264,7 @@ function App() {
                 path="/welcome"
                 element={<Homepage/>}
               />
-              <Route path="/about-us" element={
+              <Route path="/team" element={
                 <PageContainer><AboutUs/></PageContainer>
               }/>
               <Route path="/shop" element={

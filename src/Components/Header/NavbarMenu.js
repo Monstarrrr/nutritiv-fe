@@ -108,7 +108,7 @@ const SignInContainer = styled(({active, ...props }) => <div {...props} />)`
 
 const links = [
   {to: "/welcome",  label: "Home",     icon: "home",  loggedOut: true,  loggedIn: true},
-  {to: "/about-us", label: "About us", icon: "users", loggedOut: true,  loggedIn: true},
+  {to: "/team", label: "The Team",    icon: "users",  loggedOut: true,  loggedIn: true},
   {to: "/shop",     label: "Shop",     icon: "shop",  loggedOut: true,  loggedIn: true},
   {to: "/chat",     label: "Support",  icon: "chat",  loggedOut: true,  loggedIn: true},
   {to: "/cart",     label: "Cart",     icon: "cart",  loggedOut: false, loggedIn: true},
