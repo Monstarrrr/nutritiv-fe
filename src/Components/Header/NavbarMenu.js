@@ -20,13 +20,13 @@ const LinkContainer = styled(({active, ...props }) => <div {...props} />)`
   display: flex;
   padding: ${tokens.spacing.md} 0;
   padding-right: ${props => 
-    props.active ? `0` : `1px`
+    props.active ? `0` : `0.5px`
   };
   font-weight: ${props => 
     props.active ? `bold` : `normal`
   };
   opacity: ${props => 
-    props.active ? 1 : 0.65
+    props.active ? 1 : 0.72
   };
   ${CustomLink} {
     color: ${tokens.color.contrastLight};
@@ -230,7 +230,10 @@ export const NavbarMenu = ({ open }) => {
           </Navigation>
           <NavFooter>
             {loggedIn ? (
-              <Logout label />
+              <Logout 
+                label
+                style={{opacity: 0.72}} 
+              />
             ) : (
               <SignInContainer
                 active={active === "/login"}
@@ -240,7 +243,6 @@ export const NavbarMenu = ({ open }) => {
                   color={tokens.color.contrastLight}
                   height={25}
                   strokeWidth={2}
-                  filled
                   name="login"
                 />
                 <label>

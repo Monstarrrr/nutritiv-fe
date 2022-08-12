@@ -12,7 +12,7 @@ const Container = styled.div`
   display: flex;
 `
 
-export const Logout = ({ label }) => {
+export const Logout = ({ label, style }) => {
   const dispatch = useDispatch();
   
   const handleLogout = async () => {
@@ -31,7 +31,10 @@ export const Logout = ({ label }) => {
   }
   
   return (
-    <Container onClick={handleLogout}>
+    <Container 
+      onClick={handleLogout}
+      style={style}  
+    >
       <Icon
         name="exit"
         color={tokens.color.contrastLight}

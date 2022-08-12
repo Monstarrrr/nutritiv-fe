@@ -19,15 +19,16 @@ const viewBox = [
     menu:    [{default: "0 0 22 22"}],
     close:   [{default: "0 0 24 24"}],
     search:  [{default: "0 -2 24 24"}, {filled: "0 0 18 18"}],
-    home:    [{default: "0 0 22 22"},  {filled: "0 0 26 26"}],
+    home:    [{default: "0 0 26 26"},  {filled: "0 0 22 22"}],
     user:    [{default: "0 -1 27 27"}, {filled: "0 -1 22 22"}],
     users:   [{default: "0 -1 27 27"}, {filled: "0 -1 23 23"}],
     tag:     [{default: "0 -2 27 27"}, {filled: "0 -2 23 23"}],
     login:   [{default: "0 -1 26 26"}],
     exit:    [{default: "0 0 23 23"}],
-    counter: [{default: "0 0 100 100"}],
+    counter: [{default: "0 0 100 100"}, {filled: "0 0 100 100"}],
   },
 ]
+
 export const Icon = (props) => {
   const { 
     name,
@@ -41,6 +42,8 @@ export const Icon = (props) => {
     count,
     style
   } = props;
+  
+  console.log(name);
 
   return (
     <>
@@ -72,9 +75,9 @@ export const Icon = (props) => {
         )}
         {name === "chat" && (
           filled ? (
-            <path fillRule="evenodd" d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 112 0 1 1 0 01-2 0zm7-1a1 1 0 100 2 1 1 0 000-2z" clipRule="evenodd" />
+            <path fillRule="evenodd" d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z" clipRule="evenodd" />
           ) : (
-            <path strokeLinecap="round"  strokeLinejoin="round"  d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+            <path strokeLinecap="round" strokeLinejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
           )
         )}
         {name === "menu" && (
@@ -123,7 +126,7 @@ export const Icon = (props) => {
             <path strokeLinecap="round" strokeLinejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
           )
         )}
-        {name === "tag" && (
+        {name === "login" && (
           <g transform="scale(-1,1) translate(-23, 0)">
             <path strokeLinecap="round" strokeLinejoin="round" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
           </g>

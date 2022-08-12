@@ -45,9 +45,6 @@ const Nav = styled(motion.nav)`
   ${mediaQuery[3]} {
     padding: 0;
   }
-  /* ${mediaQueries({
-    background: ["transparent", "transparent", "transparent", "transparent"]
-  })} */
   ${LogoSide}, ${NavSide}, ${ProfileSide} {
     align-items: center;
     display: flex;
@@ -304,6 +301,9 @@ export default function Navbar() {
                     name="counter"
                     color={tokens.color.accentStrong}
                     textColor={tokens.color.contrastDark}
+                    filled
+                    height={"90%"}
+                    width={"90%"}
                     count={user.cartQuantity}
                   />
                 </IconContainer>
@@ -380,6 +380,9 @@ export default function Navbar() {
                   color={tokens.color.accentStrong}
                   textColor={tokens.color.contrastDark}
                   count={user.cartQuantity}
+                  filled
+                  height={"90%"}
+                  width={"90%"}
                 />
               </IconContainer>
             )}
