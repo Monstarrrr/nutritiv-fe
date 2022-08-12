@@ -265,6 +265,7 @@ export default function Navbar() {
                 <Icon
                   name="search"
                   color={tokens.color.contrastLight}
+                  filled={location.pathname === "/shop"}
                   strokeWidth={2}
                 />
               </IconContainer>
@@ -277,27 +278,26 @@ export default function Navbar() {
                 <Icon
                   name="cart"
                   color={tokens.color.contrastLight}
+                  filled={location.pathname === "/cart"}
                   strokeWidth={2}
                 />
               </IconContainer>
-              {
-                user?.cartQuantity > 0 && (
-                  <IconContainer
-                    css={css`
-                      position: absolute;
-                      top: -5px;
-                      right: -12px;
-                    `}
-                  >
-                    <Icon
-                      name="counter"
-                      color={tokens.color.accentStrong}
-                      textColor={tokens.color.contrastDark}
-                      count={user.cartQuantity}
-                    />
-                  </IconContainer>
-                )
-              }
+              {user?.cartQuantity > 0 && (
+                <IconContainer
+                  css={css`
+                    position: absolute;
+                    top: -5px;
+                    right: -12px;
+                  `}
+                >
+                  <Icon
+                    name="counter"
+                    color={tokens.color.accentStrong}
+                    textColor={tokens.color.contrastDark}
+                    count={user.cartQuantity}
+                  />
+                </IconContainer>
+              )}
             </ProfileLink>
             <ProfileLink
               active={location.pathname === "/chat" ? 1 : undefined}
@@ -305,9 +305,10 @@ export default function Navbar() {
             >
               <IconContainer>
                 <Icon
-                  color={tokens.color.contrastLight}
-                  strokeWidth={2}
                   name="chat"
+                  color={tokens.color.contrastLight}
+                  filled={location.pathname === "/chat"}
+                  strokeWidth={2}
                 />
               </IconContainer>
             </ProfileLink>
@@ -369,20 +370,22 @@ export default function Navbar() {
                 strokeWidth={2}
               />
             </IconContainer>
-            <IconContainer
-              css={css`
-                position: absolute;
-                top: -5px;
-                right: -12px;
-              `}
-            >
-              <Icon
-                name="counter"
-                color={tokens.color.accentStrong}
-                textColor={tokens.color.contrastDark}
-                count={user.cartQuantity}
-              />
-            </IconContainer>
+            {user?.cartQuantity > 0 && (
+              <IconContainer
+                css={css`
+                  position: absolute;
+                  top: -5px;
+                  right: -12px;
+                `}
+              >
+                <Icon
+                  name="counter"
+                  color={tokens.color.accentStrong}
+                  textColor={tokens.color.contrastDark}
+                  count={user.cartQuantity}
+                />
+              </IconContainer>
+            )}
           </ProfileLink>
         )}
         <MenuButton onClick={() => handleOpenMenu()}>

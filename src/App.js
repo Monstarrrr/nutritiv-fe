@@ -230,7 +230,6 @@ function App() {
               }
               #root {
                 height: 100%;
-                overflow: hidden;
                 perspective: 3000px;
                 perspective-origin: -100% 50%;
                 > div {
