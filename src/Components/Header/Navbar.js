@@ -263,6 +263,7 @@ export default function Navbar() {
                   name="search"
                   color={tokens.color.contrastLight}
                   filled={location.pathname === "/shop"}
+                  resizeDefault="0 -1 25 25"
                   strokeWidth={2}
                 />
               </IconContainer>
@@ -286,7 +287,9 @@ export default function Navbar() {
                   name="cart"
                   color={tokens.color.contrastLight}
                   filled={location.pathname === "/cart"}
-                  strokeWidth={2}
+                  resizeDefault="0 -2 26 26"
+                  resizeFilled="0 -2 22 22"
+                  strokeWidth={1.5}
                 />
               </IconContainer>
               {user?.cartQuantity > 0 && (
