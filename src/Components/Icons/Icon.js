@@ -168,7 +168,7 @@ export const Icon = (props) => {
         xmlns="http://www.w3.org/2000/svg" 
         className="h-6 w-6" 
         fill={filled ? color : "none"}
-        viewBox={filled ? "0 -1 23 23" : "0 -1 27 27"} 
+        viewBox={filled ? "0 -1 22 22" : "0 -1 27 27"} 
         stroke={color} 
         strokeWidth={filled ? 0 : strokeWidth}
         height={height || "100%"}
@@ -209,14 +209,16 @@ export const Icon = (props) => {
         xmlns="http://www.w3.org/2000/svg" 
         className="h-6 w-6" 
         fill="none"
-        viewBox="0 0 23 23" 
+        viewBox="0 -1 26 26" 
         stroke={color}
         strokeWidth={strokeWidth}
         height={height || "100%"}
         width={width || "100%"}
         style={style}
       >
-        <path strokeLinecap="round" strokeLinejoin="round" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+        <g transform="scale(-1,1) translate(-23, 0)">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+        </g>
       </svg>
     )
   }

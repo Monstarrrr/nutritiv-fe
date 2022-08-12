@@ -9,8 +9,7 @@ import { tokens } from '../Helpers/styleTokens'
 import { closeMobileNavMenu } from '../Redux/reducers/modals'
 import Navbar from './Header/Navbar'
 
-const Pages = styled(({ homepage, minimized, overflowHidden, ...props }) => 
-<motion.div {...props} />)`
+const Pages = styled(({ homepage, minimized, overflowHidden, ...props }) => <motion.div {...props} />)`
   background-size: 100% 100%;
   background-origin: border-box;
   box-shadow: ${props => 
