@@ -20,13 +20,13 @@ const LinkContainer = styled(({active, ...props }) => <div {...props} />)`
   display: flex;
   padding: ${tokens.spacing.md} 0;
   padding-right: ${props => 
-    props.active ? `0` : `1px`
+    props.active ? `0` : `0.5px`
   };
   font-weight: ${props => 
     props.active ? `bold` : `normal`
   };
   opacity: ${props => 
-    props.active ? 1 : 0.65
+    props.active ? 1 : 0.72
   };
   ${CustomLink} {
     color: ${tokens.color.contrastLight};
@@ -108,8 +108,8 @@ const SignInContainer = styled(({active, ...props }) => <div {...props} />)`
 
 const links = [
   {to: "/welcome",  label: "Home",     icon: "home",  loggedOut: true,  loggedIn: true},
-  {to: "/about-us", label: "About us", icon: "users", loggedOut: true,  loggedIn: true},
-  {to: "/shop",     label: "Shop",     icon: "tag",   loggedOut: true,  loggedIn: true},
+  {to: "/team", label: "The Team",    icon: "users",  loggedOut: true,  loggedIn: true},
+  {to: "/shop",     label: "Shop",     icon: "shop",  loggedOut: true,  loggedIn: true},
   {to: "/chat",     label: "Support",  icon: "chat",  loggedOut: true,  loggedIn: true},
   {to: "/cart",     label: "Cart",     icon: "cart",  loggedOut: false, loggedIn: true},
   {to: "/profile",  label: "Account",  icon: "user",  loggedOut: false, loggedIn: true},
@@ -175,12 +175,28 @@ export const NavbarMenu = ({ open }) => {
               </LogoLink>
             </LeftSide>
             <RightSide>
-              <div onClick={() => handleCloseMenu()}>
-                <Icon
+              <div
+                style={{display: "flex"}}
+                onClick={() => handleInstantLink("/shop")}
+              >
+                <Icon 
+                  name="search" 
                   color={tokens.color.contrastLight}
-                  height={28}
+                  height={26}
+                  resize="0 -3 29 29"
                   strokeWidth={2}
+                  style={{marginRight: "8px"}}
+                />
+              </div>
+              <div
+                style={{display: "flex"}}
+                onClick={() => handleCloseMenu()}
+              >
+                <Icon
                   name="close" 
+                  color={tokens.color.contrastLight}
+                  height={26}
+                  strokeWidth={2}
                 />
               </div>
             </RightSide>
@@ -214,7 +230,10 @@ export const NavbarMenu = ({ open }) => {
           </Navigation>
           <NavFooter>
             {loggedIn ? (
-              <Logout label />
+              <Logout 
+                label
+                style={{opacity: 0.72}} 
+              />
             ) : (
               <SignInContainer
                 active={active === "/login"}
@@ -224,7 +243,6 @@ export const NavbarMenu = ({ open }) => {
                   color={tokens.color.contrastLight}
                   height={25}
                   strokeWidth={2}
-                  filled
                   name="login"
                 />
                 <label>

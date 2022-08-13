@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 import { mediaQueries, mediaQuery, tokens } from '../../Helpers/styleTokens';
@@ -45,9 +45,6 @@ const Nav = styled(motion.nav)`
   ${mediaQuery[3]} {
     padding: 0;
   }
-  /* ${mediaQueries({
-    background: ["transparent", "transparent", "transparent", "transparent"]
-  })} */
   ${LogoSide}, ${NavSide}, ${ProfileSide} {
     align-items: center;
     display: flex;
@@ -149,21 +146,33 @@ const MobileSide = styled.div`
 
 const navLinksItems = [
   {link: "/welcome", label: "Home", delay: 0},
-  {link: "/about-us", label: "About us", delay: 0},
+  {link: "/team", label: "The Team", delay: 0},
   {link: "/shop", label: "Shop", delay: 0},
 ]
 
 export default function Navbar() {
   const user = useSelector(state => state.user)
+  const minimized = useSelector(state => state.modals.mobileNavMenu);
   const dispatch = useDispatch();
   const location = useLocation();
   const [hovered, setHovered] = useState("");
   const [active, setActive] = useState(location.pathname);
-  
+  const [cartActive, setCartActive] = useState(
+    !minimized ? location.pathname === "/cart" : false
+  )
   
   const handleOpenMenu = () => {
     dispatch(openMobileNavMenu())
   }
+  
+  useEffect(() => {
+    if(minimized && location.pathname === "/cart") {
+      const timer = setTimeout(() => {
+        setCartActive(true);
+      }, 105)
+      return () => clearTimeout(timer);
+    }
+  }, [location.pathname, minimized]);
   
   return (
     <Nav>
@@ -266,20 +275,33 @@ export default function Navbar() {
                   name="search"
                   color={tokens.color.contrastLight}
                   filled={location.pathname === "/shop"}
+                  resizeDefault="0 -1 25 25"
                   strokeWidth={2}
                 />
               </IconContainer>
             </ProfileLink>
-            {/* <Link to="/profile">
-              { user.username }
-            </Link> */}
+            <ProfileLink
+              active={location.pathname === "/chat" ? 1 : undefined}
+              to="/chat"
+            >
+              <IconContainer>
+                <Icon
+                  name="chat"
+                  color={tokens.color.contrastLight}
+                  filled={location.pathname === "/chat"}
+                  strokeWidth={2}
+                />
+              </IconContainer>
+            </ProfileLink>
             <ProfileLink to={'/cart'}>
               <IconContainer>
                 <Icon
                   name="cart"
                   color={tokens.color.contrastLight}
                   filled={location.pathname === "/cart"}
-                  strokeWidth={2}
+                  resizeDefault="0 -2 26 26"
+                  resizeFilled="0 -2 22 22"
+                  strokeWidth={1.5}
                 />
               </IconContainer>
               {user?.cartQuantity > 0 && (
@@ -294,23 +316,13 @@ export default function Navbar() {
                     name="counter"
                     color={tokens.color.accentStrong}
                     textColor={tokens.color.contrastDark}
+                    filled
+                    height={"90%"}
+                    width={"90%"}
                     count={user.cartQuantity}
                   />
                 </IconContainer>
               )}
-            </ProfileLink>
-            <ProfileLink
-              active={location.pathname === "/chat" ? 1 : undefined}
-              to="/chat"
-            >
-              <IconContainer>
-                <Icon
-                  name="chat"
-                  color={tokens.color.contrastLight}
-                  filled={location.pathname === "/chat"}
-                  strokeWidth={2}
-                />
-              </IconContainer>
             </ProfileLink>
             <ProfileLink
               active={location.pathname === "/profile" ? 1 : undefined}
@@ -366,7 +378,8 @@ export default function Navbar() {
               <Icon
                 name="cart"
                 color={tokens.color.contrastLight}
-                filled={location.pathname === "/cart"}
+                // filled={location.pathname === "/cart"}
+                filled={cartActive}
                 strokeWidth={2}
               />
             </IconContainer>
@@ -383,6 +396,9 @@ export default function Navbar() {
                   color={tokens.color.accentStrong}
                   textColor={tokens.color.contrastDark}
                   count={user.cartQuantity}
+                  filled
+                  height={"90%"}
+                  width={"90%"}
                 />
               </IconContainer>
             )}
