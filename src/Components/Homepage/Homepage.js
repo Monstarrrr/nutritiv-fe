@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import { tokens } from '../../Helpers/styleTokens';
 import { useLocation } from 'react-router-dom';
@@ -18,9 +18,23 @@ const VideoContainer = styled.div`
   z-index: 0;
 `
 
+const data = [
+  { name: "Image 1", link: "/image1" },
+  { name: "Image 2", link: "/image2" },
+  { name: "Image 3", link: "/image3" },
+  { name: "Image 4", link: "/image4" },
+  { name: "Image 5", link: "/image5" },
+  { name: "Image 6", link: "/image6" },
+  { name: "Image 7", link: "/image7" },
+  { name: "Image 8", link: "/image8" },
+  { name: "Image 9", link: "/image9" },
+  { name: "Image 10", link: "/image10" },
+  { name: "Image 11", link: "/image11" },
+]
+
 export const Homepage = () => {
   const location = useLocation();
-  
+
   useEffect(() => {
     const hash = location.hash
     // Check if there is a hash and if an element with that id exists
@@ -33,27 +47,6 @@ export const Homepage = () => {
   return (
     <>
       <HomepageContentContainer>
-        <h2>
-          Homepage
-        </h2>
-        <h2>
-          Homepage
-        </h2>
-        <h2>
-          Homepage
-        </h2>
-        <h2>
-          Homepage
-        </h2>
-        <h2>
-          Homepage
-        </h2>
-        <h2>
-          Homepage
-        </h2>
-        <h2>
-          Homepage
-        </h2>
         <h2>
           Homepage
         </h2>
