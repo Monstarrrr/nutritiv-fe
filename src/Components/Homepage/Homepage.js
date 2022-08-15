@@ -9,8 +9,9 @@ import { NutriButton } from '../NutriButton';
 const HomepageContentContainer = styled.div`
   margin: 0 auto;
   max-width: ${tokens.maxWidth.xl};
+  min-height: 100vh;
   overflow: auto;
-  padding-top: ${tokens.navHeight.xl};
+  padding-top: ${tokens.navHeight.lg};
   position: relative;
   text-align: center;
   z-index: 1;
@@ -75,39 +76,6 @@ export const Homepage = () => {
           }}
           type="filled"
         />
-        <h5>
-          homepage
-        </h5>
-        <h5>
-          homepage
-        </h5>
-        <h5>
-          homepage
-        </h5>
-        <h5>
-          homepage
-        </h5>
-        <h5>
-          homepage
-        </h5>
-        <h5>
-          homepage
-        </h5>
-        <h5>
-          homepage
-        </h5>
-        <h5>
-          homepage
-        </h5>
-        <h5>
-          homepage
-        </h5>
-        <h5>
-          homepage
-        </h5>
-        <h5>
-          homepage
-        </h5>
       </HomepageContentContainer>
       <VideoContainer
         id="iceberg-container"

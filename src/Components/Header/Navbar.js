@@ -42,7 +42,7 @@ const Nav = styled(motion.nav)`
   width: auto;
   z-index: 9;
   ${mediaQuery[1]} {
-    height: ${tokens.navHeight.xl};
+    height: ${tokens.navHeight.lg};
     padding: 0 ${tokens.spacing.xl};
   }
   ${mediaQuery[3]} {
@@ -75,7 +75,7 @@ const Nav = styled(motion.nav)`
         height: 100%;
         a {
           padding: 0 ${tokens.spacing.max};
-          line-height: ${tokens.navHeight.xl};
+          line-height: ${tokens.navHeight.lg};
         }
       }
     }
