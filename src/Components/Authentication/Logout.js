@@ -9,7 +9,11 @@ import { Icon } from '../Icons/Icon';
 
 const Container = styled.div`
   align-items: center;
+  cursor: pointer;
   display: flex;
+  &:hover {
+    opacity: 0.8;
+  };
 `
 
 export const Logout = ({ label, style }) => {
@@ -31,9 +35,9 @@ export const Logout = ({ label, style }) => {
   }
   
   return (
-    <Container 
+    <Container
       onClick={handleLogout}
-      style={style}  
+      style={style}
     >
       <Icon
         name="exit"
@@ -44,7 +48,7 @@ export const Logout = ({ label, style }) => {
         style={{marginRight: "10px"}}
       />
       {label && (
-        <label>
+        <label style={{cursor: "pointer"}}>
           Sign Out
         </label>
       )}

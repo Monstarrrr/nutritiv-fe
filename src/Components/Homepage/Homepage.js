@@ -1,36 +1,31 @@
 /** @jsxImportSource @emotion/react */
 import React, { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 import styled from '@emotion/styled';
 import { tokens } from '../../Helpers/styleTokens';
 import { useLocation } from 'react-router-dom';
+import { NutriButton } from '../NutriButton';
 
 const HomepageContentContainer = styled.div`
   margin: 0 auto;
   max-width: ${tokens.maxWidth.xl};
   overflow: auto;
   padding-top: ${tokens.navHeight.xl};
+  position: relative;
+  text-align: center;
+  z-index: 1;
 `
 const VideoContainer = styled.div`
   position: absolute;
   left: 0;
   right: 0;
-  top: 400px;
+  top: calc(100vh - 650px);
   z-index: 0;
 `
 
-const data = [
-  { name: "Image 1", link: "/image1" },
-  { name: "Image 2", link: "/image2" },
-  { name: "Image 3", link: "/image3" },
-  { name: "Image 4", link: "/image4" },
-  { name: "Image 5", link: "/image5" },
-  { name: "Image 6", link: "/image6" },
-  { name: "Image 7", link: "/image7" },
-  { name: "Image 8", link: "/image8" },
-  { name: "Image 9", link: "/image9" },
-  { name: "Image 10", link: "/image10" },
-  { name: "Image 11", link: "/image11" },
-]
+const Video = styled(motion.video)`
+  filter: blur(1px) opacity(0.75);
+`
 
 export const Homepage = () => {
   const location = useLocation();
@@ -47,14 +42,77 @@ export const Homepage = () => {
   return (
     <>
       <HomepageContentContainer>
-        <h2>
-          Homepage
+        <h2 
+          style={{
+            fontSize: "88px",
+            letterSpacing: "14px",
+            marginTop: "120px",
+            marginBottom: 0,
+            textTransform: "uppercase",
+          }}
+        >
+          Nutritiv
         </h2>
+        <h3
+          style={{
+            fontSize: tokens.font.fontSize.md,
+            fontWeight: tokens.font.fontWeight.regular,
+            letterSpacing: '4px',
+            lineHeight: "1.65",
+            textTransform: "uppercase",
+          }}
+        >
+          Get&nbsp;
+          <span style={{fontWeight: tokens.font.fontWeight.medium}}>superformant</span>
+          <br/>
+          with our&nbsp;
+          <span style={{fontWeight: tokens.font.fontWeight.medium}}>superments</span>
+        </h3>
+        <NutriButton 
+          label="Shop Now"
+          style={{
+            marginTop: "20px",
+          }}
+          type="filled"
+        />
+        <h5>
+          homepage
+        </h5>
+        <h5>
+          homepage
+        </h5>
+        <h5>
+          homepage
+        </h5>
+        <h5>
+          homepage
+        </h5>
+        <h5>
+          homepage
+        </h5>
+        <h5>
+          homepage
+        </h5>
+        <h5>
+          homepage
+        </h5>
+        <h5>
+          homepage
+        </h5>
+        <h5>
+          homepage
+        </h5>
+        <h5>
+          homepage
+        </h5>
+        <h5>
+          homepage
+        </h5>
       </HomepageContentContainer>
       <VideoContainer
         id="iceberg-container"
       >
-        <video
+        <Video
           autoPlay
           id="iceberg-video"
           loop
@@ -64,7 +122,7 @@ export const Homepage = () => {
           width="100%"
         >
           <source src="/video_iceberg.webm" type="video/webm" />
-        </video>
+        </Video>
       </VideoContainer>
       
       {/* temp
