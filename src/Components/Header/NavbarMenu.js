@@ -8,6 +8,7 @@ import { tokens } from '../../Helpers/styleTokens';
 import { Icon } from '../Icons/Icon';
 import { useSelector } from 'react-redux';
 import { Logout } from '../Authentication/Logout';
+import { UserAvatar } from '../Profile/UserAvatar';
 
 const LeftSide = styled.div``
 const RightSide = styled.div``
@@ -108,11 +109,11 @@ const SignInContainer = styled(({active, ...props }) => <div {...props} />)`
 
 const links = [
   {to: "/welcome",  label: "Home",     icon: "home",  loggedOut: true,  loggedIn: true},
-  {to: "/team", label: "The Team",    icon: "users",  loggedOut: true,  loggedIn: true},
+  {to: "/team",     label: "The Team", icon: "users", loggedOut: true,  loggedIn: true},
   {to: "/shop",     label: "Shop",     icon: "shop",  loggedOut: true,  loggedIn: true},
   {to: "/chat",     label: "Support",  icon: "chat",  loggedOut: true,  loggedIn: true},
   {to: "/cart",     label: "Cart",     icon: "cart",  loggedOut: false, loggedIn: true},
-  {to: "/profile",  label: "Account",  icon: "user",  loggedOut: false, loggedIn: true},
+  {to: "/profile",  label: "Account",  user: true,    loggedOut: false, loggedIn: true},
 ]
 
 export const NavbarMenu = ({ open }) => {
@@ -120,6 +121,7 @@ export const NavbarMenu = ({ open }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const loggedIn = useSelector(state => state.user.loggedIn);
+  const username = useSelector(state => state.user.username);
   const [active, setActive] = useState([]);
   
   const timerRef = useRef();
@@ -210,19 +212,38 @@ export const NavbarMenu = ({ open }) => {
                     onClick={() => handleLinkClick(link.to)}
                     key={link.to}
                   >
-                    <Icon
-                      color={tokens.color.contrastLight}
-                      filled={active === link.to}
-                      height={26}
-                      name={link.icon}
-                      strokeWidth={2}
-                    />
-                    <CustomLink
-                      name={link.to}
-                      to={link.to}
-                    >
-                      {link.label}
-                    </CustomLink>
+                    {link.icon ? (
+                      <>
+                        <Icon
+                          color={tokens.color.contrastLight}
+                          filled={active === link.to}
+                          height={26}
+                          name={link.icon}
+                          strokeWidth={2}
+                        />
+                        <CustomLink
+                          name={link.to}
+                          to={link.to}
+                        >
+                          {link.label}
+                        </CustomLink>
+                      </>
+                    ) : (
+                      <>
+                        <UserAvatar 
+                          style={{
+                            height: "26px",
+                            marginRight: tokens.spacing.lg,
+                          }}
+                        />
+                        <CustomLink
+                          name={link.to}
+                          to={link.to}
+                        >
+                          {username}
+                        </CustomLink>
+                      </>
+                    )}
                   </LinkContainer>
                 )
               ))}
