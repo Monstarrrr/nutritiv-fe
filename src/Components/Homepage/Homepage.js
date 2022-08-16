@@ -89,7 +89,7 @@ export const Homepage = () => {
           height="100%"
           width="100%"
         >
-          <source src="/video_iceberg_v2.webm" type="video/webm" />
+          <source src="/video_iceberg_v3.webm" type="video/webm" />
         </Video>
       </VideoContainer>
       
