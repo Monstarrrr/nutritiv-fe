@@ -9,7 +9,7 @@ import { NutriButton } from '../NutriButton';
 const HomepageContentContainer = styled.div`
   margin: 0 auto;
   max-width: ${tokens.maxWidth.xl};
-  min-height: 100vh;
+  min-height: calc(100vh - ${tokens.navHeight.lg});
   overflow: auto;
   padding-top: ${tokens.navHeight.lg};
   position: relative;
@@ -20,12 +20,12 @@ const VideoContainer = styled.div`
   position: absolute;
   left: 0;
   right: 0;
-  top: calc(100vh - 650px);
+  top: calc(39vh);
   z-index: 0;
 `
 
 const Video = styled(motion.video)`
-  filter: blur(1px) opacity(0.75);
+  filter: blur(0.6px) opacity(0.74);
 `
 
 export const Homepage = () => {
@@ -89,7 +89,7 @@ export const Homepage = () => {
           height="100%"
           width="100%"
         >
-          <source src="/video_iceberg.webm" type="video/webm" />
+          <source src="/video_iceberg_v2.webm" type="video/webm" />
         </Video>
       </VideoContainer>
       
