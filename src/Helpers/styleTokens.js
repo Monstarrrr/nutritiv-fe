@@ -184,8 +184,8 @@ export const tokens = {
 
   // Specifics
   navHeight: {
-    xl: "100px",
-    md: "72px",
     sm: "60px",
+    md: "72px",
+    lg: "100px",
   }
 }

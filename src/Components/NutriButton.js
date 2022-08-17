@@ -23,6 +23,7 @@ export const NutriButton = React.memo(function NutriButton(props) {
   // size:      'small'   | none
   // accent:    'confirm' | 'info' | 'warning' | 'error' | none
   // wave:      '1'       | none
+  // ...props:  (style, onClick, onMouseEnter...)
   
   const handleClick = () => {
     navigate('/register');

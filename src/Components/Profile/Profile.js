@@ -7,6 +7,7 @@ import { ProfileEmail } from './ProfileEmail';
 import { ProfilePassword } from './ProfilePassword';
 import { ProfileUsername } from './ProfileUsername';
 import { ProfileDelete } from './ProfileDelete';
+import { Logout } from '../Authentication/Logout';
 
 export default function Profile() {
   const user = useSelector(state => state.user)
@@ -49,7 +50,11 @@ export default function Profile() {
       <hr />
       <ProfileAddress userInfo={userInfo} />
       <br />
-
+      
+      <hr />
+      <Logout label />
+      <br />
+      
       <hr />
       <ProfileDelete userInfo={userInfo} />
       <br />

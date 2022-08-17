@@ -8,14 +8,17 @@ import { DelayLink } from '../DelayLink';
 import styled from '@emotion/styled';
 import { css } from '@emotion/react';
 import { Icon } from '../Icons/Icon';
-import { Logout } from '../Authentication/Logout';
 import { NutriButton } from '../NutriButton';
 import { openMobileNavMenu } from '../../Redux/reducers/modals';
 
 // Styles
 const LogoSide = styled.div``
 const NavSide = styled.div``
-const ProfileSide = styled.div``
+const ProfileSide = styled.div`
+  a:last-child {
+    margin-right: 0;
+  }
+`
 const NavLinkWrapper = styled(motion.div)`
   cursor: pointer;
   position: relative;
@@ -39,7 +42,7 @@ const Nav = styled(motion.nav)`
   width: auto;
   z-index: 9;
   ${mediaQuery[1]} {
-    height: ${tokens.navHeight.xl};
+    height: ${tokens.navHeight.lg};
     padding: 0 ${tokens.spacing.xl};
   }
   ${mediaQuery[3]} {
@@ -72,7 +75,7 @@ const Nav = styled(motion.nav)`
         height: 100%;
         a {
           padding: 0 ${tokens.spacing.max};
-          line-height: ${tokens.navHeight.xl};
+          line-height: ${tokens.navHeight.lg};
         }
       }
     }
@@ -94,11 +97,13 @@ const LogoLink = styled(Link)`
     height: 36px;
     user-select: none;
     ${mediaQueries({
-      height: ["42px", "42px", "46px", "50px"]
+      height: ["38px", "42px", "46px", "50px"]
     })}
   };
 `
 const ProfileLink = styled(Link)`
+  align-items: center;
+  display: flex;
   height: 24px;
   margin: 0 ${tokens.spacing.md};
   position: relative;
@@ -106,7 +111,12 @@ const ProfileLink = styled(Link)`
 const IconContainer = styled.div`
   height: ${tokens.font.fontSize.lg};
 `
+const Username = styled.span`
+  font-weight: ${tokens.font.fontWeight.medium};
+  margin-right: ${tokens.spacing.md};
+`
 const Avatar = styled.img`
+  border-radius: ${tokens.borderRadius.max};
   height: 100%;
   width: 100%;
 `
@@ -157,6 +167,7 @@ export default function Navbar() {
   const location = useLocation();
   const [hovered, setHovered] = useState("");
   const [active, setActive] = useState(location.pathname);
+  const [profileMenu, setProfileMenu] = useState(false); 
   const [cartActive, setCartActive] = useState(
     !minimized ? location.pathname === "/cart" : false
   )
@@ -165,6 +176,15 @@ export default function Navbar() {
     dispatch(openMobileNavMenu())
   }
   
+  const handleHoverProfileEnter = () => {
+    setProfileMenu(true)
+  }
+  const handleHoverProfileLeave = () => {
+    setProfileMenu(false)
+  }
+  
+  console.log('# profileMenu :', profileMenu);
+
   useEffect(() => {
     if(minimized && location.pathname === "/cart") {
       const timer = setTimeout(() => {
@@ -324,16 +344,32 @@ export default function Navbar() {
                 </IconContainer>
               )}
             </ProfileLink>
+            <span
+              style={{
+                color: tokens.color.contrastLight,
+                opacity: 0.4,
+                fontSize: tokens.font.fontSize.lg,
+                marginLeft: tokens.spacing.md,
+                marginBottom: "2px",
+                cursor: "initial",
+              }}
+            >
+              |
+            </span>
             <ProfileLink
               active={location.pathname === "/profile" ? 1 : undefined}
+              onMouseEnter={() => handleHoverProfileEnter()}
+              onMouseLeave={() => handleHoverProfileLeave()}
               to="/profile"
             >
+              <Username>
+                {user.username}
+              </Username>
               <Avatar
                 alt="avatar"
                 src={user.avatar}
               />
             </ProfileLink>
-            <Logout />
           </>
         ) : (
           <>
@@ -378,7 +414,6 @@ export default function Navbar() {
               <Icon
                 name="cart"
                 color={tokens.color.contrastLight}
-                // filled={location.pathname === "/cart"}
                 filled={cartActive}
                 strokeWidth={2}
               />
