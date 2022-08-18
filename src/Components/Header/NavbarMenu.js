@@ -240,7 +240,7 @@ export const NavbarMenu = ({ open }) => {
                           name={link.to}
                           to={link.to}
                         >
-                          {username}
+                          My Account
                         </CustomLink>
                       </>
                     )}
