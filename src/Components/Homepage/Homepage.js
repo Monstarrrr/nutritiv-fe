@@ -23,7 +23,7 @@ const VideoContainer = styled.div`
   position: absolute;
   left: 0;
   right: 0;
-  top: 550px;
+  top: 505px;
   z-index: 0;
 `
 
@@ -56,15 +56,15 @@ export const Homepage = () => {
   }
   const handleIcebergButtonLeave = () => {
     setIcebergShadow(false)
-    videoRef.current.playbackRate = 1;
+    videoRef.current.playbackRate = 0.8;
   }
   
   const icebergVariants = {
     shadow: {
-      filter: `blur(0.7px) opacity(0.65) drop-shadow(0 0 10px ${tokens.color.accentStrong}`
+      filter: `blur(0.7px) opacity(0.65) drop-shadow(0 0 4px ${tokens.color.accentStrong}`
     },
     default: {
-      filter: `blur(0.7px) opacity(0.65) drop-shadow(0 0 0.1px ${tokens.color.accentTransparent}`
+      filter: `blur(0.7px) opacity(0.65) drop-shadow(0 0 1px ${tokens.color.transparent}`
     },
     transition: {
       duration: 0.2,
@@ -87,27 +87,27 @@ export const Homepage = () => {
           <FirstBlock>
             <h2
               css={css`
-                /* font-size: 112px; */
-                /* letter-spacing: 14px; */
                 margin-bottom: 0;
                 text-transform: uppercase;
                 ${mediaQueries({
-                  fontSize: ["50px", "74px", "94px", "112px", "140px"],
+                  fontSize: ["64px", "74px", "94px", "104px", "114px"],
                   letterSpacing: ["4px", "8px", "12px", "14px", "14px"]
-                })}
+                })};
               `}
             >
               Nutritiv
             </h2>
             <h3
-              style={{
-                fontSize: tokens.font.fontSize.md,
-                fontWeight: tokens.font.fontWeight.regular,
-                letterSpacing: '4px',
-                lineHeight: "1.65",
-                margin: `${tokens.spacing.xxl} 0px 0px`,
-                textTransform: "uppercase",
-              }}
+              css={css`
+                font-weight: ${tokens.font.fontWeight.regular};
+                line-height: 1.65;
+                margin: ${tokens.spacing.xxl} 0 0;
+                text-transform: uppercase;
+                letter-spacing: 4px;
+                ${mediaQueries({
+                  fontSize: ["14px", "20px", "20px", "20px", "20px"],
+                })};
+              `}
             >
               Get&nbsp;
               <span style={{fontWeight: tokens.font.fontWeight.bold}}>superformant</span>
@@ -135,9 +135,9 @@ export const Homepage = () => {
         id="iceberg-container"
       >
         <Video
-          initial={{
-            filter: `drop-shadow(0 0 0px ${tokens.color.accentStrong}`
-          }}
+          // initial={{
+          //   filter: `drop-shadow(0 0 0.1px ${tokens.color.accentStrong}`
+          // }}
           variants={icebergVariants}
           animate={
             icebergShadow ? "shadow" : "default" 
