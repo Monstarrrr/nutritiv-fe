@@ -6,8 +6,6 @@ import { mediaQueries, tokens } from '../../Helpers/styleTokens';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { NutriButton } from '../NutriButton';
 import { css } from '@emotion/react';
-import { useDispatch } from 'react-redux';
-import { addIcebergShadow, removeIcebergShadow } from '../../Redux/reducers/modals';
 
 const HomepageContentContainer = styled.div`
   margin: 0 auto;
@@ -23,8 +21,13 @@ const VideoContainer = styled.div`
   position: absolute;
   left: 0;
   right: 0;
-  top: 505px;
+  top: 500px;
   z-index: 0;
+  ${mediaQueries({
+    top: ["380px", "420px", "470px", "500px"],
+    left: ["-45%", "-40%", "-10%", "0",],
+    right: ["-45%", "-40%", "-10%", "0",]
+  })}
 `
 
 const ViewHeightWrapper = styled.div`
@@ -36,7 +39,6 @@ const FirstBlock = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  overflow: auto;
   position: relative;
 `
 
@@ -47,13 +49,12 @@ const Video = styled(motion.video)`
 
 export const Homepage = () => {
   const videoRef= useRef();
-  const navigate = useNavigate();
   const location = useLocation();
   const [icebergShadow, setIcebergShadow] = useState(false)
   
   const handleIcebergButtonEnter = () => {
     setIcebergShadow(true)
-    videoRef.current.playbackRate = 2.2;
+    videoRef.current.playbackRate = 2;
   }
   const handleIcebergButtonLeave = () => {
     setIcebergShadow(false)
@@ -91,7 +92,7 @@ export const Homepage = () => {
                 margin-bottom: 0;
                 text-transform: uppercase;
                 ${mediaQueries({
-                  fontSize: ["64px", "74px", "94px", "104px", "114px"],
+                  fontSize: ["64px", "74px", "94px", "104px", "112px"],
                   letterSpacing: ["4px", "8px", "12px", "14px", "14px"]
                 })};
               `}
@@ -111,10 +112,14 @@ export const Homepage = () => {
               `}
             >
               Get&nbsp;
-              <span style={{fontWeight: tokens.font.fontWeight.bold}}>superformant</span>
+              <span style={{fontWeight: tokens.font.fontWeight.bold}}>
+                superformant
+              </span>
               <br/>
               with our&nbsp;
-              <span style={{fontWeight: tokens.font.fontWeight.bold}}>superments</span>
+              <span style={{fontWeight: tokens.font.fontWeight.bold}}>
+                superments
+              </span>
             </h3>
             <div
               onMouseEnter={() => handleIcebergButtonEnter()}
@@ -133,13 +138,8 @@ export const Homepage = () => {
           </FirstBlock>
         </ViewHeightWrapper>
       </HomepageContentContainer>
-      <VideoContainer
-        id="iceberg-container"
-      >
+      <VideoContainer id="iceberg-container">
         <Video
-          // initial={{
-          //   filter: `drop-shadow(0 0 0.1px ${tokens.color.accentStrong}`
-          // }}
           variants={icebergVariants}
           animate={
             icebergShadow ? "shadow" : "default" 
