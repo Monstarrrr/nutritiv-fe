@@ -20,6 +20,7 @@ const Pages = styled(({ homepage, minimized, overflowHidden, ...props }) => <mot
     )
   };
   color: ${tokens.color.contrastLight};
+  min-height: 100vh;
   overflow-y: ${props => 
     props.overflowHidden ? `hidden` : `initial`
   };
@@ -106,7 +107,7 @@ export const PagesWrapper = ({ minimized }) => {
           duration: 0.4,
         },
         height: {
-          delay: 1,
+          delay: 0.41,
         },
       },
     },
@@ -124,7 +125,7 @@ export const PagesWrapper = ({ minimized }) => {
           duration: 0.4,
         },
         height: {
-          delay: 1,
+          delay: 0.41,
         },
       },
     },
@@ -140,6 +141,9 @@ export const PagesWrapper = ({ minimized }) => {
       transition: {
         backgroundImage: {
           duration: duration,
+        },
+        height: {
+          duration: 0
         }
       }
     },
@@ -155,6 +159,9 @@ export const PagesWrapper = ({ minimized }) => {
       transition: {
         backgroundImage: {
           duration: duration
+        },
+        height: {
+          duration: 0
         }
       }
     }

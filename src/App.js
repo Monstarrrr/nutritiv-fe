@@ -229,6 +229,7 @@ function App() {
                 max-width: none;
               }
               #root {
+                min-height: 100%;
                 height: auto;
                 perspective: 3000px;
                 perspective-origin: -100% 50%;
