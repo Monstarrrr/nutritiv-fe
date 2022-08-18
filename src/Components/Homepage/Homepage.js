@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import styled from '@emotion/styled';
 import { mediaQueries, tokens } from '../../Helpers/styleTokens';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { NutriButton } from '../NutriButton';
 import { css } from '@emotion/react';
 import { useDispatch } from 'react-redux';
@@ -47,6 +47,7 @@ const Video = styled(motion.video)`
 
 export const Homepage = () => {
   const videoRef= useRef();
+  const navigate = useNavigate();
   const location = useLocation();
   const [icebergShadow, setIcebergShadow] = useState(false)
   
@@ -126,6 +127,7 @@ export const Homepage = () => {
               <NutriButton 
                 label="Shop Now"
                 type="filled"
+                to="/shop"
               />
             </div>
           </FirstBlock>

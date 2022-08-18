@@ -23,10 +23,11 @@ export const NutriButton = React.memo(function NutriButton(props) {
   // size:      'small'   | none
   // accent:    'confirm' | 'info' | 'warning' | 'error' | none
   // wave:      '1'       | none
+  // to:        any
   // ...props:  (style, onClick, onMouseEnter...)
   
   const handleClick = () => {
-    navigate('/register');
+    props.to && navigate(props.to)
   }
   
   const StyledLabel = styled.label`
@@ -168,8 +169,9 @@ export const NutriButton = React.memo(function NutriButton(props) {
         },
         duration: 0
       }}
-      onClick={() => handleClick()}
+      // onClick={() => handleClick()}
       {...props}
+      onClick={() => handleClick()}
     >
       <StyledLabel {...props}>
         {props.label}
