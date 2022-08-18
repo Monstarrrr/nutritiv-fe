@@ -1,10 +1,13 @@
 /** @jsxImportSource @emotion/react */
-import React, { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import styled from '@emotion/styled';
-import { tokens } from '../../Helpers/styleTokens';
+import { mediaQueries, tokens } from '../../Helpers/styleTokens';
 import { useLocation } from 'react-router-dom';
 import { NutriButton } from '../NutriButton';
+import { css } from '@emotion/react';
+import { useDispatch } from 'react-redux';
+import { addIcebergShadow, removeIcebergShadow } from '../../Redux/reducers/modals';
 
 const HomepageContentContainer = styled.div`
   margin: 0 auto;
@@ -20,7 +23,7 @@ const VideoContainer = styled.div`
   position: absolute;
   left: 0;
   right: 0;
-  top: 500px;
+  top: 550px;
   z-index: 0;
 `
 
@@ -38,11 +41,35 @@ const FirstBlock = styled.div`
 `
 
 const Video = styled(motion.video)`
-  filter: blur(0.7px) opacity(0.65);
+  height: 100%;
+  width: 100%;
 `
 
 export const Homepage = () => {
+  const videoRef= useRef();
   const location = useLocation();
+  const [icebergShadow, setIcebergShadow] = useState(false)
+  
+  const handleIcebergButtonEnter = () => {
+    setIcebergShadow(true)
+    videoRef.current.playbackRate = 2.2;
+  }
+  const handleIcebergButtonLeave = () => {
+    setIcebergShadow(false)
+    videoRef.current.playbackRate = 1;
+  }
+  
+  const icebergVariants = {
+    shadow: {
+      filter: `blur(0.7px) opacity(0.65) drop-shadow(0 0 10px ${tokens.color.accentStrong}`
+    },
+    default: {
+      filter: `blur(0.7px) opacity(0.65) drop-shadow(0 0 0.1px ${tokens.color.accentTransparent}`
+    },
+    transition: {
+      duration: 0.2,
+    }
+  }
 
   useEffect(() => {
     const hash = location.hash
@@ -58,13 +85,17 @@ export const Homepage = () => {
       <HomepageContentContainer>
         <ViewHeightWrapper>
           <FirstBlock>
-            <h2 
-              style={{
-                fontSize: "112px",
-                letterSpacing: "14px",
-                marginBottom: 0,
-                textTransform: "uppercase",
-              }}
+            <h2
+              css={css`
+                /* font-size: 112px; */
+                /* letter-spacing: 14px; */
+                margin-bottom: 0;
+                text-transform: uppercase;
+                ${mediaQueries({
+                  fontSize: ["50px", "74px", "94px", "112px", "140px"],
+                  letterSpacing: ["4px", "8px", "12px", "14px", "14px"]
+                })}
+              `}
             >
               Nutritiv
             </h2>
@@ -84,13 +115,19 @@ export const Homepage = () => {
               with our&nbsp;
               <span style={{fontWeight: tokens.font.fontWeight.bold}}>superments</span>
             </h3>
-            <NutriButton 
-              label="Shop Now"
+            <div
+              onMouseEnter={() => handleIcebergButtonEnter()}
+              onMouseLeave={() => handleIcebergButtonLeave()}
               style={{
+                borderRadius: tokens.borderRadius.default,
                 marginTop: "20px",
               }}
-              type="filled"
-            />
+            >
+              <NutriButton 
+                label="Shop Now"
+                type="filled"
+              />
+            </div>
           </FirstBlock>
         </ViewHeightWrapper>
       </HomepageContentContainer>
@@ -98,15 +135,23 @@ export const Homepage = () => {
         id="iceberg-container"
       >
         <Video
+          initial={{
+            filter: `drop-shadow(0 0 0px ${tokens.color.accentStrong}`
+          }}
+          variants={icebergVariants}
+          animate={
+            icebergShadow ? "shadow" : "default" 
+          }
           autoPlay
           id="iceberg-video"
           loop
           muted
           playsInline
+          ref={videoRef}
           height="100%"
           width="100%"
         >
-          <source src="/video_iceberg_v3.webm" type="video/webm" />
+          <source src="/video_iceberg.webm" type="video/webm" />
         </Video>
       </VideoContainer>
       
