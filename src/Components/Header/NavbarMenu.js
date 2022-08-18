@@ -74,7 +74,7 @@ const LogoLink = styled(Link)`
   display: flex;
   align-items: center;
   img {
-    height: 36px;
+    height: 42px;
   }
 `
 

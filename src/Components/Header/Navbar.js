@@ -97,7 +97,8 @@ const LogoLink = styled(Link)`
     height: 36px;
     user-select: none;
     ${mediaQueries({
-      height: ["38px", "42px", "46px", "50px"]
+      height: ["42px", "42px", "46px", "50px"],
+      marginLeft: ['12px', '12px', 0, 0]
     })}
   };
 `

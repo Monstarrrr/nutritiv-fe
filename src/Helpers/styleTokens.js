@@ -32,11 +32,11 @@ const config = {
   warningColor: "#ffc107",
   errorColor: "#dc3545",
   
-  xsFontsize: "12px",
-  smFontsize: "14px",
-  mdFontsize: "18px",
-  lgFontsize: "24px",
-  xlFontsize: "32px",
+  xsFontsize: "14px",
+  smFontsize: "16px",
+  mdFontsize: "20px",
+  lgFontsize: "26px",
+  xlFontsize: "34px",
   
   xsSpacing: "4px",
   smSpacing: "8px",

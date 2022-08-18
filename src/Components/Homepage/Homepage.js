@@ -9,7 +9,7 @@ import { NutriButton } from '../NutriButton';
 const HomepageContentContainer = styled.div`
   margin: 0 auto;
   max-width: ${tokens.maxWidth.xl};
-  min-height: calc(100vh - ${tokens.navHeight.lg});
+  min-height: calc(100vh - ${tokens.navHeight.lg}); // temp
   overflow: auto;
   padding-top: ${tokens.navHeight.lg};
   position: relative;
@@ -20,12 +20,25 @@ const VideoContainer = styled.div`
   position: absolute;
   left: 0;
   right: 0;
-  top: calc(39vh);
+  top: 500px;
   z-index: 0;
 `
 
+const ViewHeightWrapper = styled.div`
+  height: 1150px;
+`
+
+const FirstBlock = styled.div`
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: auto;
+  position: relative;
+`
+
 const Video = styled(motion.video)`
-  filter: blur(0.6px) opacity(0.74);
+  filter: blur(0.7px) opacity(0.65);
 `
 
 export const Homepage = () => {
@@ -43,39 +56,43 @@ export const Homepage = () => {
   return (
     <>
       <HomepageContentContainer>
-        <h2 
-          style={{
-            fontSize: "88px",
-            letterSpacing: "14px",
-            marginTop: "120px",
-            marginBottom: 0,
-            textTransform: "uppercase",
-          }}
-        >
-          Nutritiv
-        </h2>
-        <h3
-          style={{
-            fontSize: tokens.font.fontSize.md,
-            fontWeight: tokens.font.fontWeight.regular,
-            letterSpacing: '4px',
-            lineHeight: "1.65",
-            textTransform: "uppercase",
-          }}
-        >
-          Get&nbsp;
-          <span style={{fontWeight: tokens.font.fontWeight.medium}}>superformant</span>
-          <br/>
-          with our&nbsp;
-          <span style={{fontWeight: tokens.font.fontWeight.medium}}>superments</span>
-        </h3>
-        <NutriButton 
-          label="Shop Now"
-          style={{
-            marginTop: "20px",
-          }}
-          type="filled"
-        />
+        <ViewHeightWrapper>
+          <FirstBlock>
+            <h2 
+              style={{
+                fontSize: "112px",
+                letterSpacing: "14px",
+                marginBottom: 0,
+                textTransform: "uppercase",
+              }}
+            >
+              Nutritiv
+            </h2>
+            <h3
+              style={{
+                fontSize: tokens.font.fontSize.md,
+                fontWeight: tokens.font.fontWeight.regular,
+                letterSpacing: '4px',
+                lineHeight: "1.65",
+                margin: `${tokens.spacing.xxl} 0px 0px`,
+                textTransform: "uppercase",
+              }}
+            >
+              Get&nbsp;
+              <span style={{fontWeight: tokens.font.fontWeight.bold}}>superformant</span>
+              <br/>
+              with our&nbsp;
+              <span style={{fontWeight: tokens.font.fontWeight.bold}}>superments</span>
+            </h3>
+            <NutriButton 
+              label="Shop Now"
+              style={{
+                marginTop: "20px",
+              }}
+              type="filled"
+            />
+          </FirstBlock>
+        </ViewHeightWrapper>
       </HomepageContentContainer>
       <VideoContainer
         id="iceberg-container"
