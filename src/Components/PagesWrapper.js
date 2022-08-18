@@ -21,6 +21,7 @@ const Pages = styled(({ homepage, minimized, overflowHidden, ...props }) => <mot
   };
   color: ${tokens.color.contrastLight};
   min-height: 100vh;
+  overflow-x: hidden;
   overflow-y: ${props => 
     props.overflowHidden ? `hidden` : `initial`
   };
