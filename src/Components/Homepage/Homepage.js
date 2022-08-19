@@ -90,6 +90,7 @@ export const Homepage = () => {
             <h2
               css={css`
                 margin-bottom: 0;
+                margin-top: 114px;
                 text-transform: uppercase;
                 ${mediaQueries({
                   fontSize: ["64px", "74px", "94px", "104px", "112px"],
@@ -103,7 +104,7 @@ export const Homepage = () => {
               css={css`
                 font-weight: ${tokens.font.fontWeight.regular};
                 line-height: 1.65;
-                margin: ${tokens.spacing.xxl} 0 0;
+                margin: ${tokens.spacing.sm} 0 0;
                 text-transform: uppercase;
                 letter-spacing: 4px;
                 ${mediaQueries({

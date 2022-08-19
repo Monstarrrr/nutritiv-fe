@@ -25,6 +25,7 @@ const config = {
   lightContrastColor: "#F2F2F2",
   darkContrastColor: "#0e1014",
   lightTransparentColor: `rgba(255, 255, 255, 0.1)`,
+  semiLightTransparentColor: `rgba(255, 255, 255, 0.2)`,
   
   successColor: "#198754",
   infoColor: "#141270",
@@ -38,7 +39,8 @@ const config = {
   lgFontsize: "26px",
   xlFontsize: "34px",
   
-  xsSpacing: "4px",
+  xxsSpacing: "4px",
+  xsSpacing: "6px",
   smSpacing: "8px",
   mdSpacing: "12px",
   lgSpacing: "16px",
@@ -73,6 +75,7 @@ export const tokens = {
     contrastLight: `${config.lightContrastColor}`,
     contrastDark: `${config.darkContrastColor}`,
     transparentLight: `${config.lightTransparentColor}`,
+    semiTransparentLight: `${config.semiLightTransparentColor}`,
     transparent: `rgba(0, 0, 0, 0)`,
     
     success: `${config.successColor}`,

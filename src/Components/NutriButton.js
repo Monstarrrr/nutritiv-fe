@@ -103,7 +103,7 @@ export const NutriButton = React.memo(function NutriButton(props) {
       return (
         props.size === "small" ? (
         css`
-          padding: calc(${tokens.spacing.xs} / 2) ${tokens.spacing.md};
+          padding: calc(${tokens.spacing.xxs} / 2) ${tokens.spacing.md};
           font-size: ${tokens.font.fontSize.xs};
         `
       ) : (
