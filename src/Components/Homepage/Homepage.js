@@ -1,15 +1,16 @@
 /** @jsxImportSource @emotion/react */
-import React, { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import styled from '@emotion/styled';
-import { tokens } from '../../Helpers/styleTokens';
-import { useLocation } from 'react-router-dom';
+import { mediaQueries, tokens } from '../../Helpers/styleTokens';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { NutriButton } from '../NutriButton';
+import { css } from '@emotion/react';
 
 const HomepageContentContainer = styled.div`
   margin: 0 auto;
   max-width: ${tokens.maxWidth.xl};
-  min-height: calc(100vh - ${tokens.navHeight.lg});
+  min-height: calc(100vh - ${tokens.navHeight.lg}); // temp
   overflow: auto;
   padding-top: ${tokens.navHeight.lg};
   position: relative;
@@ -20,16 +21,57 @@ const VideoContainer = styled.div`
   position: absolute;
   left: 0;
   right: 0;
-  top: calc(39vh);
+  top: 500px;
   z-index: 0;
+  ${mediaQueries({
+    top: ["380px", "420px", "470px", "500px"],
+    left: ["-45%", "-40%", "-10%", "0",],
+    right: ["-45%", "-40%", "-10%", "0",]
+  })}
+`
+
+const ViewHeightWrapper = styled.div`
+  height: 1150px;
+`
+
+const FirstBlock = styled.div`
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
 `
 
 const Video = styled(motion.video)`
-  filter: blur(0.6px) opacity(0.74);
+  height: 100%;
+  width: 100%;
 `
 
 export const Homepage = () => {
+  const videoRef= useRef();
   const location = useLocation();
+  const [icebergShadow, setIcebergShadow] = useState(false)
+  
+  const handleIcebergButtonEnter = () => {
+    setIcebergShadow(true)
+    videoRef.current.playbackRate = 2;
+  }
+  const handleIcebergButtonLeave = () => {
+    setIcebergShadow(false)
+    videoRef.current.playbackRate = 0.8;
+  }
+  
+  const icebergVariants = {
+    shadow: {
+      filter: `blur(0.7px) opacity(0.65) drop-shadow(0 0 4px ${tokens.color.accentStrong}`
+    },
+    default: {
+      filter: `blur(0.7px) opacity(0.65) drop-shadow(0 0 1px ${tokens.color.transparent}`
+    },
+    transition: {
+      duration: 0.2,
+    }
+  }
 
   useEffect(() => {
     const hash = location.hash
@@ -43,53 +85,76 @@ export const Homepage = () => {
   return (
     <>
       <HomepageContentContainer>
-        <h2 
-          style={{
-            fontSize: "88px",
-            letterSpacing: "14px",
-            marginTop: "120px",
-            marginBottom: 0,
-            textTransform: "uppercase",
-          }}
-        >
-          Nutritiv
-        </h2>
-        <h3
-          style={{
-            fontSize: tokens.font.fontSize.md,
-            fontWeight: tokens.font.fontWeight.regular,
-            letterSpacing: '4px',
-            lineHeight: "1.65",
-            textTransform: "uppercase",
-          }}
-        >
-          Get&nbsp;
-          <span style={{fontWeight: tokens.font.fontWeight.medium}}>superformant</span>
-          <br/>
-          with our&nbsp;
-          <span style={{fontWeight: tokens.font.fontWeight.medium}}>superments</span>
-        </h3>
-        <NutriButton 
-          label="Shop Now"
-          style={{
-            marginTop: "20px",
-          }}
-          type="filled"
-        />
+        <ViewHeightWrapper>
+          <FirstBlock>
+            <h2
+              css={css`
+                margin-bottom: 0;
+                text-transform: uppercase;
+                ${mediaQueries({
+                  fontSize: ["64px", "74px", "94px", "104px", "112px"],
+                  letterSpacing: ["4px", "8px", "12px", "14px", "14px"],
+                  marginTop: ["59px", "72px", "94px", "114px"],
+                })};
+              `}
+            >
+              Nutritiv
+            </h2>
+            <h3
+              css={css`
+                font-weight: ${tokens.font.fontWeight.regular};
+                line-height: 1.65;
+                margin: ${tokens.spacing.sm} 0 0;
+                text-transform: uppercase;
+                letter-spacing: 4px;
+                ${mediaQueries({
+                  fontSize: ["14px", "20px", "20px", "20px", "20px"],
+                })};
+              `}
+            >
+              Get&nbsp;
+              <span style={{fontWeight: tokens.font.fontWeight.bold}}>
+                superformant
+              </span>
+              <br/>
+              with our&nbsp;
+              <span style={{fontWeight: tokens.font.fontWeight.bold}}>
+                superments
+              </span>
+            </h3>
+            <div
+              onMouseEnter={() => handleIcebergButtonEnter()}
+              onMouseLeave={() => handleIcebergButtonLeave()}
+              style={{
+                borderRadius: tokens.borderRadius.default,
+                marginTop: "20px",
+              }}
+            >
+              <NutriButton 
+                label="Shop Now"
+                type="filled"
+                to="/shop"
+              />
+            </div>
+          </FirstBlock>
+        </ViewHeightWrapper>
       </HomepageContentContainer>
-      <VideoContainer
-        id="iceberg-container"
-      >
+      <VideoContainer id="iceberg-container">
         <Video
+          variants={icebergVariants}
+          animate={
+            icebergShadow ? "shadow" : "default" 
+          }
           autoPlay
           id="iceberg-video"
           loop
           muted
           playsInline
+          ref={videoRef}
           height="100%"
           width="100%"
         >
-          <source src="/video_iceberg_v3.webm" type="video/webm" />
+          <source src="/video_iceberg.webm" type="video/webm" />
         </Video>
       </VideoContainer>
       

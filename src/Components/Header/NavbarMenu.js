@@ -74,7 +74,7 @@ const LogoLink = styled(Link)`
   display: flex;
   align-items: center;
   img {
-    height: 36px;
+    height: 42px;
   }
 `
 
@@ -121,7 +121,6 @@ export const NavbarMenu = ({ open }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const loggedIn = useSelector(state => state.user.loggedIn);
-  const username = useSelector(state => state.user.username);
   const [active, setActive] = useState([]);
   
   const timerRef = useRef();
@@ -240,7 +239,7 @@ export const NavbarMenu = ({ open }) => {
                           name={link.to}
                           to={link.to}
                         >
-                          {username}
+                          My Account
                         </CustomLink>
                       </>
                     )}

@@ -8,17 +8,17 @@ export const modalsSlice = createSlice({
   name: 'modal',
   initialState,
   reducers: {
-    closeMobileNavMenu: (modals) => {
-      modals.mobileNavMenu = false
-    },
     openMobileNavMenu: (modals) => {
       modals.mobileNavMenu = true
+    },
+    closeMobileNavMenu: (modals) => {
+      modals.mobileNavMenu = false
     },
   }
 })
 export const {
   closeMobileNavMenu,
-  openMobileNavMenu
+  openMobileNavMenu,
 } = modalsSlice.actions;
 
 export default modalsSlice.reducer;

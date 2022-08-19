@@ -17,6 +17,15 @@ const NavSide = styled.div``
 const ProfileSide = styled.div`
   a:last-child {
     margin-right: 0;
+    border: 2px solid ${props => 
+      props.location === "/profile" ? `transparent` : tokens.color.semiTransparentLight
+    };
+    margin-left: ${props =>
+      props.cartFilled ? tokens.spacing.xl : tokens.spacing.md
+    };
+    &:hover {
+      border-color: transparent;
+    }
   }
 `
 const NavLinkWrapper = styled(motion.div)`
@@ -53,20 +62,19 @@ const Nav = styled(motion.nav)`
     display: flex;
     height: 100%;
     a {
-      color: ${tokens.color.contrastLight};
       font-weight: ${tokens.font.fontWeight.medium};
       text-decoration: none;
     }
   };
   ${LogoSide}, ${ProfileSide} {
-    flex: 1;
+    flex: 2;
   };
   ${NavSide} {
     display: none;
     ${mediaQuery[2]} {
       display: flex;
       justify-content: center;
-      flex: 2;
+      flex: 3;
       text-transform: uppercase;
       ${NavLinkWrapper} {
         align-items: center;
@@ -74,8 +82,16 @@ const Nav = styled(motion.nav)`
         display: flex;
         height: 100%;
         a {
-          padding: 0 ${tokens.spacing.max};
+          color: ${tokens.color.contrastLight};
+          padding: 0 ${tokens.spacing.xxl};
           line-height: ${tokens.navHeight.lg};
+        }
+      }
+    }
+    ${mediaQuery[3]} {
+      ${NavLinkWrapper} {
+        a {
+          padding: 0 ${tokens.spacing.max}
         }
       }
     }
@@ -97,32 +113,61 @@ const LogoLink = styled(Link)`
     height: 36px;
     user-select: none;
     ${mediaQueries({
-      height: ["38px", "42px", "46px", "50px"]
+      height: ["42px", "42px", "46px", "50px"],
+      marginLeft: ['2px', '2px', 0, 0]
     })}
   };
 `
 const ProfileLink = styled(Link)`
   align-items: center;
+  background-color: ${props => 
+      (props.active && props.lastLink) ? `${tokens.color.contrastLight}` : `transparent`
+  };
+  border-radius: ${tokens.borderRadius.max};
+  color: ${props =>
+    (props.active && props.lastLink) ? `${tokens.color.contrastDark}` : `inherit`
+  };
   display: flex;
   height: 24px;
-  margin: 0 ${tokens.spacing.md};
+  margin: 0 ${tokens.spacing.xs};
+  padding: ${tokens.spacing.xs};
   position: relative;
+  transition: all ease .2s;
+  &:hover {
+    ${props =>
+      props.active && props.lastLink ? (
+        mediaQueries({
+          backgroundColor: ["transparent", "transparent", "transparent",  tokens.color.contrastLight],
+        })
+      ) : (
+        mediaQueries({
+          backgroundColor: ["transparent", "transparent", "transparent",  tokens.color.semiTransparentLight],
+        })
+      )
+    }
+    transition: all ease .2s;
+  }
 `
 const IconContainer = styled.div`
   height: ${tokens.font.fontSize.lg};
 `
 const Username = styled.span`
   font-weight: ${tokens.font.fontWeight.medium};
-  margin-right: ${tokens.spacing.md};
+  margin-right: ${tokens.spacing.sm};
+  margin-left: ${tokens.spacing.md};
+  flex-shrink: 0;
+  font-size: ${tokens.font.fontSize.xs};
 `
 const Avatar = styled.img`
   border-radius: ${tokens.borderRadius.max};
+  margin-right: ${tokens.spacing.sm};
   height: 100%;
-  width: 100%;
+  width: 24px;
 `
 const LoginLink = styled(Link)`
   display: none;
   ${mediaQuery[2]} {
+    color: ${tokens.color.contrastLight};
     display: initial;
     padding: ${tokens.spacing.md} ${tokens.spacing.xxl};
     transition: opacity ease 0.25s;
@@ -283,7 +328,10 @@ export default function Navbar() {
         ))}
       </NavSide>
       
-      <ProfileSide>
+      <ProfileSide 
+        cartFilled={user?.cartQuantity > 0}
+        location={location.pathname}
+      >
         {user.loggedIn ? (
           <>
             <ProfileLink 
@@ -295,7 +343,7 @@ export default function Navbar() {
                   name="search"
                   color={tokens.color.contrastLight}
                   filled={location.pathname === "/shop"}
-                  resizeDefault="0 -1 25 25"
+                  resizeDefault="0 0 25 25"
                   strokeWidth={2}
                 />
               </IconContainer>
@@ -309,6 +357,8 @@ export default function Navbar() {
                   name="chat"
                   color={tokens.color.contrastLight}
                   filled={location.pathname === "/chat"}
+                  resizeDefault="0 0 25 25"
+                  resizeFilled="0 0 22 22"
                   strokeWidth={2}
                 />
               </IconContainer>
@@ -329,7 +379,7 @@ export default function Navbar() {
                   css={css`
                     position: absolute;
                     top: -5px;
-                    right: -12px;
+                    right: -6px;
                   `}
                 >
                   <Icon
@@ -344,22 +394,11 @@ export default function Navbar() {
                 </IconContainer>
               )}
             </ProfileLink>
-            <span
-              style={{
-                color: tokens.color.contrastLight,
-                opacity: 0.4,
-                fontSize: tokens.font.fontSize.lg,
-                marginLeft: tokens.spacing.md,
-                marginBottom: "2px",
-                cursor: "initial",
-              }}
-            >
-              |
-            </span>
             <ProfileLink
               active={location.pathname === "/profile" ? 1 : undefined}
               onMouseEnter={() => handleHoverProfileEnter()}
               onMouseLeave={() => handleHoverProfileLeave()}
+              lastLink
               to="/profile"
             >
               <Username>

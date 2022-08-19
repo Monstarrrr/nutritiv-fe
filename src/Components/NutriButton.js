@@ -23,10 +23,11 @@ export const NutriButton = React.memo(function NutriButton(props) {
   // size:      'small'   | none
   // accent:    'confirm' | 'info' | 'warning' | 'error' | none
   // wave:      '1'       | none
+  // to:        any
   // ...props:  (style, onClick, onMouseEnter...)
   
   const handleClick = () => {
-    navigate('/register');
+    props.to && navigate(props.to)
   }
   
   const StyledLabel = styled.label`
@@ -60,14 +61,17 @@ export const NutriButton = React.memo(function NutriButton(props) {
           color: ${tokens.color.contrastDark};
           border: none;
           /* &:hover {
-            box-shadow: inset 0 0 0 100em rgb(0 0 0 / 10%);
+            box-shadow: 0 0 6px ${tokens.color.accentStrong};
           } */
         `
       ) : (
         css`
           background-color: ${tokens.color.transparent};
-          color: ${tokens.color.contrastLight};
           border: 1px solid ${tokens.color.accentTransparent};
+          color: ${tokens.color.contrastLight};
+          /* &:hover {
+            box-shadow: 0 0 6px ${tokens.color.accentTransparent};
+          } */
         `
       ))
     }};
@@ -99,7 +103,7 @@ export const NutriButton = React.memo(function NutriButton(props) {
       return (
         props.size === "small" ? (
         css`
-          padding: calc(${tokens.spacing.xs} / 2) ${tokens.spacing.md};
+          padding: calc(${tokens.spacing.xxs} / 2) ${tokens.spacing.md};
           font-size: ${tokens.font.fontSize.xs};
         `
       ) : (
@@ -158,6 +162,7 @@ export const NutriButton = React.memo(function NutriButton(props) {
       whileHover={{
         animationDuration: "3.25s",
         filter: "brightness(1)",
+        boxShadow: `0 0 6px ${tokens.color.accentStrong}`
       }}
       whileTap={{
         backgroundPositionY: "-100px",
@@ -166,7 +171,7 @@ export const NutriButton = React.memo(function NutriButton(props) {
         backgroundPositionY: {
           duration: 0.125
         },
-        duration: 0
+        duration: 0.2
       }}
       onClick={() => handleClick()}
       {...props}
