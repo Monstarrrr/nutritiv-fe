@@ -83,8 +83,15 @@ const Nav = styled(motion.nav)`
         height: 100%;
         a {
           color: ${tokens.color.contrastLight};
-          padding: 0 ${tokens.spacing.max};
+          padding: 0 ${tokens.spacing.xxl};
           line-height: ${tokens.navHeight.lg};
+        }
+      }
+    }
+    ${mediaQuery[3]} {
+      ${NavLinkWrapper} {
+        a {
+          padding: 0 ${tokens.spacing.max}
         }
       }
     }
@@ -160,6 +167,7 @@ const Avatar = styled.img`
 const LoginLink = styled(Link)`
   display: none;
   ${mediaQuery[2]} {
+    color: ${tokens.color.contrastLight};
     display: initial;
     padding: ${tokens.spacing.md} ${tokens.spacing.xxl};
     transition: opacity ease 0.25s;

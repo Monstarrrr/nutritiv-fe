@@ -90,11 +90,11 @@ export const Homepage = () => {
             <h2
               css={css`
                 margin-bottom: 0;
-                margin-top: 114px;
                 text-transform: uppercase;
                 ${mediaQueries({
                   fontSize: ["64px", "74px", "94px", "104px", "112px"],
-                  letterSpacing: ["4px", "8px", "12px", "14px", "14px"]
+                  letterSpacing: ["4px", "8px", "12px", "14px", "14px"],
+                  marginTop: ["59px", "72px", "94px", "114px"],
                 })};
               `}
             >
