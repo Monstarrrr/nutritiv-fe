@@ -114,7 +114,7 @@ const LogoLink = styled(Link)`
     user-select: none;
     ${mediaQueries({
       height: ["42px", "42px", "46px", "50px"],
-      marginLeft: ['12px', '12px', 0, 0]
+      marginLeft: ['2px', '2px', 0, 0]
     })}
   };
 `
