@@ -9,7 +9,7 @@ import { tokens } from '../Helpers/styleTokens'
 import { closeMobileNavMenu } from '../Redux/reducers/modals'
 import Navbar from './Header/Navbar'
 
-const Pages = styled(({ homepage, minimized, overflowHidden, ...props }) => <motion.div {...props} />)`
+const Pages = styled(({ homepage, minimized, ...props }) => <motion.div {...props} />)`
   background-size: 100% 100%;
   background-origin: border-box;
   box-shadow: ${props => 
@@ -21,10 +21,7 @@ const Pages = styled(({ homepage, minimized, overflowHidden, ...props }) => <mot
   };
   color: ${tokens.color.contrastLight};
   min-height: 100vh;
-  overflow-x: hidden;
-  overflow-y: ${props => 
-    props.overflowHidden ? `hidden` : `initial`
-  };
+  overflow: hidden;
   position: relative;
   transform-style: preserve-3d;
   scale: 1;
@@ -49,18 +46,13 @@ export const PagesWrapper = ({ minimized }) => {
   const dispatch = useDispatch();
   const location = useLocation();
   const [duration, setDuration] = useState(0);
-  const [overflowHidden, setOverflowHidden] = useState(minimized);
   
   useEffect(() => {
-    if(minimized) {
-      setOverflowHidden(true);
-    }
     const timer = setTimeout(() => {
       if(minimized) {
         setDuration(0.22);
       } else {
         setDuration(0);
-        setOverflowHidden(false);
       }
     }, 400)
     return () => clearTimeout(timer)
@@ -184,7 +176,6 @@ export const PagesWrapper = ({ minimized }) => {
       exit={minimized && "exit"}
       minimized={minimized}
       onClick={() => handleMobileNavMenu()}
-      overflowHidden={overflowHidden}
       variants={pagesVariants}
     >
       <Navbar />
