@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import React from 'react'
 import { tokens } from '../../Helpers/styleTokens';
+import { motion } from 'framer-motion';
 
 const Count = styled.span`
   color: ${props => props.textColor};
@@ -14,36 +15,51 @@ const Count = styled.span`
 
 const viewBox = [
   {
-    cart:    [{default: "0 0 24 24"},  {filled: "1 0 19 19"}],
-    shop:    [{default: "1 0 24 24"},  {filled: "1 0 19 19"}],
-    chat:    [{default: "0 -1 26 26"}, {filled: "0 -1 22 22"}],
-    menu:    [{default: "0 0 22 22"}],
-    close:   [{default: "0 0 24 24"}],
-    search:  [{default: "0 -2 28 28"}, {filled: "1 1 18 18"}],
-    home:    [{default: "0 0 25 25"},  {filled: "0 0 21 21"}],
-    user:    [{default: "0 -1 27 27"}, {filled: "0 -1 22 22"}],
-    users:   [{default: "-1 -1 27 27"}, {filled: "-1 -1 23 23"}],
-    tag:     [{default: "0 -2 27 27"}, {filled: "0 -2 23 23"}],
-    login:   [{default: "0 -1 26 26"}],
-    exit:    [{default: "0 0 23 23"}],
-    counter: [{default: "0 0 100 100"}, {filled: "0 0 100 100"}],
+    cart:         [{default: "0 0 24 24"},  {filled: "1 0 19 19"}],
+    shop:         [{default: "1 0 24 24"},  {filled: "1 0 19 19"}],
+    chat:         [{default: "0 -1 26 26"}, {filled: "0 -1 22 22"}],
+    menu:         [{default: "0 0 22 22"}],
+    close:        [{default: "0 0 24 24"}],
+    search:       [{default: "0 -2 28 28"}, {filled: "1 1 18 18"}],
+    home:         [{default: "0 0 25 25"},  {filled: "0 0 21 21"}],
+    user:         [{default: "0 -1 27 27"}, {filled: "0 -1 22 22"}],
+    users:        [{default: "-1 -1 27 27"}, {filled: "-1 -1 23 23"}],
+    tag:          [{default: "0 -2 27 27"}, {filled: "0 -2 23 23"}],
+    login:        [{default: "0 -1 26 26"}],
+    exit:         [{default: "0 0 23 23"}],
+    counter:      [{default: "0 0 100 100"}, {filled: "0 0 100 100"}],
+    "arrow-down": [{default: "0 0 100 100"}],
+    wave:         [{default: "0 0 100 100"}, {filled: "0 0 100 100"}],
   },
 ]
 
 export const Icon = (props) => {
   const { 
-    name,
+    name, // required
+    color, // required
     filled,
-    color,
     textColor,
-    strokeWidth, 
+    strokeWidth,
     width, 
     height,
+    hovered,
     resizeDefault,
     resizeFilled,
     count,
     style
   } = props;
+  
+  const pathVariant = {
+    notHovered: {
+      pathLength: 0,
+    },
+    hovered: {
+      pathLength: 1,
+      transition: {
+        ease: "easeInOut",
+      }
+    }
+  }
 
   return (
     <>
@@ -62,8 +78,8 @@ export const Icon = (props) => {
             )
           )
         }
-        stroke={color} 
-        strokeWidth={filled ? 0 : strokeWidth}
+        stroke={color || tokens.color.contrastLight} 
+        strokeWidth={strokeWidth ? strokeWidth : 0}
         height={height || "100%"}
         width={width || "100%"}
         style={style}
@@ -145,6 +161,40 @@ export const Icon = (props) => {
         )}
         {name === "counter" && (
           <circle cx="50" cy="50" r="50" />
+        )}
+        {name === "arrow-down" && (
+          <path strokeLinecap="round" strokeLinejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+        )}
+        {name === "wave" && (
+          <>
+            <motion.path
+              variants={pathVariant}
+              animate={hovered ? "hovered" : "notHovered"}
+              d="M16.5137234,24.1536064c5.3276005,0,10.6513004-1.8349991,16.0449009-5.5030003
+              c9.075695-6.1742992,20.5312004-6.1722994,29.8934975,0.0079002c0.4623985,0.3031998,1.0820999,0.1742992,1.3842964-0.291399
+              c0.3027039-0.465601,0.1734085-1.0907001-0.2885933-1.3959007c-10.0488052-6.6311007-22.3515053-6.6281004-32.1084023,0.0079002
+              c-10.035099,6.8260002-19.8099995,6.8269997-29.8813-0.0010014c-0.4585-0.3111-1.0796-0.1869984-1.3881999,0.2747002
+              c-0.3081,0.4616013-0.186,1.0876999,0.272,1.3987999C5.854023,22.3196068,11.185523,24.1536064,16.5137234,24.1536064z"
+            />
+            <motion.path
+              variants={pathVariant}
+              animate={hovered ? "hovered" : "notHovered"}
+              d="M63.5478249,30.8939056c-10.0498047-6.6310997-22.3525047-6.6280994-32.1084023,0.0079002
+              c-10.0361004,6.8279991-19.8110008,6.8269997-29.8813-0.0009995c-0.4585-0.3111-1.0796-0.1879997-1.3877,0.2747002
+              c-0.3086,0.4617004-0.1865,1.0877991,0.2715,1.3987999c5.4116001,3.6679993,10.7426996,5.5029984,16.0708008,5.5029984
+              c5.3275986-0.0009995,10.6513996-1.8349991,16.0459003-5.5038986c9.0746956-6.1753006,20.5302963-6.1714001,29.8934975,0.0078011
+              c0.4623985,0.3031998,1.0825996,0.1742973,1.3848-0.2914009C64.139122,31.8242073,64.0098267,31.1991062,63.5478249,30.8939056z"
+            />
+            <motion.path
+              variants={pathVariant}
+              animate={hovered ? "hovered" : "notHovered"}
+              d="M63.5478249,44.8166046c-10.0498047-6.629097-22.3520012-6.6260986-32.1084023,0.0079002
+              c-10.0340996,6.8280029-19.8080997,6.8300018-29.8813-0.0009995c-0.4585-0.3110008-1.0796-0.1870003-1.3877,0.2747002
+              c-0.3086,0.4617004-0.1865,1.0877991,0.2715,1.3988991c5.4120998,3.6689034,10.7440996,5.5039024,16.0718002,5.502903
+              c5.3276005,0,10.6513004-1.8350029,16.0444012-5.5039024c9.0761948-6.1733971,20.5307961-6.1713982,29.8939972,0.0078011
+              c0.4623985,0.3031998,1.0825996,0.1743011,1.3848-0.2912979C64.139122,45.7469063,64.0098267,45.1218071,63.5478249,44.8166046z"
+            />
+          </>
         )}
       </svg>
       {name === "counter" && (

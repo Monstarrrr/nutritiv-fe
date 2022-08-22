@@ -6,6 +6,7 @@ import { mediaQueries, tokens } from '../../Helpers/styleTokens';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { NutriButton } from '../NutriButton';
 import { css } from '@emotion/react';
+import { Icon } from '../Icons/Icon';
 
 const HomepageContentContainer = styled.div`
   margin: 0 auto;
@@ -30,9 +31,7 @@ const VideoContainer = styled.div`
   })}
 `
 
-const ViewHeightWrapper = styled.div`
-  height: 1150px;
-`
+const ViewHeightWrapper = styled.div``
 
 const FirstBlock = styled.div`
   align-items: center;
@@ -42,6 +41,16 @@ const FirstBlock = styled.div`
   position: relative;
 `
 
+const ArrowSection = styled.div``
+const SecondBlock = styled.div`
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  margin-top: 32vw;
+  margin-bottom: 400px; // temp
+`
+
+
 const Video = styled(motion.video)`
   height: 100%;
   width: 100%;
@@ -49,8 +58,22 @@ const Video = styled(motion.video)`
 
 export const Homepage = () => {
   const videoRef= useRef();
+  const discoverScrollRef = useRef(null);
   const location = useLocation();
   const [icebergShadow, setIcebergShadow] = useState(false)
+  const [arrowHovered, setArrowHovered] = useState(false)
+  const [fillDelay, setFillDelay] = useState(false)
+  
+  useEffect(() => {
+    if(arrowHovered) {
+      const timer = setTimeout(() => {
+        setFillDelay(true);
+      }, 200)
+      return () => clearTimeout(timer);
+    } else {
+      setFillDelay(false);
+    }
+  }, [arrowHovered]);
   
   const handleIcebergButtonEnter = () => {
     setIcebergShadow(true)
@@ -61,6 +84,13 @@ export const Homepage = () => {
     videoRef.current.playbackRate = 0.8;
   }
   
+  const scrollToElement = () => {
+    discoverScrollRef && discoverScrollRef.current.scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+    });
+  }
+
   const icebergVariants = {
     shadow: {
       filter: `blur(0.7px) opacity(0.65) drop-shadow(0 0 4px ${tokens.color.accentStrong}`
@@ -81,6 +111,8 @@ export const Homepage = () => {
       el.scrollIntoView({behavior: "smooth"})
     }
   }, [location.hash])
+  
+  console.log('# arrowHovered :', arrowHovered)
   
   return (
     <>
@@ -131,12 +163,78 @@ export const Homepage = () => {
               }}
             >
               <NutriButton 
-                label="Shop Now"
+                label="Discover"
                 type="filled"
-                to="/shop"
+                onClick={scrollToElement}
               />
             </div>
           </FirstBlock>
+          <SecondBlock>
+            <h4
+              css={css`
+                margin-right: 20px;
+                margin-left: 20px;
+                font-size: ${tokens.font.fontSize.md};
+                font-weight: ${tokens.font.fontWeight.bold};
+                /* letter-spacing: 1px; */
+                line-height: 1.5;
+                ${mediaQueries({
+                  paddingRight: [
+                    "8px", "10px", "15px", "26px"
+                  ],
+                  marginTop: [
+                    "98vw", "80vw", "44vw", "28vw"
+                  ],
+                  maxWidth: [
+                    "480px",
+                  ]
+                })}
+              `}
+              ref={discoverScrollRef}
+            >
+              The human body uses only 20% of its molecules potential.<br/>
+              Our superments are exclusive supplements which unlock their hidden potential.<br/>
+            </h4>
+            <ArrowSection
+              css={css`
+                margin-top: 34px;
+                ${mediaQueries({
+                  paddingRight: [
+                    "8px", "10px", "15px", "26px"
+                  ],
+                })}
+              `}
+            >
+              <div
+                onMouseEnter={() => setArrowHovered(true)}
+                onMouseLeave={() => setArrowHovered(false)}
+                css={css`
+                  cursor: pointer;
+                  padding: 4px;
+                `}
+              >
+                <Icon
+                  name="arrow-down"
+                  color={tokens.color.contrastLight}
+                  resizeDefault="0 0 25 25"
+                  strokeWidth={2}
+                  height={25}
+                  width={25}
+                />
+              </div>
+              <Icon 
+                name="wave"
+                color={tokens.color.contrastLight}
+                filled={fillDelay}
+                hovered={arrowHovered}
+                resizeDefault="0 0 65 70"
+                resizeFilled="0 0 65 70"
+                strokeWidth={2}
+                height={35}
+                width={35}
+              />
+            </ArrowSection>
+          </SecondBlock>
         </ViewHeightWrapper>
       </HomepageContentContainer>
       <VideoContainer id="iceberg-container">

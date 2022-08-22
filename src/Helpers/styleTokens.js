@@ -16,6 +16,7 @@ export const mediaQueries = facepaint(
 
 const config = {
   primaryColor: "rgba(2, 0, 71, 1)",
+  primaryColorTransparent: "rgba(10, 14, 77, 0.3)",
   secondaryColor: "rgba(20, 122, 165, 1)",
   secondaryColorTransparent: "rgba(20,122,165, 0.3)",
   accentColorStrong: "#15f1ff",
@@ -66,6 +67,7 @@ export const tokens = {
   color: {
     // GENERAL
     primary: `${config.primaryColor}`,
+    primaryTransparent: `${config.primaryColorTransparent}`,
     secondary: `${config.secondaryColor}`,
     secondaryTransparent: `${config.secondaryColorTransparent}`,
     accentStrong: `${config.accentColorStrong}`,
