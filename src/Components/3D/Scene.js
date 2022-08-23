@@ -14,7 +14,7 @@ softShadows({
   rings: 11, // Rings (default: 11) must be a int
 })
 
-export const Scene = ({ type }) => {
+export const Scene = ({ type, homepageCard }) => {
   const modelRotation = useRef(0);
   const orbitControlsRef = useRef(null);
   const directionalLightRef = useRef(null);
@@ -58,9 +58,17 @@ export const Scene = ({ type }) => {
         autoRotate
         autoRotateSpeed={2}
         enablePan={false}
-        enableZoom={true}
-        minDistance={type === "pill" ? 5 : 7}
-        maxDistance={type === "pill" ? 7 : 9}
+        enableZoom={homepageCard ? false : true}
+        minDistance={
+          type === "pill" ? 2.65 : 7
+        }
+        maxDistance={
+          homepageCard ? (
+            type === "pill" ? 2.65 : 7
+          ) : (
+            type === "pill" ? 7 : 9
+          )
+        }
         minPolarAngle={angleToRadians(70)}
         maxPolarAngle={angleToRadians(100)}
         makeDefault
@@ -94,9 +102,12 @@ export const Scene = ({ type }) => {
         <meshBasicMaterial opacity={0.5} />
       </Plane> */}
       {/* SHADOW */}
-      <Plane receiveShadow rotation-x={-Math.PI / 2} position={[0, -1.9, 0]} args={[10, 10, 4, 4]}>
-        <shadowMaterial opacity={0.5} />
-      </Plane>
+      
+      {!homepageCard && (
+        <Plane receiveShadow rotation-x={-Math.PI / 2} position={[0, -1.9, 0]} args={[10, 10, 4, 4]}>
+          <shadowMaterial opacity={0.5} />
+        </Plane>
+      )}
       
       {/* LIGHTS */}
       <directionalLight
