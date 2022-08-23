@@ -47,9 +47,19 @@ const SecondBlock = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 32vw;
-  margin-bottom: 400px; // temp
+  margin-bottom: 4vw;
 `
 
+const ThirdBlock = styled.div`
+  margin-bottom: 600px; // temp
+`
+const DemoCard = styled.div``
+
+const SectionTitle = styled.h2`
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  font-size: 52px;
+`
 
 const Video = styled(motion.video)`
   height: 100%;
@@ -200,7 +210,7 @@ export const Homepage = () => {
                 margin-top: 7vw;
                 ${mediaQueries({
                   paddingRight: [
-                    "8px", "10px", "15px", "26px"
+                    "8px", "10px", "15px", "22px"
                   ],
                   marginTop: [
                     "14vw", "8vw", "6vw", "7vw"
@@ -238,6 +248,38 @@ export const Homepage = () => {
               />
             </ArrowSection>
           </SecondBlock>
+          <ThirdBlock
+            css={css`
+              align-items: center;
+              display: flex;
+              flex-direction: column;
+              padding-right: 12px;
+              margin-top: calc(40vh - 7vw);
+            `}
+          >
+            <SectionTitle>
+                Shapes
+            </SectionTitle>
+            {/* <DemoCard
+              css={css`
+                height: 400px;
+                perspective: 1000px;
+                perspective-origin: center;
+                position: relative;
+                width: 800px;
+                &:after {
+                  background: ${tokens.color.secondary};
+                  border-radius: ${tokens.borderRadius.xl};
+                  content: "";
+                  position: absolute;
+                  inset: 0;
+                  transform: rotateX(27deg) rotateY(0deg);
+                }
+              `}
+            >
+              
+            </DemoCard> */}
+          </ThirdBlock>
         </ViewHeightWrapper>
       </HomepageContentContainer>
       <VideoContainer id="iceberg-container">
