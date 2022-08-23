@@ -183,7 +183,7 @@ export const Homepage = () => {
                     "8px", "10px", "15px", "26px"
                   ],
                   marginTop: [
-                    "98vw", "80vw", "44vw", "28vw"
+                    "98vw", "80vw", "44vw", "32vw"
                   ],
                   maxWidth: [
                     "480px",
@@ -197,11 +197,14 @@ export const Homepage = () => {
             </h4>
             <ArrowSection
               css={css`
-                margin-top: 34px;
+                margin-top: 7vw;
                 ${mediaQueries({
                   paddingRight: [
                     "8px", "10px", "15px", "26px"
                   ],
+                  marginTop: [
+                    "14vw", "8vw", "6vw", "7vw"
+                  ]
                 })}
               `}
             >
