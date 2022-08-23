@@ -83,7 +83,7 @@ const Nav = styled(motion.nav)`
         height: 100%;
         a {
           color: ${tokens.color.contrastLight};
-          padding: 0 ${tokens.spacing.xxl};
+          padding: 0 28px;
           line-height: ${tokens.navHeight.lg};
         }
       }
@@ -129,6 +129,7 @@ const ProfileLink = styled(Link)`
   };
   display: flex;
   height: 24px;
+  min-width: 24px;
   margin: 0 ${tokens.spacing.xs};
   padding: ${tokens.spacing.xs};
   position: relative;
@@ -153,10 +154,13 @@ const IconContainer = styled.div`
 `
 const Username = styled.span`
   font-weight: ${tokens.font.fontWeight.medium};
-  margin-right: ${tokens.spacing.sm};
-  margin-left: ${tokens.spacing.md};
   flex-shrink: 0;
   font-size: ${tokens.font.fontSize.xs};
+  margin-right: ${tokens.spacing.sm};
+  margin-left: ${tokens.spacing.md};
+  max-width: 197px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `
 const Avatar = styled.img`
   border-radius: ${tokens.borderRadius.max};
@@ -228,8 +232,6 @@ export default function Navbar() {
     setProfileMenu(false)
   }
   
-  console.log('# profileMenu :', profileMenu);
-
   useEffect(() => {
     if(minimized && location.pathname === "/cart") {
       const timer = setTimeout(() => {
@@ -344,7 +346,7 @@ export default function Navbar() {
                   color={tokens.color.contrastLight}
                   filled={location.pathname === "/shop"}
                   resizeDefault="0 0 25 25"
-                  strokeWidth={2}
+                  strokeWidth={location.pathname === "/shop" ? 0 : 2}
                 />
               </IconContainer>
             </ProfileLink>
@@ -359,7 +361,7 @@ export default function Navbar() {
                   filled={location.pathname === "/chat"}
                   resizeDefault="0 0 25 25"
                   resizeFilled="0 0 22 22"
-                  strokeWidth={2}
+                  strokeWidth={location.pathname === "/chat" ? 0 : 2}
                 />
               </IconContainer>
             </ProfileLink>
@@ -371,7 +373,7 @@ export default function Navbar() {
                   filled={location.pathname === "/cart"}
                   resizeDefault="0 -2 26 26"
                   resizeFilled="0 -2 22 22"
-                  strokeWidth={1.5}
+                  strokeWidth={location.pathname === "/cart" ? 0 : 1.5}
                 />
               </IconContainer>
               {user?.cartQuantity > 0 && (
@@ -385,11 +387,11 @@ export default function Navbar() {
                   <Icon
                     name="counter"
                     color={tokens.color.accentStrong}
+                    count={user.cartQuantity}
                     textColor={tokens.color.contrastDark}
                     filled
                     height={"90%"}
                     width={"90%"}
-                    count={user.cartQuantity}
                   />
                 </IconContainer>
               )}

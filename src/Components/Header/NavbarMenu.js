@@ -218,7 +218,7 @@ export const NavbarMenu = ({ open }) => {
                           filled={active === link.to}
                           height={26}
                           name={link.icon}
-                          strokeWidth={2}
+                          strokeWidth={active === link.to ? 0 : 2}
                         />
                         <CustomLink
                           name={link.to}
