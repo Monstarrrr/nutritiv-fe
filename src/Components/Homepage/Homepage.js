@@ -2,11 +2,12 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import styled from '@emotion/styled';
-import { mediaQueries, tokens } from '../../Helpers/styleTokens';
+import { breakpoints, mediaQueries, tokens } from '../../Helpers/styleTokens';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { NutriButton } from '../NutriButton';
 import { css } from '@emotion/react';
 import { Icon } from '../Icons/Icon';
+import useWindowDimensions from '../../Helpers/useWindowDimensions';
 import { Canvas } from '@react-three/fiber';
 
 const HomepageContentContainer = styled.div`
@@ -74,6 +75,7 @@ export const Homepage = () => {
   const [icebergShadow, setIcebergShadow] = useState(false)
   const [arrowHovered, setArrowHovered] = useState(false)
   const [fillDelay, setFillDelay] = useState(false)
+  const { width } = useWindowDimensions()
   
   useEffect(() => {
     if(arrowHovered) {
@@ -87,12 +89,16 @@ export const Homepage = () => {
   }, [arrowHovered]);
   
   const handleIcebergButtonEnter = () => {
-    setIcebergShadow(true)
-    videoRef.current.playbackRate = 2;
+    if(width > breakpoints[2]) {
+      setIcebergShadow(true)
+      videoRef.current.playbackRate = 2;
+    }
   }
   const handleIcebergButtonLeave = () => {
-    setIcebergShadow(false)
-    videoRef.current.playbackRate = 0.8;
+    if(width > breakpoints[2]) {
+      setIcebergShadow(false)
+      videoRef.current.playbackRate = 0.8;
+    }
   }
   
   const scrollToElement = () => {
