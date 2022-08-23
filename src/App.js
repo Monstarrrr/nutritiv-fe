@@ -232,7 +232,7 @@ function App() {
                 min-height: 100%;
                 height: auto;
                 perspective: 3000px;
-                perspective-origin: -100% 50%;
+                perspective-origin: ${mobileNavMenu ? "-100% 50%" : "center"};
                 > div {
                   max-width: none;
                 }

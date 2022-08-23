@@ -456,7 +456,7 @@ export default function Navbar() {
                 name="cart"
                 color={tokens.color.contrastLight}
                 filled={cartActive}
-                strokeWidth={2}
+                strokeWidth={location.pathname === "/cart" ? 0 : 2}
               />
             </IconContainer>
             {user?.cartQuantity > 0 && (
