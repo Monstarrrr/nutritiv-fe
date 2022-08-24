@@ -118,8 +118,8 @@ export const Homepage = () => {
     }
   }
   
-  const scrollToElement = () => {
-    discoverScrollRef && discoverScrollRef.current.scrollIntoView({
+  const scrollToElement = (element) => {
+    element && element.current.scrollIntoView({
       behavior: "smooth",
       block: "center",
     });
@@ -201,7 +201,7 @@ export const Homepage = () => {
               <NutriButton 
                 label="Discover"
                 type="filled"
-                onClick={scrollToElement}
+                onClick={() => scrollToElement(discoverScrollRef)}
               />
             </div>
           </FirstBlock>
@@ -257,6 +257,7 @@ export const Homepage = () => {
                 <Icon
                   name="arrow-down"
                   color={tokens.color.contrastLight}
+                  onClick={() => scrollToElement(discoverScrollRef)}
                   resizeDefault="0 0 25 25"
                   strokeWidth={2}
                   height={25}
@@ -380,7 +381,7 @@ export const Homepage = () => {
                   css={css`
                     padding-left: 33px;
                     text-align: left;
-                    width: 270px;
+                    width: 250px;
                   `}
                 >
                   <h4
@@ -389,7 +390,7 @@ export const Homepage = () => {
                       font-weight: ${tokens.font.fontWeight.medium};
                     `}
                   >
-                    The <i>pill</i> shape
+                    The <i>capsule</i> shape
                   </h4>
                   <div
                     css={css`
@@ -397,7 +398,7 @@ export const Homepage = () => {
                       display: flex;
                       font-weight: ${tokens.font.fontWeight.light};
                       flex-direction: column;
-                      div {
+                      > div {
                         align-items: center;
                         display: flex;
                         margin-bottom: ${tokens.spacing.sm};
@@ -405,40 +406,49 @@ export const Homepage = () => {
                     `}
                   >
                     {pillsStats.map(stat => (
-                      <div>
-                        {stat.name} : 
-                        {[...Array(stat.value)].map((x, i) => 
-                          <Icon
-                            color={tokens.color.contrastLight}
-                            filled
-                            height={20}
-                            name="beaker"
-                            style={{
-                              marginLeft: "10px"
-                            }}
-                            width={20}
-                          />
-                        )}
-                        {[...Array(5 - stat.value)].map((x, i) => 
-                          <Icon
-                            color={tokens.color.contrastLight}
-                            height={20}
-                            name="beaker"
-                            style={{
-                              marginLeft: "10px",
-                              opacity: 0.5
-                            }}
-                            strokeWidth={2}
-                            width={20}
-                          />
-                        )}
+                      <div
+                        css={css`
+                          display: flex;
+                          justify-content: space-between;
+                        `}
+                      >
+                        <label>
+                          {stat.name} :
+                        </label>
+                        <div>
+                          {[...Array(stat.value)].map((x, i) => 
+                            <Icon
+                              color={tokens.color.contrastLight}
+                              filled
+                              height={20}
+                              name="beaker"
+                              style={{
+                                marginLeft: "10px"
+                              }}
+                              width={20}
+                            />
+                          )}
+                          {[...Array(5 - stat.value)].map((x, i) => 
+                            <Icon
+                              color={tokens.color.contrastLight}
+                              height={20}
+                              name="beaker"
+                              style={{
+                                marginLeft: "10px",
+                                opacity: 0.5
+                              }}
+                              strokeWidth={2}
+                              width={20}
+                            />
+                          )}
+                        </div>
                       </div>
                     ))}
                   </div>
                 </CardDescription>
                 <CardButton
                   css={css`
-                    width: 200px;
+                    width: 259px;
                   `}
                 >
                   <NutriButton 

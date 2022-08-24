@@ -1,7 +1,7 @@
 import { Environment, OrbitControls, PerspectiveCamera, Plane, softShadows, Stats, useHelper } from '@react-three/drei'
 import React, { Suspense, useRef } from 'react'
-import JellyModel from './models/Jelly';
-import PillModel from './models/Pill';
+import GummyModel from './models/Gummy';
+import CapsuleModel from './models/Capsule';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 import angleToRadians from '../../Helpers/angleToRadians';
@@ -78,9 +78,9 @@ export const Scene = ({ type, homepageCard }) => {
       {/* MODEL */}
       {
         type === "jelly" ? (
-          <JellyModel forwardRef={modelRotation} /> 
+          <GummyModel forwardRef={modelRotation} /> 
         ) : (
-          <PillModel forwardRef={modelRotation} />
+          <CapsuleModel forwardRef={modelRotation} />
         )
       }
       
