@@ -2,12 +2,14 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import styled from '@emotion/styled';
-import { mediaQueries, tokens } from '../../Helpers/styleTokens';
+import { breakpoints, mediaQueries, tokens } from '../../Helpers/styleTokens';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { NutriButton } from '../NutriButton';
 import { css } from '@emotion/react';
 import { Icon } from '../Icons/Icon';
+import useWindowDimensions from '../../Helpers/useWindowDimensions';
 import { Canvas } from '@react-three/fiber';
+import { Scene } from '../3D/Scene';
 
 const HomepageContentContainer = styled.div`
   margin: 0 auto;
@@ -54,7 +56,8 @@ const SecondBlock = styled.div`
 const ThirdBlock = styled.div`
   margin-bottom: 600px; // temp
 `
-const DemoCard = styled.div``
+const SectionContent = styled.div``
+const Card = styled.div``
 
 const SectionTitle = styled.h2`
   text-transform: uppercase;
@@ -74,6 +77,7 @@ export const Homepage = () => {
   const [icebergShadow, setIcebergShadow] = useState(false)
   const [arrowHovered, setArrowHovered] = useState(false)
   const [fillDelay, setFillDelay] = useState(false)
+  const { width } = useWindowDimensions()
   
   useEffect(() => {
     if(arrowHovered) {
@@ -87,12 +91,16 @@ export const Homepage = () => {
   }, [arrowHovered]);
   
   const handleIcebergButtonEnter = () => {
-    setIcebergShadow(true)
-    videoRef.current.playbackRate = 2;
+    if(width > breakpoints[2]) {
+      setIcebergShadow(true)
+      videoRef.current.playbackRate = 2;
+    }
   }
   const handleIcebergButtonLeave = () => {
-    setIcebergShadow(false)
-    videoRef.current.playbackRate = 0.8;
+    if(width > breakpoints[2]) {
+      setIcebergShadow(false)
+      videoRef.current.playbackRate = 0.8;
+    }
   }
   
   const scrollToElement = () => {
@@ -261,34 +269,60 @@ export const Homepage = () => {
             <SectionTitle>
                 Shapes
             </SectionTitle>
-            {/* <DemoCard
+            <SectionContent
               css={css`
                 margin-top: ${tokens.spacing.lg};
-                height: 350px;
                 perspective: 2000px;
                 perspective-origin: center;
                 position: relative;
-                width: 800px;
-                &:after {
-                  background: ${tokens.color.secondary};
-                  border-radius: ${tokens.borderRadius.xl};
-                  content: "";
-                  position: absolute;
-                  inset: 0;
-                  transform: rotateX(27deg) rotateY(0deg);
-                }
               `}
             >
-              <div style={{
-                  background: "transparent", 
-                  height: "500px", 
-                  width: "500px"
-              }}>
+              <Card
+                css={css`
+                  background: ${tokens.color.secondary};
+                  border-radius: ${tokens.borderRadius.xl};
+                  height: 289px;
+                  position: relative;
+                  transform: rotateX(27deg) rotateY(0deg);
+                  transform-style: preserve-3d;
+                  width: 700px;
+                  z-index: -1;
+                  &:before {
+                    background: #072564;
+                    border-radius: ${tokens.borderRadius.xl};
+                    content: "";
+                    position: absolute;
+                    inset: 0;
+                    transform: translateZ(-190px);
+                  }
+                  &:after {
+                    background: #051255;
+                    border-radius: ${tokens.borderRadius.xl};
+                    content: "";
+                    position: absolute;
+                    inset: 0;
+                    transform: translateZ(-380px);
+                  }
+                `}
+              />
+              <div 
+                css={css`
+                  background: transparent;
+                  position: absolute;
+                  left: 0px;
+                  height: 300px;
+                  width: 299px;
+                  top: -58px;
+                `}
+              >
                 <Canvas shadows>
-                  <Scene type="pill" />
+                  <Scene 
+                    type="pill"
+                    homepageCard
+                  />
                 </Canvas>
               </div>
-            </DemoCard> */}
+            </SectionContent>
           </ThirdBlock>
         </ViewHeightWrapper>
       </HomepageContentContainer>
