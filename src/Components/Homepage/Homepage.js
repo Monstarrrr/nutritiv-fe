@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
+import React from 'react';
 import { useEffect, useRef, useState } from 'react';
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import styled from '@emotion/styled';
 import { breakpoints, mediaQueries, tokens } from '../../Helpers/styleTokens';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -10,6 +11,7 @@ import { Icon } from '../Icons/Icon';
 import useWindowDimensions from '../../Helpers/useWindowDimensions';
 import { Canvas } from '@react-three/fiber';
 import { Scene } from '../3D/Scene';
+import Delayed from '../DelayComponent';
 
 const HomepageContentContainer = styled.div`
   margin: 0 auto;
@@ -74,7 +76,7 @@ const Video = styled(motion.video)`
   width: 100%;
 `
 
-const pillsStats = [
+const capsulesStats = [
   { name: "Strength",   value: 5 },
   { name: "Duration",   value: 3 },
   { name: "Peak Speed", value: 5 }
@@ -85,14 +87,19 @@ const gummiesStats = [
   { name: "Peak Speed", value: 5 }
 ]
 
-export const Homepage = () => {
+export const Homepage = React.forwardRef((props, ref) => {
   const videoRef= useRef();
   const discoverScrollRef = useRef(null);
+  const ShapesScrollRef = useRef(null);
   const location = useLocation();
   const [icebergShadow, setIcebergShadow] = useState(false)
   const [arrowHovered, setArrowHovered] = useState(false)
   const [fillDelay, setFillDelay] = useState(false)
-  const { width } = useWindowDimensions()
+  const { width } = useWindowDimensions();
+  
+  useEffect(() => {
+    console.log('# canvasView1 Homepage.js :', ref)
+  }, [ref]);
   
   useEffect(() => {
     if(arrowHovered) {
@@ -145,8 +152,6 @@ export const Homepage = () => {
       el.scrollIntoView({behavior: "smooth"})
     }
   }, [location.hash])
-  
-  console.log('# arrowHovered :', arrowHovered)
   
   return (
     <>
@@ -249,6 +254,7 @@ export const Homepage = () => {
               <div
                 onMouseEnter={() => setArrowHovered(true)}
                 onMouseLeave={() => setArrowHovered(false)}
+                onClick={() => scrollToElement(ShapesScrollRef)}
                 css={css`
                   cursor: pointer;
                   padding: 4px;
@@ -257,7 +263,6 @@ export const Homepage = () => {
                 <Icon
                   name="arrow-down"
                   color={tokens.color.contrastLight}
-                  onClick={() => scrollToElement(discoverScrollRef)}
                   resizeDefault="0 0 25 25"
                   strokeWidth={2}
                   height={25}
@@ -300,6 +305,7 @@ export const Homepage = () => {
               `}
             >
               <Card
+                ref={ShapesScrollRef}
                 css={css`
                   background: ${tokens.color.secondary};
                   border-radius: ${tokens.borderRadius.xl};
@@ -326,26 +332,7 @@ export const Homepage = () => {
                     transform: translateZ(-380px);
                   }
                 `}
-              >
-                <label
-                  css={css`
-                    color: ${tokens.color.primary};
-                    font-size: 280px;
-                    font-style: italic;
-                    font-weight: ${tokens.font.fontWeight.bold};
-                    letter-spacing: 24px;
-                    opacity: 0.1;
-                    position: absolute;
-                    top: -13px;
-                    bottom: 0;
-                    right: 0;
-                    left: 34px;
-                    text-transform: uppercase;
-                  `}
-                >
-                  Pill
-                </label>
-              </Card>
+              />
               <CardContent
                 css={css`
                   align-items: center;
@@ -359,23 +346,35 @@ export const Homepage = () => {
                     width: 270px;
                   `}
                 >
-                  <div 
-                    css={css`
-                      background: transparent;
-                      position: absolute;
-                      left: 0px;
-                      height: 300px;
-                      width: 270px;
-                      top: -58px;
-                    `}
-                  >
-                    <Canvas shadows>
-                      <Scene 
-                        type="pill"
-                        homepageCard
-                      />
-                    </Canvas>
-                  </div>
+                  <Delayed waitBeforeShow={500}>
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ 
+                        opacity: 1,
+                        transition: {
+                          delay: 1,
+                        }
+                      }} 
+                      css={css`
+                        background: transparent;
+                        position: absolute;
+                        left: 0px;
+                        height: 300px;
+                        width: 270px;
+                        top: -58px;
+                      `}
+                    >
+                      <div ref={ref}>
+                        hi
+                      </div>
+                      {/* <Canvas>
+                        <Scene 
+                          type="pill"
+                          homepageCard
+                        />
+                      </Canvas> */}
+                    </motion.div>
+                  </Delayed>
                 </CardSuperment>
                 <CardDescription
                   css={css`
@@ -386,17 +385,16 @@ export const Homepage = () => {
                 >
                   <h4
                     css={css`
-                      font-size: ${tokens.font.fontSize.md};
+                      font-size: ${tokens.font.fontSize.lg};
                       font-weight: ${tokens.font.fontWeight.medium};
                     `}
                   >
-                    The <i>capsule</i> shape
+                    Capsule
                   </h4>
                   <div
                     css={css`
                       align-items: left;
                       display: flex;
-                      font-weight: ${tokens.font.fontWeight.light};
                       flex-direction: column;
                       > div {
                         align-items: center;
@@ -405,8 +403,9 @@ export const Homepage = () => {
                       }
                     `}
                   >
-                    {pillsStats.map(stat => (
+                    {capsulesStats.map(stat => (
                       <div
+                        key={stat.name}
                         css={css`
                           display: flex;
                           justify-content: space-between;
@@ -421,6 +420,7 @@ export const Homepage = () => {
                               color={tokens.color.contrastLight}
                               filled
                               height={20}
+                              key={i}
                               name="beaker"
                               style={{
                                 marginLeft: "10px"
@@ -432,6 +432,7 @@ export const Homepage = () => {
                             <Icon
                               color={tokens.color.contrastLight}
                               height={20}
+                              key={i}
                               name="beaker"
                               style={{
                                 marginLeft: "10px",
@@ -445,6 +446,7 @@ export const Homepage = () => {
                       </div>
                     ))}
                   </div>
+                  <br />
                 </CardDescription>
                 <CardButton
                   css={css`
@@ -452,7 +454,7 @@ export const Homepage = () => {
                   `}
                 >
                   <NutriButton 
-                    label="Shop Pills"
+                    label="Shop Capsules"
                     type="filled"
                   />
                 </CardButton>
@@ -500,4 +502,4 @@ export const Homepage = () => {
       </div> */}
     </>
   )
-}
+})

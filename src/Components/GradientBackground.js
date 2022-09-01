@@ -39,7 +39,7 @@ export const GradientBackground = ({ ...props }) => {
   
   const variants = {
     homepage: { 
-      backgroundImage: `linear-gradient(180deg, ${firstColor} 0px, ${firstColor} 600px, ${secondColor} 1100px)`,
+      backgroundImage: `linear-gradient(180deg, ${firstColor} 0px, ${firstColor} 750px, ${secondColor} 1200px)`,
       transition: {
         duration: 0.4,
         ease: "easeOut"

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { Routes, Route, useLocation, Navigate, Outlet, useSearchParams, useNavigate } from 'react-router-dom';
 import { loadStripe } from '@stripe/stripe-js';
@@ -30,6 +30,10 @@ import { AboutUs } from './Components/AboutUs/AboutUs';
 import { NavbarMenu } from './Components/Header/NavbarMenu';
 import { PagesWrapper } from './Components/PagesWrapper';
 import { GradientBackground } from './Components/GradientBackground';
+import { Canvas } from '@react-three/fiber';
+import useRefs from 'react-use-refs';
+import { Preload, View } from '@react-three/drei';
+import { Scene } from './Components/3D/Scene';
 
 // init stripe
 const stripePromise = loadStripe(
@@ -37,6 +41,10 @@ const stripePromise = loadStripe(
 );
 
 function App() {
+  const [
+    canvasWrapperRef, 
+    canvasView1, canvasView2, canvasView3, canvasView4, canvasView5
+  ] = useRefs();
   const [gettingUserInfo, setGettingUserInfo] = useState(false);
   const dispatch = useDispatch();
   const loggedIn = useSelector(state => state.user.loggedIn);
@@ -50,6 +58,10 @@ function App() {
   const oAuthUsername = searchParams.get('username');
   const oAuthAccessToken = searchParams.get('oAuthToken');
   const registrationToken = searchParams.get('verificationToken');
+  
+  useEffect(() => {
+    console.log('# canvasView1 App.js :', canvasView1)
+  }, [canvasView1]);
   
   useEffect(() => {
     // App titles
@@ -225,7 +237,7 @@ function App() {
               }
               html, body, 
               #iceberg-container, #iceberg-video,
-              #root, #gradient-background {
+              #root, #gradient-background, #canvasWrapper, #pages {
                 max-width: none;
               }
               #root {
@@ -233,9 +245,6 @@ function App() {
                 height: auto;
                 perspective: 3000px;
                 perspective-origin: ${mobileNavMenu ? "-100% 50%" : "center"};
-                > div {
-                  max-width: none;
-                }
               }
             `
           }
@@ -247,85 +256,102 @@ function App() {
           minimizedDefaultColor={tokens.color.secondary}
         />
         <NavbarMenu open={mobileNavMenu} />
-        <AnimatePresence exitBeforeEnter>
-          <Routes
-            location={location} 
-            key={location.pathname}
+        <div 
+          id="canvasWrapper" 
+          ref={canvasWrapperRef}
+        >
+          <AnimatePresence exitBeforeEnter>
+            <Routes
+              location={location} 
+              key={location.pathname}
+            >
+              <Route path="" element={
+                <PagesWrapper minimized={mobileNavMenu}/>
+              }>
+                {/* PUBLIC */}
+                <Route
+                  path="*"
+                  element={<Navigate to="/page-not-found" replace/>}
+                />
+                <Route
+                  index
+                  path="/welcome"
+                  element={<Homepage ref={canvasView1}/>}
+                />
+                <Route path="/team" element={
+                  <PageContainer><AboutUs/></PageContainer>
+                }/>
+                <Route path="/shop" element={
+                  <PageContainer><Shop/></PageContainer>
+                }/>
+                <Route path="/product">
+                  <Route path=":productTitle" element={
+                    <PageContainer><ProductPage/></PageContainer>
+                  }/>
+                </Route>
+                <Route path="/chat" element={
+                  <PageContainer><ChatConnection/></PageContainer>
+                }/> 
+                <Route path="/releases" element={
+                  <PageContainer><ReleaseNotes/></PageContainer>
+                }/>
+                <Route path="/cancel" element={
+                  <PageContainer><CheckoutCancel/></PageContainer>
+                }/>
+                <Route path="/success" element={
+                  <PageContainer><CheckoutSuccess/></PageContainer>
+                }/>
+                <Route path="/page-not-found" element={
+                  <PageContainer><PageNotFound/></PageContainer>
+                }/>
+                <Route
+                  path="/"
+                  element={<Navigate to="/welcome" replace/>}
+                />
+                {/* PRIVATE */}
+                {/* RESTRICTED - USER */}
+                <Route element={<Restricted routeType="user" />}>
+                  <Route path="/profile" element={
+                    <PageContainer><Profile/></PageContainer>
+                  }/>
+                  <Route path="/cart" element={
+                    <PageContainer><Cart/></PageContainer>
+                  }/>
+                </Route>
+                {/* RESTRICTED - GUEST */}
+                <Route element={<Restricted routeType="guest" />}>
+                  <Route path="/login" element={
+                    <PageContainer><Login/></PageContainer>
+                  }/>
+                  <Route path="/register" element={
+                    <PageContainer><Register/></PageContainer>
+                  }/>
+                  <Route path="/forgot-password" element={
+                    <PageContainer><ForgotPassword/></PageContainer>
+                  }/>
+                  <Route path="/reset-password" element={
+                    <PageContainer><ResetPassword/></PageContainer>
+                  }/>
+                  <Route path="/forgot-2FA" element={
+                    <PageContainer><ForgotTFA/></PageContainer>
+                  }/>
+                </Route>
+              </Route>
+            </Routes>
+          </AnimatePresence>
+          <Canvas
+            onCreated={(state) => state.events.connect(canvasWrapperRef.current)}
+            className="canvas"
           >
-            <Route path="" element={
-              <PagesWrapper minimized={mobileNavMenu}/>
-            }>
-              {/* PUBLIC */}
-              <Route
-                path="*"
-                element={<Navigate to="/page-not-found" replace/>}
-              />
-              <Route
-                index
-                path="/welcome"
-                element={<Homepage/>}
-              />
-              <Route path="/team" element={
-                <PageContainer><AboutUs/></PageContainer>
-              }/>
-              <Route path="/shop" element={
-                <PageContainer><Shop/></PageContainer>
-              }/>
-              <Route path="/product">
-                <Route path=":productTitle" element={
-                  <PageContainer><ProductPage/></PageContainer>
-                }/>
-              </Route>
-              <Route path="/chat" element={
-                <PageContainer><ChatConnection/></PageContainer>
-              }/> 
-              <Route path="/releases" element={
-                <PageContainer><ReleaseNotes/></PageContainer>
-              }/>
-              <Route path="/cancel" element={
-                <PageContainer><CheckoutCancel/></PageContainer>
-              }/>
-              <Route path="/success" element={
-                <PageContainer><CheckoutSuccess/></PageContainer>
-              }/>
-              <Route path="/page-not-found" element={
-                <PageContainer><PageNotFound/></PageContainer>
-              }/>
-              <Route
-                path="/"
-                element={<Navigate to="/welcome" replace/>}
-              />
-              {/* PRIVATE */}
-              {/* RESTRICTED - USER */}
-              <Route element={<Restricted routeType="user" />}>
-                <Route path="/profile" element={
-                  <PageContainer><Profile/></PageContainer>
-                }/>
-                <Route path="/cart" element={
-                  <PageContainer><Cart/></PageContainer>
-                }/>
-              </Route>
-              {/* RESTRICTED - GUEST */}
-              <Route element={<Restricted routeType="guest" />}>
-                <Route path="/login" element={
-                  <PageContainer><Login/></PageContainer>
-                }/>
-                <Route path="/register" element={
-                  <PageContainer><Register/></PageContainer>
-                }/>
-                <Route path="/forgot-password" element={
-                  <PageContainer><ForgotPassword/></PageContainer>
-                }/>
-                <Route path="/reset-password" element={
-                  <PageContainer><ResetPassword/></PageContainer>
-                }/>
-                <Route path="/forgot-2FA" element={
-                  <PageContainer><ForgotTFA/></PageContainer>
-                }/>
-              </Route>
-            </Route>
-          </Routes>
-        </AnimatePresence>
+            <Suspense fallback={null}>
+              <View track={canvasView1}>
+                <color attach="background" args={['lightgreen']} />
+                <Scene />
+              </View>
+              <Preload all />
+            </Suspense>
+          </Canvas>
+        </div>
       </GoogleReCaptchaProvider>
     </Elements>
   );

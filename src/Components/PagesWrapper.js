@@ -169,6 +169,7 @@ export const PagesWrapper = ({ minimized }) => {
           location.pathname === "/welcome" ? "normalSizeHomepage" : "normalSizeOtherPage"
         )
       }
+      id="pages"
       initial={
         minimized ? "initial" : false
       }
