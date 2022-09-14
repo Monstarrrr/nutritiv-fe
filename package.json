@@ -6,14 +6,18 @@
     "@emotion/react": "^11.9.3",
     "@emotion/styled": "^11.9.3",
     "@mui/material": "^5.4.3",
-    "@react-three/drei": "^9.13.0",
-    "@react-three/fiber": "^8.0.22",
+    "@react-three/drei": "^9.30.1",
+    "@react-three/fiber": "^8.7.3",
     "@reduxjs/toolkit": "^1.7.1",
     "@stripe/react-stripe-js": "^1.7.0",
     "@stripe/stripe-js": "^1.22.0",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
+    "@types/jest": "^29.0.2",
+    "@types/node": "^18.7.18",
+    "@types/react": "^17.0.50",
+    "@types/react-dom": "^18.0.6",
     "ansi-html": "^0.0.9",
     "axios": "^0.24.0",
     "customize-cra": "^1.0.0",
@@ -33,6 +37,7 @@
     "react-router-dom": "^6.0.2",
     "react-scripts": "^5.0.1",
     "react-table": "^7.7.0",
+    "react-use-refs": "^1.0.1",
     "sass": "^1.49.7",
     "socket.io-client": "^4.4.1",
     "use-immer": "^0.6.0",
@@ -61,7 +66,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
   }
 }

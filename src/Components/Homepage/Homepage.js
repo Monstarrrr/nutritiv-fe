@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { useEffect, useRef, useState } from 'react';
+import { forwardRef, useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import styled from '@emotion/styled';
 import { breakpoints, mediaQueries, tokens } from '../../Helpers/styleTokens';
@@ -10,6 +10,7 @@ import { Icon } from '../Icons/Icon';
 import useWindowDimensions from '../../Helpers/useWindowDimensions';
 import { Canvas } from '@react-three/fiber';
 import { Scene } from '../3D/Scene';
+import CanvasDefaultList from '../3D/CanvasDefaultList';
 
 const HomepageContentContainer = styled.div`
   margin: 0 auto;
@@ -85,7 +86,11 @@ const gummiesStats = [
   { name: "Peak Speed", value: 5 }
 ]
 
-export const Homepage = () => {
+const Homepage = forwardRef((props, ref) => {
+  // Drei Canvas Refs //
+  const refsNames = require("../../Helpers/canvasRefs.json");
+  const refs = Object.fromEntries(refsNames.map((prop) => [prop, ref[prop]]));
+  
   const videoRef= useRef();
   const discoverScrollRef = useRef(null);
   const location = useLocation();
@@ -150,9 +155,12 @@ export const Homepage = () => {
   
   return (
     <>
+      {/* Drei Canvas Refs */}
+      <CanvasDefaultList ref={ref} />
+
       <HomepageContentContainer>
         <ViewHeightWrapper>
-
+          
           {/* FIRST BLOCK */}
           <FirstBlock>
             <h2
@@ -168,6 +176,7 @@ export const Homepage = () => {
             >
               Nutritiv
             </h2>
+            <div ref={refs.canvasView1} style={{ display: "inline-block", height: "100px", width: "100px" }} /> 
             <h3
               css={css`
                 font-weight: ${tokens.font.fontWeight.regular};
@@ -359,7 +368,7 @@ export const Homepage = () => {
                     width: 270px;
                   `}
                 >
-                  <div 
+                  <div
                     css={css`
                       background: transparent;
                       position: absolute;
@@ -369,12 +378,13 @@ export const Homepage = () => {
                       top: -58px;
                     `}
                   >
-                    <Canvas shadows>
+                    {/* <Canvas shadows>
+                      
                       <Scene 
                         type="pill"
                         homepageCard
                       />
-                    </Canvas>
+                    </Canvas> */}
                   </div>
                 </CardSuperment>
                 <CardDescription
@@ -405,22 +415,24 @@ export const Homepage = () => {
                       }
                     `}
                   >
-                    {pillsStats.map(stat => (
+                    {pillsStats.map((stat, i) => (
                       <div
                         css={css`
                           display: flex;
                           justify-content: space-between;
                         `}
+                        key={i}
                       >
                         <label>
                           {stat.name} :
                         </label>
                         <div>
-                          {[...Array(stat.value)].map((x, i) => 
+                          {[...Array(stat.value)].map((_, i) => 
                             <Icon
                               color={tokens.color.contrastLight}
                               filled
                               height={20}
+                              key={i}
                               name="beaker"
                               style={{
                                 marginLeft: "10px"
@@ -428,10 +440,11 @@ export const Homepage = () => {
                               width={20}
                             />
                           )}
-                          {[...Array(5 - stat.value)].map((x, i) => 
+                          {[...Array(5 - stat.value)].map((_, i) => 
                             <Icon
                               color={tokens.color.contrastLight}
                               height={20}
+                              key={i}
                               name="beaker"
                               style={{
                                 marginLeft: "10px",
@@ -479,25 +492,8 @@ export const Homepage = () => {
           <source src="/video_iceberg.webm" type="video/webm" />
         </Video>
       </VideoContainer>
-      
-      {/* temp
-        <video autoPlay loop width="1080" height="1080">
-          <source src="/test.webm" type="video/webm" />
-          <source src="video.mov" type="video/quicktime" />
-          Couldn't load the video on your device.
-        </video> 
-      */}
-      
-      {/* THREE JS TESTING */}
-      {/* <div style={{
-          background: "transparent", 
-          height: "500px", 
-          width: "500px"
-      }}>
-        <Canvas shadows>
-          <Scene type="pill" />
-        </Canvas>
-      </div> */}
     </>
   )
-}
+});
+
+export default Homepage;
