@@ -1,7 +1,7 @@
 import { Environment, OrbitControls, PerspectiveCamera, Plane, softShadows, Stats, useHelper } from '@react-three/drei'
 import React, { Suspense, useRef } from 'react'
-import JellyModel from './models/Jelly';
-import PillModel from './models/Pill';
+import GummyModel from './models/Gummy';
+import CapsuleModel from './models/Capsule';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 import angleToRadians from '../../Helpers/angleToRadians';
@@ -78,9 +78,9 @@ export const Scene = ({ type, homepageCard }) => {
       {/* MODEL */}
       {
         type === "jelly" ? (
-          <JellyModel forwardRef={modelRotation} /> 
+          <GummyModel forwardRef={modelRotation} /> 
         ) : (
-          <PillModel forwardRef={modelRotation} />
+          <CapsuleModel forwardRef={modelRotation} />
         )
       }
       
@@ -89,7 +89,7 @@ export const Scene = ({ type, homepageCard }) => {
         // preset="park"
         files={['px.png', 'nx.png', 'py.png', 'ny.png', 'pz.png', 'nz.png']}
         path="/hdri/venice/"
-        intensity={0.5}
+        intensity={1}
       >
         <mesh scale={100}>
           <sphereGeometry args={[1, 64, 64]} />
@@ -110,7 +110,7 @@ export const Scene = ({ type, homepageCard }) => {
       )}
       
       {/* LIGHTS */}
-      <directionalLight
+      {/* <directionalLight
         castShadow
         intensity={3}
         position={[0, 6, 0]}
@@ -122,7 +122,7 @@ export const Scene = ({ type, homepageCard }) => {
         shadow-camera-right={10}
         shadow-camera-top={10}
         shadow-camera-bottom={-10}
-      />
+      /> */}
       
       <pointLight 
         intensity={20}

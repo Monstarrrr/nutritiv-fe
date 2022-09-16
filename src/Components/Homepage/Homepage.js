@@ -58,6 +58,10 @@ const ThirdBlock = styled.div`
 `
 const SectionContent = styled.div``
 const Card = styled.div``
+const CardContent = styled.div``
+const CardSuperment = styled.div``
+const CardDescription = styled.div``
+const CardButton = styled.div``
 
 const SectionTitle = styled.h2`
   text-transform: uppercase;
@@ -69,6 +73,17 @@ const Video = styled(motion.video)`
   height: 100%;
   width: 100%;
 `
+
+const pillsStats = [
+  { name: "Strength",   value: 5 },
+  { name: "Duration",   value: 3 },
+  { name: "Peak Speed", value: 5 }
+]
+const gummiesStats = [
+  { name: "Strength",   value: 5 },
+  { name: "Duration",   value: 3 },
+  { name: "Peak Speed", value: 5 }
+]
 
 export const Homepage = () => {
   const videoRef= useRef();
@@ -103,8 +118,8 @@ export const Homepage = () => {
     }
   }
   
-  const scrollToElement = () => {
-    discoverScrollRef && discoverScrollRef.current.scrollIntoView({
+  const scrollToElement = (element) => {
+    element && element.current.scrollIntoView({
       behavior: "smooth",
       block: "center",
     });
@@ -137,6 +152,8 @@ export const Homepage = () => {
     <>
       <HomepageContentContainer>
         <ViewHeightWrapper>
+
+          {/* FIRST BLOCK */}
           <FirstBlock>
             <h2
               css={css`
@@ -184,10 +201,12 @@ export const Homepage = () => {
               <NutriButton 
                 label="Discover"
                 type="filled"
-                onClick={scrollToElement}
+                onClick={() => scrollToElement(discoverScrollRef)}
               />
             </div>
           </FirstBlock>
+
+          {/* SECOND BLOCK */}
           <SecondBlock>
             <h4
               css={css`
@@ -238,6 +257,7 @@ export const Homepage = () => {
                 <Icon
                   name="arrow-down"
                   color={tokens.color.contrastLight}
+                  onClick={() => scrollToElement(discoverScrollRef)}
                   resizeDefault="0 0 25 25"
                   strokeWidth={2}
                   height={25}
@@ -257,12 +277,14 @@ export const Homepage = () => {
               />
             </ArrowSection>
           </SecondBlock>
+
+          {/* THIRD BLOCK */}
           <ThirdBlock
             css={css`
               align-items: center;
               display: flex;
               flex-direction: column;
-              padding-right: 12px;
+              padding-right: 6px;
               margin-top: calc(40vh - 7vw);
             `}
           >
@@ -271,7 +293,7 @@ export const Homepage = () => {
             </SectionTitle>
             <SectionContent
               css={css`
-                margin-top: ${tokens.spacing.lg};
+                margin-top: ${tokens.spacing.max};
                 perspective: 2000px;
                 perspective-origin: center;
                 position: relative;
@@ -285,7 +307,7 @@ export const Homepage = () => {
                   position: relative;
                   transform: rotateX(27deg) rotateY(0deg);
                   transform-style: preserve-3d;
-                  width: 700px;
+                  width: 812px;
                   z-index: -1;
                   &:before {
                     background: #072564;
@@ -304,24 +326,137 @@ export const Homepage = () => {
                     transform: translateZ(-380px);
                   }
                 `}
-              />
-              <div 
+              >
+                <label
+                  css={css`
+                    color: ${tokens.color.primary};
+                    font-size: 280px;
+                    font-style: italic;
+                    font-weight: ${tokens.font.fontWeight.bold};
+                    letter-spacing: 24px;
+                    opacity: 0.1;
+                    position: absolute;
+                    top: -13px;
+                    bottom: 0;
+                    right: 0;
+                    left: 34px;
+                    text-transform: uppercase;
+                  `}
+                >
+                  Pill
+                </label>
+              </Card>
+              <CardContent
                 css={css`
-                  background: transparent;
+                  align-items: center;
+                  display: flex;
                   position: absolute;
-                  left: 0px;
-                  height: 300px;
-                  width: 299px;
-                  top: -58px;
+                  inset: 0;
                 `}
               >
-                <Canvas shadows>
-                  <Scene 
-                    type="pill"
-                    homepageCard
+                <CardSuperment
+                  css={css`
+                    width: 270px;
+                  `}
+                >
+                  <div 
+                    css={css`
+                      background: transparent;
+                      position: absolute;
+                      left: 0px;
+                      height: 300px;
+                      width: 270px;
+                      top: -58px;
+                    `}
+                  >
+                    <Canvas shadows>
+                      <Scene 
+                        type="pill"
+                        homepageCard
+                      />
+                    </Canvas>
+                  </div>
+                </CardSuperment>
+                <CardDescription
+                  css={css`
+                    padding-left: 33px;
+                    text-align: left;
+                    width: 250px;
+                  `}
+                >
+                  <h4
+                    css={css`
+                      font-size: ${tokens.font.fontSize.md};
+                      font-weight: ${tokens.font.fontWeight.medium};
+                    `}
+                  >
+                    The <i>capsule</i> shape
+                  </h4>
+                  <div
+                    css={css`
+                      align-items: left;
+                      display: flex;
+                      font-weight: ${tokens.font.fontWeight.light};
+                      flex-direction: column;
+                      > div {
+                        align-items: center;
+                        display: flex;
+                        margin-bottom: ${tokens.spacing.sm};
+                      }
+                    `}
+                  >
+                    {pillsStats.map(stat => (
+                      <div
+                        css={css`
+                          display: flex;
+                          justify-content: space-between;
+                        `}
+                      >
+                        <label>
+                          {stat.name} :
+                        </label>
+                        <div>
+                          {[...Array(stat.value)].map((x, i) => 
+                            <Icon
+                              color={tokens.color.contrastLight}
+                              filled
+                              height={20}
+                              name="beaker"
+                              style={{
+                                marginLeft: "10px"
+                              }}
+                              width={20}
+                            />
+                          )}
+                          {[...Array(5 - stat.value)].map((x, i) => 
+                            <Icon
+                              color={tokens.color.contrastLight}
+                              height={20}
+                              name="beaker"
+                              style={{
+                                marginLeft: "10px",
+                                opacity: 0.5
+                              }}
+                              strokeWidth={2}
+                              width={20}
+                            />
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </CardDescription>
+                <CardButton
+                  css={css`
+                    width: 259px;
+                  `}
+                >
+                  <NutriButton 
+                    label="Shop Pills"
+                    type="filled"
                   />
-                </Canvas>
-              </div>
+                </CardButton>
+              </CardContent>
             </SectionContent>
           </ThirdBlock>
         </ViewHeightWrapper>
