@@ -1,5 +1,5 @@
 import { Environment, OrbitControls, PerspectiveCamera, Plane, softShadows, Stats, useHelper } from '@react-three/drei'
-import React, { Suspense, useRef } from 'react'
+import React, { Suspense, useEffect, useRef, useState } from 'react'
 import GummyModel from './models/Gummy';
 import CapsuleModel from './models/Capsule';
 import * as THREE from 'three';
@@ -86,9 +86,9 @@ export const Scene = ({ type, homepageCard }) => {
       
       <Environment
         background={false}
-        // preset="park"
-        files={['px.png', 'nx.png', 'py.png', 'ny.png', 'pz.png', 'nz.png']}
-        path="/hdri/venice/"
+        preset="park"
+        // files={['px.png', 'nx.png', 'py.png', 'ny.png', 'pz.png', 'nz.png']}
+        // path="/hdri/venice/"
         intensity={1}
       >
         <mesh scale={100}>
