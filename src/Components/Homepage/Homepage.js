@@ -17,6 +17,7 @@ const HomepageContentContainer = styled.div`
   max-width: ${tokens.maxWidth.xl};
   min-height: calc(100vh - ${tokens.navHeight.lg}); // temp
   overflow: auto;
+  overflow-x: hidden;
   padding-top: ${tokens.navHeight.lg};
   position: relative;
   text-align: center;
@@ -176,7 +177,9 @@ const Homepage = forwardRef((props, ref) => {
             >
               Nutritiv
             </h2>
-            <div ref={refs.canvasView1} style={{ display: "inline-block", height: "100px", width: "100px" }} /> 
+            
+            {/* <div ref={refs.canvasView1} style={{ display: "inline-block", height: "100px", width: "100px" }} />  */}
+            
             <h3
               css={css`
                 font-weight: ${tokens.font.fontWeight.regular};

@@ -85,7 +85,7 @@ export const Scene = ({ type, homepageCard }) => {
       }
       
       <Environment
-        background={true}
+        background={false}
         preset="park"
         // files={['px.png', 'nx.png', 'py.png', 'ny.png', 'pz.png', 'nz.png']}
         // path="/hdri/venice/"

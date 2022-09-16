@@ -13,24 +13,6 @@ function Container({ canvasSize, scene, index, children, frames, rect, track }) 
   const virtualScene = useThree((state) => state.scene)
   const setEvents = useThree((state) => state.setEvents)
   
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if(rect.current) {
-        const { left, right, top, bottom, width, height } = rect.current;
-        console.log('# left :', left)
-        console.log('# right :', right)
-        console.log('# top :', top)
-        console.log('# bottom :', bottom)
-        console.log('# width :', width)
-        console.log('# height :', height)
-        console.log('--------------')
-      }
-  }, 5000);
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
-
   let frameCount = 0
   useFrame((state) => {
     if (frames === Infinity || frameCount <= frames) {

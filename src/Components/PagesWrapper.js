@@ -182,7 +182,7 @@ const PagesWrapper = forwardRef(({ minimized }, ref) => {
       variants={pagesVariants}
     >
       <Navbar />
-      {/* <CanvasDefaultList ref={ref} /> */}
+      <CanvasDefaultList ref={ref} />
       <Outlet />
       <Footer />
     </Pages>
