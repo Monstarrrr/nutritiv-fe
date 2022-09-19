@@ -101,6 +101,14 @@ const Homepage = forwardRef((props, ref) => {
   const { width } = useWindowDimensions()
   
   useEffect(() => {
+    if(width > breakpoints[2]) {
+      videoRef.current.play();
+    } else {
+      videoRef.current.pause();
+    }
+  }, [width]);
+
+  useEffect(() => {
     if(arrowHovered) {
       const timer = setTimeout(() => {
         setFillDelay(true);
@@ -151,8 +159,6 @@ const Homepage = forwardRef((props, ref) => {
       el.scrollIntoView({behavior: "smooth"})
     }
   }, [location.hash])
-  
-  console.log('# arrowHovered :', arrowHovered)
   
   return (
     <>
@@ -483,16 +489,18 @@ const Homepage = forwardRef((props, ref) => {
           animate={
             icebergShadow ? "shadow" : "default" 
           }
-          autoPlay
+          autoPlay={true}
           id="iceberg-video"
           loop
           muted
           playsInline
+          preload="auto"
           ref={videoRef}
           height="100%"
           width="100%"
         >
-          <source src="/video_iceberg.webm" type="video/webm" />
+          <source src="https://nutritiv.s3.eu-west-3.amazonaws.com/assets/video_iceberg.webm" type="video/webm" />
+          {/* <source src="/video_iceberg.webm" type="video/webm" /> */}
         </Video>
       </VideoContainer>
     </>

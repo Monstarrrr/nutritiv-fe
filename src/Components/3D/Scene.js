@@ -86,17 +86,17 @@ export const Scene = ({ type, homepageCard }) => {
       
       <Environment
         background={false}
-        preset="park"
-        // files={['px.png', 'nx.png', 'py.png', 'ny.png', 'pz.png', 'nz.png']}
-        // path="/hdri/venice/"
-        intensity={1}
+        // preset="park"
+        files={['px.png', 'nx.png', 'py.png', 'ny.png', 'pz.png', 'nz.png']}
+        path="/hdri/venice/"
+        intensity={3}
       >
         <mesh scale={100}>
           <sphereGeometry args={[1, 64, 64]} />
-          <meshBasicMaterial color="grey" side={THREE.BackSide} />
+          <meshBasicMaterial side={THREE.FrontSide} />
         </mesh>
       </Environment>
-
+      
       {/* GROUND */}
       {/* <Plane receiveShadow rotation-x={-Math.PI / 2} position={[0, -1.7, 0]} args={[10, 10, 4, 4]}>
         <meshBasicMaterial opacity={0.5} />

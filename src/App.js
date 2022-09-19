@@ -32,7 +32,7 @@ import PagesWrapper from './Components/PagesWrapper';
 import { GradientBackground } from './Components/GradientBackground';
 import useRefs from 'react-use-refs';
 import { Canvas } from '@react-three/fiber';
-import { Plane, Preload, 
+import { Environment, Plane, Preload, 
   // View 
 } from '@react-three/drei';
 import { View } from './Components/View';
@@ -212,7 +212,7 @@ function App() {
   }
   
   return (
-    <>
+    <div ref={canvasWrapperRef}>
       <Elements
         stripe={stripePromise}
         // options={stripeOptions}
@@ -269,7 +269,6 @@ function App() {
             minimizedDefaultColor={tokens.color.secondary}
           />
           <NavbarMenu open={mobileNavMenu} />
-          <div ref={canvasWrapperRef}>
             <Suspense fallback={null}>
               <AnimatePresence exitBeforeEnter>
                 <Routes
@@ -357,17 +356,6 @@ function App() {
                 className="canvas"
               >
                 <View track={canvasView1}>
-                  <color
-                    attach="background"
-                    args={["orange"]}
-                  />
-                  {/* <Plane
-                    rotation-x={-Math.PI / 2}
-                    position={[0, -1.9, 0]}
-                    args={[10, 10, 4, 4]}
-                  >
-                    <shadowMaterial />
-                  </Plane> */}
                   <Scene
                     type="pill"
                     homepageCard
@@ -376,10 +364,9 @@ function App() {
                 <Preload all />
               </Canvas>
             </Suspense>
-          </div>
         </GoogleReCaptchaProvider>
       </Elements>
-    </>
+    </div>
   );
 }
 
