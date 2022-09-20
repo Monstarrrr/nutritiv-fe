@@ -36,6 +36,20 @@ const VideoContainer = styled.div`
     right: ["-45%", "-40%", "-10%", "0",]
   })}
 `
+const ImageContainer = styled.div`
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 0;
+  ${mediaQueries({
+    // top: ["380px", "420px", "213px", "200px", "180px"],
+    // left: ["-45%", "-40%", "-14%", "0",],
+    // right: ["-45%", "-40%", "-17%", "-2%",]
+    top: ["380px", "420px", "470px", "500px"],
+    left: ["-45%", "-40%", "-10%", "0",],
+    right: ["-45%", "-40%", "-10%", "0",]
+  })}
+`
 
 const ViewHeightWrapper = styled.div``
 
@@ -496,34 +510,41 @@ const Homepage = forwardRef((props, ref) => {
           </ThirdBlock>
         </ViewHeightWrapper>
       </HomepageContentContainer>
-      <VideoContainer id="iceberg-container">
-        {isIOS ? (
-          <img 
-            alt="iceberg" 
-            src="https://nutritiv.s3.eu-west-3.amazonaws.com/assets/iceberg.png"
-            style={{height: "100%", width: "100%"}} 
-          />
+        {isAppleDevice ? (
+          <ImageContainer className="iceberg-container">
+            <motion.img 
+              animate={
+                icebergShadow ? "shadow" : "default" 
+              }
+              alt="iceberg" 
+              id='iceberg-image'
+              src="https://nutritiv.s3.eu-west-3.amazonaws.com/assets/image-iceberg.png"
+              style={{height: "100%", width: "100%"}} 
+              variants={icebergVariants}
+            />
+          </ImageContainer>
         ) : (
-          <Video
-            variants={icebergVariants}
-            animate={
-              icebergShadow ? "shadow" : "default" 
-            }
-            autoPlay={true}
-            id="iceberg-video"
-            loop
-            muted
-            playsInline
-            preload="auto"
-            ref={videoRef}
-            height="100%"
-            width="100%"
-          >
-            <source src="https://nutritiv.s3.eu-west-3.amazonaws.com/assets/video_iceberg.mov" type='video/mp4; codecs="hvc1"'></source>
-            <source src="https://nutritiv.s3.eu-west-3.amazonaws.com/assets/video_iceberg.webm" type="video/webm" />
-          </Video>
+          <VideoContainer className="iceberg-container">
+            <Video
+              animate={
+                icebergShadow ? "shadow" : "default" 
+              }
+              autoPlay={true}
+              id="iceberg-video"
+              loop
+              muted
+              playsInline
+              preload="auto"
+              ref={videoRef}
+              variants={icebergVariants}
+              height="100%"
+              width="100%"
+            >
+              <source src="https://nutritiv.s3.eu-west-3.amazonaws.com/assets/video_iceberg.mov" type='video/mp4; codecs="hvc1"'></source>
+              <source src="https://nutritiv.s3.eu-west-3.amazonaws.com/assets/video_iceberg.webm" type="video/webm" />
+            </Video>
+          </VideoContainer>
         )}
-      </VideoContainer>
     </>
   )
 });
