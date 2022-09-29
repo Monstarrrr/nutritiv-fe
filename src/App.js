@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { Routes, Route, useLocation, Navigate, Outlet, useSearchParams, useNavigate } from 'react-router-dom';
 import { loadStripe } from '@stripe/stripe-js';
@@ -31,12 +31,13 @@ import { NavbarMenu } from './Components/Header/NavbarMenu';
 import PagesWrapper from './Components/PagesWrapper';
 import { GradientBackground } from './Components/GradientBackground';
 import useRefs from 'react-use-refs';
-import { Canvas } from '@react-three/fiber';
-import { Environment, Plane, Preload, 
+import { Canvas, useFrame } from '@react-three/fiber';
+import { Environment, OrbitControls, PerspectiveCamera, Plane, Preload, 
   // View 
 } from '@react-three/drei';
 import { View } from './Components/View';
 import { Scene } from './Components/3D/Scene';
+import angleToRadians from './Helpers/angleToRadians';
 
 // init stripe
 const stripePromise = loadStripe(
@@ -46,6 +47,7 @@ const stripePromise = loadStripe(
 function App() {
   const [canvasWrapperRef, canvasView1, canvasView2] = useRefs();
   const canvasRefs = { canvasView1, canvasView2 };
+  const orbitControlsRef = useRef();
   const [gettingUserInfo, setGettingUserInfo] = useState(false);
   const dispatch = useDispatch();
   const loggedIn = useSelector(state => state.user.loggedIn);
@@ -359,6 +361,46 @@ function App() {
                   <Scene
                     type="pill"
                     homepageCard
+                    ref={orbitControlsRef}
+                  />
+                  <PerspectiveCamera 
+                    makeDefault 
+                    fov={40}
+                    position={[9, 1, 0]} // temp 
+                  />
+                  <OrbitControls
+                    autoRotate
+                    autoRotateSpeed={2}
+                    enablePan={false}
+                    enableZoom
+                    minDistance={2.65}
+                    maxDistance={2.65}
+                    minPolarAngle={angleToRadians(70)}
+                    maxPolarAngle={angleToRadians(100)}
+                    makeDefault
+                    ref={orbitControlsRef}
+                  />
+                </View>
+                <View track={canvasView2}>
+                  <Scene
+                    type="gummy"
+                  />
+                  <PerspectiveCamera 
+                    makeDefault 
+                    fov={40}
+                    position={[9, 1, 0]} // temp 
+                  />
+                  <OrbitControls
+                    autoRotate
+                    autoRotateSpeed={2}
+                    enablePan={false}
+                    enableZoom
+                    minDistance={7}
+                    maxDistance={7}
+                    minPolarAngle={angleToRadians(70)}
+                    maxPolarAngle={angleToRadians(100)}
+                    makeDefault
+                    ref={orbitControlsRef}
                   />
                 </View>
                 <Preload all />

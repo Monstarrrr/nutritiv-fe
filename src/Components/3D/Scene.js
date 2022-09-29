@@ -1,5 +1,5 @@
 import { Environment, OrbitControls, PerspectiveCamera, Plane, softShadows, Stats, useHelper } from '@react-three/drei'
-import React, { Suspense, useEffect, useRef, useState } from 'react'
+import React, { forwardRef, Suspense, useEffect, useRef, useState } from 'react'
 import GummyModel from './models/Gummy';
 import CapsuleModel from './models/Capsule';
 import * as THREE from 'three';
@@ -14,9 +14,9 @@ softShadows({
   rings: 11, // Rings (default: 11) must be a int
 })
 
-export const Scene = ({ type, homepageCard }) => {
+export const Scene = forwardRef(({ type, homepageCard }, ref) => {
   const modelRotation = useRef(0);
-  const orbitControlsRef = useRef(null);
+  // const orbitControlsRef = useRef();
   const directionalLightRef = useRef(null);
   // const spotLightRef1 = useRef(null);
   // const spotLightRef2 = useRef(null);
@@ -33,10 +33,11 @@ export const Scene = ({ type, homepageCard }) => {
     
     // Mouse tracking movement
     // const { x, y } = state.mouse;
-    // if(!!orbitControlsRef.current){
-    //   orbitControlsRef.current.setAzimuthalAngle(angleToRadians(- x * 90));
-    //   orbitControlsRef.current.setPolarAngle(angleToRadians(y * 50 + 90));
-    //   orbitControlsRef.current.update();
+    // if(!!ref.current){
+    //   // console.log(x, y);
+    //   ref.current.setAzimuthalAngle(angleToRadians(- x * 90));
+    //   ref.current.setPolarAngle(angleToRadians(y * 50 + 90));
+    //   ref.current.update();
     // }
   })
   
@@ -44,17 +45,17 @@ export const Scene = ({ type, homepageCard }) => {
     <Suspense fallback={null}>
       
       {/* CAMERA */}
-      <PerspectiveCamera
+      {/* <PerspectiveCamera
         makeDefault
         position={[
           type === "pill" ? 7 : 9, 
           1, 
           0
         ]}
-      />
+      /> */}
       
       {/* CONTROLS */}
-      <OrbitControls
+      {/* <OrbitControls
         autoRotate
         autoRotateSpeed={2}
         enablePan={false}
@@ -73,11 +74,11 @@ export const Scene = ({ type, homepageCard }) => {
         maxPolarAngle={angleToRadians(100)}
         makeDefault
         ref={orbitControlsRef}
-      />
+      /> */}
       
       {/* MODEL */}
       {
-        type === "jelly" ? (
+        type === "gummy" ? (
           <GummyModel forwardRef={modelRotation} /> 
         ) : (
           <CapsuleModel forwardRef={modelRotation} />
@@ -163,4 +164,4 @@ export const Scene = ({ type, homepageCard }) => {
       {/* <ambientLight intensity={0.2}/> */}
     </Suspense>
   )
-}
+})
