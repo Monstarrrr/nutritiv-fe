@@ -123,7 +123,7 @@ const Homepage = forwardRef((props, ref) => {
         <ViewHeightWrapper>
           
           {/* NUTRITIV */}
-          <IcebergSection ref={icebergSectionRefs}/>
+          <IcebergSection ref={icebergSectionRefs} setIcebergShadow={setIcebergShadow} />
           
           {/* EXPLANATION */}
           <ArrowSection ref={arrowSectionRefs}/>

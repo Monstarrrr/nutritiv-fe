@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
-import React, { forwardRef } from 'react'
+import React, { forwardRef, useState } from 'react'
+import { motion } from 'framer-motion';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { tokens } from '../../Helpers/styleTokens';
@@ -9,7 +10,7 @@ import { NutriButton } from '../NutriButton';
 const SectionTitle = styled.h2`
   text-transform: uppercase;
   letter-spacing: 4px;
-  font-size: 52px;
+  font-size: 72px;
 `
 const SectionContent = styled.div``
 const Card = styled.div``
@@ -19,7 +20,7 @@ const CardDescription = styled.div``
 const CardButton = styled.div``
 const ShapesSwitch = styled.div``
 
-const pillsStats = [
+const capsulesStats = [
   { name: "Strength",   value: 5 },
   { name: "Duration",   value: 3 },
   { name: "Peak Speed", value: 5 }
@@ -29,9 +30,12 @@ const gummiesStats = [
   { name: "Duration",   value: 3 },
   { name: "Peak Speed", value: 5 }
 ]
+const shapes = ['Capsule', 'Gummy'];
 
 export const ShapesSection = forwardRef((props, ref) => {
-  console.log('# ref :', ref)
+  const [focusedShape, setFocusedShape] = useState(null);
+  const [selectedShape, setSelectedShape] = useState(shapes[0]);
+  
   return (
     <div
       css={css`
@@ -48,9 +52,95 @@ export const ShapesSection = forwardRef((props, ref) => {
       </SectionTitle>
       
       <ShapesSwitch>
-        <div>
-        
-        </div>
+        <ul
+          css={css`
+            align-items: center;
+            border-radius: ${tokens.borderRadius.lg};
+            box-shadow: 0px 0px 10px 1px ${tokens.color.contrastDark};
+            display: flex;
+            padding: 4px;
+            background: ${tokens.color.accentWeak};
+            width: fit-content;
+          `}
+        >
+          {shapes.map(shape => (
+            <li
+              css={css`
+                align-items: center;
+                cursor: pointer;
+                display: flex;
+                height: auto;
+                justify-content: center;
+                list-style: none;
+                outline: none;
+                text-transform: uppercase;
+                padding: ${tokens.spacing.md} ${tokens.spacing.xxl};
+                position: relative;
+              `}
+              key={shape}
+              onClick={() => setSelectedShape(shape)}
+              onMouseEnter={() => setFocusedShape(shape)}
+            >
+              <span
+                css={css`
+                  bottom: 0;
+                  color: ${shape === selectedShape ? 
+                    tokens.color.contrastDark : tokens.color.contrastLight
+                  };
+                  left: '4px';
+                  font-size: ${tokens.font.fontSize.xs};
+                  font-weight: ${tokens.font.fontWeight.medium};
+                  position: 'absolute';
+                  right: 0;
+                  top: '6px';
+                  user-select: 'none';
+                  z-index: 2;
+                `}
+              >
+                {shape}
+              </span>
+
+              {focusedShape === shape ? (
+                <motion.div
+                  css={css`
+                    background: ${tokens.color.primaryTransparent};
+                    border-radius: ${tokens.borderRadius.lg};
+                    bottom: 0;
+                    height: 100%;
+                    left: 0;
+                    position: absolute;
+                    right: 0;
+                    width: 100%;
+                    z-index: 0;
+                  `}
+                  transition={{
+                    layout: {
+                      duration: 0.2,
+                      ease: 'easeOut',
+                    },
+                  }}
+                  layoutId="highlight"
+                />) : null
+              }
+              {selectedShape === shape ? (
+                <motion.div
+                  css={css`
+                    background: ${tokens.color.accentStrong};
+                    border-radius: ${tokens.borderRadius.lg};
+                    bottom: 0;
+                    height: 100%;
+                    left: 0;
+                    position: absolute;
+                    right: 0;
+                    width: 100%;
+                    z-index: 1;
+                  `}
+                  layoutId="underline"
+                />) : null
+              }
+            </li>
+          ))}
+        </ul>
       </ShapesSwitch>
       
       <SectionContent
@@ -179,7 +269,7 @@ export const ShapesSection = forwardRef((props, ref) => {
                 }
               `}
             >
-              {pillsStats.map((stat, i) => (
+              {capsulesStats.map((stat, i) => (
                 <div
                   css={css`
                     display: flex;
@@ -228,7 +318,7 @@ export const ShapesSection = forwardRef((props, ref) => {
                 font-weight: ${tokens.font.fontWeight.medium};
               `}
             >
-              Capsules are a great shape to do certain stuff lorem ipsum.
+              Capsules are great for those who want the highest performance available.
             </div>
           </CardDescription>
           
