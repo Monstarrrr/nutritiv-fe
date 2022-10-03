@@ -11,10 +11,10 @@ softShadows({
   size: 0.005,
   near: 9.5,
   samples: 30,
-  rings: 11, // Rings (default: 11) must be a int
+  rings: 11, // (default: 11) must be a int
 })
 
-export const Scene = forwardRef(({ type, homepageCard }, ref) => {
+export const Scene = forwardRef(({ type, supermentName, homepageCard }, ref) => {
   const modelRotation = useRef(0);
   // const orbitControlsRef = useRef();
   const directionalLightRef = useRef(null);
@@ -79,18 +79,16 @@ export const Scene = forwardRef(({ type, homepageCard }, ref) => {
       {/* MODEL */}
       {
         type === "gummy" ? (
-          <GummyModel forwardRef={modelRotation} /> 
+          <GummyModel forwardRef={modelRotation} supermentName={supermentName} /> 
         ) : (
-          <CapsuleModel forwardRef={modelRotation} />
+          <CapsuleModel forwardRef={modelRotation} supermentName={supermentName} />
         )
       }
       
       <Environment
         background={false}
-        // preset="park"
         files={['px.png', 'nx.png', 'py.png', 'ny.png', 'pz.png', 'nz.png']}
         path="/hdri/venice/"
-        intensity={3}
       >
         <mesh scale={100}>
           <sphereGeometry args={[1, 64, 64]} />

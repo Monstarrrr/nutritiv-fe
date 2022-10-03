@@ -1,0 +1,24 @@
+[
+  {
+    "view": "gummy-folder",
+    "supermentName": "gummy-folder",
+    "type": "gummy"
+  },
+  {
+    "view": "gummy-pi-homepageCard",
+    "supermentName": "gummy-pi",
+    "type": "gummy",
+    "homepageCard": true
+  },
+  {
+    "view": "gummy-pi",
+    "supermentName": "gummy-pi",
+    "type": "gummy",
+    "homepageCard": true
+  },
+  {
+    "view": "capsule-water",
+    "supermentName": "capsule-water",
+    "type": "capsule"
+  }
+]

@@ -59,7 +59,7 @@ const Homepage = forwardRef((props, ref) => {
   // Drei Canvas Refs //
   const refsNames = require("../../Helpers/canvasRefs.json");
   const refs = Object.fromEntries(refsNames.map((prop) => [prop, ref[prop]]));
-  
+
   const videoRef = useRef();
   const discoverScrollRef = useRef(null);
   

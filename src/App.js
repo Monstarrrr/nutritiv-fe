@@ -45,9 +45,23 @@ const stripePromise = loadStripe(
 );
 
 function App() {
-  const [canvasWrapperRef, canvasView1, canvasView2] = useRefs();
-  const canvasRefs = { canvasView1, canvasView2 };
+  // 3D
   const orbitControlsRef = useRef();
+  const [
+    canvasWrapperRef, 
+    gummyPiViewHomepage, gummyPiView, gummyFolderView, capsuleWaterViewHomepage, capsuleWaterView
+  ] = useRefs();
+  const canvasRefs = { 
+    gummyPiViewHomepage, gummyPiView, gummyFolderView, capsuleWaterViewHomepage, capsuleWaterView
+  };
+  const viewsList = [
+    { gummyPiViewHomepage, type: "gummy", homepageCard: true }, 
+    { gummyPiView, type: "gummy" }, 
+    { gummyFolderView, type: "gummy" },
+    { capsuleWaterViewHomepage, type: "capsule", homepageCard: true },
+    { capsuleWaterView, type: "capsule" }
+  ];
+  
   const [gettingUserInfo, setGettingUserInfo] = useState(false);
   const dispatch = useDispatch();
   const loggedIn = useSelector(state => state.user.loggedIn);
@@ -61,7 +75,7 @@ function App() {
   const oAuthUsername = searchParams.get('username');
   const oAuthAccessToken = searchParams.get('oAuthToken');
   const registrationToken = searchParams.get('verificationToken');
-  
+
   useEffect(() => {
     // App titles
     const titleWithoutSpecials = location.pathname.replace(/[^a-zA-Z ]/g, "");
@@ -105,7 +119,7 @@ function App() {
             console.log('# /carts/self err :', cartSelf)
           })
         } catch(err) {
-          console.log("Could not fetch user info on App initialization")
+          console.error("Could not fetch user info on App initialization")
         }
       }
       fetchUserInfo();
@@ -357,31 +371,35 @@ function App() {
                 }
                 className="canvas"
               >
-                <View track={canvasView1}>
-                  <Scene
-                    type="pill"
-                    homepageCard
-                    ref={orbitControlsRef}
-                  />
-                  <PerspectiveCamera 
-                    makeDefault 
-                    fov={40}
-                    position={[9, 1, 0]} // temp 
-                  />
-                  <OrbitControls
-                    autoRotate
-                    autoRotateSpeed={2}
-                    enablePan={false}
-                    enableZoom
-                    minDistance={2.65}
-                    maxDistance={2.65}
-                    minPolarAngle={angleToRadians(70)}
-                    maxPolarAngle={angleToRadians(100)}
-                    makeDefault
-                    ref={orbitControlsRef}
-                  />
-                </View>
-                <View track={canvasView2}>
+                {viewsList.map(view => (
+                  <View track={Object.values(view)[0]}>
+                    <Scene
+                      type={view.type}
+                      homepageCard={view.homepageCard}
+                      // type="capsule"
+                      // homepageCard
+                    />
+                    <PerspectiveCamera 
+                      makeDefault
+                      fov={40}
+                      position={[9, 1, 0]} // temp 
+                    />
+                    <OrbitControls
+                      autoRotate
+                      autoRotateSpeed={2}
+                      enablePan={false}
+                      enableZoom
+                      minDistance={2.65}
+                      maxDistance={2.65}
+                      minPolarAngle={angleToRadians(70)}
+                      maxPolarAngle={angleToRadians(100)}
+                      makeDefault
+                      ref={orbitControlsRef}
+                    />
+                  </View>
+                ))}
+               
+                {/* <View track={gummyPiView}>
                   <Scene
                     type="gummy"
                   />
@@ -403,6 +421,28 @@ function App() {
                     ref={orbitControlsRef}
                   />
                 </View>
+                <View track={gummyFolderView}>
+                  <Scene
+                    type="gummy"
+                  />
+                  <PerspectiveCamera 
+                    makeDefault 
+                    fov={40}
+                    position={[9, 1, 0]} // temp 
+                  />
+                  <OrbitControls
+                    autoRotate
+                    autoRotateSpeed={2}
+                    enablePan={false}
+                    enableZoom
+                    minDistance={7}
+                    maxDistance={7}
+                    minPolarAngle={angleToRadians(70)}
+                    maxPolarAngle={angleToRadians(100)}
+                    makeDefault
+                    ref={orbitControlsRef}
+                  />
+                </View> */}
                 <Preload all />
               </Canvas>
             </Suspense>

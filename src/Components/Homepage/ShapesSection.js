@@ -154,8 +154,10 @@ export const ShapesSection = forwardRef((props, ref) => {
       >
         <Card
           css={css`
-            background: #191c38;
+            background: ${tokens.color.primary};
+            background: radial-gradient(circle, ${tokens.color.secondaryTransparent} 0%, ${tokens.color.primary} 100%);
             border-radius: ${tokens.borderRadius.xl};
+            box-shadow: ${tokens.color.accentWeak} 0px 0px 10px 2px;
             height: 300px;
             position: relative;
             /* transform: rotateX(27deg) rotateY(0deg);
@@ -212,8 +214,16 @@ export const ShapesSection = forwardRef((props, ref) => {
                   homepageCard
                 />
               </Canvas> */}
-              <div 
-                ref={ref.canvasView2} 
+              <div
+                ref={ref.gummyPiViewHomepage}
+                style={{ 
+                  display: "inline-block", 
+                  height: "300px", 
+                  width: "300px" 
+                }} 
+              />
+              <div
+                ref={ref.capsuleWaterViewHomepage}
                 style={{ 
                   display: "inline-block", 
                   height: "300px", 
@@ -238,7 +248,7 @@ export const ShapesSection = forwardRef((props, ref) => {
                 font-weight: ${tokens.font.fontWeight.medium};
               `}
             >
-              Capsule
+              Gummy
             </h4>
             <div
               css={css`
@@ -251,7 +261,7 @@ export const ShapesSection = forwardRef((props, ref) => {
                   align-items: center;
                   display: flex;
                   margin-bottom: ${tokens.spacing.sm};
-                  &:nth-last-child(1) {
+                  &:nth-last-of-type(1) {
                     margin-bottom: 0;
                   }
                 }
@@ -318,7 +328,7 @@ export const ShapesSection = forwardRef((props, ref) => {
                 font-weight: ${tokens.font.fontWeight.medium};
               `}
             >
-              Capsules are great for those who want the highest performance available.
+              Gummies are great for those who want the highest performance available.
             </div>
           </CardDescription>
           
@@ -328,7 +338,7 @@ export const ShapesSection = forwardRef((props, ref) => {
             `}
           >
             <NutriButton 
-              label="Shop Pills"
+              label="Shop Gummies"
               type="filled"
             />
           </CardButton>
