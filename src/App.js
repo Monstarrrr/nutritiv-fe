@@ -371,13 +371,11 @@ function App() {
                 }
                 className="canvas"
               >
-                {viewsList.map(view => (
-                  <View track={Object.values(view)[0]}>
+                {viewsList.map((view, i) => (
+                  <View key={i} track={Object.values(view)[0]}>
                     <Scene
                       type={view.type}
                       homepageCard={view.homepageCard}
-                      // type="capsule"
-                      // homepageCard
                     />
                     <PerspectiveCamera 
                       makeDefault
