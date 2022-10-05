@@ -264,7 +264,7 @@ export default function Navbar() {
             key={item.link}
             onClick={() => setActive(item.link)}
             onMouseEnter={() => setHovered(item.link)}
-            onMouseLeave={() => setHovered(null)}
+            onMouseLeave={() => setHovered("")}
           >
             <DelayLink
               active={location.pathname === item.link ? 1 : undefined}

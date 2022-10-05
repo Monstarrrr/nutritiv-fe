@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import React, { forwardRef, useState } from 'react'
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { tokens } from '../../Helpers/styleTokens';
@@ -80,6 +80,7 @@ export const ShapesSection = forwardRef((props, ref) => {
               key={shape}
               onClick={() => setSelectedShape(shape)}
               onMouseEnter={() => setFocusedShape(shape)}
+              onMouseLeave={() => setFocusedShape("")}
             >
               <span
                 css={css`
@@ -99,43 +100,42 @@ export const ShapesSection = forwardRef((props, ref) => {
               >
                 {shape}
               </span>
-
               {focusedShape === shape ? (
                 <motion.div
-                  css={css`
-                    background: ${tokens.color.primaryTransparent};
-                    border-radius: ${tokens.borderRadius.lg};
-                    bottom: 0;
-                    height: 100%;
-                    left: 0;
-                    position: absolute;
-                    right: 0;
-                    width: 100%;
-                    z-index: 0;
-                  `}
+                  style={{
+                    background: tokens.color.primaryTransparent,
+                    borderRadius: tokens.borderRadius.lg,
+                    bottom: 0,
+                    height: "100%",
+                    left: 0,
+                    position: "absolute",
+                    right: 0,
+                    width: "100%",
+                    zIndex: 0,
+                  }}
                   transition={{
                     layout: {
                       duration: 0.2,
-                      ease: 'easeOut',
+                      ease: "easeOut",
                     },
                   }}
-                  layoutId="highlight"
+                  layoutId="shape-focus"
                 />) : null
               }
               {selectedShape === shape ? (
                 <motion.div
-                  css={css`
-                    background: ${tokens.color.accentStrong};
-                    border-radius: ${tokens.borderRadius.lg};
-                    bottom: 0;
-                    height: 100%;
-                    left: 0;
-                    position: absolute;
-                    right: 0;
-                    width: 100%;
-                    z-index: 1;
-                  `}
-                  layoutId="underline"
+                  style={{
+                    background: tokens.color.accentStrong,
+                    borderRadius: tokens.borderRadius.lg,
+                    bottom: 0,
+                    height: "100%",
+                    left: 0,
+                    position: "absolute",
+                    right: 0,
+                    width: "100%",
+                    zIndex: 1,
+                  }}
+                  layoutId="shape-select"
                 />) : null
               }
             </li>
@@ -219,17 +219,17 @@ export const ShapesSection = forwardRef((props, ref) => {
                 style={{ 
                   display: "inline-block", 
                   height: "300px", 
-                  width: "300px" 
-                }} 
+                  width: "270px"
+                }}
               />
-              <div
+              {/* <div
                 ref={ref.capsuleWaterViewHomepage}
                 style={{ 
                   display: "inline-block", 
                   height: "300px", 
-                  width: "300px" 
-                }} 
-              />
+                  width: "270px"
+                }}
+              /> */}
             </div>
           </CardSuperment>
           

@@ -387,8 +387,8 @@ function App() {
                       autoRotateSpeed={2}
                       enablePan={false}
                       enableZoom
-                      minDistance={2.65}
-                      maxDistance={2.65}
+                      minDistance={5.65}
+                      maxDistance={5.65}
                       minPolarAngle={angleToRadians(70)}
                       maxPolarAngle={angleToRadians(100)}
                       makeDefault
@@ -398,28 +398,6 @@ function App() {
                 ))}
                
                 {/* <View track={gummyPiView}>
-                  <Scene
-                    type="gummy"
-                  />
-                  <PerspectiveCamera 
-                    makeDefault 
-                    fov={40}
-                    position={[9, 1, 0]} // temp 
-                  />
-                  <OrbitControls
-                    autoRotate
-                    autoRotateSpeed={2}
-                    enablePan={false}
-                    enableZoom
-                    minDistance={7}
-                    maxDistance={7}
-                    minPolarAngle={angleToRadians(70)}
-                    maxPolarAngle={angleToRadians(100)}
-                    makeDefault
-                    ref={orbitControlsRef}
-                  />
-                </View>
-                <View track={gummyFolderView}>
                   <Scene
                     type="gummy"
                   />
