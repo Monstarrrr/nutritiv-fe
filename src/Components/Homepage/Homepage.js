@@ -113,12 +113,6 @@ const Homepage = forwardRef((props, ref) => {
   
   return (
     <>
-      {/* Drei Canvas Refs */}
-      <CanvasDefaultList 
-        ref={ref} 
-        // scrollToElement={scrollToElement} 
-      />
-      
       <HomepageContentContainer>
         <ViewHeightWrapper>
           

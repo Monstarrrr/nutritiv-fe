@@ -100,7 +100,7 @@ export const ShapesSection = forwardRef((props, ref) => {
               >
                 {shape}
               </span>
-              {focusedShape === shape ? (
+              {/* {focusedShape === shape ? (
                 <motion.div
                   style={{
                     background: tokens.color.primaryTransparent,
@@ -137,7 +137,7 @@ export const ShapesSection = forwardRef((props, ref) => {
                   }}
                   layoutId="shape-select"
                 />) : null
-              }
+              } */}
             </li>
           ))}
         </ul>

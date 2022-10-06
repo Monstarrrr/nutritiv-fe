@@ -13,8 +13,7 @@
   {
     "view": "gummy-pi",
     "supermentName": "gummy-pi",
-    "type": "gummy",
-    "homepageCard": true
+    "type": "gummy"
   },
   {
     "view": "capsule-water",

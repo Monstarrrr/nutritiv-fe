@@ -371,8 +371,8 @@ function App() {
                 }
                 className="canvas"
               >
-                {viewsList.map((view, i) => (
-                  <View key={i} track={Object.values(view)[0]}>
+                {/* {viewsList.map((view, i) => (
+                  <View key={i} track={Object.values(view)[0]} update={location}>
                     <Scene
                       type={view.type}
                       homepageCard={view.homepageCard}
@@ -395,9 +395,9 @@ function App() {
                       ref={orbitControlsRef}
                     />
                   </View>
-                ))}
+                ))} */}
                
-                {/* <View track={gummyPiView}>
+                <View track={gummyPiViewHomepage} update={location}>
                   <Scene
                     type="gummy"
                   />
@@ -418,7 +418,7 @@ function App() {
                     makeDefault
                     ref={orbitControlsRef}
                   />
-                </View> */}
+                </View>
                 <Preload all />
               </Canvas>
             </Suspense>
