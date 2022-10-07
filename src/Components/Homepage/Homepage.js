@@ -9,6 +9,7 @@ import { osName, isIOS } from "react-device-detect";
 import { ShapesSection } from './ShapesSection';
 import { IcebergSection } from './IcebergSection';
 import { ArrowSection } from './ArrowSection';
+import { CategoriesSection } from './CategoriesSection';
 
 const HomepageContentContainer = styled.div`
   margin: 0 auto;
@@ -117,13 +118,19 @@ const Homepage = forwardRef((props, ref) => {
         <ViewHeightWrapper>
           
           {/* NUTRITIV */}
-          <IcebergSection ref={icebergSectionRefs} setIcebergShadow={setIcebergShadow} />
+          <IcebergSection 
+            ref={icebergSectionRefs} 
+            setIcebergShadow={setIcebergShadow}
+            />
           
           {/* EXPLANATION */}
           <ArrowSection ref={arrowSectionRefs}/>
           
           {/* SHAPES */}
-          <ShapesSection ref={shapesSectionRefs} />
+          <ShapesSection ref={shapesSectionRefs}/>
+
+          {/* CATEGORIES */}
+          <CategoriesSection />
 
         </ViewHeightWrapper>
       </HomepageContentContainer>

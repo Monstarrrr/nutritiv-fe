@@ -7,11 +7,6 @@ import { tokens } from '../../Helpers/styleTokens';
 import { Icon } from '../Icons/Icon';
 import { NutriButton } from '../NutriButton';
 
-const SectionTitle = styled.h2`
-  text-transform: uppercase;
-  letter-spacing: 4px;
-  font-size: 72px;
-`
 const SectionContent = styled.div``
 const Card = styled.div``
 const CardContent = styled.div``
@@ -32,7 +27,13 @@ const gummiesStats = [
 ]
 const shapes = ['Capsule', 'Gummy'];
 
-export const ShapesSection = forwardRef((props, ref) => {
+const SectionTitle = styled.h2`
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  font-size: 72px;
+`
+
+export const ShapesSection = forwardRef(({props}, ref) => {
   const [focusedShape, setFocusedShape] = useState(null);
   const [selectedShape, setSelectedShape] = useState(shapes[0]);
   
@@ -55,11 +56,11 @@ export const ShapesSection = forwardRef((props, ref) => {
         <ul
           css={css`
             align-items: center;
+            background: ${tokens.color.accentWeak};
             border-radius: ${tokens.borderRadius.lg};
             box-shadow: 0px 0px 10px 1px ${tokens.color.contrastDark};
             display: flex;
             padding: 4px;
-            background: ${tokens.color.accentWeak};
             width: fit-content;
           `}
         >
