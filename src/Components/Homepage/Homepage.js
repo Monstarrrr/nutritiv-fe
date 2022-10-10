@@ -11,6 +11,7 @@ import { IcebergSection } from './IcebergSection';
 import { ArrowSection } from './ArrowSection';
 import { CategoriesSection } from './CategoriesSection';
 import { ReviewsSection } from './ReviewsSection';
+import { ContactSection } from './ContactSection';
 
 const HomepageContentContainer = styled.div`
   margin: 0 auto;
@@ -53,7 +54,7 @@ const ImageContainer = styled.div`
 export const SectionTitle = styled.h2`
   text-transform: uppercase;
   letter-spacing: 4px;
-  font-size: 72px;
+  font-size: 68px;
 `
 
 const ViewHeightWrapper = styled.div``
@@ -141,6 +142,9 @@ const Homepage = forwardRef((props, ref) => {
 
           {/* REVIEWS */}
           <ReviewsSection />
+
+          {/* CONTACT */}
+          <ContactSection />
 
         </ViewHeightWrapper>
       </HomepageContentContainer>
