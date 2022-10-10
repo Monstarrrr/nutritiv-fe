@@ -181,7 +181,7 @@ const PagesWrapper = forwardRef(({ minimized }, ref) => {
       onClick={() => handleMobileNavMenu()}
       variants={pagesVariants}
     >
-      <Navbar />
+      <Navbar /> 
       <CanvasDefaultList ref={ref} />
       <Outlet />
       <Footer />

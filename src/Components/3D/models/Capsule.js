@@ -3,9 +3,12 @@ import { Sparkles, Stats, useGLTF } from '@react-three/drei'
 import angleToRadians from '../../../Helpers/angleToRadians'
 import { useFrame } from '@react-three/fiber'
 
-export default function Model({ ...props }) {
+const s3Address = process.env.REACT_APP_S3_ADDRESS;
+
+export default function Model({ _ }) { // temp
   const modelRef = useRef(0);
-  const { nodes, materials } = useGLTF('/model-pill-water.glb')
+  const supermentName = "capsule-water"; // temp
+  const { nodes, materials } = useGLTF(`${s3Address}assets/${supermentName}.glb`)
   
   // useFrame(() => {
   //   modelRef.current.rotation.y += 0.01
@@ -17,7 +20,6 @@ export default function Model({ ...props }) {
         dispose={null}
         rotation={[angleToRadians(30), 0, 0]}
         scale={12}
-        {...props}
       >
         <group scale={0.1} position={[0.002,0,0.004]}>
           <mesh castShadow geometry={nodes.Sphere.geometry} material={materials['lambert2.003']}    position={[-0.1, 0.2, 0.1]}                                   scale={0.06} />

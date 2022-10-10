@@ -7,7 +7,7 @@ const isOrthographicCamera = (def) =>
   def && def.isOrthographicCamera
 const col = new THREE.Color()
 
-function Container({ canvasSize, scene, index, children, frames, rect, track }) {
+function Container({ canvasSize, scene, index, children, frames, rect, track, update }) {
   const get = useThree((state) => state.get)
   const camera = useThree((state) => state.camera)
   const virtualScene = useThree((state) => state.scene)
@@ -69,12 +69,12 @@ function Container({ canvasSize, scene, index, children, frames, rect, track }) 
     const old = get().events.connected
     setEvents({ connected: track.current })
     return () => setEvents({ connected: old })
-  }, [])
+  }, [update])
 
   return <>{children}</>
 }
 
-export const View = ({ track, index = 1, frames = Infinity, children }) => {
+export const View = ({ track, index = 1, frames = Infinity, children, update }) => {
   const rect = React.useRef(null)
   const { size, scene } = useThree()
   const [virtualScene] = React.useState(() => new THREE.Scene())
@@ -103,7 +103,7 @@ export const View = ({ track, index = 1, frames = Infinity, children }) => {
   return (
     ready &&
     createPortal(
-      <Container canvasSize={size} frames={frames} scene={scene} track={track} rect={rect} index={index}>
+      <Container canvasSize={size} frames={frames} scene={scene} track={track} rect={rect} index={index} update={update}>
         {children}
       </Container>,
       virtualScene,
