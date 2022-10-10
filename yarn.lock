@@ -1837,7 +1837,7 @@
     "suspend-react" "^0.0.8"
     "zustand" "^3.7.1"
 
-"@reduxjs/toolkit@^1.7.1":
+"@reduxjs/toolkit@^1.8.0":
   "integrity" "sha512-cdfHWfcvLyhBUDicoFwG1u32JqvwKDxLxDd7zSmSoFw/RhYLOygIRtmaMjPRUUHmVmmAGAvquLLsKKU/677kSQ=="
   "resolved" "https://registry.npmjs.org/@reduxjs/toolkit/-/toolkit-1.8.0.tgz"
   "version" "1.8.0"
