@@ -6,6 +6,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { NutriButton } from '../NutriButton';
 import { useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
+import { SectionTitle } from './Homepage';
 
 const categories = [
   {
@@ -29,18 +30,18 @@ const categories = [
     description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip."
   },
 ]
-const SectionTitle = styled.h2`
-  text-transform: uppercase;
-  letter-spacing: 4px;
-  font-size: 72px;
-`
 
 export const CategoriesSection = () => {
   const navigate = useNavigate();
   const [hovered, setHovered] = useState("")
   
   return (
-    <div css={css`display: flex; flex-direction: column`}>
+    <div 
+      css={css`
+        display: flex; 
+        flex-direction: column;
+      `}
+    >
       <SectionTitle>
           Categories
       </SectionTitle>

@@ -6,6 +6,7 @@ import styled from '@emotion/styled';
 import { tokens } from '../../Helpers/styleTokens';
 import { Icon } from '../Icons/Icon';
 import { NutriButton } from '../NutriButton';
+import { SectionTitle } from './Homepage';
 
 const SectionContent = styled.div``
 const Card = styled.div``
@@ -27,12 +28,6 @@ const gummiesStats = [
 ]
 const shapes = ['Capsule', 'Gummy'];
 
-const SectionTitle = styled.h2`
-  text-transform: uppercase;
-  letter-spacing: 4px;
-  font-size: 72px;
-`
-
 export const ShapesSection = forwardRef(({props}, ref) => {
   const [focusedShape, setFocusedShape] = useState(null);
   const [selectedShape, setSelectedShape] = useState(shapes[0]);
@@ -44,8 +39,7 @@ export const ShapesSection = forwardRef(({props}, ref) => {
         display: flex;
         flex-direction: column;
         padding-right: 6px;
-        margin-bottom: 600px; // temp
-        margin-top: calc(40vh - 7vw);
+        margin-bottom: 300px; // temp
       `}
     >
       <SectionTitle>
