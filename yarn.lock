@@ -1623,7 +1623,7 @@
     "prop-types" "^15.7.2"
     "react-is" "^17.0.2"
 
-"@mui/material@^5.4.4":
+"@mui/material@^5.4.3":
   "integrity" "sha512-VDJC7GzO1HTFqfMe2zwvaW/sRhABBJXFkKEv5gO3uXx7x9fdwJHQr4udU7NWZCUdOcx9Y0h3BsAILLefYq+WPw=="
   "resolved" "https://registry.npmjs.org/@mui/material/-/material-5.4.4.tgz"
   "version" "5.4.4"
