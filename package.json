@@ -8,7 +8,7 @@
     "@mui/material": "^5.4.4",
     "@react-three/drei": "^9.30.1",
     "@react-three/fiber": "^8.7.3",
-    "@reduxjs/toolkit": "^1.7.1",
+    "@reduxjs/toolkit": "^1.8.0",
     "@stripe/react-stripe-js": "^1.7.0",
     "@stripe/stripe-js": "^1.22.0",
     "@testing-library/jest-dom": "^5.11.4",
