@@ -80,7 +80,7 @@ export const ArrowSection = forwardRef((props, ref) => {
           `}
         >
           <Icon
-            name="arrow-down"
+            name="arrowDown"
             color={tokens.color.contrastLight}
             resizeDefault="0 0 25 25"
             strokeWidth={2}
