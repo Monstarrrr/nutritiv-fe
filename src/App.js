@@ -397,7 +397,7 @@ function App() {
                   </View>
                 ))} */}
                
-                <View track={gummyPiViewHomepage} update={location}>
+                {/* <View track={gummyPiViewHomepage} update={location}>
                   <Scene
                     type="gummy"
                   />
@@ -418,7 +418,7 @@ function App() {
                     makeDefault
                     ref={orbitControlsRef}
                   />
-                </View>
+                </View> */}
                 <View track={capsuleWaterViewHomepage} update={location}>
                   <Scene
                     type="capsule"
