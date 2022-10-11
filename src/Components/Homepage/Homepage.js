@@ -10,6 +10,8 @@ import { ShapesSection } from './ShapesSection';
 import { IcebergSection } from './IcebergSection';
 import { ArrowSection } from './ArrowSection';
 import { CategoriesSection } from './CategoriesSection';
+import { ReviewsSection } from './ReviewsSection';
+import { ContactSection } from './ContactSection';
 
 const HomepageContentContainer = styled.div`
   margin: 0 auto;
@@ -47,6 +49,12 @@ const ImageContainer = styled.div`
     left: ["-45%", "-40%", "-10%", "0",],
     right: ["-45%", "-40%", "-10%", "0",]
   })}
+`
+
+export const SectionTitle = styled.h2`
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  font-size: 68px;
 `
 
 const ViewHeightWrapper = styled.div``
@@ -119,9 +127,9 @@ const Homepage = forwardRef((props, ref) => {
           
           {/* NUTRITIV */}
           <IcebergSection 
-            ref={icebergSectionRefs} 
+            ref={icebergSectionRefs}
             setIcebergShadow={setIcebergShadow}
-            />
+          />
           
           {/* EXPLANATION */}
           <ArrowSection ref={arrowSectionRefs}/>
@@ -129,8 +137,23 @@ const Homepage = forwardRef((props, ref) => {
           {/* SHAPES */}
           <ShapesSection ref={shapesSectionRefs}/>
 
+          <div
+            ref={ref.capsuleWaterViewHomepage}
+            style={{ 
+              display: "inline-block", 
+              height: "300px", 
+              width: "270px"
+            }}
+          />
+
           {/* CATEGORIES */}
           <CategoriesSection />
+
+          {/* REVIEWS */}
+          <ReviewsSection />
+
+          {/* CONTACT */}
+          <ContactSection />
 
         </ViewHeightWrapper>
       </HomepageContentContainer>

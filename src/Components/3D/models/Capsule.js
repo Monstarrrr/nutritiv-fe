@@ -5,14 +5,18 @@ import { useFrame } from '@react-three/fiber'
 
 const s3Address = process.env.REACT_APP_S3_ADDRESS;
 
+const supermentName = "capsule-water"; // temp
+
 export default function Model({ _ }) { // temp
   const modelRef = useRef(0);
-  const supermentName = "capsule-water"; // temp
+  // const supermentName = "capsule-water"; // temp
   const { nodes, materials } = useGLTF(`${s3Address}assets/${supermentName}.glb`)
   
   // useFrame(() => {
   //   modelRef.current.rotation.y += 0.01
   // })
+
+  console.log('# nodes :', nodes);
   
   return (
     <group ref={modelRef}>
@@ -44,4 +48,4 @@ export default function Model({ _ }) { // temp
   )
 }
 
-useGLTF.preload('/model-pill-water.glb')
+useGLTF.preload(`${s3Address}assets/${supermentName}.glb`)

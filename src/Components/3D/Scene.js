@@ -40,6 +40,8 @@ export const Scene = forwardRef(({ type, supermentName, homepageCard }, ref) => 
     //   ref.current.update();
     // }
   })
+
+  console.log('# type :', type)
   
   return (
     <Suspense fallback={null}>

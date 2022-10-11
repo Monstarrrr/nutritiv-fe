@@ -419,6 +419,30 @@ function App() {
                     ref={orbitControlsRef}
                   />
                 </View>
+                <View track={capsuleWaterViewHomepage} update={location}>
+                  <Scene
+                    type="capsule"
+                    homepageCard
+                    supermentName={"capsule-water"}
+                  />
+                  <PerspectiveCamera 
+                    makeDefault 
+                    fov={40}
+                    position={[9, 1, 0]} // temp 
+                  />
+                  <OrbitControls
+                    autoRotate
+                    autoRotateSpeed={2}
+                    enablePan={false}
+                    enableZoom
+                    minDistance={7}
+                    maxDistance={7}
+                    minPolarAngle={angleToRadians(70)}
+                    maxPolarAngle={angleToRadians(100)}
+                    makeDefault
+                    ref={orbitControlsRef}
+                  />
+                </View>
                 <Preload all />
               </Canvas>
             </Suspense>
