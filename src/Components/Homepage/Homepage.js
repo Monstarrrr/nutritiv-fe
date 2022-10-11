@@ -137,6 +137,15 @@ const Homepage = forwardRef((props, ref) => {
           {/* SHAPES */}
           <ShapesSection ref={shapesSectionRefs}/>
 
+          <div
+            ref={ref.capsuleWaterViewHomepage}
+            style={{ 
+              display: "inline-block", 
+              height: "300px", 
+              width: "270px"
+            }}
+          />
+
           {/* CATEGORIES */}
           <CategoriesSection />
 

@@ -217,14 +217,14 @@ export const ShapesSection = forwardRef(({props}, ref) => {
                   width: "270px"
                 }}
               />
-              {/* <div
+              <div
                 ref={ref.capsuleWaterViewHomepage}
                 style={{ 
                   display: "inline-block", 
                   height: "300px", 
                   width: "270px"
                 }}
-              /> */}
+              />
             </div>
           </CardSuperment>
           
