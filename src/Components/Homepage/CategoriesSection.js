@@ -48,31 +48,35 @@ const lastBorders = css`
 const HoveredCard = styled(motion.div)`
   align-items: center;
   background: ${tokens.color.primary};
-  border-radius: 25px; // temp
+  border-radius: 20px; // temp
   cursor: pointer;
   display: flex;
   flex-direction: column;
   inset: 0;
   justify-content: center;
+  overflow: hidden;
   position: absolute;
 `
 const HoveredIconContainer = styled.div`
   align-items: center;
+  background: linear-gradient(198deg, rgb(0, 66, 204) 0%, rgb(16, 228, 183) 100%);
+  clip-path: ${props => props.iconName && `url(#svg-path-${props.iconName})`};
   display: flex;
   justify-content: center;
-  height: 100%;
+  height: 230%;
+  inset: 0;
   overflow: hidden;
   position: absolute;
-  inset: 0;
+  left: -226px;
+  top: -94px;
+  transform: rotate(25deg);
+  width: 230%;
   z-index: 0;
   ${props => props.first && firstBorders}
   ${props => props.last && lastBorders}
   
-  background: green;
-  clip-path: url(#svg-path-armor);
-  width: 100%;
   path {
-    transform: rotate(25deg);
+    transform: scale(5.8);
   }
 `
 
@@ -141,15 +145,17 @@ export const CategoriesSection = () => {
                   <HoveredIconContainer
                     last={i === (categories.length - 1) ? 1 : undefined}
                     first={i === 0 ? 1 : undefined}
+                    iconName={category.name}
                   >
                     <Icon
                       name={category.icon}
                       color={tokens.color.accentWeak}
                       filled
-                      style={{
-                        transform: "rotate(25deg)",
-                        position: "absolute"
-                      }}
+                      isClipPath
+                      // style={{
+                      //   transform: "rotate(25deg)",
+                      //   position: "absolute"
+                      // }}
                       height={600}
                       width={600}
                     />
