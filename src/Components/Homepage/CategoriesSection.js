@@ -67,6 +67,13 @@ const HoveredIconContainer = styled.div`
   z-index: 0;
   ${props => props.first && firstBorders}
   ${props => props.last && lastBorders}
+  
+  background: green;
+  clip-path: url(#svg-path-armor);
+  width: 100%;
+  path {
+    transform: rotate(25deg);
+  }
 `
 
 export const CategoriesSection = () => {
@@ -85,7 +92,7 @@ export const CategoriesSection = () => {
       `}
     >
       <SectionTitle>
-          Categories test
+          Categories
       </SectionTitle>
       <div
         css={css`
@@ -134,7 +141,6 @@ export const CategoriesSection = () => {
                   <HoveredIconContainer
                     last={i === (categories.length - 1) ? 1 : undefined}
                     first={i === 0 ? 1 : undefined}
-
                   >
                     <Icon
                       name={category.icon}
@@ -149,6 +155,7 @@ export const CategoriesSection = () => {
                     />
                   </HoveredIconContainer>
                   <p css={css`
+                    color: ${tokens.color.accentStrong};
                     font-size: ${tokens.font.fontSize.lg};
                     font-weight: ${tokens.font.fontWeight.medium};
                     letter-spacing: 2px;
