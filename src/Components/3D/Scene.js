@@ -80,11 +80,11 @@ export const Scene = forwardRef(({ type, supermentName, homepageCard }, ref) => 
       
       {/* MODEL */}
       {
-        // type === "gummy" ? (
-        //   <GummyModel forwardRef={modelRotation} supermentName={supermentName} /> 
-        // ) : (
+        type === "gummy" ? (
+          <GummyModel forwardRef={modelRotation} supermentName={supermentName} /> 
+        ) : (
           <CapsuleModel forwardRef={modelRotation} supermentName={supermentName} />
-        // )
+        )
       }
       
       <Environment
