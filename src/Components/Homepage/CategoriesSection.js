@@ -145,7 +145,7 @@ export const CategoriesSection = () => {
                   <HoveredIconContainer
                     last={i === (categories.length - 1) ? 1 : undefined}
                     first={i === 0 ? 1 : undefined}
-                    iconName={category.name}
+                    iconName={category.icon}
                   >
                     <Icon
                       name={category.icon}

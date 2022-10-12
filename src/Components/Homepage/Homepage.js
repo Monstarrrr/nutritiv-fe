@@ -110,7 +110,7 @@ const Homepage = forwardRef((props, ref) => {
       duration: 0.2,
     }
   }
-
+  
   useEffect(() => {
     const hash = location.hash
     // Check if there is a hash and if an element with that id exists
@@ -136,15 +136,6 @@ const Homepage = forwardRef((props, ref) => {
           
           {/* SHAPES */}
           <ShapesSection ref={shapesSectionRefs}/>
-
-          <div
-            ref={ref.capsuleWaterViewHomepage}
-            style={{ 
-              display: "inline-block", 
-              height: "300px", 
-              width: "270px"
-            }}
-          />
 
           {/* CATEGORIES */}
           <CategoriesSection />
