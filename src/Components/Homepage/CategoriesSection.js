@@ -85,7 +85,7 @@ export const CategoriesSection = () => {
       `}
     >
       <SectionTitle>
-          Categories
+          Categories test
       </SectionTitle>
       <div
         css={css`
