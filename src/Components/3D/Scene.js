@@ -41,7 +41,7 @@ export const Scene = forwardRef(({ type, supermentName, homepageCard }, ref) => 
     // }
   })
 
-  console.log('# type :', type)
+  console.log('# pointLightRef :', pointLightRef)
   
   return (
     <Suspense fallback={null}>
@@ -80,11 +80,11 @@ export const Scene = forwardRef(({ type, supermentName, homepageCard }, ref) => 
       
       {/* MODEL */}
       {
-        // type === "gummy" ? (
-        //   <GummyModel forwardRef={modelRotation} supermentName={supermentName} /> 
-        // ) : (
+        type === "gummy" ? (
+          <GummyModel forwardRef={modelRotation} supermentName={supermentName} /> 
+        ) : (
           <CapsuleModel forwardRef={modelRotation} supermentName={supermentName} />
-        // )
+        )
       }
       
       <Environment
