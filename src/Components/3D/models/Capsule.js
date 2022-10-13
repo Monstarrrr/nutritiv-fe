@@ -15,8 +15,6 @@ export default function Model({ _ }) { // temp
   // useFrame(() => {
   //   modelRef.current.rotation.y += 0.01
   // })
-
-  console.log('# nodes :', nodes);
   
   return (
     <group ref={modelRef}>
