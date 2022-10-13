@@ -57,9 +57,10 @@ const HoveredCard = styled(motion.div)`
   overflow: hidden;
   position: absolute;
 `
-const HoveredIconContainer = styled.div`
+const HoveredIconContainer = styled(motion.div)`
   align-items: center;
-  background: linear-gradient(198deg, rgb(0, 66, 204) 0%, rgb(16, 228, 183) 100%);
+  background: linear-gradient(0deg, ${tokens.color.accentWeak} 20%, rgb(16, 228, 183) 50%, ${tokens.color.accentWeak} 90%);
+  background-size: 400% 400%;
   clip-path: ${props => props.iconName && `url(#svg-path-${props.iconName})`};
   display: flex;
   justify-content: center;
@@ -112,7 +113,7 @@ export const CategoriesSection = () => {
         {categories.map((category, i) => (
           <motion.div
             onMouseEnter={() => setHoveredCategory(category.title)}
-            // onMouseLeave={() => setHovered("")}
+            onMouseLeave={() => setHoveredCategory("")}
             onClick={() => navigate("/shop")}
             key={category.title}
             variants={variants}
@@ -146,6 +147,17 @@ export const CategoriesSection = () => {
                     last={i === (categories.length - 1) ? 1 : undefined}
                     first={i === 0 ? 1 : undefined}
                     iconName={category.icon}
+                    animate={{
+                      backgroundPosition: [
+                        "0% 0%", 
+                        "0% 100%"
+                      ]
+                    }}
+                    transition={{
+                      duration: 1,
+                      ease: "easeInOut",
+                      repeatDelay: 1
+                    }}
                   >
                     <Icon
                       name={category.icon}
@@ -161,7 +173,7 @@ export const CategoriesSection = () => {
                     />
                   </HoveredIconContainer>
                   <p css={css`
-                    color: ${tokens.color.accentStrong};
+                    color: ${tokens.color.contrastLight};
                     font-size: ${tokens.font.fontSize.lg};
                     font-weight: ${tokens.font.fontWeight.medium};
                     letter-spacing: 2px;
