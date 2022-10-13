@@ -113,7 +113,7 @@ export const CategoriesSection = () => {
         {categories.map((category, i) => (
           <motion.div
             onMouseEnter={() => setHoveredCategory(category.title)}
-            // onMouseLeave={() => setHoveredCategory("")}
+            onMouseLeave={() => setHoveredCategory("")}
             onClick={() => navigate("/shop")}
             key={category.title}
             variants={variants}
