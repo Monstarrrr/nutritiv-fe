@@ -126,7 +126,7 @@ export const Scene = forwardRef(({ type, supermentName, homepageCard }, ref) => 
       /> */}
       
       <pointLight 
-        intensity={1}
+        intensity={20}
         position={[0,0,0]}
         ref={pointLightRef}
       />

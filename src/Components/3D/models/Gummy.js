@@ -7,7 +7,7 @@ export default function Model({ _ }) {
   const group = useRef()
   // const supermentName = "gummy-pi"
   // const { nodes, materials } = useGLTF(`${s3Address}assets/${supermentName}.glb`)
-  const { nodes, materials } = useGLTF(`/gummy-pi.glb`)
+  const { nodes, materials } = useGLTF(`gummy-pi.glb`)
   
   return (
     <group scale={0.45} ref={group} dispose={null}>
