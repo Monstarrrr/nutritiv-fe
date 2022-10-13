@@ -40,7 +40,7 @@ export const Scene = forwardRef(({ type, supermentName, homepageCard }, ref) => 
     //   ref.current.update();
     // }
   })
-
+  
   console.log('# pointLightRef :', pointLightRef)
   
   return (
@@ -79,13 +79,13 @@ export const Scene = forwardRef(({ type, supermentName, homepageCard }, ref) => 
       /> */}
       
       {/* MODEL */}
-      {
+      {/* {
         type === "gummy" ? (
           <GummyModel forwardRef={modelRotation} supermentName={supermentName} /> 
-        ) : (
+        ) : ( */}
           <CapsuleModel forwardRef={modelRotation} supermentName={supermentName} />
-        )
-      }
+        {/* )
+      } */}
       
       <Environment
         background={false}

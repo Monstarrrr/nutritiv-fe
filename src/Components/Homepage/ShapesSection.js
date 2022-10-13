@@ -209,14 +209,14 @@ export const ShapesSection = forwardRef(({props}, ref) => {
                   homepageCard
                 />
               </Canvas> */}
-              <div
+              {/* <div
                 ref={ref.gummyPiViewHomepage}
                 style={{ 
                   display: "inline-block", 
                   height: "300px", 
                   width: "270px"
                 }}
-              />
+              /> */}
               <div
                 ref={ref.capsuleWaterViewHomepage}
                 style={{ 
