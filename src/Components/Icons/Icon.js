@@ -32,10 +32,10 @@ const defaultViewBoxes = [
     wave:         [{default: "0 0 100 100"}, {filled: "0 0 100 100"}],
     beaker:       [{default: "0 0 24 24"}, {filled: "0 0 24 24"}],
     star:         [{default: "0 0 24 24"}, {filled: "0 0 24 24"}],
-    brain:        [{default: "0 0"}, {filled: "0 0"}],
-    arrowsUp:     [{default: "0 0"}, {filled: "0 0"}],
-    armor:        [{default: "0 0"}, {filled: "0 0"}],
-    plusSign:     [{default: "0 0"}, {filled: "0 0"}],
+    brain:        [{default: "0 0 200 200"}, {filled: "0 0 200 200"}],
+    arrowsUp:     [{default: "0 0 200 200"}, {filled: "0 0 200 200"}],
+    armor:        [{default: "0 0 200 200"}, {filled: "0 0 200 200"}],
+    plusSign:     [{default: "0 0 200 200"}, {filled: "0 0 200 200"}],
   },
 ]
 
