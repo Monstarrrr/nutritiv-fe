@@ -24,6 +24,7 @@ const config = {
   accentColorTransparent: "rgba(21, 241, 255, 0.4)",
   
   lightContrastColor: "#F2F2F2",
+  lightContrastColorWeak: "#bbbbbb",
   darkContrastColor: "#0e1014",
   lightTransparentColor: `rgba(255, 255, 255, 0.1)`,
   semiLightTransparentColor: `rgba(255, 255, 255, 0.2)`,
@@ -75,6 +76,7 @@ export const tokens = {
     accentTransparent: `${config.accentColorTransparent}`,
     
     contrastLight: `${config.lightContrastColor}`,
+    contrastLightWeak: `${config.lightContrastColorWeak}`,
     contrastDark: `${config.darkContrastColor}`,
     transparentLight: `${config.lightTransparentColor}`,
     semiTransparentLight: `${config.semiLightTransparentColor}`,

@@ -13,22 +13,22 @@ const categories = [
   {
     icon: "brain",
     title: "Mental",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip."
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip. Quis nostrud exercitation ullamco"
   },
   {
     icon: "arrowsUp",
     title: "Growth",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip."
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip. Quis nostrud exercitation ullamco"
   },
   {
     icon: "armor",
     title: "Resistance",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip."
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip. Quis nostrud exercitation ullamco"
   },
   {
     icon: "plusSign",
     title: "Unique",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip."
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip. Quis nostrud exercitation ullamco"
   },
 ]
 
@@ -68,8 +68,8 @@ const HoveredIconContainer = styled(motion.div)`
   inset: 0;
   overflow: hidden;
   position: absolute;
-  left: -226px;
-  top: -94px;
+  left: -259px;
+  top: -217px;
   transform: rotate(25deg);
   width: 230%;
   z-index: 0;
@@ -77,7 +77,7 @@ const HoveredIconContainer = styled(motion.div)`
   ${props => props.last && lastBorders}
   
   path {
-    transform: scale(5.8);
+    transform: scale(3.75);
   }
 `
 
@@ -104,7 +104,7 @@ export const CategoriesSection = () => {
           background: ${tokens.color.accentWeak};
           border-radius: ${tokens.borderRadius.max};
           display: flex;
-          height: 412px;
+          height: 390px;
           margin: ${tokens.spacing.lg} auto;
           margin-bottom: 300px; // temp
           width: 1100px;
@@ -113,7 +113,7 @@ export const CategoriesSection = () => {
         {categories.map((category, i) => (
           <motion.div
             onMouseEnter={() => setHoveredCategory(category.title)}
-            onMouseLeave={() => setHoveredCategory("")}
+            // onMouseLeave={() => setHoveredCategory("")}
             onClick={() => navigate("/shop")}
             key={category.title}
             variants={variants}
@@ -188,16 +188,25 @@ export const CategoriesSection = () => {
               name={category.icon}
               color={tokens.color.accentStrong}
               filled
-              height={100}
-              width={100}
+              height={200}
+              width={200}
             />
             <h4 css={css`
+              background: ${tokens.color.primary};
+              font-size: ${tokens.font.fontSize.lg};
               font-weight: ${tokens.font.fontWeight.medium};
+              margin-top: -26px;
+              margin-bottom: 16px;
               text-transform: uppercase;
             `}>
               {category.title}
             </h4>
-            <p>
+            <p
+              css={css`
+                color: ${tokens.color.contrastLightWeak};
+                font-size: ${tokens.font.fontSize.sm};
+              `}
+            >
               {category.description}
             </p>
           </motion.div>
