@@ -26,7 +26,7 @@ export const Scene = forwardRef(({ type, supermentName, homepageCard }, ref) => 
   // useHelper(spotLightRef1, THREE.SpotLightHelper, 'cyan')
   // useHelper(spotLightRef2, THREE.SpotLightHelper, 'pink')
   // useHelper(spotLightRef3, THREE.SpotLightHelper, 'white')
-  // useHelper(pointLightRef, THREE.PointLightHelper, 'red')
+  useHelper(pointLightRef, THREE.PointLightHelper, 'red')
   
   // On every frame change
   useFrame(state => {
@@ -40,7 +40,7 @@ export const Scene = forwardRef(({ type, supermentName, homepageCard }, ref) => 
     //   ref.current.update();
     // }
   })
-
+  
   console.log('# pointLightRef :', pointLightRef)
   
   return (
@@ -126,7 +126,7 @@ export const Scene = forwardRef(({ type, supermentName, homepageCard }, ref) => 
       /> */}
       
       <pointLight 
-        intensity={20}
+        intensity={1}
         position={[0,0,0]}
         ref={pointLightRef}
       />
