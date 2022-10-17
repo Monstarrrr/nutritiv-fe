@@ -46,7 +46,6 @@ const stripePromise = loadStripe(
 
 function App() {
   // 3D
-  console.log("window", window.__THREE__)
   const orbitControlsRef = useRef();
   const [
     canvasWrapperRef, 

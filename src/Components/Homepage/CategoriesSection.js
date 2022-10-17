@@ -59,9 +59,9 @@ const HoveredCard = styled(motion.div)`
 `
 const HoveredIconContainer = styled(motion.div)`
   align-items: center;
-  background: linear-gradient(0deg, ${tokens.color.accentWeak} 20%, rgb(16, 228, 183) 50%, ${tokens.color.accentWeak} 90%);
-  background-size: 400% 400%;
-  clip-path: ${props => props.iconName && `url(#svg-path-${props.iconName})`};
+  background: linear-gradient(0deg, ${tokens.color.accentWeak} 43%, rgb(16, 228, 183) 50%, ${tokens.color.accentWeak} 57%);
+  background-size: 250% 250%;
+  clip-path: ${props => props.iconname && `url(#svg-path-${props.iconname})`};
   display: flex;
   justify-content: center;
   height: 230%;
@@ -146,17 +146,16 @@ export const CategoriesSection = () => {
                   <HoveredIconContainer
                     last={i === (categories.length - 1) ? 1 : undefined}
                     first={i === 0 ? 1 : undefined}
-                    iconName={category.icon}
+                    iconname={category.icon}
                     animate={{
                       backgroundPosition: [
-                        "0% 0%", 
+                        "0% 10%", 
                         "0% 100%"
                       ]
                     }}
                     transition={{
-                      duration: 1,
-                      ease: "easeInOut",
-                      repeatDelay: 1
+                      duration: 0.85,
+                      ease: "linear",
                     }}
                   >
                     <Icon
@@ -164,10 +163,6 @@ export const CategoriesSection = () => {
                       color={tokens.color.accentWeak}
                       filled
                       isClipPath
-                      // style={{
-                      //   transform: "rotate(25deg)",
-                      //   position: "absolute"
-                      // }}
                       height={600}
                       width={600}
                     />

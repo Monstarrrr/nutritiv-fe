@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import axios from 'axios';
 import React, { 
+  forwardRef,
   useCallback,
   useEffect,
   useRef,
@@ -13,8 +14,8 @@ import { updateUser, updateUserCartQuantity } from '../../Redux/reducers/user';
 import { OAuth } from './OAuth';
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 
-export default function LoginPage() {
-
+const LoginPage = forwardRef((props, ref) => {
+  
   const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
@@ -312,4 +313,6 @@ export default function LoginPage() {
       }
     </div>
   )
-}
+})
+
+export default LoginPage;

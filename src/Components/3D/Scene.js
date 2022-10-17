@@ -41,8 +41,6 @@ export const Scene = forwardRef(({ type, supermentName, homepageCard }, ref) => 
     // }
   })
   
-  console.log('# pointLightRef :', pointLightRef)
-  
   return (
     <Suspense fallback={null}>
       

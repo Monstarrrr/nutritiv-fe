@@ -8,7 +8,7 @@ export default function Model({ _ }) {
   // const supermentName = "gummy-pi"
   // const { nodes, materials } = useGLTF(`${s3Address}assets/${supermentName}.glb`)
   const { nodes, materials } = useGLTF(`gummy-pi.glb`)
-
+  
   console.log('# nodes :', nodes)
   console.log('# materials :', materials)
   

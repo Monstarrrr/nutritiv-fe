@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { forwardRef, useState } from 'react';
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 import { useNavigate } from 'react-router-dom';
 import nutritivApi from '../../Api/nutritivApi';
 import { OAuth } from './OAuth';
 
-export default function RegisterPage() {
+const RegisterPage = forwardRef((props, ref) => {
   const { executeRecaptcha } = useGoogleReCaptcha();
   const [registerData, setRegisterData] = useState({
     username: "",
@@ -172,4 +172,6 @@ export default function RegisterPage() {
       <OAuth provider="github"/>
     </div>
   )
-}
+})
+
+export default RegisterPage;
