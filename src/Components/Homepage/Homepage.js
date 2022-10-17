@@ -12,10 +12,11 @@ import { ArrowSection } from './ArrowSection';
 import { CategoriesSection } from './CategoriesSection';
 import { ReviewsSection } from './ReviewsSection';
 import { ContactSection } from './ContactSection';
+import { MachineSection } from './MachineSection';
 
 const HomepageContentContainer = styled.div`
   margin: 0 auto;
-  max-width: ${tokens.maxWidth.xl};
+  max-width: none;
   min-height: calc(100vh - ${tokens.navHeight.lg}); // temp
   overflow: auto;
   overflow-x: hidden;
@@ -23,6 +24,14 @@ const HomepageContentContainer = styled.div`
   position: relative;
   text-align: center;
   z-index: 1;
+`
+const ViewHeightWrapper = styled.div`
+  margin: 0 auto;
+  max-width: none;
+  > div {
+    margin-left: auto;
+    margin-right: auto;
+  }
 `
 const VideoContainer = styled.div`
   position: absolute;
@@ -56,8 +65,6 @@ export const SectionTitle = styled.h2`
   letter-spacing: 4px;
   font-size: 68px;
 `
-
-const ViewHeightWrapper = styled.div``
 
 const Video = styled(motion.video)`
   height: 100%;
@@ -139,6 +146,9 @@ const Homepage = forwardRef((props, ref) => {
 
           {/* CATEGORIES */}
           <CategoriesSection />
+
+          {/* MACHINE */}
+          <MachineSection />
 
           {/* REVIEWS */}
           <ReviewsSection />

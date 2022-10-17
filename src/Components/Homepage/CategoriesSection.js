@@ -59,7 +59,7 @@ const HoveredCard = styled(motion.div)`
 `
 const HoveredIconContainer = styled(motion.div)`
   align-items: center;
-  background: linear-gradient(0deg, ${tokens.color.accentWeak} 43%, rgb(16, 228, 183) 50%, ${tokens.color.accentWeak} 57%);
+  background: linear-gradient(0deg, ${tokens.color.accentWeak} 43%, ${tokens.color.accentStrong} 50%, ${tokens.color.accentWeak} 57%);
   background-size: 250% 250%;
   clip-path: ${props => props.iconname && `url(#svg-path-${props.iconname})`};
   display: flex;
@@ -105,7 +105,7 @@ export const CategoriesSection = () => {
           border-radius: ${tokens.borderRadius.max};
           display: flex;
           height: 390px;
-          margin: ${tokens.spacing.lg} auto;
+          margin: ${tokens.spacing.xxl} auto;
           margin-bottom: 300px; // temp
           width: 1100px;
         `}
@@ -138,10 +138,10 @@ export const CategoriesSection = () => {
             <AnimatePresence>
               {category.title === hoveredCategory && (
                 <HoveredCard
+                  initial={{ opacity: 0, borderRadius: 0 }}
+                  animate={{ opacity: 1, borderRadius: "20px" }}
+                  exit={{ opacity: 0, borderRadius: 0 }}
                   transition={{ duration: 0.2 }}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
                 >
                   <HoveredIconContainer
                     last={i === (categories.length - 1) ? 1 : undefined}
@@ -151,11 +151,13 @@ export const CategoriesSection = () => {
                       backgroundPosition: [
                         "0% 10%", 
                         "0% 100%"
-                      ]
+                      ],
                     }}
                     transition={{
-                      duration: 0.85,
-                      ease: "linear",
+                      backgroundPosition: {
+                        duration: 0.9,
+                        ease: "easeOut",
+                      },
                     }}
                   >
                     <Icon

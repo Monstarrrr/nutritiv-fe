@@ -62,7 +62,7 @@ export const ArrowSection = forwardRef((props, ref) => {
           margin-top: 7vw;
           ${mediaQueries({
             paddingRight: [
-              "8px", "10px", "15px", "22px"
+              "8px", "10px", "12px", "12px"
             ],
             marginTop: [
               "14vw", "8vw", "6vw", "7vw"
