@@ -113,7 +113,7 @@ export const CategoriesSection = () => {
         {categories.map((category, i) => (
           <motion.div
             onMouseEnter={() => setHoveredCategory(category.title)}
-            // onMouseLeave={() => setHoveredCategory("")}
+            onMouseLeave={() => setHoveredCategory("")}
             onClick={() => navigate("/shop")}
             key={category.title}
             variants={variants}
@@ -151,8 +151,8 @@ export const CategoriesSection = () => {
                       iconname={category.icon}
                       animate={{
                         backgroundPosition: [
-                          "0% 10%", 
-                          "0% 100%"
+                          "0% -70%", 
+                          "0% -145%"
                         ],
                       }}
                       transition={{
@@ -181,7 +181,7 @@ export const CategoriesSection = () => {
                         height={65}
                         width={65}
                         style={{
-                          filter: "drop-shadow(3px 5px 2px rgb(0 0 0 / 0.4))",
+                          filter: "drop-shadow(0px 0px 10px rgb(21 241 255 / 0.4))",
                           zIndex: 2,
                         }}
                       />
