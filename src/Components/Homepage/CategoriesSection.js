@@ -152,6 +152,7 @@ export const CategoriesSection = () => {
               css={css`
                 align-items: center;
                 background: ${tokens.color.primary};
+                background: radial-gradient(circle, rgb(4, 58, 81) 0%, rgb(2, 0, 71) 100%);
                 border: 4px solid ${tokens.color.accentWeak};
                 border-radius: 20px;
                 display: flex;
@@ -237,7 +238,12 @@ export const CategoriesSection = () => {
                           width={30}
                         />
                       </motion.div>
-                      <div css={css`height: 100px;`}>
+                      <div 
+                        css={css`
+                          height: 86px; 
+                          overflow: hidden;
+                        `}
+                      >
                         <Icon
                           name={category.icon}
                           color={tokens.color.accentStrong}
@@ -245,24 +251,24 @@ export const CategoriesSection = () => {
                           height={120}
                           width={120}
                         />
-                        <h4 css={css`
-                          background: ${tokens.color.primary};
-                          font-size: ${tokens.font.fontSize.lg};
-                          font-weight: ${tokens.font.fontWeight.medium};
-                          margin-bottom: 16px;
-                          position: relative;
-                          text-transform: uppercase;
-                          top: -73px;
-                          z-index: 0;
-                        `}>
-                          {category.title}
-                        </h4>
                       </div>
+                      <h4 css={css`
+                        font-size: ${tokens.font.fontSize.lg};
+                        font-weight: ${tokens.font.fontWeight.medium};
+                        margin-bottom: 0;
+                        margin-top: 0;
+                        position: relative;
+                        text-transform: uppercase;
+                        z-index: 0;
+                      `}>
+                        {category.title}
+                      </h4>
                       <p
                         css={css`
                           color: ${tokens.color.contrastLightWeak};
                           font-size: ${tokens.font.fontSize.sm};
                           padding-top: ${tokens.spacing.xxl};
+                          margin: 0;
                         `}
                       >
                         {category.description}
