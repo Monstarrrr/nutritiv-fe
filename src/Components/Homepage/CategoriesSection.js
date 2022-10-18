@@ -2,7 +2,7 @@
 import React, { useState } from 'react'
 import { css } from '@emotion/react';
 import { tokens } from '../../Helpers/styleTokens';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, AnimateSharedLayout, motion } from 'framer-motion';
 import { NutriButton } from '../NutriButton';
 import { useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
@@ -13,22 +13,22 @@ const categories = [
   {
     icon: "brain",
     title: "Mental",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip. Quis nostrud exercitation ullamco"
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip."
   },
   {
     icon: "arrowsUp",
     title: "Growth",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip. Quis nostrud exercitation ullamco"
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip."
   },
   {
     icon: "armor",
     title: "Resistance",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip. Quis nostrud exercitation ullamco"
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip."
   },
   {
     icon: "plusSign",
     title: "Unique",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip. Quis nostrud exercitation ullamco"
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip."
   },
 ]
 
@@ -68,7 +68,7 @@ const HoveredIconContainer = styled(motion.div)`
   inset: 0;
   overflow: hidden;
   position: absolute;
-  left: -259px;
+  left: -268px;
   top: -217px;
   transform: rotate(25deg);
   width: 230%;
@@ -85,7 +85,7 @@ export const CategoriesSection = () => {
   const navigate = useNavigate();
   const [hoveredCategory, setHoveredCategory] = useState("")
   const variants = {
-    default: { borderRadius: "10px" },
+    default: { borderRadius: "20px" },
     hoveredAnimation: { borderRadius: "25px" }
   }
   
@@ -101,19 +101,19 @@ export const CategoriesSection = () => {
       </SectionTitle>
       <div
         css={css`
-          background: ${tokens.color.accentWeak};
+          /* background: ${tokens.color.accentWeak}; */
           border-radius: ${tokens.borderRadius.max};
           display: flex;
-          height: 390px;
+          height: 400px;
           margin: ${tokens.spacing.xxl} auto;
           margin-bottom: 300px; // temp
-          width: 1100px;
+          justify-content: space-between;
         `}
       >
         {categories.map((category, i) => (
           <motion.div
             onMouseEnter={() => setHoveredCategory(category.title)}
-            onMouseLeave={() => setHoveredCategory("")}
+            // onMouseLeave={() => setHoveredCategory("")}
             onClick={() => navigate("/shop")}
             key={category.title}
             variants={variants}
@@ -126,86 +126,118 @@ export const CategoriesSection = () => {
               align-items: center;
               background: ${tokens.color.primary};
               border: 4px solid ${tokens.color.accentWeak};
-              border-right: 0;
+              border-radius: 20px;
               display: flex;
               flex-direction: column;
-              margin-right: -4px;
+              margin: 0 20px;
+              /* margin-right: -4px; */
               padding: ${tokens.spacing.xxl};
               position: relative;
-              border: 4px solid ${tokens.color.accentWeak};
+              width: 200px;
             `}
           >
             <AnimatePresence>
-              {category.title === hoveredCategory && (
-                <HoveredCard
-                  initial={{ opacity: 0, borderRadius: 0 }}
-                  animate={{ opacity: 1, borderRadius: "20px" }}
-                  exit={{ opacity: 0, borderRadius: 0 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <HoveredIconContainer
-                    last={i === (categories.length - 1) ? 1 : undefined}
-                    first={i === 0 ? 1 : undefined}
-                    iconname={category.icon}
-                    animate={{
-                      backgroundPosition: [
-                        "0% 10%", 
-                        "0% 100%"
-                      ],
-                    }}
-                    transition={{
-                      backgroundPosition: {
-                        duration: 0.9,
-                        ease: "easeOut",
-                      },
-                    }}
+              <AnimateSharedLayout>
+                {category.title === hoveredCategory ? (
+                  <HoveredCard
+                    initial={{ opacity: 0, borderRadius: 0 }}
+                    animate={{ opacity: 1, borderRadius: "20px" }}
+                    exit={{ opacity: 0, borderRadius: 0 }}
+                    transition={{ duration: 0.2 }}
                   >
-                    <Icon
-                      name={category.icon}
-                      color={tokens.color.accentWeak}
-                      filled
-                      isClipPath
-                      height={600}
-                      width={600}
-                    />
-                  </HoveredIconContainer>
-                  <p css={css`
-                    color: ${tokens.color.contrastLight};
-                    font-size: ${tokens.font.fontSize.lg};
-                    font-weight: ${tokens.font.fontWeight.medium};
-                    letter-spacing: 2px;
-                    z-index: 1;`
-                  }>
-                    SHOP
-                  </p>
-                </HoveredCard>
-              )}
+                    <HoveredIconContainer
+                      last={i === (categories.length - 1) ? 1 : undefined}
+                      first={i === 0 ? 1 : undefined}
+                      iconname={category.icon}
+                      animate={{
+                        backgroundPosition: [
+                          "0% 10%", 
+                          "0% 100%"
+                        ],
+                      }}
+                      transition={{
+                        backgroundPosition: {
+                          duration: 0.9,
+                          ease: "easeOut",
+                        },
+                      }}
+                    >
+                      <Icon
+                        name={category.icon}
+                        color={tokens.color.accentWeak}
+                        filled
+                        isClipPath
+                        height={600}
+                        width={600}
+                      />
+                    </HoveredIconContainer>
+                    <motion.div
+                      layoutId="search-icon"
+                    >
+                      <Icon 
+                        color={tokens.color.accentStrong}
+                        name="search"
+                        filled
+                        height={65}
+                        width={65}
+                        style={{
+                          filter: "drop-shadow(3px 5px 2px rgb(0 0 0 / 0.4))",
+                          zIndex: 2,
+                        }}
+                      />
+                    </motion.div>
+                  </HoveredCard>
+                ) : (
+                  <>
+                    <motion.div
+                      layoutId="search-icon"
+                      css={css`
+                        position: absolute;
+                        right: 10px;
+                        top: 10px;
+                      `}
+                    >
+                      <Icon
+                        name="search"
+                        color={tokens.color.accentWeak}
+                        filled
+                        height={30}
+                        width={30}
+                      />
+                    </motion.div>
+                    <div css={css`height: 100px;`}>
+                      <Icon
+                        name={category.icon}
+                        color={tokens.color.accentStrong}
+                        filled
+                        height={120}
+                        width={120}
+                      />
+                      <h4 css={css`
+                        background: ${tokens.color.primary};
+                        font-size: ${tokens.font.fontSize.lg};
+                        font-weight: ${tokens.font.fontWeight.medium};
+                        margin-bottom: 16px;
+                        position: relative;
+                        text-transform: uppercase;
+                        top: -73px;
+                      `}>
+                        {category.title}
+                      </h4>
+                    </div>
+                    <p
+                      css={css`
+                        color: ${tokens.color.contrastLightWeak};
+                        font-size: ${tokens.font.fontSize.sm};
+                        padding-top: ${tokens.spacing.xxl};
+                      `}
+                    >
+                      {category.description}
+                    </p>
+                  </>
+                )}
+              </AnimateSharedLayout>
             </AnimatePresence>
-            <Icon
-              name={category.icon}
-              color={tokens.color.accentStrong}
-              filled
-              height={200}
-              width={200}
-            />
-            <h4 css={css`
-              background: ${tokens.color.primary};
-              font-size: ${tokens.font.fontSize.lg};
-              font-weight: ${tokens.font.fontWeight.medium};
-              margin-top: -26px;
-              margin-bottom: 16px;
-              text-transform: uppercase;
-            `}>
-              {category.title}
-            </h4>
-            <p
-              css={css`
-                color: ${tokens.color.contrastLightWeak};
-                font-size: ${tokens.font.fontSize.sm};
-              `}
-            >
-              {category.description}
-            </p>
           </motion.div>
         ))}
       </div>
