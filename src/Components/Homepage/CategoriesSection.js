@@ -81,6 +81,27 @@ const HoveredIconContainer = styled(motion.div)`
   }
 `
 
+const Datalines = styled.img`
+  filter: brightness(1.5);
+  height: 300px;
+  left: ${props => props.left ? 0 : "initial"};
+  right: ${props => props.left ? "initial" : 0};
+  position: absolute;
+  top: 275px;
+`
+
+const SideGradient = styled.div`
+  background: ${tokens.color.accentTransparent};
+  border-radius: 999px;
+  filter: blur(370px);
+  height: 210%;
+  left: ${props => props.left ? "-598px" : "initial"};
+  right: ${props => props.left ? "initial" : "-598px"};
+  position: absolute;
+  top: -100%;
+  width: 650px;
+`
+
 export const CategoriesSection = () => {
   const navigate = useNavigate();
   const [hoveredCategory, setHoveredCategory] = useState("")
@@ -96,23 +117,14 @@ export const CategoriesSection = () => {
         position: relative;
       `}
     >
-      <img 
-        css={css`
-          position: absolute;
-          left: 0;
-          height: 300px;
-          top: 275px;
-        `}
+      <SideGradient left={1} />
+      <SideGradient />
+      <Datalines
+        left={1}
         src="datalines-left.png"
         alt="datalines"
       />
-      <img 
-        css={css`
-          position: absolute;
-          right: 0;
-          height: 300px;
-          top: 275px;
-        `}
+      <Datalines
         src="datalines-right.png"
         alt="datalines"
       />
