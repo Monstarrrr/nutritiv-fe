@@ -30,7 +30,7 @@ export const ArrowSection = forwardRef((props, ref) => {
         display: flex;
         flex-direction: column;
         margin-top: 32vw;
-        margin-bottom: 4vw;
+        margin-bottom: 40vh;
       `}
     >
       <h4
@@ -62,7 +62,7 @@ export const ArrowSection = forwardRef((props, ref) => {
           margin-top: 7vw;
           ${mediaQueries({
             paddingRight: [
-              "8px", "10px", "12px", "12px"
+              "8px", "8px", "10px", "12px"
             ],
             marginTop: [
               "14vw", "8vw", "6vw", "7vw"

@@ -132,7 +132,22 @@ export const ReviewsSection = () => {
               {reviewer.name}
             </ReviewerName>
             <Comment>
-              "{reviewer.comment}"  
+              <Icon 
+                color={tokens.color.accentStrong}
+                name="quote"
+                filled
+                height={40}
+                width={40}
+              />
+              {reviewer.comment}
+              <Icon 
+                color={tokens.color.accentStrong}
+                name="quote"
+                filled
+                height={40}
+                width={40}
+                style={{ transform: "rotate(180deg)" }}
+              />
             </Comment>
             <Rating>
               {[...Array(reviewer.rating)].map((_, i) => (

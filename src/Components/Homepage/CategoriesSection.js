@@ -180,7 +180,7 @@ export const CategoriesSection = () => {
                 <AnimateSharedLayout>
                   {category.title === hoveredCategory ? (
                     <HoveredCard
-                      initial={{ opacity: 0, borderRadius: 0 }}
+                      initial={{ opacity: 0, borderRadius: "10px" }}
                       animate={{ opacity: 1, borderRadius: "20px" }}
                       exit={{ opacity: 0, borderRadius: 0 }}
                       transition={{ duration: 0.2 }}

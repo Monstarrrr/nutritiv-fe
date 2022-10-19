@@ -38,8 +38,7 @@ export const ShapesSection = forwardRef(({props}, ref) => {
         align-items: center;
         display: flex;
         flex-direction: column;
-        padding-right: 6px;
-        margin-bottom: 300px; // temp
+        margin-bottom: 40vh; // temp
       `}
     >
       <SectionTitle>
@@ -141,40 +140,39 @@ export const ShapesSection = forwardRef(({props}, ref) => {
       <SectionContent
         css={css`
           margin-top: ${tokens.spacing.max};
-          /* perspective: 2000px;
-          perspective-origin: center; */
+          perspective: 2000px;
+          perspective-origin: center;
           position: relative;
         `}
-        ref={ref.shapesScrollRef}
       >
         <Card
           css={css`
             background: ${tokens.color.primary};
-            background: radial-gradient(circle, ${tokens.color.secondaryTransparent} 0%, ${tokens.color.primary} 100%);
+            background: radial-gradient(circle, rgb(1, 53, 74) 0%, ${tokens.color.primary} 100%);
             border-radius: ${tokens.borderRadius.xl};
             box-shadow: ${tokens.color.accentWeak} 0px 0px 10px 2px;
             height: 300px;
             position: relative;
-            /* transform: rotateX(27deg) rotateY(0deg);
-            transform-style: preserve-3d; */
+            transform: rotateX(27deg) rotateY(0deg);
+            transform-style: preserve-3d;
             width: 812px;
             z-index: -1;
-            /* &:before {
-              background: #072564;
-              border-radius: ${tokens.borderRadius.xl};
-              content: "";
-              position: absolute;
-              inset: 0;
-              transform: translateZ(-190px);
-            }
-            &:after {
+            &:before {
               background: #051255;
               border-radius: ${tokens.borderRadius.xl};
               content: "";
               position: absolute;
               inset: 0;
-              transform: translateZ(-380px);
-            } */
+              transform: translateZ(-84px);
+            }
+            &:after {
+              background: #0512558f;
+              border-radius: ${tokens.borderRadius.xl};
+              content: "";
+              position: absolute;
+              inset: 0;
+              transform: translateZ(-160px);
+            }
           `}
         />
         
@@ -184,6 +182,7 @@ export const ShapesSection = forwardRef(({props}, ref) => {
             display: flex;
             position: absolute;
             inset: 0;
+            transform: rotateX(20deg) rotateY(0deg);
           `}
         >
           <CardSuperment
@@ -209,14 +208,6 @@ export const ShapesSection = forwardRef(({props}, ref) => {
                   homepageCard
                 />
               </Canvas> */}
-              {/* <div
-                ref={ref.gummyPiViewHomepage}
-                style={{ 
-                  display: "inline-block", 
-                  height: "300px", 
-                  width: "270px"
-                }}
-              /> */}
               <div
                 ref={ref.capsuleWaterViewHomepage}
                 style={{ 
@@ -236,6 +227,7 @@ export const ShapesSection = forwardRef(({props}, ref) => {
             `}
           >
             <h4
+              ref={ref.shapesScrollRef}
               css={css`
                 margin-top: 0;
                 margin-bottom: ${tokens.spacing.xl};
