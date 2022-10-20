@@ -254,6 +254,10 @@ function App() {
                 #root, #gradient-background {
                   max-width: none;
                 }
+                body { // Prevents scrollbar from pushing content
+                  overflow-x: hidden;
+                  width: 100vw; 
+                }
                 .canvas, .canvas > div, canvas {
                   max-width: none;
                 }

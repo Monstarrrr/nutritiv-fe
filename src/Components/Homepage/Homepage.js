@@ -141,17 +141,18 @@ const Homepage = forwardRef((props, ref) => {
           {/* EXPLANATION */}
           <ArrowSection ref={arrowSectionRefs}/>
           
+          {/* MACHINE */}
+          <MachineSection />
+          
           {/* SHAPES */}
           <ShapesSection ref={shapesSectionRefs}/>
 
           {/* CATEGORIES */}
           <CategoriesSection />
 
-          {/* MACHINE */}
-          <MachineSection />
 
           {/* REVIEWS */}
-          <ReviewsSection />
+          {/* <ReviewsSection /> */}
 
           {/* CONTACT */}
           <ContactSection />

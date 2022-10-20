@@ -19,17 +19,20 @@ const reviewers = [
   {
     name: "Emily D",
     comment: "C'est sympas mais pourquoi il y a une dent sur la page d'accueil?",
-    rating: 4
+    rating: 4,
+    link: "/reviewer-1.jpg"
   },
   {
     name: "Monsieur Yoann D.",
     comment: "Mhm. Ok. Mais il est où le code ?",
-    rating: 1
+    rating: 1,
+    link: "/reviewer-2.jpg"
   },
   {
     name: "Monstar",
     comment: "Un design inégalé, une expérience utilisateur digne des plus grand noms de la codification, ce site coche toutes les cases.",
-    rating: 5
+    rating: 5,
+    link: "/reviewer-3.jpg"
   },
 ];
 
@@ -92,7 +95,13 @@ export const ReviewsSection = () => {
               src={reviewer.link}
               key={i}
               css={css`
+                box-shadow: 0 0 14px 0px #000;
+                border: 6px solid ${tokens.color.accentWeak};
+                border-radius: 999px;
                 height: 180px; // temp
+                position: relative;
+                left: 50%;
+                transform: translate(-50%);
               `}
             />
           )
@@ -133,7 +142,7 @@ export const ReviewsSection = () => {
             </ReviewerName>
             <Comment>
               <Icon 
-                color={tokens.color.accentStrong}
+                color={tokens.color.secondary}
                 name="quote"
                 filled
                 height={40}
@@ -141,7 +150,7 @@ export const ReviewsSection = () => {
               />
               {reviewer.comment}
               <Icon 
-                color={tokens.color.accentStrong}
+                color={tokens.color.secondary}
                 name="quote"
                 filled
                 height={40}
@@ -152,7 +161,7 @@ export const ReviewsSection = () => {
             <Rating>
               {[...Array(reviewer.rating)].map((_, i) => (
                 <Icon
-                  color={tokens.color.accentStrong}
+                  color={tokens.color.secondary}
                   filled
                   height={20}
                   key={i}
@@ -162,7 +171,7 @@ export const ReviewsSection = () => {
               ))}
               {[...Array(5 - reviewer.rating)].map((_, i) => (
                 <Icon
-                  color={tokens.color.accentStrong}
+                  color={tokens.color.secondary}
                   height={20}
                   key={i}
                   name="star"

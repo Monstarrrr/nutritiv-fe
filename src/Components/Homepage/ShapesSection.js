@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React, { forwardRef, useState } from 'react'
+import React, { forwardRef, useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
@@ -9,7 +9,7 @@ import { NutriButton } from '../NutriButton';
 import { SectionTitle } from './Homepage';
 
 const SectionContent = styled.div``
-const Card = styled.div``
+const Card = styled(motion.div)``
 const CardContent = styled.div``
 const CardSuperment = styled.div``
 const CardDescription = styled.div``
@@ -28,9 +28,23 @@ const gummiesStats = [
 ]
 const shapes = ['Capsule', 'Gummy'];
 
+const variants = {
+  active: "transform: rotateX(50deg)",
+  default: "transform: rotateX(20deg)",
+}
+
 export const ShapesSection = forwardRef(({props}, ref) => {
   const [focusedShape, setFocusedShape] = useState(null);
   const [selectedShape, setSelectedShape] = useState(shapes[0]);
+  const [active, setActive] = useState(false);
+  
+  useEffect(() => {
+    setActive(true)
+    const timer = setTimeout(() => {
+      setActive(false);
+    }, 200)
+    return () => clearTimeout(timer);
+  }, [selectedShape]);
   
   return (
     <div
@@ -153,7 +167,7 @@ export const ShapesSection = forwardRef(({props}, ref) => {
             box-shadow: ${tokens.color.accentWeak} 0px 0px 10px 2px;
             height: 300px;
             position: relative;
-            transform: rotateX(27deg) rotateY(0deg);
+            transform: rotateX(20deg) rotateY(0deg);
             transform-style: preserve-3d;
             width: 812px;
             z-index: -1;
@@ -223,6 +237,7 @@ export const ShapesSection = forwardRef(({props}, ref) => {
             css={css`
               padding-left: 20px;
               text-align: left;
+              user-select: none;
               width: 270px;
             `}
           >

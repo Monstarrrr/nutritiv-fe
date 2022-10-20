@@ -5,10 +5,10 @@ import { forwardRef } from 'react'
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { Outlet, useLocation } from 'react-router-dom'
-import { Footer } from '../Footer/Footer'
 import { tokens } from '../Helpers/styleTokens'
 import { closeMobileNavMenu } from '../Redux/reducers/modals'
 import CanvasDefaultList from './3D/CanvasDefaultList'
+import { Footer } from './Footer/Footer'
 import Navbar from './Header/Navbar'
 
 const Pages = styled(({ homepage, minimized, ...props }) => <motion.div {...props} />)`
