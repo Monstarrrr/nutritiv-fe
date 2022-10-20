@@ -75,20 +75,28 @@ export const ArrowSection = forwardRef((props, ref) => {
           onMouseEnter={() => setArrowHovered(true)}
           onMouseLeave={() => setArrowHovered(false)}
           css={css`
+            border-radius: 999px;
+            border: 2px solid ${tokens.color.accentWeak};
             cursor: pointer;
-            padding: 4px;
+            padding: 8px;
+            padding-bottom: 4px;
+            transition: all ease .2s;
+            &:hover {
+              box-shadow: 0 0 10px -1px ${tokens.color.accentStrong};
+              border: 2px solid ${tokens.color.accentStrong};
+            }
           `}
         >
           <Icon
             name="arrowDown"
             color={tokens.color.contrastLight}
-            resizeDefault="0 0 25 25"
+            resizeDefault="-1 0 25 25"
             strokeWidth={2}
             height={25}
             width={25}
           />
         </div>
-        <Icon 
+        <Icon
           name="wave"
           color={tokens.color.contrastLight}
           filled={fillDelay}
@@ -96,6 +104,7 @@ export const ArrowSection = forwardRef((props, ref) => {
           resizeDefault="0 0 65 70"
           resizeFilled="0 0 65 70"
           strokeWidth={2}
+          style={{ paddingTop: "20px" }}
           height={35}
           width={35}
         />
