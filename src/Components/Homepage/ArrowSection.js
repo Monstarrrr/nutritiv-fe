@@ -3,7 +3,7 @@ import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import React, { forwardRef, useEffect, useState } from 'react'
 import { scrollToElement } from '../../Helpers/scrollToElement'
-import { mediaQueries, tokens } from '../../Helpers/styleTokens'
+import { mediaQueries, mediaQuery, tokens } from '../../Helpers/styleTokens'
 import { Icon } from '../Icons/Icon'
 
 const ArrowSide = styled.div``
@@ -42,10 +42,16 @@ export const ArrowSection = forwardRef((props, ref) => {
           line-height: 1.5;
           ${mediaQueries({
             paddingRight: [
-              "8px", "10px", "15px", "26px"
+              "0px", "0px", "0px", "26px"
             ],
             marginTop: [
-              "98vw", "80vw", "44vw", "32vw"
+              "98vw", "80vw", "74vw", "32vw"
+            ],
+            marginRight: [
+              "50px", "20px", "20px", "20px"
+            ],
+            marginLeft: [
+              "50px", "20px", "20px", "20px"
             ],
             maxWidth: [
               "480px",
@@ -62,7 +68,7 @@ export const ArrowSection = forwardRef((props, ref) => {
           margin-top: 7vw;
           ${mediaQueries({
             paddingRight: [
-              "8px", "8px", "10px", "12px"
+              "0px", "0px", "0px", "12px"
             ],
             marginTop: [
               "14vw", "8vw", "6vw", "7vw"
@@ -71,7 +77,7 @@ export const ArrowSection = forwardRef((props, ref) => {
         `}
       >
         <div
-          onClick={() => scrollToElement(ref.shapesScrollRef)}
+          onClick={() => scrollToElement(ref.machineScrollRef)}
           onMouseEnter={() => setArrowHovered(true)}
           onMouseLeave={() => setArrowHovered(false)}
           css={css`

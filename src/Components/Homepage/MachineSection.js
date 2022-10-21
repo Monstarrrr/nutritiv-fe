@@ -1,21 +1,43 @@
 /** @jsxImportSource @emotion/react */
-import React from 'react'
+import React, { forwardRef } from 'react'
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
+import { mediaQueries } from '../../Helpers/styleTokens';
+import { SectionTitle } from './Homepage';
 
 const Container = styled.div`
+  margin-bottom: 40vh;
   max-width: none;
   width: 100%;
-  > img {
-    max-width: none;
-    width: 100%;
-  }
 `
 
-export const MachineSection = () => {
+export const MachineSection = forwardRef((props, ref) => {
   return (
     <Container>
-      <img alt="machine" src="machine.png" />
+      <SectionTitle>
+        Manufacturing
+      </SectionTitle>
+      <div
+        css={css`
+          display: flex;
+          justify-content: center;
+        `}
+      >
+        <img 
+          alt="machine" 
+          css={css`
+            max-width: none;
+            width: 100%;
+            ${mediaQueries({
+              width: [
+                "220vw", "180vw", "150vw", "130vw", "100vw"
+              ]
+            })}
+          `}
+          ref={ref.machineScrollRef}
+          src="machine.png" 
+        />
+      </div>
     </Container>
   )
-}
+})

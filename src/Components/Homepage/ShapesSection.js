@@ -242,7 +242,6 @@ export const ShapesSection = forwardRef(({props}, ref) => {
             `}
           >
             <h4
-              ref={ref.shapesScrollRef}
               css={css`
                 margin-top: 0;
                 margin-bottom: ${tokens.spacing.xl};

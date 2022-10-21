@@ -4,13 +4,11 @@ import styled from '@emotion/styled';
 import { breakpoints, mediaQueries, tokens } from '../../Helpers/styleTokens';
 import { useLocation } from 'react-router-dom';
 import useWindowDimensions from '../../Helpers/useWindowDimensions';
-import CanvasDefaultList from '../3D/CanvasDefaultList';
 import { osName, isIOS } from "react-device-detect";
 import { ShapesSection } from './ShapesSection';
 import { IcebergSection } from './IcebergSection';
 import { ArrowSection } from './ArrowSection';
 import { CategoriesSection } from './CategoriesSection';
-import { ReviewsSection } from './ReviewsSection';
 import { ContactSection } from './ContactSection';
 import { MachineSection } from './MachineSection';
 
@@ -33,8 +31,10 @@ const ViewHeightWrapper = styled.div`
     margin-right: auto;
   }
 `
-const VideoContainer = styled.div`
+const IcebergContainer = styled.div`
   position: absolute;
+  display: ${props => props.mobile ? "flex" : "initial"};
+  justify-content: center;
   left: 0;
   right: 0;
   top: 500px;
@@ -63,12 +63,19 @@ const ImageContainer = styled.div`
 export const SectionTitle = styled.h2`
   text-transform: uppercase;
   letter-spacing: 4px;
-  font-size: 68px;
+  ${mediaQueries({
+    fontSize: [
+      "36px", "48px", "62px", "68px"
+    ],
+  })}
 `
 
 const Video = styled(motion.video)`
   height: 100%;
   width: 100%;
+`
+const Image = styled(motion.img)`
+  width: 170vw;
 `
 
 const Homepage = forwardRef((props, ref) => {
@@ -80,8 +87,10 @@ const Homepage = forwardRef((props, ref) => {
   const discoverScrollRef = useRef(null);
   
   const icebergSectionRefs = { videoRef, discoverScrollRef };
+  const machineScrollRef = useRef(null);
+  const machineSectionRefs = { machineScrollRef };
   const shapesScrollRef = useRef(null);
-  const shapesSectionRefs = { ...refs, shapesScrollRef };
+  const shapesSectionRefs = { ...refs };
   const arrowSectionRefs = { ...refs, shapesScrollRef, discoverScrollRef };
   
   const location = useLocation();
@@ -142,7 +151,7 @@ const Homepage = forwardRef((props, ref) => {
           <ArrowSection ref={arrowSectionRefs}/>
           
           {/* MACHINE */}
-          <MachineSection />
+          <MachineSection ref={machineSectionRefs} />
           
           {/* SHAPES */}
           <ShapesSection ref={shapesSectionRefs}/>
@@ -156,7 +165,7 @@ const Homepage = forwardRef((props, ref) => {
 
           {/* CONTACT */}
           <ContactSection />
-
+        
         </ViewHeightWrapper>
       </HomepageContentContainer>
       
@@ -174,26 +183,44 @@ const Homepage = forwardRef((props, ref) => {
           />
         </ImageContainer>
       ) : (
-        <VideoContainer className="iceberg-container">
-          <Video
-            animate={
-              icebergShadow ? "shadow" : "default" 
-            }
-            autoPlay={true}
-            id="iceberg-video"
-            loop
-            muted
-            playsInline
-            preload="auto"
-            ref={videoRef}
-            variants={icebergVariants}
-            height="100%"
-            width="100%"
-          >
-            <source src="https://nutritiv.s3.eu-west-3.amazonaws.com/assets/video_iceberg.mov" type='video/mp4; codecs="hvc1"'></source>
-            <source src="https://nutritiv.s3.eu-west-3.amazonaws.com/assets/video_iceberg.webm" type="video/webm" />
-          </Video>
-        </VideoContainer>
+        <IcebergContainer 
+          className="iceberg-container"
+          mobile={width <= breakpoints[2] ? 1 : undefined}
+        >
+          {width > breakpoints[2] ? (
+            <Video
+              animate={
+                icebergShadow ? "shadow" : "default" 
+              }
+              autoPlay={true}
+              id="iceberg-video"
+              loop
+              muted
+              playsInline
+              preload="auto"
+              ref={videoRef}
+              variants={icebergVariants}
+              height="100%"
+              width="100%"
+            >
+              <source src="https://nutritiv.s3.eu-west-3.amazonaws.com/assets/video_iceberg.mov" type='video/mp4; codecs="hvc1"'></source>
+              <source src="https://nutritiv.s3.eu-west-3.amazonaws.com/assets/video_iceberg.webm" type="video/webm" />
+            </Video>
+          ) : (
+            <Image 
+              alt="test-iceberg" 
+              initial={{y: 0}}
+              animate={{ y: "14px" }}
+              transition={{ 
+                duration: 1.65, 
+                ease: "easeInOut", 
+                repeat: Infinity, 
+                repeatType: "reverse" 
+              }}
+              src="image_iceberg.png" 
+            />
+          )}
+        </IcebergContainer>
       )}
     </>
   )
