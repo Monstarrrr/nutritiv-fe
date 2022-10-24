@@ -76,6 +76,8 @@ function App() {
   const oAuthAccessToken = searchParams.get('oAuthToken');
   const registrationToken = searchParams.get('verificationToken');
 
+  console.log('# location.pathname :', location.pathname)
+
   useEffect(() => {
     // App titles
     const titleWithoutSpecials = location.pathname.replace(/[^a-zA-Z ]/g, "");
@@ -375,8 +377,8 @@ function App() {
                 }
                 className="canvas"
               >
-                {/* {viewsList.map((view, i) => (
-                  <View key={i} track={Object.values(view)[0]} update={location}>
+                {viewsList.map((view, i) => (
+                  <View key={i} index={i} track={Object.values(view)[0]} update={location}>
                     <Scene
                       type={view.type}
                       homepageCard={view.homepageCard}
@@ -399,9 +401,9 @@ function App() {
                       ref={orbitControlsRef}
                     />
                   </View>
-                ))} */}
+                ))}
                
-                <View track={gummyPiViewHomepage} update={location}>
+                {/* <View track={gummyPiViewHomepage} update={location}>
                   <Scene
                     type="gummy"
                   />
@@ -446,7 +448,7 @@ function App() {
                     makeDefault
                     ref={orbitControlsRef}
                   />
-                </View>
+                </View> */}
                 <Preload all />
               </Canvas>
             </Suspense>

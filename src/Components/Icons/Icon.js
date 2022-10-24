@@ -50,6 +50,9 @@ export const Icon = (props) => {
     name, // required
     color, // required
     strokeWidth, // required if != filled
+    initial,
+    animate,
+    transition,
     count,
     filled,
     height,
@@ -76,10 +79,13 @@ export const Icon = (props) => {
   
   return (
     <>
-      <svg 
+      <motion.svg 
         xmlns="http://www.w3.org/2000/svg" 
         className="h-6 w-6" 
         fill={filled ? color : "none"}
+        animate={animate}
+        initial={initial}
+        transition={transition}
         viewBox={
           (resizeDefault && !filled) ? resizeDefault : (
             (resizeFilled && filled) ? resizeFilled : (
@@ -282,7 +288,7 @@ export const Icon = (props) => {
           </g>
         )}
       
-      </svg>
+      </motion.svg>
 
       {name === "counter" && (
         <Count textColor={textColor}>

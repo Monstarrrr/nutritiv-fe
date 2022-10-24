@@ -177,7 +177,7 @@ const Homepage = forwardRef((props, ref) => {
             }
             alt="iceberg" 
             id='iceberg-image'
-            src="https://nutritiv.s3.eu-west-3.amazonaws.com/assets/image-iceberg.png"
+            src="image_iceberg.png"
             style={{height: "100%", width: "100%"}} 
             variants={icebergVariants}
           />

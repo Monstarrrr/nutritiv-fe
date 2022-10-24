@@ -5,6 +5,7 @@ import styled from "@emotion/styled"
 import { css, keyframes } from "@emotion/react"
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { Icon } from "./Icons/Icon";
 
 const waveAnimation = keyframes`
   from {
@@ -18,12 +19,13 @@ const waveAnimation = keyframes`
 export const NutriButton = React.memo(function NutriButton(props) {
   const navigate = useNavigate();
   // type:      'filled'  | none
-  // rounded:   any       | none
+  // rounded:   integer   | none
   // disabled:  true      | [false]
   // size:      'small'   | none
   // accent:    'confirm' | 'info' | 'warning' | 'error' | none
+  // icon:      '1'       | none
   // wave:      '1'       | none
-  // to:        any
+  // to:        link
   // ...props:  (style, onClick, onMouseEnter...)
   
   const handleClick = () => {
