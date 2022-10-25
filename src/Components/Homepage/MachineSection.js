@@ -9,6 +9,9 @@ const Container = styled.div`
   margin-bottom: 40vh;
   max-width: none;
   width: 100%;
+  & > h2 {
+    max-width: none;
+  }
 `
 
 export const MachineSection = forwardRef((props, ref) => {
@@ -21,6 +24,7 @@ export const MachineSection = forwardRef((props, ref) => {
         css={css`
           display: flex;
           justify-content: center;
+          max-width: none;
         `}
       >
         <img 
