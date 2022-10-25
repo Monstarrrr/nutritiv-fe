@@ -214,7 +214,7 @@ export const CategoriesSection = () => {
                   onMouseEnter={() => (
                     setHoveredCategory(category.title)
                   )}
-                  // onMouseLeave={() => setHoveredCategory("")}
+                  onMouseLeave={() => setHoveredCategory("")}
                   onClick={() => (
                     isMobile ? (
                       hoveredCategory === category.title ? (
@@ -334,8 +334,7 @@ export const CategoriesSection = () => {
                           } 
                         }}
                       >
-                        <motion.div
-                          layoutId="search-icon"
+                        <div
                           css={css`
                             position: absolute;
                             right: 10px;
@@ -344,13 +343,31 @@ export const CategoriesSection = () => {
                           `}
                         >
                           <Icon
+                            layoutId="search-icon"
                             name="search"
                             color={tokens.color.accentWeak}
                             filled
                             height={30}
                             width={30}
                           />
-                        </motion.div>
+                          {i === 0 && ( // Fix weird framer-motion issue
+                            <Icon
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              transition={{ opacity: {delay: 1 }}}
+                              name="search"
+                              color={tokens.color.accentWeak}
+                              filled
+                              style={{ 
+                                left: "50%",
+                                position: "absolute", 
+                                transform: "translateX(-50%)"
+                              }}
+                              height={30}
+                              width={30}
+                            />
+                          )}
+                        </div>
                         <div 
                           css={css`
                             height: 86px; 

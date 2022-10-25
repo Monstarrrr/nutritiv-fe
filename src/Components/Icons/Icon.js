@@ -53,6 +53,7 @@ export const Icon = (props) => {
     initial,
     animate,
     transition,
+    layoutId,
     count,
     filled,
     height,
@@ -86,6 +87,7 @@ export const Icon = (props) => {
         animate={animate}
         initial={initial}
         transition={transition}
+        layoutId={layoutId}
         viewBox={
           (resizeDefault && !filled) ? resizeDefault : (
             (resizeFilled && filled) ? resizeFilled : (
