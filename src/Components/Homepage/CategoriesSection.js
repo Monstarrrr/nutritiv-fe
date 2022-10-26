@@ -111,6 +111,7 @@ const Arrow = styled.div`
   display: flex;
   padding: 8px;
   transition: all ease .2s;
+  pointer-events: ${props => props.disabled ? "none" : "initial"};
   &:hover {
     box-shadow: 0 0 10px -1px ${tokens.color.accentStrong};
     border: 2px solid ${tokens.color.accentStrong};
@@ -121,6 +122,8 @@ export const CategoriesSection = () => {
   const navigate = useNavigate();
   const [hoveredCategory, setHoveredCategory] = useState("");
   const [isMobile, setIsMobile] = useState(true);
+  const [loading, setLoading] = useState(false);
+  
   const [activeIndex, setActiveIndex] = useState(0);
   const datalinesAnimationLeft = useAnimation();
   const datalinesAnimationRight = useAnimation();
@@ -153,18 +156,28 @@ export const CategoriesSection = () => {
   }
   
   const handleGoPrevious = () => {
+    setLoading(true);
     startDatalinesAnimationLeft();
     startDatalinesAnimationRight();
     setActiveIndex(prevActiveIndex => (
       prevActiveIndex === 0 ? (categories.length - 1) : prevActiveIndex - 1
     ))
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 205)
+    return () => clearTimeout(timer);
   }
   const handleGoNext = () => {
+    setLoading(true);
     startDatalinesAnimationLeft();
     startDatalinesAnimationRight();
     setActiveIndex(prevActiveIndex => (
       prevActiveIndex === (categories.length - 1) ? 0 : prevActiveIndex + 1
     ))
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 205)
+    return () => clearTimeout(timer);
   }
 
   console.log('# activeIndex :', activeIndex)
@@ -434,7 +447,10 @@ export const CategoriesSection = () => {
                 margin-top: ${tokens.spacing.lg};
               `}
             >
-              <Arrow onClick={handleGoPrevious}>
+              <Arrow 
+                disabled={loading}
+                onClick={handleGoPrevious}
+              >
                 <Icon 
                   name="chevronLeft"
                   color={tokens.color.accentStrong}
@@ -462,7 +478,10 @@ export const CategoriesSection = () => {
                   />
                 ))}
               </div>
-              <Arrow onClick={handleGoNext}>
+              <Arrow 
+                disabled={loading}
+                onClick={handleGoNext}
+              >
                 <Icon 
                   name="chevronRight"
                   color={tokens.color.accentStrong}
