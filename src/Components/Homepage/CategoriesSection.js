@@ -104,6 +104,19 @@ const SideGradient = styled.div`
   width: 650px;
 `
 
+const Arrow = styled.div`
+  align-items: center;
+  border-radius: 999px;
+  cursor: pointer;
+  display: flex;
+  padding: 8px;
+  transition: all ease .2s;
+  &:hover {
+    box-shadow: 0 0 10px -1px ${tokens.color.accentStrong};
+    border: 2px solid ${tokens.color.accentStrong};
+  }
+`
+
 export const CategoriesSection = () => {
   const navigate = useNavigate();
   const [hoveredCategory, setHoveredCategory] = useState("");
@@ -153,6 +166,8 @@ export const CategoriesSection = () => {
       prevActiveIndex === (categories.length - 1) ? 0 : prevActiveIndex + 1
     ))
   }
+
+  console.log('# activeIndex :', activeIndex)
   
   useEffect(() => {
     if(width < breakpoints[3]) {
@@ -330,7 +345,8 @@ export const CategoriesSection = () => {
                           opacity: 0, 
                           borderRadius: 0, 
                           transition: { 
-                            duration: 0.2 
+                            duration: 0.2,
+                            ease: "easeInOut"
                           } 
                         }}
                       >
@@ -411,10 +427,51 @@ export const CategoriesSection = () => {
             ))}
           </AnimatePresence>
           {isMobile && (
-            <>
-              <button onClick={handleGoPrevious}>previous</button>
-              <button onClick={handleGoNext}>next</button>
-            </>
+            <div
+              css={css`
+                display: flex;
+                justify-content: center;
+                margin-top: ${tokens.spacing.lg};
+              `}
+            >
+              <Arrow onClick={handleGoPrevious}>
+                <Icon 
+                  name="chevronLeft"
+                  color={tokens.color.accentStrong}
+                  strokeWidth={2}
+                  height={25}
+                  width={25}
+                />
+              </Arrow>
+              <div
+                css={css`
+                  align-items: center;
+                  display: flex;
+                  gap: ${tokens.spacing.md};
+                  margin: 0 ${tokens.spacing.md};
+                `}
+              >
+                {categories.map((_, i) => (
+                  <div 
+                    css={css`
+                      background-color: ${i === activeIndex ? tokens.color.accentStrong : tokens.color.accentWeak};
+                      border-radius: ${tokens.borderRadius.max};
+                      height: 6px;
+                      width: 6px;
+                    `}
+                  />
+                ))}
+              </div>
+              <Arrow onClick={handleGoNext}>
+                <Icon 
+                  name="chevronRight"
+                  color={tokens.color.accentStrong}
+                  strokeWidth={2}
+                  height={25}
+                  width={25}
+                />
+              </Arrow>
+            </div>
           )}
         </div>
       </div>
