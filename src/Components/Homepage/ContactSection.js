@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import React from 'react'
-import { tokens } from '../../Helpers/styleTokens'
+import { mediaQueries, tokens } from '../../Helpers/styleTokens'
 import { SectionTitle } from './Homepage'
 
 const Container = styled.div`
@@ -48,10 +48,14 @@ export const ContactSection = () => {
       {/* <ExcitingSvg /> */}
       <div 
         css={css`
+          display: flex;
+          justify-content: center;
           padding-top: 40px;
           position: relative;
           & > img {
-            margin-bottom: -640px;
+            ${mediaQueries({
+              marginBottom: ["-717px", "-690px", "-660px", "-645px"]
+            })}
           }
         `}
       >

@@ -97,11 +97,20 @@ const SideGradient = styled.div`
   border-radius: 999px;
   filter: blur(370px);
   height: 210%;
-  left: ${props => props.left ? "-598px" : "initial"};
-  right: ${props => props.left ? "initial" : "-598px"};
   position: absolute;
   top: -100%;
   width: 650px;
+  ${props => props.left ? GradientLeft : GradientRight}
+`
+const GradientLeft = css`
+  ${mediaQueries({
+    left: ["-650px", "-638px", "-614px", "-598px"]
+  })}
+`
+const GradientRight = css`
+  ${mediaQueries({
+    right: ["-650px", "-638px", "-614px", "-598px"]
+  })}
 `
 
 const Arrow = styled.div`
@@ -229,7 +238,7 @@ export const CategoriesSection = () => {
             margin: ${tokens.spacing.xxl} auto;
             margin-bottom: 300px; // temp
             justify-content: space-between;
-            ${mediaQuery[2]} {
+            ${mediaQuery[3]} {
               flex-direction: row;
             }
           `}
