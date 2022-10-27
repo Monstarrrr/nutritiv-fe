@@ -35,6 +35,7 @@ export const ContactSection = () => {
       <div
         css={css`
           margin: ${tokens.spacing.max} auto;
+          padding: 0 ${tokens.spacing.lg};
           font-size: ${tokens.font.fontSize.md};
         `}
       >
