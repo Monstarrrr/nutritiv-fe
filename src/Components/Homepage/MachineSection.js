@@ -19,7 +19,26 @@ export const MachineSection = forwardRef((props, ref) => {
     <Container>
       <SectionTitle>
         Manufacturing
+        <span
+          css={css`
+            display: block;
+            font-size: 14px;
+            padding: 0px 12px;
+          `}
+        >
+          the future of complements
+        </span>
       </SectionTitle>
+      <span
+        css={css`
+          color: #c5c5c5;
+          display: block;
+          font-size: 14px;
+          padding: 22px 24px;
+        `}
+      >
+        We are lorem ipsum du stuff et tout là something some words sample textsomething some words sample text
+      </span>
       <div
         css={css`
           display: flex;

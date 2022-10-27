@@ -65,7 +65,7 @@ export const SectionTitle = styled.h2`
   letter-spacing: 4px;
   ${mediaQueries({
     fontSize: [
-      "36px", "48px", "62px", "68px"
+      "32px", "44px", "62px", "68px"
     ],
   })}
 `
