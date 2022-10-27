@@ -121,10 +121,6 @@ const Arrow = styled.div`
   padding: 8px;
   transition: all ease .2s;
   pointer-events: ${props => props.disabled ? "none" : "initial"};
-  &:hover {
-    box-shadow: 0 0 10px -1px ${tokens.color.accentStrong};
-    border: 2px solid ${tokens.color.accentStrong};
-  }
 `
 
 export const CategoriesSection = () => {

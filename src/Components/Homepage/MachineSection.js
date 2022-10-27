@@ -2,7 +2,7 @@
 import React, { forwardRef } from 'react'
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import { mediaQueries } from '../../Helpers/styleTokens';
+import { mediaQueries, tokens } from '../../Helpers/styleTokens';
 import { SectionTitle } from './Homepage';
 
 const Container = styled.div`
@@ -22,8 +22,16 @@ export const MachineSection = forwardRef((props, ref) => {
         <span
           css={css`
             display: block;
-            font-size: 14px;
+            max-width: none;
             padding: 0px 12px;
+            ${mediaQueries({
+              fontSize: [
+                tokens.font.fontSize.xs, 
+                tokens.font.fontSize.sm, 
+                tokens.font.fontSize.md, 
+                tokens.font.fontSize.lg, 
+              ],
+            })}
           `}
         >
           the future of complements
@@ -34,6 +42,7 @@ export const MachineSection = forwardRef((props, ref) => {
           color: #c5c5c5;
           display: block;
           font-size: 14px;
+          max-width: none;
           padding: 22px 24px;
         `}
       >
