@@ -279,6 +279,14 @@ const Shop = forwardRef((props, ref) => {
                   count={numberOfPages}
                   page={page}
                   onChange={handleChangeActivePage}
+                  sx={{
+                    '& .MuiButtonBase-root': {
+                      color: "white",
+                    },
+                    '& .MuiPaginationItem-root': {
+                      color: "white",
+                    }
+                  }}
                 />
                 {/* PRODUCTS PER PAGE - DROPDOWN */}
                 <form>
