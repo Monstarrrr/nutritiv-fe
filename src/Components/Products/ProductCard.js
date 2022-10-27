@@ -21,7 +21,7 @@ export const ProductCard = ({ product, index }) => {
       key={product._id}
       onClick={() => navigate(`/product/${product.title}`)}
       style={{
-        background: "lightgray",
+        background: "gray",
       }}
       variants={productCard}
       initial="initial"
