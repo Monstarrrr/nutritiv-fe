@@ -42,7 +42,8 @@ export const MachineSection = forwardRef((props, ref) => {
           color: #c5c5c5;
           display: block;
           font-size: 14px;
-          max-width: none;
+          margin: 0 auto;
+          max-width: 400px;
           padding: 22px 24px;
         `}
       >
