@@ -100,44 +100,48 @@ export const ShapesSection = forwardRef((props, ref) => {
               >
                 {shape}
               </span>
-              {/* {focusedShape === shape ? (
-                <motion.div
-                  style={{
-                    background: tokens.color.primaryTransparent,
-                    borderRadius: tokens.borderRadius.lg,
-                    bottom: 0,
-                    height: "100%",
-                    left: 0,
-                    position: "absolute",
-                    right: 0,
-                    width: "100%",
-                    zIndex: 0,
-                  }}
-                  transition={{
-                    layout: {
-                      duration: 0.2,
-                      ease: "easeOut",
-                    },
-                  }}
-                  layoutId="shape-focus"
-                />) : null
+              {focusedShape === shape ? (
+                <AnimatePresence>
+                  <motion.div
+                    style={{
+                      background: tokens.color.primaryTransparent,
+                      borderRadius: tokens.borderRadius.lg,
+                      bottom: 0,
+                      height: "100%",
+                      left: 0,
+                      position: "absolute",
+                      right: 0,
+                      width: "100%",
+                      zIndex: 0,
+                    }}
+                    transition={{
+                      layout: {
+                        duration: 0.2,
+                        ease: "easeOut",
+                      },
+                    }}
+                    layoutId="shape-focus"
+                  />
+                </AnimatePresence>) : null
               }
               {selectedShape === shape ? (
-                <motion.div
-                  style={{
-                    background: tokens.color.accentStrong,
-                    borderRadius: tokens.borderRadius.lg,
-                    bottom: 0,
-                    height: "100%",
-                    left: 0,
-                    position: "absolute",
-                    right: 0,
-                    width: "100%",
-                    zIndex: 1,
-                  }}
-                  layoutId="shape-select"
-                />) : null
-              } */}
+                <AnimatePresence>
+                  <motion.div
+                    style={{
+                      background: tokens.color.accentStrong,
+                      borderRadius: tokens.borderRadius.lg,
+                      bottom: 0,
+                      height: "100%",
+                      left: 0,
+                      position: "absolute",
+                      right: 0,
+                      width: "100%",
+                      zIndex: 1,
+                    }}
+                    layoutId="shape-select"
+                  />
+                </AnimatePresence>) : null
+              }
             </li>
           ))}
         </ul>

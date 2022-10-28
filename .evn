@@ -1,0 +1,5 @@
+REACT_APP_API_VERSION = "v1"
+REACT_APP_S3_ADDRESS = "https://nutritiv.s3.eu-west-3.amazonaws.com/"
+REACT_APP_S3_PRODUCTS = "productsImgs/"
+REACT_APP_S3_AVATAR = "usersAvatar/"
+REACT_APP_S3_CSS = "cssFiles/"
