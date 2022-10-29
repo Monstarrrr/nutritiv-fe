@@ -292,7 +292,7 @@ function App() {
           />
           <NavbarMenu open={mobileNavMenu} />
             <Suspense fallback={null}>
-              <AnimatePresence exitBeforeEnter>
+              {/* <AnimatePresence exitBeforeEnter> */}
                 <Routes
                   location={location} 
                   key={location.pathname}
@@ -370,7 +370,7 @@ function App() {
                     </Route>
                   </Route>
                 </Routes>
-              </AnimatePresence>
+              {/* </AnimatePresence> */}
               <Canvas
                 onCreated={(state) =>
                   state.events.connect(canvasWrapperRef.current)
