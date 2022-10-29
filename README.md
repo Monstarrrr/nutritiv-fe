@@ -9,7 +9,7 @@
 [![Lines of code](https://img.shields.io/tokei/lines/github/Monstarrrr/nutritiv-fe)](#) 
 
 ## Available Scripts
- 
+
 In the project directory, you can run:
 
 ### `npm start`
