@@ -16,6 +16,7 @@ import { Cart } from './Components/Payment/Cart';
 import Homepage from './Components/Homepage/Homepage';
 import PageNotFound from './Components/PageNotFound/PageNotFound';
 import ChatConnection from './Components/Chat/ChatConnection';
+import { AnimatePresence } from 'framer-motion';
 import { ForgotPassword } from './Components/Authentication/ForgotPassword';
 import { ForgotTFA } from './Components/Authentication/ForgotTFA';
 import { ResetPassword } from './Components/Authentication/ResetPassword';
@@ -30,8 +31,8 @@ import { NavbarMenu } from './Components/Header/NavbarMenu';
 import PagesWrapper from './Components/PagesWrapper';
 import { GradientBackground } from './Components/GradientBackground';
 import useRefs from 'react-use-refs';
-import { Canvas } from '@react-three/fiber';
-import { OrbitControls, PerspectiveCamera, Preload, 
+import { Canvas, useFrame } from '@react-three/fiber';
+import { Environment, OrbitControls, PerspectiveCamera, Plane, Preload, 
   // View 
 } from '@react-three/drei';
 import { View } from './Components/View';

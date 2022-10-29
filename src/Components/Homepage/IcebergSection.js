@@ -1,127 +1,10 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import styled from '@emotion/styled';
-import { motion } from 'framer-motion';
 import React, { forwardRef, useState } from 'react'
 import { scrollToElement } from '../../Helpers/scrollToElement';
-import { breakpoints, mediaQueries, mediaQuery, tokens } from '../../Helpers/styleTokens'
+import { breakpoints, mediaQueries, tokens } from '../../Helpers/styleTokens'
 import useWindowDimensions from '../../Helpers/useWindowDimensions';
 import { NutriButton } from '../NutriButton';
-
-const PillButton = styled(motion.button)`
-  background: ${tokens.color.accentStrong};
-  border: none;
-  border-radius: ${tokens.borderRadius.default};
-  /* box-shadow: 0 0 6px ${tokens.color.accentStrong}; */
-  box-shadow: 0 0 0 2px aqua;
-  color: ${tokens.color.contrastDark};
-  cursor: pointer;
-  font-weight: ${tokens.font.fontWeight.medium};
-  outline: none;
-  overflow: hidden;
-  transition: all .2s ease;
-  padding: ${tokens.spacing.sm} ${tokens.spacing.xl};
-  position: relative;
-  font-size: ${tokens.font.fontSize.sm};
-  ${mediaQuery[1]} {
-    padding: calc(${tokens.spacing.xl} / 2) ${tokens.spacing.xxl};
-  }
-  &:before {
-    background: #085e63;
-    content: "";
-    height: 100%;
-    position: absolute;
-    top: 0;
-    transition: all ease .2s;
-    width: 50%;
-  }
-  &:hover {
-    box-shadow: 0 0 6px ${tokens.color.accentStrong};
-    &:before {
-      transform: translateX(200%);
-      transition: all ease .2s;
-    }
-    > span {
-      opacity: 1;
-      transition: all ease .2s;
-    }
-    div {
-      &::before, &::after {
-        transform: translateX(128px);
-        transition: all ease .2s;
-      }
-    }
-  }
-  > span {
-    opacity: 0;
-    transition: all ease .2s;
-  }
-`
-
-const BubblesWrapper = styled.div`
-  height: 0;
-  width: 0;
-`
-const BubbleGlobal = css`
-  background: #085e63;
-  border-radius: 999px;
-  content: "";
-  position: absolute;
-`
-const BubblesA = styled.div`
-  &::before {
-    ${BubbleGlobal}
-    height: 9px;
-    width: 9px;
-    left: 63px;
-    top: 27px;
-    transition: all ease .2s;
-  }
-  &::after {
-    ${BubbleGlobal}
-    height: 10px;
-    width: 10px;
-    left: 55px;
-    top: 9px;
-    transition: all ease .2s;
-  }
-`
-const BubblesB = styled.div`
-  &::before {
-    ${BubbleGlobal}
-    height: 7px;
-    width: 7px;
-    left: 19px;
-    top: 21px;
-    transition: all ease .2s;
-  }
-  &::after {
-    ${BubbleGlobal}
-    height: 6px;
-    width: 6px;
-    left: 12px;
-    top: 10px;
-    transition: all ease .2s;
-  }
-`
-const BubblesC = styled.div`
-  &::before {
-    ${BubbleGlobal}
-    height: 8px;
-    width: 8px;
-    left: 32px;
-    top: 15px;
-    transition: all ease .2s;
-  }
-  &::after {
-    ${BubbleGlobal}
-    height: 11px;
-    width: 11px;
-    left: 42px;
-    top: 20px;
-    transition: all ease .2s;
-  }
-`
 
 export const IcebergSection = forwardRef((props, ref) => {
   const { setIcebergShadow } = props;
@@ -163,6 +46,10 @@ export const IcebergSection = forwardRef((props, ref) => {
       >
         Nutritiv
       </h2>
+      
+      {/* <div ref={refs.canvasView1} style={{ display: "inline-block", height: "100px", width: "100px" }} /> 
+      <div ref={refs.canvasView2} style={{ display: "inline-block", height: "100px", width: "100px" }} />  */}
+      
       <h3
         css={css`
           font-weight: ${tokens.font.fontWeight.regular};
@@ -193,18 +80,11 @@ export const IcebergSection = forwardRef((props, ref) => {
           marginTop: "20px",
         }}
       >
-        <PillButton 
+        <NutriButton 
+          label="Discover"
+          type="filled"
           onClick={() => scrollToElement(ref.discoverScrollRef)}
-        >
-          <BubblesWrapper>
-            <BubblesA />
-            <BubblesB />
-            <BubblesC />
-          </BubblesWrapper>
-          <span>
-            Discover !
-          </span>
-        </PillButton>
+        />
       </div>
     </div>
   )
