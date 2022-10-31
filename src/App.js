@@ -392,9 +392,17 @@ function App() {
                       autoRotate
                       autoRotateSpeed={2}
                       enablePan={false}
-                      enableZoom
-                      minDistance={5.65}
-                      maxDistance={5.65}
+                      enableZoom={view.homepageCard ? false : true}
+                      minDistance={
+                        view.type === "pill" ? 2.65 : 7
+                      }
+                      maxDistance={
+                        view.homepageCard ? (
+                          view.type === "pill" ? 2.65 : 7
+                        ) : (
+                          view.type === "pill" ? 7 : 9
+                        )
+                      }
                       minPolarAngle={angleToRadians(70)}
                       maxPolarAngle={angleToRadians(100)}
                       makeDefault

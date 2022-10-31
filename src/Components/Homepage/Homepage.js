@@ -85,13 +85,11 @@ const Homepage = forwardRef((props, ref) => {
 
   const videoRef = useRef();
   const discoverScrollRef = useRef(null);
-  const machineScrollRef = useRef(null);
   const shapesScrollRef = useRef(null);
   
   const icebergSectionRefs = { videoRef, discoverScrollRef };
-  const machineSectionRefs = { machineScrollRef };
-  const shapesSectionRefs = { ...refs };
-  const arrowSectionRefs = { ...refs, machineScrollRef, discoverScrollRef };
+  const shapesSectionRefs = { ...refs, shapesScrollRef };
+  const arrowSectionRefs = { ...refs, shapesScrollRef, discoverScrollRef };
   
   const location = useLocation();
   const [icebergShadow, setIcebergShadow] = useState(false);
@@ -150,15 +148,14 @@ const Homepage = forwardRef((props, ref) => {
           {/* EXPLANATION */}
           <ArrowSection ref={arrowSectionRefs}/>
           
-          {/* MACHINE */}
-          <MachineSection ref={machineSectionRefs} />
-          
           {/* SHAPES */}
           <ShapesSection ref={shapesSectionRefs}/>
-
+          
           {/* CATEGORIES */}
           <CategoriesSection />
-
+          
+          {/* MACHINE */}
+          <MachineSection />
 
           {/* REVIEWS */}
           {/* <ReviewsSection /> */}

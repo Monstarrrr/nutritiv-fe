@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React, { forwardRef } from 'react'
+import { forwardRef } from 'react'
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { mediaQueries, tokens } from '../../Helpers/styleTokens';
@@ -41,12 +41,18 @@ export const MachineSection = forwardRef((props, ref) => {
         css={css`
           color: #c5c5c5;
           display: block;
-          font-size: 14px;
-          max-width: none;
+          max-width: 400px;
+          margin: 0 auto;
           padding: 22px 24px;
+          ${mediaQueries({
+            fontSize: [
+              tokens.font.fontSize.xs, 
+              tokens.font.fontSize.sm,
+            ]
+          })}
         `}
       >
-        We are lorem ipsum du stuff et tout là something some words sample textsomething some words sample text
+        Through a complex process, we at Nutritiv are able to rearange sets of molecules in a specific ways in relation to how they interact with the human body, <br />we then pack them into a digestible format, ready for human consumption.
       </span>
       <div
         css={css`
@@ -66,7 +72,6 @@ export const MachineSection = forwardRef((props, ref) => {
               ]
             })}
           `}
-          ref={ref.machineScrollRef}
           src="machine.png" 
         />
       </div>

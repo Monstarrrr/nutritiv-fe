@@ -12,8 +12,6 @@ function Container({ canvasSize, scene, index, children, frames, rect, track, up
   const camera = useThree((state) => state.camera)
   const virtualScene = useThree((state) => state.scene)
   const setEvents = useThree((state) => state.setEvents)
-
-  console.log('# index View.js :', index)
   
   let frameCount = 0
   useFrame((state) => {
@@ -70,7 +68,6 @@ function Container({ canvasSize, scene, index, children, frames, rect, track, up
     // Connect the event layer to the tracking element
     const old = get().events.connected
     setEvents({ connected: track.current })
-    console.log("View.js updated");
     return () => setEvents({ connected: old })
   }, [update])
 
@@ -99,7 +96,6 @@ export const View = ({ track, index = 1, frames = Infinity, children, update }) 
   React.useEffect(() => {
     // We need the tracking elements bounds beforehand in order to inject it into the portal
     rect.current = track.current?.getBoundingClientRect()
-    console.log('# rect.current :', rect.current)
     // And now we can proceed
     toggle()
   }, [])

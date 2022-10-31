@@ -77,7 +77,7 @@ export const ArrowSection = forwardRef((props, ref) => {
         `}
       >
         <div
-          onClick={() => scrollToElement(ref.machineScrollRef)}
+          onClick={() => scrollToElement(ref.shapesScrollRef)}
           onMouseEnter={() => setArrowHovered(true)}
           onMouseLeave={() => setArrowHovered(false)}
           css={css`

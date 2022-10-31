@@ -79,32 +79,38 @@ export const Footer = () => {
               display: flex;
               justify-content: center;
               min-width: 180px;
-              > svg {
+              > a {
                 margin: 0 ${tokens.spacing.sm};
               }
             `}
           >
-            <Icon
-              name="github" 
-              color={tokens.color.contrastLight}
-              filled
-              height={"28px"}
-              width={"28px"}
-            />
-            <Icon
-              name="star" 
-              color={tokens.color.contrastLight}
-              filled
-              height={"28px"}
-              width={"28px"}
-            />
-            <Icon
-              name="beaker" 
-              color={tokens.color.contrastLight}
-              filled
-              height={"28px"}
-              width={"28px"}
-            />
+            <a href="https://github.com/Monstarrrr/nutritiv-fe">
+              <Icon
+                name="github" 
+                color={tokens.color.contrastLight}
+                filled
+                height={"28px"}
+                width={"28px"}
+              />
+            </a>
+            <a href="">
+              <Icon
+                name="star" 
+                color={tokens.color.contrastLight}
+                filled
+                height={"28px"}
+                width={"28px"}
+              />
+            </a>
+            <a href="">
+              <Icon
+                name="beaker" 
+                color={tokens.color.contrastLight}
+                filled
+                height={"28px"}
+                width={"28px"}
+              />
+            </a>
           </div>
         </div>
         
