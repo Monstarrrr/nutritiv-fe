@@ -299,33 +299,42 @@ export const ShapesSection = forwardRef(({props}, ref) => {
                     {stat.name}
                   </label>
                   <div>
-                    {[...Array(stat.value)].map((_, i) => 
-                      <Icon
-                        color={tokens.color.accentStrong}
-                        filled
-                        height={20}
-                        key={i}
-                        name="beaker"
-                        style={{
-                          marginLeft: "5px"
-                        }}
-                        width={20}
-                      />
-                    )}
-                    {[...Array(5 - stat.value)].map((_, i) => 
-                      <Icon
-                        color={tokens.color.accentStrong}
-                        height={20}
-                        key={i}
-                        name="beaker"
-                        style={{
-                          marginLeft: "5px",
-                          opacity: 0.5
-                        }}
-                        strokeWidth={2}
-                        width={20}
-                      />
-                    )}
+                    <AnimatePresence exitBeforeEnter>
+                      {[...Array(stat.value)].map((_, i) => 
+                        <Icon
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          transition={{ duration: 0.2 * i }}
+                          color={tokens.color.accentStrong}
+                          filled
+                          height={20}
+                          key={i}
+                          name="beaker"
+                          style={{
+                            marginLeft: "5px"
+                          }}
+                          width={20}
+                        />
+                      )}
+                      {[...Array(5 - stat.value)].map((_, i) => 
+                        <Icon
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 0.5 }}
+                          exit={{ opacity: 0 }}
+                          transition={{ duration: (0.2 * i) + (0.2 * stat.value) }}
+                          color={tokens.color.accentStrong}
+                          height={20}
+                          key={i}
+                          name="beaker"
+                          style={{
+                            marginLeft: "5px"
+                          }}
+                          strokeWidth={2}
+                          width={20}
+                        />
+                      )}
+                    </AnimatePresence>
                   </div>
                 </div>
               ))}
@@ -346,7 +355,7 @@ export const ShapesSection = forwardRef(({props}, ref) => {
             `}
           >
             <NutriButton 
-              label="Shop Gummies"
+              label={selectedShape.name === "Capsule" ? "Shop Capsules" : "Shop Gummies"}
               type="filled"
             />
           </CardButton>
