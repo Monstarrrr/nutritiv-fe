@@ -3,43 +3,101 @@ import React, { forwardRef, useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import { tokens } from '../../Helpers/styleTokens';
+import { mediaQuery, tokens } from '../../Helpers/styleTokens';
 import { Icon } from '../Icons/Icon';
 import { NutriButton } from '../NutriButton';
 import { SectionTitle } from './Homepage';
 
+// SECTION
+const Section = styled.div`
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 40vh; // temp
+`
 const SectionContent = styled.div`
   margin-top: ${tokens.spacing.max};
   perspective: 2000px;
   perspective-origin: center;
   position: relative;
 `
-const Card = styled(motion.div)`
-  background: ${tokens.color.primary};
-  background: radial-gradient(circle, rgb(1, 53, 74) 0%, ${tokens.color.primary} 100%);
-  border-radius: ${tokens.borderRadius.xl};
-  box-shadow: ${tokens.color.accentWeak} 0px 0px 10px 2px;
-  height: 300px;
-  position: relative;
-  transform: rotateX(20deg) rotateY(0deg);
-  transform-style: preserve-3d;
-  width: 812px;
-  z-index: -1;
-  &:before {
-    background: #051255;
-    border-radius: ${tokens.borderRadius.xl};
-    content: "";
-    position: absolute;
-    inset: 0;
-    transform: translateZ(-84px);
+
+// SWITCH
+const SwitchWrapper = styled.div`
+  display: none;
+  ${mediaQuery[2]} {
+    align-items: center;
+    background: ${tokens.color.accentWeak};
+    border-radius: ${tokens.borderRadius.lg};
+    box-shadow: 0px 0px 10px 1px ${tokens.color.contrastDark};
+    padding: 4px;
+    width: fit-content;
+    display: flex;
   }
-  &:after {
-    background: #0512558f;
+`
+const ShapeContainer = styled.li`
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  height: auto;
+  justify-content: center;
+  list-style: none;
+  outline: none;
+  text-transform: uppercase;
+  padding: ${tokens.spacing.md} ${tokens.spacing.xxl};
+  position: relative;
+`
+const ShapeLabel = styled.span`
+  bottom: 0;
+  color: ${props => props.active ? tokens.color.contrastDark : tokens.color.contrastLight};
+  left: '4px';
+  font-size: ${tokens.font.fontSize.xs};
+  font-weight: ${tokens.font.fontWeight.medium};
+  position: 'absolute';
+  right: 0;
+  top: '6px';
+  user-select: 'none';
+  z-index: 2;
+`
+const FocusedShape = styled(motion.div)`
+  background: ${tokens.color.primaryTransparent};
+  border-radius: ${tokens.borderRadius.lg};
+  height: 100%;
+  width: 100%;
+  z-index: 0;
+`
+
+// CARD
+const Card = styled(motion.div)`
+  display: none;
+  ${mediaQuery[2]} {
+    background: ${tokens.color.primary};
+    background: radial-gradient(circle, rgb(1, 53, 74) 0%, ${tokens.color.primary} 100%);
     border-radius: ${tokens.borderRadius.xl};
-    content: "";
-    position: absolute;
-    inset: 0;
-    transform: translateZ(-160px);
+    box-shadow: ${tokens.color.accentWeak} 0px 0px 10px 2px;
+    display: block;
+    height: 300px;
+    position: relative;
+    transform: rotateX(20deg) rotateY(0deg);
+    transform-style: preserve-3d;
+    width: 812px;
+    z-index: -1;
+    &:before {
+      background: #051255;
+      border-radius: ${tokens.borderRadius.xl};
+      content: "";
+      position: absolute;
+      inset: 0;
+      transform: translateZ(-84px);
+    }
+    &:after {
+      background: #0512558f;
+      border-radius: ${tokens.borderRadius.xl};
+      content: "";
+      position: absolute;
+      inset: 0;
+      transform: translateZ(-160px);
+    }
   }
 `
 const CardContent = styled.div`
@@ -48,6 +106,10 @@ const CardContent = styled.div`
   position: absolute;
   inset: 0;
   transform: rotateX(20deg) rotateY(0deg);
+  flex-direction: column;
+  ${mediaQuery[2]} {
+    flex-direction: row;
+  }
 `
 const CardSupermentContainer = styled.div`
   position: relative;
@@ -62,14 +124,40 @@ const CardSuperment = styled.div`
   bottom: 50%;
   transform: translateY(50%);
 `
+const StatsContainer = styled.div`
+  align-items: left;
+  display: flex;
+  font-weight: ${tokens.font.fontWeight.light};
+  flex-direction: column;
+  position: relative;
+  > div {
+    align-items: center;
+    display: flex;
+    margin-bottom: ${tokens.spacing.sm};
+    &:nth-last-of-type(1) {
+      margin-bottom: 0;
+    }
+  }
+  &:before {
+    display: none;
+    ${mediaQuery[2]} {
+      content: "";
+      background-color: ${tokens.color.accentStrong};
+      bottom: 0;
+      display: inline-block;
+      position: absolute;
+      top: 0;
+      width: 2px;
+      left: -24px;
+      height: 50%;
+      transform: translateY(50%);
+      border-radius: 20px;
+    }
+  }
+`
 const CardDescription = styled.div``
 const CardButton = styled.div``
 const ShapesSwitch = styled.div``
-
-const variants = {
-  active: "transform: rotateX(50deg)",
-  default: "transform: rotateX(20deg)",
-}
 
 const shapes = [
   {
@@ -91,96 +179,48 @@ const shapes = [
     description: "For those who want lasting effects, at the cost of strength and the time it takes to set in.",
   }, 
 ];
+
 export const ShapesSection = forwardRef(({props}, ref) => {
   const [focusedShape, setFocusedShape] = useState(null);
   const [selectedShape, setSelectedShape] = useState(shapes[0]);
-
-  const [active, setActive] = useState(false);
   
-  useEffect(() => {
-    setActive(true)
-    const timer = setTimeout(() => {
-      setActive(false);
-    }, 200)
+  // const [active, setActive] = useState(false);
+  
+  // useEffect(() => {
+  //   setActive(true)
+  //   const timer = setTimeout(() => {
+  //     setActive(false);
+  //   }, 200)
     
-    return () => clearTimeout(timer);
-  }, [selectedShape]);
+  //   return () => clearTimeout(timer);
+  // }, [selectedShape]);
   
   return (
-    <div
-      css={css`
-        align-items: center;
-        display: flex;
-        flex-direction: column;
-        margin-bottom: 40vh; // temp
-      `}
-    >
+    <Section>
       <SectionTitle>
           Shapes
       </SectionTitle>
       
       <ShapesSwitch>
-        <ul
-          css={css`
-            align-items: center;
-            background: ${tokens.color.accentWeak};
-            border-radius: ${tokens.borderRadius.lg};
-            box-shadow: 0px 0px 10px 1px ${tokens.color.contrastDark};
-            display: flex;
-            padding: 4px;
-            width: fit-content;
-          `}
-        >
+        <SwitchWrapper>
           {shapes && shapes.map(shape => (
-            <li
-              css={css`
-                align-items: center;
-                cursor: pointer;
-                display: flex;
-                height: auto;
-                justify-content: center;
-                list-style: none;
-                outline: none;
-                text-transform: uppercase;
-                padding: ${tokens.spacing.md} ${tokens.spacing.xxl};
-                position: relative;
-              `}
+            <ShapeContainer
               key={shape.name}
               onClick={() => setSelectedShape(shape)}
               onMouseEnter={() => setFocusedShape(shape.name)}
               onMouseLeave={() => setFocusedShape("")}
             >
-              <span
-                css={css`
-                  bottom: 0;
-                  color: ${shape.name === selectedShape.name ? 
-                    tokens.color.contrastDark : tokens.color.contrastLight
-                  };
-                  left: '4px';
-                  font-size: ${tokens.font.fontSize.xs};
-                  font-weight: ${tokens.font.fontWeight.medium};
-                  position: 'absolute';
-                  right: 0;
-                  top: '6px';
-                  user-select: 'none';
-                  z-index: 2;
-                `}
-              >
+              <ShapeLabel active={shape.name === selectedShape.name ? 1 : undefined}>
                 {shape.name}
-              </span>
+              </ShapeLabel>
               {focusedShape === shape.name ? (
                 <AnimatePresence>
-                  <motion.div
+                  <FocusedShape
                     style={{
-                      background: tokens.color.primaryTransparent,
-                      borderRadius: tokens.borderRadius.lg,
                       bottom: 0,
-                      height: "100%",
                       left: 0,
                       position: "absolute",
                       right: 0,
-                      width: "100%",
-                      zIndex: 0,
                     }}
                     transition={{
                       layout: {
@@ -210,9 +250,9 @@ export const ShapesSection = forwardRef(({props}, ref) => {
                   />
                 </AnimatePresence>) : null
               }
-            </li>
+            </ShapeContainer>
           ))}
-        </ul>
+        </SwitchWrapper>
       </ShapesSwitch>
       
       <SectionContent>
@@ -258,36 +298,8 @@ export const ShapesSection = forwardRef(({props}, ref) => {
             >
               {selectedShape && selectedShape.name}
             </h4>
-            <div
-              css={css`
-                align-items: left;
-                display: flex;
-                font-weight: ${tokens.font.fontWeight.light};
-                flex-direction: column;
-                position: relative;
-                > div {
-                  align-items: center;
-                  display: flex;
-                  margin-bottom: ${tokens.spacing.sm};
-                  &:nth-last-of-type(1) {
-                    margin-bottom: 0;
-                  }
-                }
-                &:before {
-                  content: "";
-                  background-color: ${tokens.color.accentStrong};
-                  bottom: 0;
-                  position: absolute;
-                  top: 0;
-                  width: 2px;
-                  left: -24px;
-                  height: 50%;
-                  transform: translateY(50%);
-                  border-radius: 20px;
-                }
-              `}
-            >
-              {selectedShape && selectedShape.stats.map((stat, i) => (
+            <StatsContainer>
+              {selectedShape && selectedShape.stats.map(stat => (
                 <div
                   css={css`
                     display: flex;
@@ -300,47 +312,39 @@ export const ShapesSection = forwardRef(({props}, ref) => {
                   </label>
                   <div>
                     {[...Array(stat.value)].map((_, i) => 
-                      <AnimatePresence key={i} exitBeforeEnter>
-                        <Icon
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          exit={{ opacity: 0 }}
-                          transition={{ duration: 0.2 * i }}
-                          color={tokens.color.accentStrong}
-                          filled
-                          height={20}
-                          key={i}
-                          name="beaker"
-                          style={{
-                            marginLeft: "5px"
-                          }}
-                          width={20}
-                        />
-                      </AnimatePresence>
+                      <Icon
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.2 * i }}
+                        color={tokens.color.accentStrong}
+                        filled
+                        height={20}
+                        name="beaker"
+                        style={{
+                          marginLeft: "5px"
+                        }}
+                        width={20}
+                      />
                     )}
                     {[...Array(5 - stat.value)].map((_, i) => 
-                      <AnimatePresence key={i}>
-                        <Icon
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 0.5 }}
-                          exit={{ opacity: 0 }}
-                          transition={{ duration: (0.2 * i) + (0.2 * stat.value) }}
-                          color={tokens.color.accentStrong}
-                          height={20}
-                          key={i}
-                          name="beaker"
-                          style={{
-                            marginLeft: "5px"
-                          }}
-                          strokeWidth={2}
-                          width={20}
-                        />
-                      </AnimatePresence>
+                      <Icon
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 0.5 }}
+                        transition={{ duration: (0.2 * i) + (0.2 * stat.value) }}
+                        color={tokens.color.accentStrong}
+                        height={20}
+                        name="beaker"
+                        style={{
+                          marginLeft: "5px"
+                        }}
+                        strokeWidth={2}
+                        width={20}
+                      />
                     )}
                   </div>
                 </div>
               ))}
-            </div>
+            </StatsContainer>
             <div
               css={css`
                 margin-top: ${tokens.spacing.xl};
@@ -363,6 +367,6 @@ export const ShapesSection = forwardRef(({props}, ref) => {
           </CardButton>
         </CardContent>
       </SectionContent>
-    </div>
+    </Section>
   )
 })

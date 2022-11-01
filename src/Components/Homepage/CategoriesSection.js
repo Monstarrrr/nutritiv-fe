@@ -184,8 +184,6 @@ export const CategoriesSection = () => {
     }, 205)
     return () => clearTimeout(timer);
   }
-
-  console.log('# activeIndex :', activeIndex)
   
   useEffect(() => {
     if(width < breakpoints[3]) {
