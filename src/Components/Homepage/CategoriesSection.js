@@ -473,7 +473,8 @@ export const CategoriesSection = () => {
                 `}
               >
                 {categories.map((_, i) => (
-                  <div 
+                  <div
+                    key={i}
                     css={css`
                       background-color: ${i === activeIndex ? tokens.color.accentStrong : tokens.color.accentWeak};
                       border-radius: ${tokens.borderRadius.max};

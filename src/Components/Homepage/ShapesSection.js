@@ -299,8 +299,8 @@ export const ShapesSection = forwardRef(({props}, ref) => {
                     {stat.name}
                   </label>
                   <div>
-                    <AnimatePresence exitBeforeEnter>
-                      {[...Array(stat.value)].map((_, i) => 
+                    {[...Array(stat.value)].map((_, i) => 
+                      <AnimatePresence key={i} exitBeforeEnter>
                         <Icon
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
@@ -316,8 +316,10 @@ export const ShapesSection = forwardRef(({props}, ref) => {
                           }}
                           width={20}
                         />
-                      )}
-                      {[...Array(5 - stat.value)].map((_, i) => 
+                      </AnimatePresence>
+                    )}
+                    {[...Array(5 - stat.value)].map((_, i) => 
+                      <AnimatePresence key={i}>
                         <Icon
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 0.5 }}
@@ -333,8 +335,8 @@ export const ShapesSection = forwardRef(({props}, ref) => {
                           strokeWidth={2}
                           width={20}
                         />
-                      )}
-                    </AnimatePresence>
+                      </AnimatePresence>
+                    )}
                   </div>
                 </div>
               ))}
