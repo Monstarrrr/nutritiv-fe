@@ -1,11 +1,12 @@
-import React, { useRef } from 'react'
+import React, { forwardRef, useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
 
 const s3Address = process.env.REACT_APP_S3_ADDRESS;
 
 const supermentName = "gummy-pi" // temp
 
-export default function Model({ _ }) {
+export const GummyModel = forwardRef(({ supermentName }, ref) => {
+  console.log('# supermentName :', supermentName)
   const group = useRef()
   const { nodes, materials } = useGLTF(`${s3Address}assets/${supermentName}.glb`)
   
@@ -15,6 +16,6 @@ export default function Model({ _ }) {
       <mesh wireframe castShadow geometry={nodes.Cube002.geometry} material={materials.transparent_cap} position={[-0.05, -0.32, 0.01]} scale={2.19} />
     </group>
   )
-}
+})
 
-useGLTF.preload('/model-jelly-pi.glb')
+// useGLTF.preload('/model-jelly-pi.glb')

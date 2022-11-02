@@ -1,7 +1,7 @@
 import { Environment, OrbitControls, PerspectiveCamera, Plane, softShadows, Stats, useHelper } from '@react-three/drei'
 import React, { forwardRef, Suspense, useEffect, useRef, useState } from 'react'
-import GummyModel from './models/Gummy';
-import CapsuleModel from './models/Capsule';
+import {GummyModel} from './models/Gummy';
+import {CapsuleModel} from './models/Capsule';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 import angleToRadians from '../../Helpers/angleToRadians';
@@ -27,10 +27,9 @@ export const Scene = forwardRef(({ type, supermentName, homepageCard }, ref) => 
   // useHelper(spotLightRef2, THREE.SpotLightHelper, 'pink')
   // useHelper(spotLightRef3, THREE.SpotLightHelper, 'white')
   useHelper(pointLightRef, THREE.PointLightHelper, 'red')
-  
+
   // On every frame change
   useFrame(state => {
-    
     // Mouse tracking movement
     // const { x, y } = state.mouse;
     // if(!!ref.current){
@@ -77,12 +76,17 @@ export const Scene = forwardRef(({ type, supermentName, homepageCard }, ref) => 
       /> */}
       
       {/* MODEL */}
+      {/* {type === "gummyBlob" && (
+          <GummyBlob forwardRef={modelRotation} supermentName={supermentName} /> 
+      )}
+      {type === "gummyMold" && (
+          <GummyMold forwardRef={modelRotation} supermentName={supermentName} />
+      )} */}
       {type === "gummy" ? (
-          <GummyModel forwardRef={modelRotation} supermentName={supermentName} /> 
-        ) : (
-          <CapsuleModel forwardRef={modelRotation} supermentName={supermentName} />
-        )
-      }
+          <GummyModel forwardRef={modelRotation} supermentName={supermentName} />
+      ) : (
+        <CapsuleModel forwardRef={modelRotation} supermentName={supermentName} />
+      )}
       
       <Environment
         background={false}

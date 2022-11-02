@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { forwardRef, useRef, useState } from 'react'
 import { Sparkles, Stats, useGLTF } from '@react-three/drei'
 import angleToRadians from '../../../Helpers/angleToRadians'
 import { useFrame } from '@react-three/fiber'
@@ -7,7 +7,7 @@ const s3Address = process.env.REACT_APP_S3_ADDRESS;
 
 const supermentName = "capsule-water"; // temp
 
-export default function Model({ _ }) { // temp
+export const CapsuleModel = forwardRef(({ supermentName }, ref) => { // temp
   const modelRef = useRef(0);
   const { nodes, materials } = useGLTF(`${s3Address}assets/${supermentName}.glb`)
   
@@ -43,6 +43,6 @@ export default function Model({ _ }) { // temp
       </group>
     </group>
   )
-}
+})
 
-useGLTF.preload(`${s3Address}assets/${supermentName}.glb`)
+// useGLTF.preload(`${s3Address}assets/capsule-water.glb`);

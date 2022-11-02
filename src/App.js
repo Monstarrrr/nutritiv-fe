@@ -16,7 +16,6 @@ import { Cart } from './Components/Payment/Cart';
 import Homepage from './Components/Homepage/Homepage';
 import PageNotFound from './Components/PageNotFound/PageNotFound';
 import ChatConnection from './Components/Chat/ChatConnection';
-import { AnimatePresence } from 'framer-motion';
 import { ForgotPassword } from './Components/Authentication/ForgotPassword';
 import { ForgotTFA } from './Components/Authentication/ForgotTFA';
 import { ResetPassword } from './Components/Authentication/ResetPassword';
@@ -31,8 +30,8 @@ import { NavbarMenu } from './Components/Header/NavbarMenu';
 import PagesWrapper from './Components/PagesWrapper';
 import { GradientBackground } from './Components/GradientBackground';
 import useRefs from 'react-use-refs';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { Environment, OrbitControls, PerspectiveCamera, Plane, Preload, 
+import { Canvas } from '@react-three/fiber';
+import { OrbitControls, PerspectiveCamera, Preload, 
   // View 
 } from '@react-three/drei';
 import { View } from './Components/View';
@@ -55,11 +54,11 @@ function App() {
     gummyPiViewHomepage, gummyPiView, gummyFolderView, capsuleWaterViewHomepage, capsuleWaterView
   };
   const viewsList = [
-    { gummyPiViewHomepage, type: "gummy", homepageCard: true }, 
-    { gummyPiView, type: "gummy" }, 
-    { gummyFolderView, type: "gummy" },
-    { capsuleWaterViewHomepage, type: "capsule", homepageCard: true },
-    { capsuleWaterView, type: "capsule" }
+    { gummyPiViewHomepage,      name: "pi",     type: "gummy", homepageCard: true }, 
+    { gummyPiView,              name: "pi",     type: "gummy" }, 
+    // { gummyFolderView,          name: "folder", type: "gummyMold" },
+    { capsuleWaterViewHomepage, name: "water",  type: "capsule", homepageCard: true },
+    { capsuleWaterView,         name: "water",  type: "capsule" }
   ];
   
   const [gettingUserInfo, setGettingUserInfo] = useState(false);
@@ -378,10 +377,16 @@ function App() {
                 className="canvas"
               >
                 {viewsList.map((view, i) => (
-                  <View key={i} index={i} track={Object.values(view)[0]} update={location}>
+                  <View 
+                    index={i} 
+                    key={i}
+                    track={Object.values(view)[0]} 
+                    update={location}
+                  >
                     <Scene
-                      type={view.type}
                       homepageCard={view.homepageCard}
+                      supermentName={`${view.type}-${view.name}`}
+                      type={view.type}
                     />
                     <PerspectiveCamera 
                       makeDefault
