@@ -313,13 +313,14 @@ export const ShapesSection = forwardRef(({props}, ref) => {
                   <div>
                     {[...Array(stat.value)].map((_, i) => 
                       <Icon
-                        initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        transition={{ duration: 0.2 * i }}
                         color={tokens.color.accentStrong}
                         filled
                         height={20}
+                        initial={{ opacity: 0 }}
+                        key={i}
                         name="beaker"
+                        transition={{ duration: 0.2 * i }}
                         style={{
                           marginLeft: "5px"
                         }}
@@ -328,12 +329,13 @@ export const ShapesSection = forwardRef(({props}, ref) => {
                     )}
                     {[...Array(5 - stat.value)].map((_, i) => 
                       <Icon
-                        initial={{ opacity: 0 }}
                         animate={{ opacity: 0.5 }}
-                        transition={{ duration: (0.2 * i) + (0.2 * stat.value) }}
                         color={tokens.color.accentStrong}
                         height={20}
+                        initial={{ opacity: 0 }}
+                        key={i}
                         name="beaker"
+                        transition={{ duration: (0.2 * i) + (0.2 * stat.value) }}
                         style={{
                           marginLeft: "5px"
                         }}
