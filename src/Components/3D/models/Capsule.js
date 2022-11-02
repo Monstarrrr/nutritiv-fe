@@ -9,7 +9,6 @@ const supermentName = "capsule-water"; // temp
 
 export default function Model({ _ }) { // temp
   const modelRef = useRef(0);
-  // const supermentName = "capsule-water"; // temp
   const { nodes, materials } = useGLTF(`${s3Address}assets/${supermentName}.glb`)
   
   // useFrame(() => {

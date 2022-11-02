@@ -3,11 +3,11 @@ import { useGLTF } from '@react-three/drei'
 
 const s3Address = process.env.REACT_APP_S3_ADDRESS;
 
+const supermentName = "gummy-pi" // temp
+
 export default function Model({ _ }) {
   const group = useRef()
-  // const supermentName = "gummy-pi"
-  // const { nodes, materials } = useGLTF(`${s3Address}assets/${supermentName}.glb`)
-  const { nodes, materials } = useGLTF(`gummy-pi.glb`)
+  const { nodes, materials } = useGLTF(`${s3Address}assets/${supermentName}.glb`)
   
   return (
     <group scale={0.45} ref={group} dispose={null}>
