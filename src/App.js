@@ -25,7 +25,7 @@ import { Global, css } from '@emotion/react';
 import './App.scss';
 import { tokens } from './Helpers/styleTokens';
 import { PageContainer } from './Components/PageContainer';
-import AboutUs from './Components/AboutUs/AboutUs';
+import Nutriteam from './Components/Nutriteam/Nutriteam';
 import { NavbarMenu } from './Components/Header/NavbarMenu';
 import PagesWrapper from './Components/PagesWrapper';
 import { GradientBackground } from './Components/GradientBackground';
@@ -48,15 +48,16 @@ function App() {
   const orbitControlsRef = useRef();
   const [
     canvasWrapperRef, 
-    gummyPiViewHomepage, gummyPiView, gummyFolderView, capsuleWaterViewHomepage, capsuleWaterView
+    gummyPiViewHomepage, gummyPiView, gummyFolderView, gummyFolderViewHomepage, capsuleWaterViewHomepage, capsuleWaterView
   ] = useRefs();
   const canvasRefs = { 
-    gummyPiViewHomepage, gummyPiView, gummyFolderView, capsuleWaterViewHomepage, capsuleWaterView
+    gummyPiViewHomepage, gummyPiView, gummyFolderView, gummyFolderViewHomepage, capsuleWaterViewHomepage, capsuleWaterView
   };
   const viewsList = [
-    { gummyPiViewHomepage,      name: "pi",     type: "gummy", homepageCard: true }, 
-    { gummyPiView,              name: "pi",     type: "gummy" }, 
-    // { gummyFolderView,          name: "folder", type: "gummyMold" },
+    { gummyPiViewHomepage,      name: "pi",     type: "gummyBlob", homepageCard: true }, 
+    { gummyPiView,              name: "pi",     type: "gummyBlob" }, 
+    { gummyFolderView,          name: "folder", type: "gummyMold" },
+    { gummyFolderViewHomepage,  name: "folder", type: "gummyMold", homepageCard: true },
     { capsuleWaterViewHomepage, name: "water",  type: "capsule", homepageCard: true },
     { capsuleWaterView,         name: "water",  type: "capsule" }
   ];
@@ -291,85 +292,83 @@ function App() {
           />
           <NavbarMenu open={mobileNavMenu} />
             <Suspense fallback={null}>
-              {/* <AnimatePresence exitBeforeEnter> */}
-                <Routes
-                  location={location} 
-                  key={location.pathname}
-                >
-                  <Route path="" element={
-                    <PagesWrapper ref={canvasRefs} minimized={mobileNavMenu}/>
-                  }>
-                    {/* PUBLIC */}
-                    <Route
-                      path="*"
-                      element={<Navigate to="/page-not-found" replace/>}
-                    />
-                    <Route
-                      index
-                      path="/welcome"
-                      element={<Homepage ref={canvasRefs} />}
-                    />
-                    <Route path="/team" element={
-                      <PageContainer><AboutUs ref={canvasRefs}/></PageContainer>
+              <Routes
+                location={location} 
+                key={location.pathname}
+              >
+                <Route path="" element={
+                  <PagesWrapper ref={canvasRefs} minimized={mobileNavMenu}/>
+                }>
+                  {/* PUBLIC */}
+                  <Route
+                    path="*"
+                    element={<Navigate to="/page-not-found" replace/>}
+                  />
+                  <Route
+                    index
+                    path="/welcome"
+                    element={<Homepage ref={canvasRefs} />}
+                  />
+                  <Route path="/team" element={
+                    <PageContainer><Nutriteam ref={canvasRefs}/></PageContainer>
+                  }/>
+                  <Route path="/shop" element={
+                    <PageContainer><Shop ref={canvasRefs}/></PageContainer>
+                  }/>
+                  <Route path="/product">
+                    <Route path=":productTitle" element={
+                      <PageContainer><ProductPage ref={canvasRefs}/></PageContainer>
                     }/>
-                    <Route path="/shop" element={
-                      <PageContainer><Shop ref={canvasRefs}/></PageContainer>
-                    }/>
-                    <Route path="/product">
-                      <Route path=":productTitle" element={
-                        <PageContainer><ProductPage ref={canvasRefs}/></PageContainer>
-                      }/>
-                    </Route>
-                    <Route path="/chat" element={
-                      <PageContainer><ChatConnection ref={canvasRefs}/></PageContainer>
-                    }/> 
-                    <Route path="/releases" element={
-                      <PageContainer><ReleaseNotes ref={canvasRefs}/></PageContainer>
-                    }/>
-                    <Route path="/cancel" element={
-                      <PageContainer><CheckoutCancel ref={canvasRefs}/></PageContainer>
-                    }/>
-                    <Route path="/success" element={
-                      <PageContainer><CheckoutSuccess ref={canvasRefs}/></PageContainer>
-                    }/>
-                    <Route path="/page-not-found" element={
-                      <PageContainer><PageNotFound ref={canvasRefs}/></PageContainer>
-                    }/>
-                    <Route
-                      path="/"
-                      element={<Navigate to="/welcome" replace/>}
-                    />
-                    {/* PRIVATE */}
-                    {/* RESTRICTED - USER */}
-                    <Route element={<Restricted routeType="user" />}>
-                      <Route path="/profile" element={
-                        <PageContainer><Profile ref={canvasRefs}/></PageContainer>
-                      }/>
-                      <Route path="/cart" element={
-                        <PageContainer><Cart ref={canvasRefs}/></PageContainer>
-                      }/>
-                    </Route>
-                    {/* RESTRICTED - GUEST */}
-                    <Route element={<Restricted routeType="guest" />}>
-                      <Route path="/login" element={
-                        <PageContainer><Login ref={canvasRefs}/></PageContainer>
-                      }/>
-                      <Route path="/register" element={
-                        <PageContainer><Register ref={canvasRefs}/></PageContainer>
-                      }/>
-                      <Route path="/forgot-password" element={
-                        <PageContainer><ForgotPassword ref={canvasRefs}/></PageContainer>
-                      }/>
-                      <Route path="/reset-password" element={
-                        <PageContainer><ResetPassword ref={canvasRefs}/></PageContainer>
-                      }/>
-                      <Route path="/forgot-2FA" element={
-                        <PageContainer><ForgotTFA ref={canvasRefs}/></PageContainer>
-                      }/>
-                    </Route>
                   </Route>
-                </Routes>
-              {/* </AnimatePresence> */}
+                  <Route path="/chat" element={
+                    <PageContainer><ChatConnection ref={canvasRefs}/></PageContainer>
+                  }/> 
+                  <Route path="/releases" element={
+                    <PageContainer><ReleaseNotes ref={canvasRefs}/></PageContainer>
+                  }/>
+                  <Route path="/cancel" element={
+                    <PageContainer><CheckoutCancel ref={canvasRefs}/></PageContainer>
+                  }/>
+                  <Route path="/success" element={
+                    <PageContainer><CheckoutSuccess ref={canvasRefs}/></PageContainer>
+                  }/>
+                  <Route path="/page-not-found" element={
+                    <PageContainer><PageNotFound ref={canvasRefs}/></PageContainer>
+                  }/>
+                  <Route
+                    path="/"
+                    element={<Navigate to="/welcome" replace/>}
+                  />
+                  {/* PRIVATE */}
+                  {/* RESTRICTED - USER */}
+                  <Route element={<Restricted routeType="user" />}>
+                    <Route path="/profile" element={
+                      <PageContainer><Profile ref={canvasRefs}/></PageContainer>
+                    }/>
+                    <Route path="/cart" element={
+                      <PageContainer><Cart ref={canvasRefs}/></PageContainer>
+                    }/>
+                  </Route>
+                  {/* RESTRICTED - GUEST */}
+                  <Route element={<Restricted routeType="guest" />}>
+                    <Route path="/login" element={
+                      <PageContainer><Login ref={canvasRefs}/></PageContainer>
+                    }/>
+                    <Route path="/register" element={
+                      <PageContainer><Register ref={canvasRefs}/></PageContainer>
+                    }/>
+                    <Route path="/forgot-password" element={
+                      <PageContainer><ForgotPassword ref={canvasRefs}/></PageContainer>
+                    }/>
+                    <Route path="/reset-password" element={
+                      <PageContainer><ResetPassword ref={canvasRefs}/></PageContainer>
+                    }/>
+                    <Route path="/forgot-2FA" element={
+                      <PageContainer><ForgotTFA ref={canvasRefs}/></PageContainer>
+                    }/>
+                  </Route>
+                </Route>
+              </Routes>
               <Canvas
                 onCreated={(state) =>
                   state.events.connect(canvasWrapperRef.current)
@@ -415,53 +414,6 @@ function App() {
                     />
                   </View>
                 ))}
-               
-                {/* <View track={gummyPiViewHomepage} update={location}>
-                  <Scene
-                    type="gummy"
-                  />
-                  <PerspectiveCamera 
-                    makeDefault 
-                    fov={40}
-                    position={[9, 1, 0]} // temp 
-                  />
-                  <OrbitControls
-                    autoRotate
-                    autoRotateSpeed={2}
-                    enablePan={false}
-                    enableZoom
-                    minDistance={7}
-                    maxDistance={7}
-                    minPolarAngle={angleToRadians(70)}
-                    maxPolarAngle={angleToRadians(100)}
-                    makeDefault
-                    ref={orbitControlsRef}
-                  />
-                </View>
-                <View track={capsuleWaterViewHomepage} update={location}>
-                  <Scene
-                    type="capsule"
-                    homepageCard
-                    supermentName={"capsule-water"}
-                  />
-                  <PerspectiveCamera 
-                    makeDefault 
-                    fov={40}
-                    position={[9, 1, 0]} // temp 
-                  />
-                  <OrbitControls
-                    autoRotate
-                    autoRotateSpeed={2}
-                    enablePan={false}
-                    enableZoom
-                    minDistance={7}
-                    maxDistance={7}
-                    minPolarAngle={angleToRadians(70)}
-                    maxPolarAngle={angleToRadians(100)}
-                    makeDefault
-                    ref={orbitControlsRef}
-                  />
-                </View> */}
                 <Preload all />
               </Canvas>
             </Suspense>

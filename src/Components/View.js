@@ -13,6 +13,10 @@ function Container({ canvasSize, scene, index, children, frames, rect, track, up
   const virtualScene = useThree((state) => state.scene)
   const setEvents = useThree((state) => state.setEvents)
   
+  console.log('# index :', index)
+  console.log('# scene :', scene)
+  console.log('# track :', track)
+
   let frameCount = 0
   useFrame((state) => {
     if (frames === Infinity || frameCount <= frames) {

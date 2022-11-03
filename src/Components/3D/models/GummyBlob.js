@@ -1,12 +1,8 @@
 import React, { forwardRef, useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
+import { s3Address } from '../../../Api/nutritivApi'
 
-const s3Address = process.env.REACT_APP_S3_ADDRESS;
-
-const supermentName = "gummy-pi" // temp
-
-export const GummyModel = forwardRef(({ supermentName }, ref) => {
-  console.log('# supermentName :', supermentName)
+export const GummyBlob = forwardRef(({ supermentName }, ref) => {
   const group = useRef()
   const { nodes, materials } = useGLTF(`${s3Address}assets/${supermentName}.glb`)
   

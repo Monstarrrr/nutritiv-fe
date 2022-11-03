@@ -1932,9 +1932,7 @@
   "resolved" "https://registry.npmjs.org/@react-spring/types/-/types-9.5.5.tgz"
   "version" "9.5.5"
 
-"@react-three/drei@^9.35.0":
-  "integrity" "sha512-XJSvM04RvJOItoNkmoIEw4bUr9qWPe6WF52udvDLPoCm5ICvClIH98CdsQKuP1hJKXwLLFJ//w7S000BsQUTAA=="
-  "resolved" "https://registry.npmjs.org/@react-three/drei/-/drei-9.38.0.tgz"
+"@react-three/drei@^9.36.0":
   "version" "9.38.0"
   dependencies:
     "@babel/runtime" "^7.11.2"

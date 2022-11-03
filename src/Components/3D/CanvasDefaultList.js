@@ -1,5 +1,4 @@
-import React, { forwardRef, useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom';
+import React, { forwardRef } from 'react'
 
 const CanvasDefaultList = forwardRef((props, ref) => {
   const refsNames = require("../../Helpers/canvasRefs.json");

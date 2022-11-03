@@ -1,20 +1,12 @@
-import React, { forwardRef, useRef, useState } from 'react'
-import { Sparkles, Stats, useGLTF } from '@react-three/drei'
+import React, { forwardRef, useRef } from 'react'
+import { useGLTF } from '@react-three/drei'
 import angleToRadians from '../../../Helpers/angleToRadians'
-import { useFrame } from '@react-three/fiber'
+import { s3Address } from '../../../Api/nutritivApi'
 
-const s3Address = process.env.REACT_APP_S3_ADDRESS;
-
-const supermentName = "capsule-water"; // temp
-
-export const CapsuleModel = forwardRef(({ supermentName }, ref) => { // temp
+export const Capsule = forwardRef(({ supermentName }, ref) => { // temp
   const modelRef = useRef(0);
   const { nodes, materials } = useGLTF(`${s3Address}assets/${supermentName}.glb`)
-  
-  // useFrame(() => {
-  //   modelRef.current.rotation.y += 0.01
-  // })
-  
+    
   return (
     <group ref={modelRef}>
       <group 

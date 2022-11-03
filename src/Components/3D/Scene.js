@@ -1,10 +1,10 @@
-import { Environment, OrbitControls, PerspectiveCamera, Plane, softShadows, Stats, useHelper } from '@react-three/drei'
-import React, { forwardRef, Suspense, useEffect, useRef, useState } from 'react'
-import {GummyModel} from './models/Gummy';
-import {CapsuleModel} from './models/Capsule';
+import { Environment, Plane, softShadows, useHelper } from '@react-three/drei'
+import React, { forwardRef, Suspense, useRef } from 'react'
+import {GummyBlob} from './models/GummyBlob';
+import {GummyMold} from './models/GummyMold';
+import {Capsule} from './models/Capsule';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
-import angleToRadians from '../../Helpers/angleToRadians';
 
 softShadows({
   frustum: 3.75,
@@ -17,7 +17,7 @@ softShadows({
 export const Scene = forwardRef(({ type, supermentName, homepageCard }, ref) => {
   const modelRotation = useRef(0);
   // const orbitControlsRef = useRef();
-  const directionalLightRef = useRef(null);
+  // const directionalLightRef = useRef(null);
   // const spotLightRef1 = useRef(null);
   // const spotLightRef2 = useRef(null);
   // const spotLightRef3 = useRef(null);
@@ -43,49 +43,15 @@ export const Scene = forwardRef(({ type, supermentName, homepageCard }, ref) => 
   return (
     <Suspense fallback={null}>
       
-      {/* CAMERA */}
-      {/* <PerspectiveCamera
-        makeDefault
-        position={[
-          type === "pill" ? 7 : 9, 
-          1, 
-          0
-        ]}
-      /> */}
-      
-      {/* CONTROLS */}
-      {/* <OrbitControls
-        autoRotate
-        autoRotateSpeed={2}
-        enablePan={false}
-        enableZoom={homepageCard ? false : true}
-        minDistance={
-          type === "pill" ? 2.65 : 7
-        }
-        maxDistance={
-          homepageCard ? (
-            type === "pill" ? 2.65 : 7
-          ) : (
-            type === "pill" ? 7 : 9
-          )
-        }
-        minPolarAngle={angleToRadians(70)}
-        maxPolarAngle={angleToRadians(100)}
-        makeDefault
-        ref={orbitControlsRef}
-      /> */}
-      
       {/* MODEL */}
-      {/* {type === "gummyBlob" && (
+      {type === "gummyBlob" && (
           <GummyBlob forwardRef={modelRotation} supermentName={supermentName} /> 
       )}
       {type === "gummyMold" && (
           <GummyMold forwardRef={modelRotation} supermentName={supermentName} />
-      )} */}
-      {type === "gummy" ? (
-          <GummyModel forwardRef={modelRotation} supermentName={supermentName} />
-      ) : (
-        <CapsuleModel forwardRef={modelRotation} supermentName={supermentName} />
+      )}
+      {type === "capsule" && (
+          <Capsule forwardRef={modelRotation} supermentName={supermentName} />
       )}
       
       <Environment
@@ -103,8 +69,8 @@ export const Scene = forwardRef(({ type, supermentName, homepageCard }, ref) => 
       {/* <Plane receiveShadow rotation-x={-Math.PI / 2} position={[0, -1.7, 0]} args={[10, 10, 4, 4]}>
         <meshBasicMaterial opacity={0.5} />
       </Plane> */}
+
       {/* SHADOW */}
-      
       {!homepageCard && (
         <Plane receiveShadow rotation-x={-Math.PI / 2} position={[0, -1.9, 0]} args={[10, 10, 4, 4]}>
           <shadowMaterial opacity={0.5} />
@@ -142,26 +108,7 @@ export const Scene = forwardRef(({ type, supermentName, homepageCard }, ref) => 
         power={10}
         ref={spotLightRef1}
       />
-      <spotLight
-        angle={angleToRadians(10)} 
-        // castShadow
-        decay={2}
-        distance={4}
-        penumbra={1}
-        position={[4, 0, 0]}
-        power={10}
-        ref={spotLightRef2}
-      />
-      <spotLight
-        angle={angleToRadians(10)} 
-        // castShadow
-        decay={2}
-        distance={4}
-        penumbra={1}
-        position={[-4, 0, 0]}
-        power={10}
-        ref={spotLightRef3}
-      /> */}
+
       {/* <ambientLight intensity={0.2}/> */}
     </Suspense>
   )

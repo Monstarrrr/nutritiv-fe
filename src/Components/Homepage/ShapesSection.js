@@ -269,7 +269,7 @@ export const ShapesSection = forwardRef(({props}, ref) => {
                 }}
               />
               <div
-                ref={ref.gummyPiViewHomepage}
+                ref={ref.gummyFolderViewHomepage}
                 style={{
                   display: selectedShape.name === "Gummy" ? "inline-block" : "none", 
                   height: "300px", 
