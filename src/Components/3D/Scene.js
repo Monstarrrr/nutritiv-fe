@@ -19,13 +19,9 @@ export const Scene = forwardRef(({ type, supermentName, homepageCard }, ref) => 
   // const orbitControlsRef = useRef();
   // const directionalLightRef = useRef(null);
   // const spotLightRef1 = useRef(null);
-  // const spotLightRef2 = useRef(null);
-  // const spotLightRef3 = useRef(null);
   const pointLightRef = useRef(null);
   // useHelper(directionalLightRef, THREE.DirectionalLightHelper, 1, "yellow")
   // useHelper(spotLightRef1, THREE.SpotLightHelper, 'cyan')
-  // useHelper(spotLightRef2, THREE.SpotLightHelper, 'pink')
-  // useHelper(spotLightRef3, THREE.SpotLightHelper, 'white')
   useHelper(pointLightRef, THREE.PointLightHelper, 'red')
 
   // On every frame change
@@ -69,20 +65,20 @@ export const Scene = forwardRef(({ type, supermentName, homepageCard }, ref) => 
       {/* <Plane receiveShadow rotation-x={-Math.PI / 2} position={[0, -1.7, 0]} args={[10, 10, 4, 4]}>
         <meshBasicMaterial opacity={0.5} />
       </Plane> */}
-
+      
       {/* SHADOW */}
-      {!homepageCard && (
+      {/* {!homepageCard && ( */}
         <Plane receiveShadow rotation-x={-Math.PI / 2} position={[0, -1.9, 0]} args={[10, 10, 4, 4]}>
           <shadowMaterial opacity={0.5} />
         </Plane>
-      )}
+      {/* )} */}
       
       {/* LIGHTS */}
-      {/* <directionalLight
+      <directionalLight
         castShadow
-        intensity={30}
+        intensity={0.2}
         position={[0, 6, 0]}
-        ref={directionalLightRef}
+        // ref={directionalLightRef}
         shadow-mapSize-width={1024}
         shadow-mapSize-height={1024}
         shadow-camera-far={30}
@@ -90,7 +86,7 @@ export const Scene = forwardRef(({ type, supermentName, homepageCard }, ref) => 
         shadow-camera-right={10}
         shadow-camera-top={10}
         shadow-camera-bottom={-10}
-      /> */}
+      />
       
       <pointLight 
         intensity={1}
@@ -107,9 +103,9 @@ export const Scene = forwardRef(({ type, supermentName, homepageCard }, ref) => 
         position={[0, 0, -4]}
         power={10}
         ref={spotLightRef1}
-      />
+      /> */}
 
-      {/* <ambientLight intensity={0.2}/> */}
+      <ambientLight intensity={0.2}/>
     </Suspense>
   )
 })

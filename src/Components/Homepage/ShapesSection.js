@@ -3,10 +3,11 @@ import React, { forwardRef, useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import { mediaQuery, tokens } from '../../Helpers/styleTokens';
+import { breakpoints, mediaQuery, tokens } from '../../Helpers/styleTokens';
 import { Icon } from '../Icons/Icon';
 import { NutriButton } from '../NutriButton';
 import { SectionTitle } from './Homepage';
+import useWindowDimensions from '../../Helpers/useWindowDimensions';
 
 // SECTION
 const Section = styled.div`
@@ -16,23 +17,37 @@ const Section = styled.div`
   margin-bottom: 40vh; // temp
 `
 const SectionContent = styled.div`
-  margin-top: ${tokens.spacing.max};
-  perspective: 2000px;
-  perspective-origin: center;
-  position: relative;
+  z-index: 0;
+  ${mediaQuery[2]} {
+    margin-top: ${tokens.spacing.max};
+    perspective: 2000px;
+    perspective-origin: center;
+    position: relative;  
+  }
 `
 
 // SWITCH
+const ShapesSwitch = styled.div`
+  position: relative;
+  top: 238px;
+  width: 248px;
+  z-index: 1;
+  ${mediaQuery[2]} {
+    top: 0px;
+  }
+`
 const SwitchWrapper = styled.div`
-  display: none;
+  display: flex;
+  justify-content: space-between;
+  margin: 0 10px;
   ${mediaQuery[2]} {
     align-items: center;
     background: ${tokens.color.accentWeak};
     border-radius: ${tokens.borderRadius.lg};
     box-shadow: 0px 0px 10px 1px ${tokens.color.contrastDark};
+    justify-content: initial;
     padding: 4px;
     width: fit-content;
-    display: flex;
   }
 `
 const ShapeContainer = styled.li`
@@ -44,8 +59,11 @@ const ShapeContainer = styled.li`
   list-style: none;
   outline: none;
   text-transform: uppercase;
-  padding: ${tokens.spacing.md} ${tokens.spacing.xxl};
+  padding: 8px 28px;
   position: relative;
+  ${mediaQuery[2]} {
+    padding: ${tokens.spacing.md} ${tokens.spacing.xxl};
+  }
 `
 const ShapeLabel = styled.span`
   bottom: 0;
@@ -53,6 +71,7 @@ const ShapeLabel = styled.span`
   left: '4px';
   font-size: ${tokens.font.fontSize.xs};
   font-weight: ${tokens.font.fontWeight.medium};
+  opacity: ${props => props.active ? 1 : 0.5};
   position: 'absolute';
   right: 0;
   top: '6px';
@@ -103,33 +122,100 @@ const Card = styled(motion.div)`
 const CardContent = styled.div`
   align-items: center;
   display: flex;
-  position: absolute;
-  inset: 0;
-  transform: rotateX(20deg) rotateY(0deg);
   flex-direction: column;
+  inset: 0;
+  position: relative;
   ${mediaQuery[2]} {
     flex-direction: row;
+    position: absolute;
+    transform: rotateX(20deg) rotateY(0deg);
   }
 `
+
 const CardSupermentContainer = styled.div`
+  background: radial-gradient(circle, rgb(4, 58, 81) 0%, rgb(2, 0, 71) 100%);
+  border-top-left-radius: 999px;
+  border-top-right-radius: 999px;
+  box-shadow: 0 0 100px 0px black;
   position: relative;
-  width: 270px;
+  width: 248px;
+  ${mediaQuery[2]} {
+    background: transparent;
+    border-radius: 0;
+    box-shadow: none;
+    width: 270px;
+  }
 `
 const CardSuperment = styled.div`
   background: transparent;
-  position: absolute;
-  left: 0px;
-  height: 300px;
+  height: 250px;
+  position: relative;
+  margin: auto;
+  width: 222px;
+  ${mediaQuery[2]} {
+    bottom: 50%;
+    height: 300px;
+    left: 0px;
+    position: absolute;
+    transform: translateY(50%);
+    width: 270px;
+  }
+`
+const SupermentAll = css`
+  position: relative;
+  height: 270px;
+  width: 222px;
+  ${mediaQuery[2]} {
+    height: 300px;
+    width: 270px;
+  }
+`
+const SupermentA = styled(motion.div)`
+  display: ${props => props.type === "Capsule" ? "inline-block" : "none"};
+  top: -70px;
+  ${SupermentAll};
+  ${mediaQuery[2]} {
+    top: -78px;
+  }
+  `
+const SupermentB = styled.div` 
+  display: ${props => props.type === "Gummy" ? "inline-block" : "none"};
+  top: -54px;
+  ${SupermentAll};
+  ${mediaQuery[2]} {
+    top: -62px;
+  }
+`
+
+const CardInfo = styled.div`
+  text-align: center;
   width: 270px;
-  bottom: 50%;
-  transform: translateY(50%);
+  ${mediaQuery[2]} {  
+    padding-left: 20px;
+    text-align: left;
+    user-select: none;
+    width: 270px;
+  }
+`
+const CardTitle = styled.h4`
+  display: none;
+  ${mediaQuery[2]} {
+    display: initial;
+    margin-top: 0;
+    margin-bottom: ${tokens.spacing.xl};
+    font-size: ${tokens.font.fontSize.lg};
+    font-weight: ${tokens.font.fontWeight.medium};
+  }
 `
 const StatsContainer = styled.div`
-  align-items: left;
+  align-items: center;
   display: flex;
   font-weight: ${tokens.font.fontWeight.light};
   flex-direction: column;
   position: relative;
+  ${mediaQuery[2]} {
+    align-items: left;
+  }
   > div {
     align-items: center;
     display: flex;
@@ -155,9 +241,11 @@ const StatsContainer = styled.div`
     }
   }
 `
-const CardDescription = styled.div``
+const CardDescription = styled.div`
+  margin-top: ${tokens.spacing.xl};
+  font-weight: ${tokens.font.fontWeight.medium};
+`
 const CardButton = styled.div``
-const ShapesSwitch = styled.div``
 
 const shapes = [
   {
@@ -183,17 +271,16 @@ const shapes = [
 export const ShapesSection = forwardRef(({props}, ref) => {
   const [focusedShape, setFocusedShape] = useState(null);
   const [selectedShape, setSelectedShape] = useState(shapes[0]);
+  const [isMobile, setIsMobile] = useState(true);
+  const { width } = useWindowDimensions();
   
-  // const [active, setActive] = useState(false);
-  
-  // useEffect(() => {
-  //   setActive(true)
-  //   const timer = setTimeout(() => {
-  //     setActive(false);
-  //   }, 200)
-    
-  //   return () => clearTimeout(timer);
-  // }, [selectedShape]);
+  useEffect(() => {
+    if(width > breakpoints[2]) {
+      setIsMobile(false);
+    } else {
+      setIsMobile(true);
+    }
+  }, [width]);
   
   return (
     <Section>
@@ -238,6 +325,16 @@ export const ShapesSection = forwardRef(({props}, ref) => {
                     style={{
                       background: tokens.color.accentStrong,
                       borderRadius: tokens.borderRadius.lg,
+                      borderTopLeftRadius: isMobile ? (
+                        selectedShape.name === "Capsule" ? tokens.borderRadius.lg : 0
+                      ) : (
+                        tokens.borderRadius.lg
+                      ),
+                      borderTopRightRadius: isMobile ? (
+                        selectedShape.name === "Gummy" ? tokens.borderRadius.lg : 0
+                      ) : (
+                        tokens.borderRadius.lg
+                      ),
                       bottom: 0,
                       height: "100%",
                       left: 0,
@@ -260,44 +357,21 @@ export const ShapesSection = forwardRef(({props}, ref) => {
         <CardContent>
           <CardSupermentContainer>
             <CardSuperment>
-              <div
+              <SupermentA
                 ref={ref.capsuleWaterViewHomepage}
-                style={{ 
-                  display: selectedShape.name === "Capsule" ? "inline-block" : "none", 
-                  height: "300px", 
-                  width: "270px"
-                }}
-              />
-              <div
-                ref={ref.gummyFolderViewHomepage}
-                style={{
-                  display: selectedShape.name === "Gummy" ? "inline-block" : "none", 
-                  height: "300px", 
-                  width: "270px"
-                }}
+                type={selectedShape.name} 
+                />
+              <SupermentB
+                ref={ref.gummyPiViewHomepage}
+                type={selectedShape.name} 
               />
             </CardSuperment>
           </CardSupermentContainer>
           
-          <CardDescription
-            css={css`
-              padding-left: 20px;
-              text-align: left;
-              user-select: none;
-              width: 270px;
-            `}
-          >
-            <h4
-              ref={ref.shapesScrollRef}
-              css={css`
-                margin-top: 0;
-                margin-bottom: ${tokens.spacing.xl};
-                font-size: ${tokens.font.fontSize.lg};
-                font-weight: ${tokens.font.fontWeight.medium};
-              `}
-            >
+          <CardInfo>
+            <CardTitle ref={ref.shapesScrollRef}>
               {selectedShape && selectedShape.name}
-            </h4>
+            </CardTitle>
             <StatsContainer>
               {selectedShape && selectedShape.stats.map(stat => (
                 <div
@@ -347,15 +421,10 @@ export const ShapesSection = forwardRef(({props}, ref) => {
                 </div>
               ))}
             </StatsContainer>
-            <div
-              css={css`
-                margin-top: ${tokens.spacing.xl};
-                font-weight: ${tokens.font.fontWeight.medium};
-              `}
-            >
+            <CardDescription>
               {selectedShape.description}  
-            </div>
-          </CardDescription>
+            </CardDescription>
+          </CardInfo>
           
           <CardButton
             css={css`

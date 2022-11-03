@@ -17,7 +17,11 @@ const Container = styled.div`
 export const MachineSection = forwardRef((props, ref) => {
   return (
     <Container>
-      <SectionTitle>
+      <SectionTitle
+        css={css`
+          font-size: 32px;
+        `}
+      >
         Manufacturing
         <span
           css={css`
@@ -52,7 +56,7 @@ export const MachineSection = forwardRef((props, ref) => {
           })}
         `}
       >
-        Through a complex process, we at Nutritiv are able to rearange sets of molecules in a specific ways in relation to how they interact with the human body, <br />we then pack them into a digestible format, ready for human consumption.
+        Through a complex process, we at Nutritiv are able to rearange sets of molecules in a specific ways in relation to how they interact with the human body and pack them into a digestible format, ready for human consumption.
       </span>
       <div
         css={css`
