@@ -200,7 +200,7 @@ const CardInfo = styled.div`
 const CardTitle = styled.h4`
   display: none;
   ${mediaQuery[2]} {
-    display: initial;
+    display: inline-block;
     margin-top: 0;
     margin-bottom: ${tokens.spacing.xl};
     font-size: ${tokens.font.fontSize.lg};
@@ -209,17 +209,32 @@ const CardTitle = styled.h4`
 `
 const StatsContainer = styled.div`
   align-items: center;
+  background: #041a4d;
+  border-bottom-left-radius: 999px;
+  border-bottom-right-radius: 999px;
   display: flex;
   font-weight: ${tokens.font.fontWeight.light};
-  flex-direction: column;
+  margin: 0 auto;
+  padding-bottom: 38px;
   position: relative;
+  flex-direction: column;
+  width: 248px;
+  
   ${mediaQuery[2]} {
-    align-items: left;
+    align-items: start;
+    background: transparent;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+    padding-bottom: 0px;
+    width: auto;
   }
   > div {
     align-items: center;
     display: flex;
     margin-bottom: ${tokens.spacing.sm};
+    ${mediaQuery[2]} {
+      flex-direction: row;
+    }
     &:nth-last-of-type(1) {
       margin-bottom: 0;
     }
@@ -241,9 +256,31 @@ const StatsContainer = styled.div`
     }
   }
 `
+const StatContainer = styled.div`
+  display: flex;
+  font-weight: ${tokens.font.fontWeight.regular};
+  flex-direction: column;
+  margin-bottom: 0;
+  margin-top: 16px;
+  ${mediaQuery[2]} {
+    margin-bottom: 0;
+    margin-top: 0;  
+  }
+`
+const StatLabel = styled.div`
+  margin-right: 0;
+  margin-bottom: 6px;
+  ${mediaQuery[2]} {
+    margin-right: ${tokens.spacing.md};
+  }
+`
 const CardDescription = styled.div`
+  margin-bottom: ${tokens.spacing.xl};
   margin-top: ${tokens.spacing.xl};
   font-weight: ${tokens.font.fontWeight.medium};
+  ${mediaQuery[2]} {
+    margin-bottom: 0;
+  }
 `
 const CardButton = styled.div``
 
@@ -336,6 +373,7 @@ export const ShapesSection = forwardRef(({props}, ref) => {
                         tokens.borderRadius.lg
                       ),
                       bottom: 0,
+                      boxShadow: isMobile ? `0 0 8px -1px ${tokens.color.accentStrong}` : "none",
                       height: "100%",
                       left: 0,
                       position: "absolute",
@@ -374,16 +412,10 @@ export const ShapesSection = forwardRef(({props}, ref) => {
             </CardTitle>
             <StatsContainer>
               {selectedShape && selectedShape.stats.map(stat => (
-                <div
-                  css={css`
-                    display: flex;
-                    font-weight: ${tokens.font.fontWeight.regular};
-                  `}
-                  key={stat.name}
-                >
-                  <label css={css`margin-right: ${tokens.spacing.md};`}>
+                <StatContainer key={stat.name}>
+                  <StatLabel>
                     {stat.name}
-                  </label>
+                  </StatLabel>
                   <div>
                     {[...Array(stat.value)].map((_, i) => 
                       <Icon
@@ -394,7 +426,7 @@ export const ShapesSection = forwardRef(({props}, ref) => {
                         initial={{ opacity: 0 }}
                         key={i}
                         name="beaker"
-                        transition={{ duration: 0.2 * i }}
+                        transition={{ duration: 0.25 * i }}
                         style={{
                           marginLeft: "5px"
                         }}
@@ -409,7 +441,7 @@ export const ShapesSection = forwardRef(({props}, ref) => {
                         initial={{ opacity: 0 }}
                         key={i}
                         name="beaker"
-                        transition={{ duration: (0.2 * i) + (0.2 * stat.value) }}
+                        transition={{ duration: (0.25 * i) + (0.25 * stat.value) }}
                         style={{
                           marginLeft: "5px"
                         }}
@@ -418,7 +450,7 @@ export const ShapesSection = forwardRef(({props}, ref) => {
                       />
                     )}
                   </div>
-                </div>
+                </StatContainer>
               ))}
             </StatsContainer>
             <CardDescription>
