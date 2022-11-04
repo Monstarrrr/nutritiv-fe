@@ -206,12 +206,14 @@ export const CategoriesSection = () => {
         alt="datalines"
         animate={datalinesAnimationLeft}
         src="datalines-left.png"
+        style={{ left: 0 }}
         initial={{ transform: "translateX(0px)" }}
         />
       <Datalines
         alt="datalines"
         animate={datalinesAnimationRight}
         initial={{ transform: "translateX(0px)" }}
+        style={{ right: 0 }}
         src="datalines-right.png"
       />
       <div 
