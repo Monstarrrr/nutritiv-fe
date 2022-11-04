@@ -140,8 +140,8 @@ export const CategoriesSection = () => {
   const { width } = useWindowDimensions();
   
   async function startDatalinesAnimationLeft() {
-    await datalinesAnimationLeft.start({ left: "-20px" })
-    await datalinesAnimationLeft.start({ left: "0px" })
+    await datalinesAnimationLeft.start({ transform: "translateX(-20px)" })
+    await datalinesAnimationLeft.start({ transform: "translateX(0px)" })
     datalinesAnimationLeft.start({
       transition: {
         ease: "easeInOut",
@@ -150,8 +150,8 @@ export const CategoriesSection = () => {
     })
   }
   async function startDatalinesAnimationRight() {
-    await datalinesAnimationRight.start({ right: "-20px" })
-    await datalinesAnimationRight.start({ right: "0px" })
+    await datalinesAnimationRight.start({ transform: "translateX(20px)" })
+    await datalinesAnimationRight.start({ transform: "translateX(0px)" })
     datalinesAnimationRight.start({
       transition: {
         ease: "easeInOut",
@@ -206,12 +206,12 @@ export const CategoriesSection = () => {
         alt="datalines"
         animate={datalinesAnimationLeft}
         src="datalines-left.png"
-        initial={{ left: 0 }}
+        initial={{ transform: "translateX(0px)" }}
         />
       <Datalines
         alt="datalines"
         animate={datalinesAnimationRight}
-        initial={{ right: 0 }}
+        initial={{ transform: "translateX(0px)" }}
         src="datalines-right.png"
       />
       <div 
