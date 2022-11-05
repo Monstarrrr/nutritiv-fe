@@ -15,22 +15,22 @@ const categories = [
   {
     icon: "brain",
     title: "Mental",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip."
+    description: "Who doesn't want some enhanced cognitive functions? Superments of the mental category increase your knowledge on a given topic or your psychological skills to better deal with your everyday challenges."
   },
   {
     icon: "arrowsUp",
     title: "Growth",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip."
+    description: "The growth superments allow you to develop physical properties to the next level and beyond what is usually possible to reach. Wanna jump higher than a kangaroo? Checkout superments of this category!"
   },
   {
     icon: "armor",
     title: "Resistance",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip."
+    description: "Are you looking to defend yourself against all sorts of threats? In this category you will find superments which allow you to do exactly that. We have resistance to fire, water, poison, and more."
   },
   {
     icon: "plusSign",
     title: "Unique",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip."
+    description: "Like the name suggests, those are unique superments that don't belong to any specific category. Whether you're just curious or looking for something different, make sure to check these out!"
   },
 ]
 

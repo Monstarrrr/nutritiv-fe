@@ -297,7 +297,7 @@ const shapes = [
       { name: "Duration",   value: 3 },
       { name: "Peak Speed", value: 5 }
     ],
-    description: "For those who want the highest performance available, at the cost of a shorter duration of the effects.",
+    description: "For those who want the highest performance available, at the cost of a shorter duration of the effect.",
   }, 
   {
     name: 'Gummy',
@@ -306,7 +306,7 @@ const shapes = [
       { name: "Duration",   value: 5 },
       { name: "Peak Speed", value: 3 }    
     ],
-    description: "For those who want lasting effects, at the cost of strength and the time it takes to set in.",
+    description: "For those who want a lasting effect, at the cost of its strength and the time it takes for it to set in.",
   }, 
 ];
 
