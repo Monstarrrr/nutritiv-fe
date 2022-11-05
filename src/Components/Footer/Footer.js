@@ -84,7 +84,13 @@ export const Footer = () => {
               }
             `}
           >
-            <a href="https://github.com/Monstarrrr/nutritiv-fe">
+            <a 
+              href="https://github.com/Monstarrrr/nutritiv-fe"
+              css={css`
+                align-items: center;
+                display: flex; 
+              `}
+            >
               <Icon
                 name="github" 
                 color={tokens.color.contrastLight}
@@ -93,18 +99,18 @@ export const Footer = () => {
                 width={"28px"}
               />
             </a>
-            <a href="">
+            <a href="mailto:admin@nutritiv.app">
               <Icon
-                name="star" 
+                name="mail" 
                 color={tokens.color.contrastLight}
                 filled
                 height={"28px"}
                 width={"28px"}
               />
             </a>
-            <a href="">
+            <a href="https://goo.gl/maps/3jHqjPTChCAevUyW9">
               <Icon
-                name="beaker" 
+                name="location" 
                 color={tokens.color.contrastLight}
                 filled
                 height={"28px"}
