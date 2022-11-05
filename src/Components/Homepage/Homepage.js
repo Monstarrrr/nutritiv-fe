@@ -60,6 +60,12 @@ const ImageContainer = styled.div`
   })}
 `
 
+export const ScrollRef = styled.div`
+  top: 50%;
+  transform: translateY(-50%);
+  position: absolute;
+`
+
 export const SectionTitle = styled.h2`
   text-transform: uppercase;
   letter-spacing: 4px;

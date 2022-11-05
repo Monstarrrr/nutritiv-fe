@@ -98,7 +98,7 @@ const SideGradient = styled.div`
   filter: blur(370px);
   height: 210%;
   position: absolute;
-  top: -100%;
+  top: -128%;
   width: 650px;
   ${props => props.left ? GradientLeft : GradientRight}
 `
@@ -248,17 +248,7 @@ export const CategoriesSection = () => {
                     setHoveredCategory(category.title)
                   )}
                   onMouseLeave={() => setHoveredCategory("")}
-                  onClick={() => (
-                    isMobile ? (
-                      hoveredCategory === category.title ? (
-                        navigate("/shop")
-                      ) : (
-                        setHoveredCategory(category.title)
-                      )
-                    ) : (
-                      navigate("/shop")
-                    )
-                  )}
+                  onClick={() => navigate("/shop")}
                   variants={variants}
                   initial={{ borderRadius: "20px" }}
                   animate={category.title === hoveredCategory ? 

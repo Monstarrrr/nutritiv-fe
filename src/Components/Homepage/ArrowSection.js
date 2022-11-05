@@ -3,7 +3,8 @@ import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import React, { forwardRef, useEffect, useState } from 'react'
 import { scrollToElement } from '../../Helpers/scrollToElement'
-import { mediaQueries, mediaQuery, tokens } from '../../Helpers/styleTokens'
+import { breakpoints, mediaQueries, mediaQuery, tokens } from '../../Helpers/styleTokens'
+import useWindowDimensions from '../../Helpers/useWindowDimensions'
 import { Icon } from '../Icons/Icon'
 
 const ArrowSide = styled.div``
@@ -11,7 +12,8 @@ const ArrowSide = styled.div``
 export const ArrowSection = forwardRef((props, ref) => {
   const [fillDelay, setFillDelay] = useState(false)
   const [arrowHovered, setArrowHovered] = useState(false)
-  
+  const { width } = useWindowDimensions();
+
   useEffect(() => {
     if(arrowHovered) {
       const timer = setTimeout(() => {
@@ -88,8 +90,10 @@ export const ArrowSection = forwardRef((props, ref) => {
             padding-bottom: 4px;
             transition: all ease .2s;
             &:hover {
-              box-shadow: 0 0 10px -1px ${tokens.color.accentStrong};
-              border: 2px solid ${tokens.color.accentStrong};
+              ${mediaQuery[2]} {
+                box-shadow: 0 0 10px -1px ${tokens.color.accentStrong};
+                border: 2px solid ${tokens.color.accentStrong};
+              }
             }
           `}
         >
@@ -102,18 +106,20 @@ export const ArrowSection = forwardRef((props, ref) => {
             width={25}
           />
         </div>
-        <Icon
-          name="wave"
-          color={tokens.color.contrastLight}
-          filled={fillDelay}
-          hovered={arrowHovered}
-          resizeDefault="0 0 65 70"
-          resizeFilled="0 0 65 70"
-          strokeWidth={2}
-          style={{ paddingTop: "20px" }}
-          height={35}
-          width={35}
-        />
+        {width > breakpoints[2] && (
+          <Icon
+            name="wave"
+            color={tokens.color.contrastLight}
+            filled={fillDelay}
+            hovered={arrowHovered}
+            resizeDefault="0 0 65 70"
+            resizeFilled="0 0 65 70"
+            strokeWidth={2}
+            style={{ paddingTop: "20px" }}
+            height={35}
+            width={35}
+          />
+        )}
       </ArrowSide>
     </div>
   )

@@ -45,9 +45,9 @@ export const Scene = forwardRef(({ type, supermentName, homepageCard }, ref) => 
       )}
       {type === "gummyMold" && (
           <GummyMold forwardRef={modelRotation} supermentName={supermentName} />
-      )}
+          )}
       {type === "capsule" && (
-          <Capsule forwardRef={modelRotation} supermentName={supermentName} />
+        <Capsule forwardRef={modelRotation} supermentName={supermentName} />
       )}
       
       <Environment

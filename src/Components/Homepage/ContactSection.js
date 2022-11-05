@@ -53,6 +53,7 @@ export const ContactSection = () => {
           justify-content: center;
           padding-top: 40px;
           position: relative;
+          z-index: -1;
           & > img {
             ${mediaQueries({
               marginBottom: ["-717px", "-690px", "-660px", "-645px"]

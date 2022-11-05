@@ -6,8 +6,9 @@ import styled from '@emotion/styled';
 import { breakpoints, mediaQuery, tokens } from '../../Helpers/styleTokens';
 import { Icon } from '../Icons/Icon';
 import { NutriButton } from '../NutriButton';
-import { SectionTitle } from './Homepage';
+import { ScrollRef, SectionTitle } from './Homepage';
 import useWindowDimensions from '../../Helpers/useWindowDimensions';
+
 
 // SECTION
 const Section = styled.div`
@@ -15,6 +16,7 @@ const Section = styled.div`
   display: flex;
   flex-direction: column;
   margin-bottom: 40vh; // temp
+  position: relative;
 `
 const SectionContent = styled.div`
   z-index: 0;
@@ -124,19 +126,20 @@ const CardContent = styled.div`
   display: flex;
   flex-direction: column;
   inset: 0;
+  margin-bottom: 30px;
   position: relative;
   ${mediaQuery[2]} {
     flex-direction: row;
+    margin-bottom: 0;
     position: absolute;
     transform: rotateX(20deg) rotateY(0deg);
   }
 `
 
 const CardSupermentContainer = styled.div`
-  background: radial-gradient(circle, rgb(4, 58, 81) 0%, rgb(2, 0, 71) 100%);
+  background: radial-gradient(circle, ${tokens.color.primary} 0%, ${tokens.color.secondaryTransparent} 100%);
   border-top-left-radius: 999px;
   border-top-right-radius: 999px;
-  box-shadow: 0 0 100px 0px black;
   position: relative;
   width: 248px;
   ${mediaQuery[2]} {
@@ -209,22 +212,24 @@ const CardTitle = styled.h4`
 `
 const StatsContainer = styled.div`
   align-items: center;
-  background: #041a4d;
+  background: radial-gradient(circle, rgb(0, 28, 71) 0%, ${tokens.color.secondaryTransparent} 100%);
   border-bottom-left-radius: 999px;
   border-bottom-right-radius: 999px;
+  box-shadow: 0 0 100px -20px black;
   display: flex;
   font-weight: ${tokens.font.fontWeight.light};
   margin: 0 auto;
   padding-bottom: 38px;
   position: relative;
   flex-direction: column;
-  width: 248px;
+  width: 252px;
   
   ${mediaQuery[2]} {
     align-items: start;
     background: transparent;
     border-bottom-left-radius: 0px;
     border-bottom-right-radius: 0px;
+    box-shadow: none;
     padding-bottom: 0px;
     width: auto;
   }
@@ -319,8 +324,29 @@ export const ShapesSection = forwardRef(({props}, ref) => {
     }
   }, [width]);
   
+  const handleSelectedShape = (shape) => {
+    const timer = setTimeout(() => {
+      setSelectedShape(prevState => ({...prevState, ...shape}));  
+    }, 1)
+    
+    setSelectedShape(prevState => (
+      {
+        ...prevState,
+        name: shape.name,
+        stats: [
+          {...prevState.stats[0], value: null},
+          {...prevState.stats[1], value: null},
+          {...prevState.stats[2], value: null},
+        ]
+      }
+    ))
+
+    return () => clearTimeout(timer)
+  }
+  
   return (
     <Section>
+      <ScrollRef ref={ref.shapesScrollRef}/>
       <SectionTitle>
           Shapes
       </SectionTitle>
@@ -330,7 +356,7 @@ export const ShapesSection = forwardRef(({props}, ref) => {
           {shapes && shapes.map(shape => (
             <ShapeContainer
               key={shape.name}
-              onClick={() => setSelectedShape(shape)}
+              onClick={() => handleSelectedShape(shape)}
               onMouseEnter={() => setFocusedShape(shape.name)}
               onMouseLeave={() => setFocusedShape("")}
             >
@@ -407,7 +433,7 @@ export const ShapesSection = forwardRef(({props}, ref) => {
           </CardSupermentContainer>
           
           <CardInfo>
-            <CardTitle ref={ref.shapesScrollRef}>
+            <CardTitle>
               {selectedShape && selectedShape.name}
             </CardTitle>
             <StatsContainer>
@@ -417,7 +443,7 @@ export const ShapesSection = forwardRef(({props}, ref) => {
                     {stat.name}
                   </StatLabel>
                   <div>
-                    {[...Array(stat.value)].map((_, i) => 
+                    {stat.value && [...Array(stat.value)].map((_, i) => 
                       <Icon
                         animate={{ opacity: 1 }}
                         color={tokens.color.accentStrong}
@@ -433,7 +459,7 @@ export const ShapesSection = forwardRef(({props}, ref) => {
                         width={20}
                       />
                     )}
-                    {[...Array(5 - stat.value)].map((_, i) => 
+                    {stat.value && [...Array(5 - stat.value)].map((_, i) => 
                       <Icon
                         animate={{ opacity: 0.5 }}
                         color={tokens.color.accentStrong}
