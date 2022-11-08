@@ -248,8 +248,11 @@ function App() {
                 body {
                   background: black;
                   color: ${tokens.color.contrastLight};
-                  font-family: 'Roboto', sans-serif;
+                  font-family: 'Jost', sans-serif;
                   position: relative;
+                }
+                h1, h2, h3, h4, h5, h6 {
+                  font-family: 'Roboto', sans-serif;
                 }
                 html, body, 
                 .iceberg-container, #iceberg-video, #iceberg-image,

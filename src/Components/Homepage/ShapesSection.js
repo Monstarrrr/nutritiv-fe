@@ -200,7 +200,7 @@ const CardInfo = styled.div`
     width: 270px;
   }
 `
-const CardTitle = styled.h4`
+const CardTitle = styled(motion.h4)`
   display: none;
   ${mediaQuery[2]} {
     display: inline-block;
@@ -279,7 +279,7 @@ const StatLabel = styled.div`
     margin-right: ${tokens.spacing.md};
   }
 `
-const CardDescription = styled.div`
+const CardDescription = styled(motion.div)`
   margin-bottom: ${tokens.spacing.xl};
   margin-top: ${tokens.spacing.xl};
   font-weight: ${tokens.font.fontWeight.medium};
@@ -342,6 +342,20 @@ export const ShapesSection = forwardRef(({props}, ref) => {
     ))
 
     return () => clearTimeout(timer)
+  }
+
+  const titleAnimation = {
+    show: {
+      opacity: 1,
+      x: 0,
+      transition: {
+        duration: 0.8
+      }
+    },
+    hide: {
+      opacity: 0,
+      x: -20,
+    }
   }
   
   return (
@@ -433,16 +447,29 @@ export const ShapesSection = forwardRef(({props}, ref) => {
           </CardSupermentContainer>
           
           <CardInfo>
-            <CardTitle>
-              {selectedShape && selectedShape.name}
-            </CardTitle>
+            <AnimatePresence exitBeforeEnter>
+              {selectedShape && (
+                <CardTitle 
+                  animate={{opacity: 1, x: 0}}
+                  initial={{opacity: 0, x: -12}}
+                  exit={{opacity: 0, x: 12}}
+                  transition={{
+                    duration: 0.3,
+                    ease: "easeInOut",
+                  }}
+                  key={selectedShape.name}
+                >
+                  {selectedShape.name}
+                </CardTitle>
+              )}
+            </AnimatePresence>
             <StatsContainer>
               {selectedShape && selectedShape.stats.map(stat => (
                 <StatContainer key={stat.name}>
                   <StatLabel>
                     {stat.name}
                   </StatLabel>
-                  <div>
+                  <div style={{height: "24px"}}>
                     {stat.value && [...Array(stat.value)].map((_, i) => 
                       <Icon
                         animate={{ opacity: 1 }}
@@ -479,9 +506,30 @@ export const ShapesSection = forwardRef(({props}, ref) => {
                 </StatContainer>
               ))}
             </StatsContainer>
-            <CardDescription>
-              {selectedShape.description}  
-            </CardDescription>
+            <AnimatePresence exitBeforeEnter>
+              {selectedShape.description && (
+                <CardDescription
+                  animate={{opacity: 1, x: 0, y: 0}}
+                  initial={{
+                    opacity: 0, 
+                    x: isMobile ? 0 : -6,
+                    y: isMobile ? -6 : 0,
+                  }}
+                  exit={{
+                    opacity: 0, 
+                    x: isMobile ? 0 : 6,
+                    y: isMobile ? 6 : 0
+                  }}
+                  transition={{
+                    duration: isMobile ? 0.24 : 0.3,
+                    ease: "easeOut",
+                  }}
+                  key={selectedShape.description}
+                >
+                  {selectedShape.description}  
+                </CardDescription>
+              )}
+            </AnimatePresence>
           </CardInfo>
           
           <CardButton
