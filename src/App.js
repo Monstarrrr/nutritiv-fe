@@ -244,6 +244,26 @@ function App() {
               css`
                 * {
                   max-width: ${tokens.maxWidth.xl};
+                  scrollbar-width: thin;
+                  scrollbar-color: ${tokens.color.accentStrong} transparent;
+                  &::selection {
+                    color: ${tokens.color.contrastDark};
+                    background-color: ${tokens.color.accentStrong};
+                  }
+                  /* Scrollbar on Chrome, Edge, and Safari */
+                  &::-webkit-scrollbar {
+                    height: 1px;
+                    width: 8px;
+                  }
+                  
+                  &::-webkit-scrollbar-track {
+                    background: rgba(0, 0, 0, 0);
+                  }
+                  
+                  &::-webkit-scrollbar-thumb {
+                    background-color: ${tokens.color.accentStrong};
+                    border-radius: 10px;
+                  }
                 }
                 body {
                   background: black;

@@ -11,10 +11,22 @@ const NavLink = styled(Link)`
   color: ${props => props.active ? tokens.color.secondary : tokens.color.contrastLight};
 `
 
+
+const HoverableLinks = css`
+  color: ${tokens.color.accentStrong};
+  text-decoration: none;
+  transition: all ease .2s;
+  &:hover {
+    transition: all ease .2s;
+    opacity: 0.65;
+  }
+`
+const IconLink = styled.a`${HoverableLinks}`
+const TextLink = styled.a`${HoverableLinks}`
+
 export const Footer = () => {
   const location = useLocation();
-  const [active, setActive] = useState(location.pathname);
-
+  
   return (
     <footer 
       css={css`
@@ -22,7 +34,6 @@ export const Footer = () => {
         flex-direction: column;
         margin: 0 auto;
         text-align: center;
-        user-select: none;
       `}
     >
       <div css={css`margin: ${tokens.spacing.xxl};`}>
@@ -60,13 +71,17 @@ export const Footer = () => {
               <NavLink
                 active={location.pathname === item.link ? 1 : undefined}
                 key={item.link}
-                onClick={() => setActive(item.link)}
                 css={css`
                   margin: 0 ${tokens.spacing.lg};
                   font-weight: ${tokens.font.fontWeight.medium};
                   letter-spacing: 1px;
                   text-decoration: none;
                   text-transform: uppercase;
+                  transition: all ease .2s;
+                  &:hover {
+                    transition: all ease .2s;
+                    opacity: ${item.link === location.pathname ? 1 : 0.65};
+                  }
                 `}
                 to={item.link}
               >
@@ -84,7 +99,7 @@ export const Footer = () => {
               }
             `}
           >
-            <a 
+            <IconLink
               href="https://github.com/Monstarrrr/nutritiv-fe"
               css={css`
                 align-items: center;
@@ -98,8 +113,8 @@ export const Footer = () => {
                 height={"28px"}
                 width={"28px"}
               />
-            </a>
-            <a href="mailto:admin@nutritiv.app">
+            </IconLink>
+            <IconLink href="mailto:admin@nutritiv.app">
               <Icon
                 name="mail" 
                 color={tokens.color.contrastLight}
@@ -107,8 +122,8 @@ export const Footer = () => {
                 height={"28px"}
                 width={"28px"}
               />
-            </a>
-            <a href="https://goo.gl/maps/3jHqjPTChCAevUyW9">
+            </IconLink>
+            <IconLink href="https://goo.gl/maps/3jHqjPTChCAevUyW9">
               <Icon
                 name="location" 
                 color={tokens.color.contrastLight}
@@ -116,7 +131,7 @@ export const Footer = () => {
                 height={"28px"}
                 width={"28px"}
               />
-            </a>
+            </IconLink>
           </div>
         </div>
         
@@ -127,22 +142,21 @@ export const Footer = () => {
             margin-top: ${tokens.spacing.xxl};
           `}
         >
-          2022 by Kiwi Labs, All Rights Reserved. <a>Hire us</a>.
+          2022 by Kiwi Labs, All Rights Reserved. <TextLink href="https://discord.gg/shj48F8XBd" target="_blank">Hire us</TextLink>.
         </div>
         <div
           css={css`
             font-size: ${tokens.font.fontSize.xs};
             margin-bottom: ${tokens.spacing.lg};
-            & > a {
-              color: ${tokens.color.accentStrong};
-              text-decoration: none;
-            }
           `}
         >
           This site is protected by reCAPTCHA and the Google&nbsp;
-          <a href="https://policies.google.com/privacy">Privacy Policy</a> and&nbsp;
-          <a href="https://policies.google.com/terms">Terms of Service</a> apply.&nbsp;
-          <Link to="/releases">
+          <TextLink href="https://policies.google.com/privacy" target="_blank">Privacy Policy</TextLink> and&nbsp;
+          <TextLink href="https://policies.google.com/terms" target="_blank">Terms of Service</TextLink> apply.&nbsp;
+          <Link 
+            css={css`${HoverableLinks}`}
+            to="/releases"
+          >
             Releases
           </Link>
           .
