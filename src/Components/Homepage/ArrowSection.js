@@ -6,6 +6,7 @@ import { scrollToElement } from '../../Helpers/scrollToElement'
 import { breakpoints, mediaQueries, mediaQuery, tokens } from '../../Helpers/styleTokens'
 import useWindowDimensions from '../../Helpers/useWindowDimensions'
 import { Icon } from '../Icons/Icon'
+import { motion } from 'framer-motion';
 
 const ArrowSide = styled.div``
 
@@ -25,6 +26,13 @@ export const ArrowSection = forwardRef((props, ref) => {
     }
   }, [arrowHovered]);
   
+  const textVariants = {
+    "onscreen": {
+      opacity: 1,
+      y: 0,
+    },
+  }
+
   return (
     <div
       css={css`
@@ -35,7 +43,7 @@ export const ArrowSection = forwardRef((props, ref) => {
         margin-bottom: 40vh;
       `}
     >
-      <h4
+      <motion.h4
         css={css`
           margin-right: 20px;
           margin-left: 20px;
@@ -60,11 +68,21 @@ export const ArrowSection = forwardRef((props, ref) => {
             ]
           })}
         `}
+        initial={{ 
+          opacity: 0, 
+          y: -30,
+        }}
+        transition={{
+          duration: 0.4
+        }}
         ref={ref.discoverScrollRef}
+        variants={textVariants}
+        viewport={{ once: false, amount: 0.4 }}
+        whileInView="onscreen"
       >
         The human body uses only 20% of its molecules potential.<br/>
         Our superments are exclusive supplements which unlock their hidden potential.<br/>
-      </h4>
+      </motion.h4>
       <ArrowSide
         css={css`
           margin-top: 7vw;
@@ -78,7 +96,7 @@ export const ArrowSection = forwardRef((props, ref) => {
           })}
         `}
       >
-        <div
+        <motion.div
           onClick={() => scrollToElement(ref.shapesScrollRef)}
           onMouseEnter={() => setArrowHovered(true)}
           onMouseLeave={() => setArrowHovered(false)}
@@ -96,6 +114,11 @@ export const ArrowSection = forwardRef((props, ref) => {
               }
             }
           `}
+          initial={{ opacity: 0 }}
+          transition={{ delay: 0.1}}
+          variants={textVariants}
+          viewport={{ once: true, amount: 0.4 }}
+          whileInView="onscreen"
         >
           <Icon
             name="arrowDown"
@@ -105,7 +128,7 @@ export const ArrowSection = forwardRef((props, ref) => {
             height={25}
             width={25}
           />
-        </div>
+        </motion.div>
         {width > breakpoints[2] && (
           <Icon
             name="wave"
