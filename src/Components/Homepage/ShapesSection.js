@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
-import React, { forwardRef, useEffect, useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion';
+import React, { forwardRef, useEffect, useRef, useState } from 'react'
+import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { breakpoints, mediaQuery, tokens } from '../../Helpers/styleTokens';
@@ -18,7 +18,7 @@ const Section = styled.div`
   margin-bottom: 40vh; // temp
   position: relative;
 `
-const SectionContent = styled.div`
+const SectionContent = styled(motion.div)`
   z-index: 0;
   ${mediaQuery[2]} {
     margin-top: ${tokens.spacing.max};
@@ -121,7 +121,7 @@ const Card = styled(motion.div)`
     }
   }
 `
-const CardContent = styled.div`
+const CardContent = styled(motion.div)`
   align-items: center;
   display: flex;
   flex-direction: column;
@@ -132,7 +132,7 @@ const CardContent = styled.div`
     flex-direction: row;
     margin-bottom: 0;
     position: absolute;
-    transform: rotateX(20deg) rotateY(0deg);
+    /* transform: rotateX(20deg) rotateY(0deg); */
   }
 `
 
@@ -315,6 +315,12 @@ export const ShapesSection = forwardRef(({props}, ref) => {
   const [selectedShape, setSelectedShape] = useState(shapes[0]);
   const [isMobile, setIsMobile] = useState(true);
   const { width } = useWindowDimensions();
+  const { scrollYProgress } = useScroll({
+    target: ref.shapesScrollRef,
+    offset: ["start end", "center center"]
+  });
+  const scrollShapesRotation = useTransform(scrollYProgress, [0, 1], [60, 20]);
+  const scrollShapesScale = useTransform(scrollYProgress, [0, 1], [0.9, 1]);
   
   useEffect(() => {
     if(width > breakpoints[2]) {
@@ -340,27 +346,15 @@ export const ShapesSection = forwardRef(({props}, ref) => {
         ]
       }
     ))
-
+    
     return () => clearTimeout(timer)
   }
 
-  const titleAnimation = {
-    show: {
-      opacity: 1,
-      x: 0,
-      transition: {
-        duration: 0.8
-      }
-    },
-    hide: {
-      opacity: 0,
-      x: -20,
-    }
-  }
-  
   return (
     <Section>
-      <ScrollRef ref={ref.shapesScrollRef}/>
+      <ScrollRef 
+        ref={ref.shapesScrollRef}
+      />
       <SectionTitle>
           Shapes
       </SectionTitle>
@@ -430,9 +424,9 @@ export const ShapesSection = forwardRef(({props}, ref) => {
         </SwitchWrapper>
       </ShapesSwitch>
       
-      <SectionContent>
-        <Card />
-        <CardContent>
+      <SectionContent style={{ scale: !isMobile && scrollShapesScale }}>
+        <Card style={{rotateX: !isMobile && scrollShapesRotation}}/>
+        <CardContent style={{rotateX: !isMobile && scrollShapesRotation}}>
           <CardSupermentContainer>
             <CardSuperment>
               <SupermentA
