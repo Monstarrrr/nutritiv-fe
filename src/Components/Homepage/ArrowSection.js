@@ -1,13 +1,12 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
-import React, { forwardRef, useEffect, useRef, useState } from 'react'
+import React, { forwardRef, useEffect, useState } from 'react'
 import { scrollToElement } from '../../Helpers/scrollToElement'
 import { breakpoints, mediaQueries, mediaQuery, tokens } from '../../Helpers/styleTokens'
 import useWindowDimensions from '../../Helpers/useWindowDimensions'
 import { Icon } from '../Icons/Icon'
 import { motion, useSpring, useTransform, useViewportScroll } from 'framer-motion';
-import { useScroll } from '@react-three/drei'
 
 const Container = styled.div`
   align-items: center;
@@ -179,21 +178,16 @@ export const ArrowSection = forwardRef((props, ref) => {
       </svg>
       
       <svg 
-        width="100%" 
-        height="250%" 
-        // viewBox="0 0 2000 2000"
-        style={{ 
-          // marginTop: "calc(32vw + 150px)",
+        width="100%"
+        height="250%"
+        style={{
           position: "absolute",
           opacity: 0.6,
           zIndex: 0,
         }}
       >
         {bubbles.map((bubble, i) => (
-          <Bubble 
-            key={i} 
-            bubble={bubble}
-          />
+          <Bubble key={i} bubble={bubble} />
         ))}
       </svg>
       
