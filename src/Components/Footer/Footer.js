@@ -142,7 +142,15 @@ export const Footer = () => {
             margin-top: ${tokens.spacing.xxl};
           `}
         >
-          2022 by Kiwi Labs, All Rights Reserved. <TextLink href="https://discord.gg/shj48F8XBd" target="_blank">Hire us</TextLink>.
+          2022 by <TextLink href="https://discord.gg/shj48F8XBd" target="_blank">Kiwi Labs</TextLink>, All Rights Reserved.&nbsp;
+          <Link 
+            css={css`${HoverableLinks}`}
+            to="/releases"
+          >
+            Releases
+          </Link>
+          .
+          {/* <TextLink href="https://discord.gg/shj48F8XBd" target="_blank">Hire us</TextLink>. */}
         </div>
         <div
           css={css`
@@ -153,13 +161,6 @@ export const Footer = () => {
           This site is protected by reCAPTCHA and the Google&nbsp;
           <TextLink href="https://policies.google.com/privacy" target="_blank">Privacy Policy</TextLink> and&nbsp;
           <TextLink href="https://policies.google.com/terms" target="_blank">Terms of Service</TextLink> apply.&nbsp;
-          <Link 
-            css={css`${HoverableLinks}`}
-            to="/releases"
-          >
-            Releases
-          </Link>
-          .
         </div>
       </div>
     </footer>
