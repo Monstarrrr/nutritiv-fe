@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import React, { forwardRef, useEffect, useRef, useState } from 'react'
-import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion';
+import { AnimatePresence, motion, useScroll, useSpring, useTransform } from 'framer-motion';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { breakpoints, mediaQuery, tokens } from '../../Helpers/styleTokens';
@@ -48,6 +48,7 @@ const SwitchWrapper = styled.div`
     border-radius: ${tokens.borderRadius.lg};
     box-shadow: 0px 0px 10px 1px ${tokens.color.contrastDark};
     justify-content: initial;
+    margin: 0;
     padding: 4px;
     width: fit-content;
   }
@@ -319,9 +320,15 @@ export const ShapesSection = forwardRef(({props}, ref) => {
     target: ref.shapesScrollRef,
     offset: ["start end", "center center"]
   });
-  const scrollShapesRotation = useTransform(scrollYProgress, [0, 1], [60, 20]);
+  const scrollShapesRotation = useTransform(scrollYProgress, [0, 1], [50, 20]);
   const scrollShapesScale = useTransform(scrollYProgress, [0, 1], [0.9, 1]);
-  
+  const springShapesRotation = useSpring(scrollShapesRotation, {
+    stiffness: 800, damping: 100
+  });
+  const springShapesScale = useSpring(scrollShapesScale, {
+    stiffness: 800, damping: 100
+  });
+
   useEffect(() => {
     if(width > breakpoints[2]) {
       setIsMobile(false);
@@ -424,9 +431,9 @@ export const ShapesSection = forwardRef(({props}, ref) => {
         </SwitchWrapper>
       </ShapesSwitch>
       
-      <SectionContent style={{ scale: !isMobile && scrollShapesScale }}>
-        <Card style={{rotateX: !isMobile && scrollShapesRotation}}/>
-        <CardContent style={{rotateX: !isMobile && scrollShapesRotation}}>
+      <SectionContent style={{ scale: !isMobile && springShapesScale }}>
+        <Card style={{rotateX: !isMobile && springShapesRotation}}/>
+        <CardContent style={{rotateX: !isMobile && springShapesRotation}}>
           <CardSupermentContainer>
             <CardSuperment>
               <SupermentA
