@@ -1,10 +1,11 @@
-import { Environment, Plane, softShadows, useHelper } from '@react-three/drei'
+import { Environment, Html, Plane, softShadows, useHelper, useProgress } from '@react-three/drei'
 import React, { forwardRef, Suspense, useRef } from 'react'
 import {GummyBlob} from './models/GummyBlob';
 import {GummyMold} from './models/GummyMold';
 import {Capsule} from './models/Capsule';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
+import { tokens } from '../../Helpers/styleTokens';
 
 softShadows({
   frustum: 3.75,
@@ -13,6 +14,41 @@ softShadows({
   samples: 30,
   rings: 11, // (default: 11) must be a int
 })
+
+function Loader() {
+  const { progress, errors } = useProgress();
+  return (
+    <Html
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <div
+        style={{
+          color: errors > 0 ? tokens.color.error : tokens.color.contrastLight,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          position: 'relative',
+          top: "78px",
+          left: "-50%",
+        }}
+      >
+        {errors > 0 ? (
+          errors.map(err => (
+            <div>{err}</div>
+          ))
+        ) : (
+          <>
+            {Math.ceil(progress)}%<br />loaded
+          </>
+        )}
+      </div>
+    </Html>
+  )
+}
 
 export const Scene = forwardRef(({ type, supermentName, homepageCard }, ref) => {
   const modelRotation = useRef(0);
@@ -37,7 +73,7 @@ export const Scene = forwardRef(({ type, supermentName, homepageCard }, ref) => 
   })
   
   return (
-    <Suspense fallback={null}>
+    <Suspense fallback={<Loader />}>
       
       {/* MODEL */}
       {type === "gummyBlob" && (
@@ -45,7 +81,7 @@ export const Scene = forwardRef(({ type, supermentName, homepageCard }, ref) => 
       )}
       {type === "gummyMold" && (
           <GummyMold forwardRef={modelRotation} supermentName={supermentName} />
-          )}
+      )}
       {type === "capsule" && (
         <Capsule forwardRef={modelRotation} supermentName={supermentName} />
       )}
