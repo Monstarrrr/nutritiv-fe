@@ -40,7 +40,7 @@ export const ContactSection = () => {
         `}
       >
         <Email>
-          contact.nutriteam@gmail.com
+          contact.nutritiv@gmail.com
         </Email>
         <Address>
           Champ de Mars, 5 Av. Anatole France, 75007 Paris
