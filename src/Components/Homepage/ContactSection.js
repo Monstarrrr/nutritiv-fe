@@ -5,6 +5,8 @@ import styled from '@emotion/styled'
 import React from 'react'
 import { mediaQueries, tokens } from '../../Helpers/styleTokens'
 import { SectionTitle } from './Homepage'
+import { Icon } from '../Icons/Icon';
+import { HoverableLinks } from '../PagesWrapper';
 
 const Container = styled.div`
   max-width: none;
@@ -23,7 +25,6 @@ const BottomGradient = styled.div`
   height: 200px;
   width: 100%;
 `
-const Email = styled.div``
 const Address = styled.div``
 
 export const ContactSection = () => {
@@ -39,9 +40,27 @@ export const ContactSection = () => {
           font-size: ${tokens.font.fontSize.md};
         `}
       >
-        <Email>
+        <a 
+          css={css`
+            ${HoverableLinks}
+            color: ${tokens.color.contrastLight};
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: underline;
+          `} 
+          href="mailto:contact.nutritiv@gmail.com"
+        >
           contact.nutritiv@gmail.com
-        </Email>
+          <Icon
+            color={tokens.color.contrastLight} 
+            name="openUrl" 
+            strokeWidth={2}
+            style={{ marginLeft: tokens.spacing.xs }}
+            height={20}
+            width={20}
+          />
+        </a>
         <Address>
           Champ de Mars, 5 Av. Anatole France, 75007 Paris
         </Address>

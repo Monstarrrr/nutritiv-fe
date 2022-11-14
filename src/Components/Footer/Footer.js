@@ -1,28 +1,15 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
-import React, { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { mediaQueries, tokens } from '../../Helpers/styleTokens'
 import { LogoLink, navLinksItems } from '../Header/Navbar'
 import { Icon } from '../Icons/Icon'
+import { HoverableLinks } from '../PagesWrapper'
 
 const NavLink = styled(Link)`
   color: ${props => props.active ? tokens.color.secondary : tokens.color.contrastLight};
 `
-
-
-const HoverableLinks = css`
-  color: ${tokens.color.accentStrong};
-  text-decoration: none;
-  transition: all ease .2s;
-  &:hover {
-    transition: all ease .2s;
-    opacity: 0.65;
-  }
-`
-const IconLink = styled.a`${HoverableLinks}`
-const TextLink = styled.a`${HoverableLinks}`
 
 export const Footer = () => {
   const location = useLocation();
@@ -99,11 +86,12 @@ export const Footer = () => {
               }
             `}
           >
-            <IconLink
+            <a
               href="https://github.com/Monstarrrr/nutritiv-fe"
               css={css`
                 align-items: center;
-                display: flex; 
+                display: flex;
+                ${HoverableLinks}
               `}
             >
               <Icon
@@ -113,8 +101,8 @@ export const Footer = () => {
                 height={"28px"}
                 width={"28px"}
               />
-            </IconLink>
-            <IconLink href="mailto:admin@nutritiv.app">
+            </a>
+            <a css={css`${HoverableLinks}`} href="mailto:contact.nutritiv@gmail.com">
               <Icon
                 name="mail" 
                 color={tokens.color.contrastLight}
@@ -122,8 +110,8 @@ export const Footer = () => {
                 height={"28px"}
                 width={"28px"}
               />
-            </IconLink>
-            <IconLink href="https://goo.gl/maps/3jHqjPTChCAevUyW9">
+            </a>
+            <a css={css`${HoverableLinks}`} href="https://goo.gl/maps/3jHqjPTChCAevUyW9">
               <Icon
                 name="location" 
                 color={tokens.color.contrastLight}
@@ -131,7 +119,7 @@ export const Footer = () => {
                 height={"28px"}
                 width={"28px"}
               />
-            </IconLink>
+            </a>
           </div>
         </div>
         
@@ -142,7 +130,11 @@ export const Footer = () => {
             margin-top: ${tokens.spacing.xxl};
           `}
         >
-          2022 by <TextLink href="https://discord.gg/shj48F8XBd" target="_blank">Kiwi Labs</TextLink>, All Rights Reserved.&nbsp;
+          2022 by&nbsp;
+          <a css={css`${HoverableLinks}`} href="https://discord.gg/shj48F8XBd" rel="noreferrer" target="_blank">
+            Kiwi Labs
+          </a>
+          , All Rights Reserved.&nbsp;
           <Link 
             css={css`${HoverableLinks}`}
             to="/releases"
@@ -159,8 +151,14 @@ export const Footer = () => {
           `}
         >
           This site is protected by reCAPTCHA and the Google&nbsp;
-          <TextLink href="https://policies.google.com/privacy" target="_blank">Privacy Policy</TextLink> and&nbsp;
-          <TextLink href="https://policies.google.com/terms" target="_blank">Terms of Service</TextLink> apply.&nbsp;
+          <a css={css`${HoverableLinks}`} href="https://policies.google.com/privacy" rel="noreferrer" target="_blank">
+            Privacy Policy&nbsp;
+          </a> 
+          and&nbsp;
+          <a css={css`${HoverableLinks}`} href="https://policies.google.com/terms" rel="noreferrer" target="_blank">
+            Terms of Service&nbsp;
+          </a> 
+          apply.&nbsp;
         </div>
       </div>
     </footer>
