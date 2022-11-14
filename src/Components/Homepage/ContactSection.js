@@ -40,10 +40,10 @@ export const ContactSection = () => {
         `}
       >
         <Email>
-          contact@nutritivshop.com
+          contact.nutriteam@gmail.com
         </Email>
         <Address>
-          58 Howard St, San Francisco, CA 941
+          Champ de Mars, 5 Av. Anatole France, 75007 Paris
         </Address>
       </div>
       {/* <ExcitingSvg /> */}
