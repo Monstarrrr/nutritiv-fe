@@ -441,7 +441,7 @@ export const ShapesSection = forwardRef(({props}, ref) => {
                 type={selectedShape.name} 
                 />
               <SupermentB
-                ref={ref.gummyPiViewHomepage}
+                ref={ref.gummySolvalitisViewHomepage}
                 type={selectedShape.name} 
               />
             </CardSuperment>

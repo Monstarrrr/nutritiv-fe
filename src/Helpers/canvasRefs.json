@@ -1,8 +1,15 @@
 [
-  "gummyPiViewHomepage",
-  "gummyPiView",
-  "gummyFolderView",
-  "gummyFolderViewHomepage",
+  "gummySolvalitisViewHomepage",
+  "gummySolvalitisView",
+  "gummyNodemodulesView",
+  "gummyNodemodulesViewHomepage",
+  "gummyAmethystExtractView",
+  "gummyAbsoriteView",
+  "gummyBaguettoidsView",
+  "gummyBicepstineView",
+  "gummyTricepstineView",
+  "gummyJumpamineView",
+  "gummyLumositeView",
   "capsuleWaterViewHomepage",
   "capsuleWaterView"
 ]

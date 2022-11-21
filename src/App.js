@@ -48,18 +48,24 @@ function App() {
   const orbitControlsRef = useRef();
   const [
     canvasWrapperRef, 
-    gummyPiViewHomepage, gummyPiView, gummyFolderView, gummyFolderViewHomepage, capsuleWaterViewHomepage, capsuleWaterView
+    gummySolvalitisViewHomepage, gummySolvalitisView, gummyNodemodulesView, gummyAbsoriteView, gummyAmethystExtractView, gummyBaguettoidsView, gummyBicepstineView, gummyJumpamineView, gummyLumositeView, capsuleWaterViewHomepage, capsuleWaterView
   ] = useRefs();
   const canvasRefs = { 
-    gummyPiViewHomepage, gummyPiView, gummyFolderView, gummyFolderViewHomepage, capsuleWaterViewHomepage, capsuleWaterView
+    gummySolvalitisViewHomepage, gummySolvalitisView, gummyNodemodulesView, gummyAbsoriteView, gummyAmethystExtractView, gummyBaguettoidsView, gummyBicepstineView, gummyJumpamineView, gummyLumositeView, capsuleWaterViewHomepage, capsuleWaterView
   };
   const viewsList = [
-    { gummyPiViewHomepage,      name: "pi",     type: "gummyBlob", homepageCard: true }, 
-    { gummyPiView,              name: "pi",     type: "gummyBlob" }, 
-    { gummyFolderView,          name: "folder", type: "gummyMold" },
-    { gummyFolderViewHomepage,  name: "folder", type: "gummyMold", homepageCard: true },
-    { capsuleWaterViewHomepage, name: "water",  type: "capsule", homepageCard: true },
-    { capsuleWaterView,         name: "water",  type: "capsule" }
+    { gummySolvalitisViewHomepage,      name: "solvalitis",       type: "gummyBlob", homepageCard: true }, 
+    { gummySolvalitisView,              name: "solvalitis",       type: "gummyBlob" }, 
+    // { gummyNodemodulesView,             name: "nodeModules",      type: "gummyMold" },
+    { gummyAmethystExtractView,         name: "amethystExtract",  type: "gummyMold", scale: [0.1, 0.11, 1] },
+    { gummyAbsoriteView,                name: "absorite",         type: "gummyMold", scale: [2, 0.4, 1] },
+    { gummyBaguettoidsView,             name: "baguettoids",      type: "gummyMold" },
+    // { gummyBicepstineView,              name: "bicepstine",       type: "gummyMold" },
+    // { gummyJumpamineView,               name: "jumpamine",        type: "gummyMold" },
+    // { gummyLumositeView,                name: "lumosite",         type: "gummyMold" },
+    // { gummyTitaniumView,                name: "titanium",         type: "gummyMold" },
+    { capsuleWaterViewHomepage,         name: "liquate",          type: "capsule", homepageCard: true },
+    { capsuleWaterView,                 name: "liquate",          type: "capsule" }
   ];
   
   const [gettingUserInfo, setGettingUserInfo] = useState(false);
@@ -407,6 +413,7 @@ function App() {
                   >
                     <Scene
                       homepageCard={view.homepageCard}
+                      scale={view.scale}
                       supermentName={`${view.type}-${view.name}`}
                       type={view.type}
                     />
