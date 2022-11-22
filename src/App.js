@@ -435,13 +435,13 @@ function App() {
                       // enableZoom={view.homepageCard ? false : true}
                       enableZoom={true}
                       minDistance={
-                        view.type === "pill" ? 2.65 : 4
+                        view.type === "capsule" ? 3.2 : 4
                       }
                       maxDistance={
                         view.homepageCard ? (
-                          view.type === "pill" ? 2.65 : 4
+                          view.type === "capsule" ? 2.65 : 4
                         ) : (
-                          view.type === "pill" ? 7 : 9
+                          view.type === "capsule" ? 4 : 9
                         )
                       }
                       minPolarAngle={angleToRadians(70)}

@@ -17,7 +17,7 @@ const AboutUs = forwardRef((props, ref) => {
       >
         <Test ref={ref.gummySolvalitisViewHomepage} />
         <Test ref={ref.gummyNodemodulesView} />
-        <Test ref={ref.gummyAmethystExtractView} />
+        {/* <Test ref={ref.gummyAmethystExtractView} />
         <Test ref={ref.gummyAbsoriteView} />
         <Test ref={ref.gummyBaguettoidsView} />
         <Test ref={ref.gummyBicepstineView} />
@@ -28,7 +28,7 @@ const AboutUs = forwardRef((props, ref) => {
         <Test ref={ref.gummyNucleateView} />
         <Test ref={ref.gummyTitaniumView} />
         <Test ref={ref.gummySerylView} />
-        <Test ref={ref.gummyWolveriteView} />
+        <Test ref={ref.gummyWolveriteView} /> */}
         <Test ref={ref.capsuleWaterView} />
       </div>
       <h2>
