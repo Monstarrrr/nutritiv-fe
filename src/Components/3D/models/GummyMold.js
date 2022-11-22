@@ -13,7 +13,6 @@ export const GummyMold = forwardRef(({ supermentName, scale = 1 }, ref) => {
         geometry={nodes.Cube.geometry}
         material={materials.transparent_cap}
         rotation={[0, -Math.PI / 2, 0]}
-        // scale={[0.1, 0.8, 1]}
         scale={scale}
       />
     </group>

@@ -57,7 +57,7 @@ function App() {
     { gummySolvalitisViewHomepage,      name: "solvalitis",       type: "gummyBlob", homepageCard: true }, 
     { gummySolvalitisView,              name: "solvalitis",       type: "gummyBlob" }, 
     // { gummyNodemodulesView,             name: "nodeModules",      type: "gummyMold" },
-    { gummyAmethystExtractView,         name: "amethystExtract",  type: "gummyMold", scale: [0.1, 0.11, 1] },
+    { gummyAmethystExtractView,         name: "amethystExtract",  type: "gummyMold", scale: [0.1, 0.12, 1] },
     { gummyAbsoriteView,                name: "absorite",         type: "gummyMold", scale: [2, 0.4, 1] },
     { gummyBaguettoidsView,             name: "baguettoids",      type: "gummyMold" },
     // { gummyBicepstineView,              name: "bicepstine",       type: "gummyMold" },
