@@ -29,6 +29,7 @@ const AboutUs = forwardRef((props, ref) => {
         <Test ref={ref.gummyTitaniumView} />
         <Test ref={ref.gummySerylView} />
         <Test ref={ref.gummyWolveriteView} />
+        <Test ref={ref.capsuleWaterView} />
       </div>
       <h2>
         The team
