@@ -10,6 +10,8 @@ import { HoverableLinks } from '../PagesWrapper'
 const NavLink = styled(Link)`
   color: ${props => props.active ? tokens.color.secondary : tokens.color.contrastLight};
 `
+const currentTime = new Date();
+const currentYear = currentTime.getFullYear()
 
 export const Footer = () => {
   const location = useLocation();
@@ -130,7 +132,7 @@ export const Footer = () => {
             margin-top: ${tokens.spacing.xxl};
           `}
         >
-          2022 by&nbsp;
+          {currentYear} by&nbsp;
           <a css={css`${HoverableLinks}`} href="https://discord.gg/shj48F8XBd" rel="noreferrer" target="_blank">
             Kiwi Labs
           </a>
