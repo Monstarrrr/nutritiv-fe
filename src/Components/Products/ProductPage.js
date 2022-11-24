@@ -8,6 +8,18 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import nutritivApi, { s3URL } from '../../Api/nutritivApi';
 import { updateUserCartQuantity } from '../../Redux/reducers/user';
 import { motion } from 'framer-motion';
+import styled from '@emotion/styled';
+
+const GummyModel = styled.div`
+  display: ${props => props.refName === props.title ? (props.gummy ? "inline-block" : "none") : ("none")};
+  height: 300px;
+  width: 270px;
+  `
+const CapsuleModel = styled.div`
+  display: ${props => props.refName === props.title ? (props.capsule ? "inline-block" : "none") : ("none")}; 
+  height: 300px;
+  width: 270px;
+`
 
 const ProductPage = forwardRef((props, ref) => {
   const loggedIn = useSelector(state => state.user.loggedIn)
@@ -164,13 +176,13 @@ const ProductPage = forwardRef((props, ref) => {
       setAvailableQuantity(Math.floor(countInStock / cartSelection.load))
     }
   }, [cartSelection.load, countInStock]);
-
+  
   return (
-    <motion.div>
+    <div>
       <h2>
         { product.title }
       </h2>
-      {
+      {/* {
         product.imgs?.map((img, i) => (
           <img
             key={i}
@@ -180,7 +192,27 @@ const ProductPage = forwardRef((props, ref) => {
             alt={`product ${i}`} 
           />
         ))
-      }
+      } */}
+      <GummyModel 
+        title={product.title}
+        refName="Solvalitis"
+        gummy={product.shape === "gummies" ? 1 : undefined}
+        ref={ref.gummyAmethystExtractView} 
+      />
+      <GummyModel 
+        title={product.title} 
+        refName="Bicepstine"
+        ref={ref.gummyBicepstineView}
+        gummy={product.shape === "gummies" ? 1 : undefined}
+      />
+      <CapsuleModel 
+        ref={ref.capsuleWaterView} 
+        capsule={product.shape === "capsules" ? 1 : undefined}
+      />
+      
+      <pre>
+        {product && JSON.stringify(product, null, 2)}
+      </pre>
       <div>
         {/* RADIO BUTTON */}
         <b>
@@ -259,7 +291,7 @@ const ProductPage = forwardRef((props, ref) => {
       {
         loadingAdding && <p>Adding {productTitle} to cart...</p>
       }
-    </motion.div>
+    </div>
   )
 });
 

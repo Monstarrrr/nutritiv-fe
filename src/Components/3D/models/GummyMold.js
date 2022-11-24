@@ -11,9 +11,6 @@ export const GummyMold = forwardRef(({
   
   const { nodes, materials } = useGLTF(`${s3Address}assets/${supermentName}.glb`);
   
-  console.log('# rotation :', rotation)
-  console.log('# superment :', supermentName)
-
   return (
     <group scale={1} dispose={null}>
       <mesh
