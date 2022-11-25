@@ -11,12 +11,12 @@ import { motion } from 'framer-motion';
 import styled from '@emotion/styled';
 
 const GummyModel = styled.div`
-  display: ${props => props.refName === props.title ? (props.gummy ? "inline-block" : "none") : ("none")};
+  display: ${props => props.supermentName === props.title ? (props.gummy ? "inline-block" : "none") : ("none")};
   height: 300px;
   width: 270px;
   `
 const CapsuleModel = styled.div`
-  display: ${props => props.refName === props.title ? (props.capsule ? "inline-block" : "none") : ("none")}; 
+  display: ${props => props.supermentName === props.title ? (props.capsule ? "inline-block" : "none") : ("none")}; 
   height: 300px;
   width: 270px;
 `
@@ -193,22 +193,106 @@ const ProductPage = forwardRef((props, ref) => {
           />
         ))
       } */}
-      <GummyModel 
-        title={product.title}
-        refName="Solvalitis"
-        gummy={product.shape === "gummies" ? 1 : undefined}
-        ref={ref.gummyAmethystExtractView} 
-      />
-      <GummyModel 
-        title={product.title} 
-        refName="Bicepstine"
-        ref={ref.gummyBicepstineView}
-        gummy={product.shape === "gummies" ? 1 : undefined}
-      />
-      <CapsuleModel 
-        ref={ref.capsuleWaterView} 
-        capsule={product.shape === "capsules" ? 1 : undefined}
-      />
+      {/* GUMMIES */}
+      <>
+        <GummyModel 
+          gummy={product.shape === "gummies" ? 1 : undefined}
+          ref={ref.gummyAmethystExtractView} 
+          supermentName="Amethyst Extract"
+          title={product.title}
+        />
+        <GummyModel 
+          gummy={product.shape === "gummies" ? 1 : undefined}
+          ref={ref.gummyAbsoriteView} 
+          supermentName="Absorite"
+          title={product.title}
+        />
+        <GummyModel 
+          gummy={product.shape === "gummies" ? 1 : undefined}
+          ref={ref.gummyBaguettoidsView} 
+          supermentName="Baguettoids"
+          title={product.title}
+        />
+        <GummyModel 
+          gummy={product.shape === "gummies" ? 1 : undefined}
+          ref={ref.gummyBicepstineView}
+          supermentName="Bicepstine"
+          title={product.title} 
+        />
+        <GummyModel 
+          gummy={product.shape === "gummies" ? 1 : undefined}
+          ref={ref.gummyJumpamineView}
+          supermentName="Jumpamine"
+          title={product.title} 
+        />
+        <GummyModel 
+          gummy={product.shape === "gummies" ? 1 : undefined}
+          ref={ref.gummyLumositeView}
+          supermentName="Lumosite"
+          title={product.title} 
+        />
+        <GummyModel 
+          gummy={product.shape === "gummies" ? 1 : undefined}
+          ref={ref.gummyMagmaliteView}
+          supermentName="Magmalite"
+          title={product.title} 
+        />
+        <GummyModel 
+          gummy={product.shape === "gummies" ? 1 : undefined}
+          ref={ref.gummyNodemodulesView}
+          supermentName="node_modules"
+          title={product.title} 
+        />
+        <GummyModel 
+          gummy={product.shape === "gummies" ? 1 : undefined}
+          ref={ref.gummyNotavirusiteView}
+          supermentName="Notavirusite"
+          title={product.title} 
+        />
+        <GummyModel 
+          gummy={product.shape === "gummies" ? 1 : undefined}
+          ref={ref.gummyNucleateView}
+          supermentName="Nucleate"
+          title={product.title} 
+        />
+        <GummyModel 
+          gummy={product.shape === "gummies" ? 1 : undefined}
+          ref={ref.gummySerylView}
+          supermentName="Serylanyponytailanyserine"
+          title={product.title} 
+        />
+        <GummyModel 
+          gummy={product.shape === "gummies" ? 1 : undefined}
+          ref={ref.gummySolvalitisView} 
+          supermentName="Solvalitis"
+          title={product.title}
+        />
+        <GummyModel 
+          gummy={product.shape === "gummies" ? 1 : undefined}
+          ref={ref.gummyBicepstineView}
+          supermentName="Tricepstine"
+          title={product.title} 
+        />
+        <GummyModel 
+          gummy={product.shape === "gummies" ? 1 : undefined}
+          ref={ref.gummyTitaniumView}
+          supermentName="Titanium"
+          title={product.title} 
+        />
+        <GummyModel 
+          gummy={product.shape === "gummies" ? 1 : undefined}
+          ref={ref.gummyWolveriteView}
+          supermentName="Wolverite"
+          title={product.title} 
+        />
+      </>
+      {/* CAPSULES */}
+      <>
+        <CapsuleModel 
+          ref={ref.capsuleWaterView} 
+          capsule={product.shape === "capsules" ? 1 : undefined}
+        />
+      </>
       
       <pre>
         {product && JSON.stringify(product, null, 2)}
