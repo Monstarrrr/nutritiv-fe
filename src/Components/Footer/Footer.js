@@ -26,110 +26,112 @@ export const Footer = () => {
       `}
     >
       <div css={css`margin: ${tokens.spacing.xxl};`}>
-        <div
-          css={css`
-            align-items: center;
-            display: flex;
-            justify-content: space-between;
-            ${mediaQueries({
-              flexDirection: ["column", "column", "row", "row"],
-            })}
-          `}
-        >
-          <LogoLink 
-            style={{ 
-              display: "flex",
-              minWidth: "180px", 
-              justifyContent: "center",
-            }}
-          >
-            <img 
-              alt="nutritiv logo"
-              src="/logo.png"
-            />
-          </LogoLink>
-          <ul
+        {location.pathname === "/welcome" && (
+          <div
             css={css`
+              align-items: center;
               display: flex;
-              list-style-type: none;
-              padding: 0;
-              margin: ${tokens.spacing.xxl} auto;
+              justify-content: space-between;
+              margin-bottom: ${tokens.spacing.lg};
+              ${mediaQueries({
+                flexDirection: ["column", "column", "row", "row"],
+              })}
             `}
           >
-            {navLinksItems.map(item => (
-              <NavLink
-                active={location.pathname === item.link ? 1 : undefined}
-                key={item.link}
-                css={css`
-                  margin: 0 ${tokens.spacing.lg};
-                  font-weight: ${tokens.font.fontWeight.medium};
-                  letter-spacing: 1px;
-                  text-decoration: none;
-                  text-transform: uppercase;
-                  transition: all ease .2s;
-                  &:hover {
-                    transition: all ease .2s;
-                    opacity: ${item.link === location.pathname ? 1 : 0.65};
-                  }
-                `}
-                to={item.link}
-              >
-                {item.label}
-              </NavLink>
-            ))}
-          </ul>
-          <div 
-            css={css`
-              display: flex;
-              justify-content: center;
-              min-width: 180px;
-              > a {
-                margin: 0 ${tokens.spacing.sm};
-              }
-            `}
-          >
-            <a
-              href="https://github.com/Monstarrrr/nutritiv-fe"
+            <LogoLink 
+              style={{ 
+                display: "flex",
+                minWidth: "180px", 
+                justifyContent: "center",
+              }}
+            >
+              <img 
+                alt="nutritiv logo"
+                src="/logo.png"
+              />
+            </LogoLink>
+            <ul
               css={css`
-                align-items: center;
                 display: flex;
-                ${HoverableLinks}
+                list-style-type: none;
+                padding: 0;
+                margin: ${tokens.spacing.xxl} auto;
               `}
             >
-              <Icon
-                name="github" 
-                color={tokens.color.contrastLight}
-                filled
-                height={"28px"}
-                width={"28px"}
-              />
-            </a>
-            <a css={css`${HoverableLinks}`} href="mailto:contact.nutritiv@gmail.com">
-              <Icon
-                name="mail" 
-                color={tokens.color.contrastLight}
-                filled
-                height={"28px"}
-                width={"28px"}
-              />
-            </a>
-            <a css={css`${HoverableLinks}`} href="https://goo.gl/maps/3jHqjPTChCAevUyW9">
-              <Icon
-                name="location" 
-                color={tokens.color.contrastLight}
-                filled
-                height={"28px"}
-                width={"28px"}
-              />
-            </a>
+              {navLinksItems.map(item => (
+                <NavLink
+                  active={location.pathname === item.link ? 1 : undefined}
+                  key={item.link}
+                  css={css`
+                    margin: 0 ${tokens.spacing.lg};
+                    font-weight: ${tokens.font.fontWeight.medium};
+                    letter-spacing: 1px;
+                    text-decoration: none;
+                    text-transform: uppercase;
+                    transition: all ease .2s;
+                    &:hover {
+                      transition: all ease .2s;
+                      opacity: ${item.link === location.pathname ? 1 : 0.65};
+                    }
+                  `}
+                  to={item.link}
+                >
+                  {item.label}
+                </NavLink>
+              ))}
+            </ul>
+            <div 
+              css={css`
+                display: flex;
+                justify-content: center;
+                min-width: 180px;
+                > a {
+                  margin: 0 ${tokens.spacing.sm};
+                }
+              `}
+            >
+              <a
+                href="https://github.com/Monstarrrr/nutritiv-fe"
+                css={css`
+                  align-items: center;
+                  display: flex;
+                  ${HoverableLinks}
+                `}
+              >
+                <Icon
+                  name="github" 
+                  color={tokens.color.contrastLight}
+                  filled
+                  height={"28px"}
+                  width={"28px"}
+                />
+              </a>
+              <a css={css`${HoverableLinks}`} href="mailto:contact.nutritiv@gmail.com">
+                <Icon
+                  name="mail" 
+                  color={tokens.color.contrastLight}
+                  filled
+                  height={"28px"}
+                  width={"28px"}
+                />
+              </a>
+              <a css={css`${HoverableLinks}`} href="https://goo.gl/maps/3jHqjPTChCAevUyW9">
+                <Icon
+                  name="location" 
+                  color={tokens.color.contrastLight}
+                  filled
+                  height={"28px"}
+                  width={"28px"}
+                />
+              </a>
+            </div>
           </div>
-        </div>
+        )}
         
         <div 
           css={css`
             font-size: ${tokens.font.fontSize.sm};
-            margin-bottom: ${tokens.spacing.sm};
-            margin-top: ${tokens.spacing.xxl};
+            margin-bottom: 4px;
           `}
         >
           {currentYear} by&nbsp;
@@ -146,12 +148,7 @@ export const Footer = () => {
           .
           {/* <TextLink href="https://discord.gg/shj48F8XBd" target="_blank">Hire us</TextLink>. */}
         </div>
-        <div
-          css={css`
-            font-size: ${tokens.font.fontSize.xs};
-            margin-bottom: ${tokens.spacing.lg};
-          `}
-        >
+        <div css={css`font-size: ${tokens.font.fontSize.xs};`}>
           This site is protected by reCAPTCHA and the Google&nbsp;
           <a css={css`${HoverableLinks}`} href="https://policies.google.com/privacy" rel="noreferrer" target="_blank">
             Privacy Policy&nbsp;

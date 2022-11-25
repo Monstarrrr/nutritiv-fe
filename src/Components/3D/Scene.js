@@ -125,7 +125,7 @@ export const Scene = forwardRef(({ type, rotation, scale, supermentName, homepag
       />
       
       <pointLight 
-        intensity={1}
+        intensity={type === "capsule" ? 30 : 1}
         position={[0,0,0]}
         ref={pointLightRef}
       />

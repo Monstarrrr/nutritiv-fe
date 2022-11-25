@@ -1,5 +1,5 @@
 import React from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { motion } from 'framer-motion';
 
 export const ProductCard = ({ product, index }) => {
@@ -15,11 +15,18 @@ export const ProductCard = ({ product, index }) => {
     exit: { opacity: 0 }
   }
   
+  const handleClickProduct = () => {
+    navigate({
+      pathname: `/${product.title}`,
+      search: `?shape=${product.shape}`
+    });
+  }
+  
   return (
     <motion.div
       layout
       key={product._id}
-      onClick={() => navigate(`/product/${product.title}`)}
+      onClick={() => handleClickProduct()}
       style={{
         background: "gray",
       }}

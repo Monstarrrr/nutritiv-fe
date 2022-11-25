@@ -4,7 +4,7 @@ import React, {
   useState 
 } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import nutritivApi, { s3URL } from '../../Api/nutritivApi';
 import { updateUserCartQuantity } from '../../Redux/reducers/user';
 import { motion } from 'framer-motion';
@@ -27,6 +27,9 @@ const ProductPage = forwardRef((props, ref) => {
   const { productTitle } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
+  
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [shapeQuery, setShapeQuery] = useState(searchParams.get('shape') || 'gummies');
 
   const [product, setProduct] = useState({
     productItems: []
@@ -80,7 +83,7 @@ const ProductPage = forwardRef((props, ref) => {
           { 
             msg: "Login to add a product to your cart.",
             cartSelection,
-            from: `/product/${productTitle}`
+            from: `/${productTitle}`
           }
         }
       );
@@ -108,7 +111,7 @@ const ProductPage = forwardRef((props, ref) => {
           `/products/findByTitle/${productTitle}`
         )
         if(isMounted){
-          const fetchedProduct = data.Product[0]
+          const fetchedProduct = data.Product.find(e => e.shape === shapeQuery)
           setProduct(fetchedProduct);
           
           if(location.state?.productId){
@@ -126,7 +129,7 @@ const ProductPage = forwardRef((props, ref) => {
       console.log('# /products/findByTitle err :', err)
     }
     return () => { isMounted = false }
-  }, [productTitle, location.state])
+  }, [productTitle, location.state, shapeQuery])
   
   // HANDLE SELECTED ITEM
   const handleSelectedItem = (item) => {
@@ -176,7 +179,7 @@ const ProductPage = forwardRef((props, ref) => {
       setAvailableQuantity(Math.floor(countInStock / cartSelection.load))
     }
   }, [cartSelection.load, countInStock]);
-  
+
   return (
     <div>
       <h2>
@@ -269,7 +272,7 @@ const ProductPage = forwardRef((props, ref) => {
         />
         <GummyModel 
           gummy={product.shape === "gummies" ? 1 : undefined}
-          ref={ref.gummyBicepstineView}
+          ref={ref.gummyTricepstineView}
           supermentName="Tricepstine"
           title={product.title} 
         />
@@ -297,6 +300,8 @@ const ProductPage = forwardRef((props, ref) => {
       <pre>
         {product && JSON.stringify(product, null, 2)}
       </pre>
+      <button onClick={() => setShapeQuery('gummies')}>gummy</button>
+      <button onClick={() => setShapeQuery('capsules')}>capsules</button>
       <div>
         {/* RADIO BUTTON */}
         <b>

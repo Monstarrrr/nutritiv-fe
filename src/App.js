@@ -48,16 +48,16 @@ function App() {
   const orbitControlsRef = useRef();
   const [
     canvasWrapperRef, 
-    gummyAbsoriteView, gummyAmethystExtractView, gummyBaguettoidsView, gummyBicepstineView, gummyJumpamineView, gummyLumositeView, gummyMagmaliteView, gummyNodemodulesView, gummyNotavirusiteView, gummyNucleateView, gummySerylView, gummySolvalitisView, gummySolvalitisViewHomepage, gummyTitaniumView, gummyWolveriteView, capsuleWaterViewHomepage, capsuleWaterView
+    gummyAbsoriteView, gummyAmethystExtractView, gummyBaguettoidsView, gummyBicepstineView, gummyJumpamineView, gummyLumositeView, gummyMagmaliteView, gummyNodemodulesView, gummyNotavirusiteView, gummyNucleateView, gummySerylView, gummySolvalitisView, gummySolvalitisViewHomepage, gummyTitaniumView, gummyTricepstineView, gummyWolveriteView, capsuleWaterViewHomepage, capsuleWaterView
   ] = useRefs();
   const canvasRefs = { 
-    gummyAbsoriteView, gummyAmethystExtractView, gummyBaguettoidsView, gummyBicepstineView, gummyJumpamineView, gummyLumositeView, gummyMagmaliteView, gummyNodemodulesView, gummyNotavirusiteView, gummyNucleateView, gummySerylView, gummySolvalitisView, gummySolvalitisViewHomepage, gummyTitaniumView, gummyWolveriteView, capsuleWaterViewHomepage, capsuleWaterView
+    gummyAbsoriteView, gummyAmethystExtractView, gummyBaguettoidsView, gummyBicepstineView, gummyJumpamineView, gummyLumositeView, gummyMagmaliteView, gummyNodemodulesView, gummyNotavirusiteView, gummyNucleateView, gummySerylView, gummySolvalitisView, gummySolvalitisViewHomepage, gummyTitaniumView, gummyTricepstineView, gummyWolveriteView, capsuleWaterViewHomepage, capsuleWaterView
   };
   const viewsList = [
     { gummyAmethystExtractView,           name: "amethystExtract",           type: "gummyMold", scale: [0.1, 0.12, 1] },
     { gummyAbsoriteView,                  name: "absorite",                  type: "gummyMold", scale: [1.9, 0.3, 1.2] },
-    { gummyBaguettoidsView,               name: "baguettoids",               type: "gummyMold" },
-    { gummyBicepstineView,                name: "bicepstine",                type: "gummyMold", scale: 0.6 },
+    { gummyBaguettoidsView,               name: "baguettoids",               type: "gummyMold", scale: 0.9 },
+    { gummyBicepstineView,                name: "bicepstine",                type: "gummyMold", scale: 0.5 },
     { gummyJumpamineView,                 name: "jumpamine",                 type: "gummyMold", scale: 0.25 },
     { gummyLumositeView,                  name: "lumosite",                  type: "gummyMold", scale: 4,              rotation: [0, 0, 0] },
     { gummyMagmaliteView,                 name: "magmalite",                 type: "gummyMold", scale: 0.5 },
@@ -68,6 +68,7 @@ function App() {
     { gummySolvalitisViewHomepage,        name: "solvalitis",                type: "gummyBlob", homepageCard: true }, 
     { gummySolvalitisView,                name: "solvalitis",                type: "gummyBlob" }, 
     { gummyTitaniumView,                  name: "titanium",                  type: "gummyMold", scale: 1.6 },
+    { gummyTricepstineView,               name: "tricepstine",               type: "gummyMold", scale: 0.5 },
     { gummyWolveriteView,                 name: "wolverite",                 type: "gummyMold", scale: [0.14, 0.7, 0.18] },
     { capsuleWaterViewHomepage,           name: "liquate",                   type: "capsule",   homepageCard: true },
     { capsuleWaterView,                   name: "liquate",                   type: "capsule" }
@@ -348,12 +349,12 @@ function App() {
                   }/>
                   <Route path="/shop" element={
                     <PageContainer><Shop ref={canvasRefs}/></PageContainer>
-                  }/>
-                  <Route path="/product">
-                    <Route path=":productTitle" element={
-                      <PageContainer><ProductPage ref={canvasRefs}/></PageContainer>
-                    }/>
+                  }>
+                    
                   </Route>
+                  <Route path=":productTitle" element={
+                    <PageContainer><ProductPage ref={canvasRefs}/></PageContainer>
+                  }/>
                   <Route path="/chat" element={
                     <PageContainer><ChatConnection ref={canvasRefs}/></PageContainer>
                   }/> 
@@ -435,17 +436,25 @@ function App() {
                       // enableZoom={view.homepageCard ? false : true}
                       enableZoom={true}
                       minDistance={
-                        view.type === "capsule" ? 3.2 : 4
+                        view.type === "capsule" ? 3.2 : 7
                       }
                       maxDistance={
                         view.homepageCard ? (
                           view.type === "capsule" ? 2.65 : 4
                         ) : (
-                          view.type === "capsule" ? 4 : 9
+                          view.type === "capsule" ? 4 : 8.5
                         )
                       }
-                      minPolarAngle={angleToRadians(70)}
-                      maxPolarAngle={view.homepageCard ? angleToRadians(70) : angleToRadians(100)}
+                      minPolarAngle={
+                        view.homepageCard ? (
+                          angleToRadians(70)
+                        ) : view.type === "capsule" ? angleToRadians(70) : angleToRadians(0)
+                      }
+                      maxPolarAngle={
+                        view.homepageCard ? (
+                          angleToRadians(70)
+                        ) : view.type === "capsule" ? angleToRadians(110) : angleToRadians(360)
+                      }
                       makeDefault
                       ref={orbitControlsRef}
                     />
