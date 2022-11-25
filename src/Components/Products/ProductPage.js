@@ -30,7 +30,7 @@ const ProductPage = forwardRef((props, ref) => {
   
   const [searchParams, setSearchParams] = useSearchParams();
   const [shapeQuery, setShapeQuery] = useState(searchParams.get('shape') || 'gummies');
-
+  
   const [product, setProduct] = useState({
     productItems: []
   })
@@ -83,7 +83,7 @@ const ProductPage = forwardRef((props, ref) => {
           { 
             msg: "Login to add a product to your cart.",
             cartSelection,
-            from: `/${productTitle}`
+            from: `/${productTitle}?shape=${shapeQuery}`
           }
         }
       );
@@ -111,7 +111,7 @@ const ProductPage = forwardRef((props, ref) => {
           `/products/findByTitle/${productTitle}`
         )
         if(isMounted){
-          const fetchedProduct = data.Product.find(e => e.shape === shapeQuery)
+          const fetchedProduct = data.Product.find(e => e.shape === shapeQuery) || data.Product[1];
           setProduct(fetchedProduct);
           
           if(location.state?.productId){
@@ -297,9 +297,9 @@ const ProductPage = forwardRef((props, ref) => {
         />
       </>
       
-      <pre>
+      {/* <pre>
         {product && JSON.stringify(product, null, 2)}
-      </pre>
+      </pre> */}
       <button onClick={() => setShapeQuery('gummies')}>gummy</button>
       <button onClick={() => setShapeQuery('capsules')}>capsules</button>
       <div>
