@@ -50,7 +50,7 @@ function Loader() {
   )
 }
 
-export const Scene = forwardRef(({ type, rotation, scale, supermentName, homepageCard }, ref) => {
+export const Scene = forwardRef(({ type, rotation, scale, supermentName, color, homepageCard }, ref) => {
   const modelRotation = useRef(0);
   // const orbitControlsRef = useRef();
   // const directionalLightRef = useRef(null);
@@ -83,7 +83,7 @@ export const Scene = forwardRef(({ type, rotation, scale, supermentName, homepag
         <GummyMold forwardRef={modelRotation} supermentName={supermentName} scale={scale} rotation={rotation} />
       )}
       {type === "capsule" && (
-        <Capsule forwardRef={modelRotation} supermentName={supermentName} scale={scale} rotation={rotation} />
+        <Capsule forwardRef={modelRotation} supermentName={supermentName} scale={scale} rotation={rotation} supermentColor={color} />
       )}
       
       <Environment
