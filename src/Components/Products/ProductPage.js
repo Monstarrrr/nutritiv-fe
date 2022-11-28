@@ -29,7 +29,7 @@ const ProductPage = forwardRef((props, ref) => {
   const location = useLocation();
   
   const [searchParams, setSearchParams] = useSearchParams();
-  const [shapeQuery, setShapeQuery] = useState(searchParams.get('shape') || 'gummies');
+  const [shapeQuery, setShapeQuery] = useState(searchParams.get('shape') || 'gummy');
   
   const [product, setProduct] = useState({
     productItems: []
@@ -199,91 +199,91 @@ const ProductPage = forwardRef((props, ref) => {
       {/* GUMMIES */}
       <>
         <GummyModel 
-          gummy={product.shape === "gummies" ? 1 : undefined}
+          gummy={product.shape === "gummy" ? 1 : undefined}
           ref={ref.gummyAmethystExtractView} 
           supermentName="Amethyst Extract"
           title={product.title}
         />
         <GummyModel 
-          gummy={product.shape === "gummies" ? 1 : undefined}
+          gummy={product.shape === "gummy" ? 1 : undefined}
           ref={ref.gummyAbsoriteView} 
           supermentName="Absorite"
           title={product.title}
         />
         <GummyModel 
-          gummy={product.shape === "gummies" ? 1 : undefined}
+          gummy={product.shape === "gummy" ? 1 : undefined}
           ref={ref.gummyBaguettoidsView} 
           supermentName="Baguettoids"
           title={product.title}
         />
         <GummyModel 
-          gummy={product.shape === "gummies" ? 1 : undefined}
+          gummy={product.shape === "gummy" ? 1 : undefined}
           ref={ref.gummyBicepstineView}
           supermentName="Bicepstine"
           title={product.title} 
         />
         <GummyModel 
-          gummy={product.shape === "gummies" ? 1 : undefined}
+          gummy={product.shape === "gummy" ? 1 : undefined}
           ref={ref.gummyJumpamineView}
           supermentName="Jumpamine"
           title={product.title} 
         />
         <GummyModel 
-          gummy={product.shape === "gummies" ? 1 : undefined}
+          gummy={product.shape === "gummy" ? 1 : undefined}
           ref={ref.gummyLumositeView}
           supermentName="Lumosite"
           title={product.title} 
         />
         <GummyModel 
-          gummy={product.shape === "gummies" ? 1 : undefined}
+          gummy={product.shape === "gummy" ? 1 : undefined}
           ref={ref.gummyMagmaliteView}
           supermentName="Magmalite"
           title={product.title} 
         />
         <GummyModel 
-          gummy={product.shape === "gummies" ? 1 : undefined}
+          gummy={product.shape === "gummy" ? 1 : undefined}
           ref={ref.gummyNodemodulesView}
           supermentName="node_modules"
           title={product.title} 
         />
         <GummyModel 
-          gummy={product.shape === "gummies" ? 1 : undefined}
+          gummy={product.shape === "gummy" ? 1 : undefined}
           ref={ref.gummyNotavirusiteView}
           supermentName="Notavirusite"
           title={product.title} 
         />
         <GummyModel 
-          gummy={product.shape === "gummies" ? 1 : undefined}
+          gummy={product.shape === "gummy" ? 1 : undefined}
           ref={ref.gummyNucleateView}
           supermentName="Nucleate"
           title={product.title} 
         />
         <GummyModel 
-          gummy={product.shape === "gummies" ? 1 : undefined}
+          gummy={product.shape === "gummy" ? 1 : undefined}
           ref={ref.gummySerylView}
           supermentName="Serylanyponytailanyserine"
           title={product.title} 
         />
         <GummyModel 
-          gummy={product.shape === "gummies" ? 1 : undefined}
+          gummy={product.shape === "gummy" ? 1 : undefined}
           ref={ref.gummySolvalitisView} 
           supermentName="Solvalitis"
           title={product.title}
         />
         <GummyModel 
-          gummy={product.shape === "gummies" ? 1 : undefined}
+          gummy={product.shape === "gummy" ? 1 : undefined}
           ref={ref.gummyTricepstineView}
           supermentName="Tricepstine"
           title={product.title} 
         />
         <GummyModel 
-          gummy={product.shape === "gummies" ? 1 : undefined}
+          gummy={product.shape === "gummy" ? 1 : undefined}
           ref={ref.gummyTitaniumView}
           supermentName="Titanium"
           title={product.title} 
         />
         <GummyModel 
-          gummy={product.shape === "gummies" ? 1 : undefined}
+          gummy={product.shape === "gummy" ? 1 : undefined}
           ref={ref.gummyWolveriteView}
           supermentName="Wolverite"
           title={product.title} 
@@ -293,15 +293,15 @@ const ProductPage = forwardRef((props, ref) => {
       <>
         <CapsuleModel 
           ref={ref.capsuleWaterView} 
-          capsule={product.shape === "capsules" ? 1 : undefined}
+          capsule={product.shape === "capsule" ? 1 : undefined}
         />
       </>
       
       {/* <pre>
         {product && JSON.stringify(product, null, 2)}
       </pre> */}
-      <button onClick={() => setShapeQuery('gummies')}>gummy</button>
-      <button onClick={() => setShapeQuery('capsules')}>capsules</button>
+      <button onClick={() => setShapeQuery('gummy')}>gummy</button>
+      <button onClick={() => setShapeQuery('capsule')}>capsule</button>
       <div>
         {/* RADIO BUTTON */}
         <b>
