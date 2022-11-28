@@ -179,6 +179,11 @@ const ProductPage = forwardRef((props, ref) => {
       setAvailableQuantity(Math.floor(countInStock / cartSelection.load))
     }
   }, [cartSelection.load, countInStock]);
+  
+  const handleSwitchShape = (newShape) => {
+    setShapeQuery(newShape)
+    setSearchParams({ shape: newShape })
+  }
 
   return (
     <div>
@@ -300,8 +305,8 @@ const ProductPage = forwardRef((props, ref) => {
       {/* <pre>
         {product && JSON.stringify(product, null, 2)}
       </pre> */}
-      <button onClick={() => setShapeQuery('gummy')}>gummy</button>
-      <button onClick={() => setShapeQuery('capsule')}>capsule</button>
+      <button onClick={() => handleSwitchShape("gummy")}>gummy</button>
+      <button onClick={() => handleSwitchShape("capsule")}>capsule</button>
       <div>
         {/* RADIO BUTTON */}
         <b>
