@@ -305,8 +305,15 @@ const ProductPage = forwardRef((props, ref) => {
       {/* <pre>
         {product && JSON.stringify(product, null, 2)}
       </pre> */}
-      <button onClick={() => handleSwitchShape("gummy")}>gummy</button>
-      <button onClick={() => handleSwitchShape("capsule")}>capsule</button>
+      <button 
+        disabled={location.pathname === '/Magmalite' || location.pathname === '/Liquate'}
+        onClick={() => handleSwitchShape("gummy")}
+      >
+        gummy
+      </button>
+      <button onClick={() => handleSwitchShape("capsule")}>
+        capsule
+      </button>
       <div>
         {/* RADIO BUTTON */}
         <b>

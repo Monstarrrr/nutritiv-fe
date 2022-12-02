@@ -37,14 +37,20 @@ import { OrbitControls, PerspectiveCamera, Preload,
 import { View } from './Components/View';
 import { Scene } from './Components/3D/Scene';
 import angleToRadians from './Helpers/angleToRadians';
+import { proxy, useSnapshot } from 'valtio';
 
 // init stripe
 const stripePromise = loadStripe(
   process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY
 );
 
+// 3D-models state
+
+
 function App() {
   // 3D
+  // const snap = useSnapshot(modelsState);
+  // console.log('# snap :', snap)
   const orbitControlsRef = useRef();
   const [
     canvasWrapperRef, 
@@ -54,24 +60,24 @@ function App() {
     gummyAbsoriteView, gummyAmethystExtractView, gummyBaguettoidsView, gummyBicepstineView, gummyJumpamineView, gummyLumositeView, gummyMagmaliteView, gummyNodemodulesView, gummyNotavirusiteView, gummyNucleateView, gummySerylView, gummySolvalitisView, gummySolvalitisViewHomepage, gummyTitaniumView, gummyTricepstineView, gummyWolveriteView, capsuleSolvalitisView, capsuleWaterViewHomepage, capsuleWaterView
   };
   const viewsList = [
-    { gummyAmethystExtractView,           name: "amethystExtract",           type: "gummyMold", scale: [0.1, 0.12, 1] },
-    { gummyAbsoriteView,                  name: "absorite",                  type: "gummyMold", scale: [1.9, 0.3, 1.2] },
-    { gummyBaguettoidsView,               name: "baguettoids",               type: "gummyMold", scale: 0.9 },
-    { gummyBicepstineView,                name: "bicepstine",                type: "gummyMold", scale: 0.5 },
+    { gummyAbsoriteView,                  name: "absorite",                  type: "gummyMold", scale: [23, 23, 23] },
+    { gummyAmethystExtractView,           name: "amethystExtract",           type: "gummyMold", scale: [16, 16, 16] },
+    { gummyBaguettoidsView,               name: "baguettoids",               type: "gummyMold", scale: [20, 20, 20] },
+    { gummyBicepstineView,                name: "bicepstine",                type: "gummyMold", scale: 0.45 },
     { gummyJumpamineView,                 name: "jumpamine",                 type: "gummyMold", scale: 0.25 },
-    { gummyLumositeView,                  name: "lumosite",                  type: "gummyMold", scale: 4,              rotation: [0, 0, 0] },
-    { gummyMagmaliteView,                 name: "magmalite",                 type: "gummyMold", scale: 0.5 },
-    { gummyNodemodulesView,               name: "nodeModules",               type: "gummyMold", scale: [0.12, 1, 1.5] },
+    { gummyLumositeView,                  name: "lumosite",                  type: "gummyMold", scale: 50,              rotation: [0, 0, 0] },
+    // { gummyMagmaliteView,                 name: "magmalite",                 type: "gummyMold", scale: 50 },
+    { gummyNodemodulesView,               name: "nodeModules",               type: "gummyMold", scale: 60 },
     { gummyNotavirusiteView,              name: "notavirusite",              type: "gummyMold", scale: 1.2,              rotation: [0, 0, 0] },
-    { gummyNucleateView,                  name: "nucleate",                  type: "gummyMold", scale: [1.5, 0.19, 1.5] },
-    { gummySerylView,                     name: "serylanyponytailanyserine", type: "gummyMold", scale: 0.8 },
+    { gummyNucleateView,                  name: "nucleate",                  type: "gummyMold", scale: 50 },
+    { gummySerylView,                     name: "serylanyponytailanyserine", type: "gummyMold", scale: 12 },
     { gummySolvalitisViewHomepage,        name: "solvalitis",                type: "gummyBlob", homepageCard: true }, 
     { gummySolvalitisView,                name: "solvalitis",                type: "gummyBlob" }, 
-    { gummyTitaniumView,                  name: "titanium",                  type: "gummyMold", scale: 1.6 },
-    { gummyTricepstineView,               name: "tricepstine",               type: "gummyMold", scale: 0.5 },
-    { gummyWolveriteView,                 name: "wolverite",                 type: "gummyMold", scale: [0.14, 0.7, 0.18] },
+    { gummyTitaniumView,                  name: "titanium",                  type: "gummyMold", scale: 12 },
+    { gummyTricepstineView,               name: "tricepstine",               type: "gummyMold", scale: 0.45 },
+    { gummyWolveriteView,                 name: "wolverite",                 type: "gummyMold", scale: 16 },
     { capsuleWaterView,                   name: "liquate",                   type: "capsule" },
-    { capsuleSolvalitisView,                   name: "solvalitis",                type: "capsule" },
+    { capsuleSolvalitisView,              name: "solvalitis",                type: "capsule" },
     { capsuleWaterViewHomepage,           name: "liquate",                   type: "capsule",   homepageCard: true },
   ];
   
@@ -88,9 +94,7 @@ function App() {
   const oAuthUsername = searchParams.get('username');
   const oAuthAccessToken = searchParams.get('oAuthToken');
   const registrationToken = searchParams.get('verificationToken');
-
-  console.log('# location.pathname :', location.pathname)
-
+  
   useEffect(() => {
     // App titles
     const titleWithoutSpecials = location.pathname.replace(/[^a-zA-Z ]/g, "");

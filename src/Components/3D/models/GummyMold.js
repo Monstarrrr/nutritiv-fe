@@ -7,18 +7,20 @@ export const GummyMold = forwardRef(({
   supermentName, 
   scale = 1, 
   rotation = [angleToRadians(45), 0, angleToRadians(45)] 
-}, _) => {
-  
+}, ref) => {
   const { nodes, materials } = useGLTF(`${s3Address}assets/${supermentName}.glb`);
   
+  console.log('# supermentName :', supermentName)
+
   return (
     <group scale={1} dispose={null}>
       <mesh
+        position={[0, 0, 0]}
         castShadow
-        receiveShadow
         geometry={nodes.Cube.geometry}
+        // material-color={snap.color}
         material={materials.transparent_cap}
-        rotation={rotation}
+        // rotation={rotation}
         scale={scale}
       />
     </group>

@@ -3,6 +3,7 @@ import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { forwardRef } from 'react'
 import { tokens } from '../../Helpers/styleTokens';
+import { currentYear } from '../Footer/Footer';
 import { SectionTitle } from '../Homepage/Homepage';
 
 const Test = styled.div`
@@ -32,6 +33,7 @@ const AboutUs = forwardRef((props, ref) => {
         min-height: calc(100vh - 105px);
       `}
     >
+      {/* Debugging 3D Models */}
       {/* <div
         css={css`display: flex; flex-direction: column;`}
       >
@@ -51,23 +53,19 @@ const AboutUs = forwardRef((props, ref) => {
         <Test ref={ref.gummyWolveriteView} />
         <Test ref={ref.capsuleWaterView} />
       </div> */}
+
       <SectionTitle
         css={css`
           margin-top: 100px;
-          margin-bottom: 38px;  
-          /* &:after {
-            background: ${tokens.color.accentWeak};
-            content: "";
-            display: block;
-            height: 4px;
-            width: 50%;
-          } */
+          margin-bottom: 38px;
         `}
       >
         The Nutriteam
       </SectionTitle>
       <Description>
-          Our team is a group of passionate scientists and designers from around the world. Lorem ipsum gsgd fj k hkj hhuhiuhsidf hjksdhfkjds hkshd kjhzfininf izndfi nzidjnf izjdf znidnf jzidnf jnzi nidjfzn ijdzinfjnz dijfzdnij.
+          Our team is a group of passionate scientists and designers from around the world. We all come from similar yet different backgrounds and gathered to make what is today known as the only superments company.
+          <br/> 
+          Since {currentYear + 20} we've kept evolving out range of products and will continue doing so for many years to come.
       </Description>
       <Illustration 
         alt="nutriteam illustration"

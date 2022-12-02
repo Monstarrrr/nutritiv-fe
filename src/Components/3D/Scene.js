@@ -1,11 +1,13 @@
 import { Environment, Html, Plane, softShadows, useHelper, useProgress } from '@react-three/drei'
-import React, { forwardRef, Suspense, useRef } from 'react'
+import React, { forwardRef, Suspense, useEffect, useRef } from 'react'
 import {GummyBlob} from './models/GummyBlob';
 import {GummyMold} from './models/GummyMold';
 import {Capsule} from './models/Capsule';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 import { tokens } from '../../Helpers/styleTokens';
+import { proxy, useSnapshot } from 'valtio';
+import { useLocation } from 'react-router-dom';
 
 softShadows({
   frustum: 3.75,
@@ -17,6 +19,7 @@ softShadows({
 
 function Loader() {
   const { progress, errors } = useProgress();
+  
   return (
     <Html
       style={{
@@ -90,6 +93,7 @@ export const Scene = forwardRef(({ type, rotation, scale, supermentName, color, 
         background={false}
         files={['px.png', 'nx.png', 'py.png', 'ny.png', 'pz.png', 'nz.png']}
         path="/hdri/venice/"
+        blur={0.4}
       >
         <mesh scale={100}>
           <sphereGeometry args={[1, 64, 64]} />
@@ -124,11 +128,11 @@ export const Scene = forwardRef(({ type, rotation, scale, supermentName, color, 
         shadow-camera-bottom={-10}
       />
       
-      <pointLight 
+      {/* <pointLight 
         intensity={type === "capsule" ? 30 : 1}
         position={[0,0,0]}
         ref={pointLightRef}
-      />
+      /> */}
       
       {/* <spotLight
         angle={angleToRadians(10)} 
