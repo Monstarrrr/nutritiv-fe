@@ -1,15 +1,21 @@
 [
-  "gummySolvalitisViewHomepage",
-  "gummySolvalitisView",
-  "gummyNodemodulesView",
-  "gummyNodemodulesViewHomepage",
   "gummyAmethystExtractView",
   "gummyAbsoriteView",
   "gummyBaguettoidsView",
   "gummyBicepstineView",
-  "gummyTricepstineView",
   "gummyJumpamineView",
   "gummyLumositeView",
-  "capsuleWaterViewHomepage",
-  "capsuleWaterView"
+  "gummyMagmaliteView",
+  "gummyNodemodulesView",
+  "gummyNotavirusiteView",
+  "gummyNucleateView",
+  "gummySerylView",
+  "gummySolvalitisViewHomepage",
+  "gummySolvalitisView",
+  "gummyTricepstineView",
+  "gummyTitaniumView",
+  "gummyWolveriteView",
+  "capsuleSolvalitisView",
+  "capsuleWaterView",
+  "capsuleWaterViewHomepage"
 ]

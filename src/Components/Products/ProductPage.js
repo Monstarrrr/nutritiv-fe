@@ -4,10 +4,22 @@ import React, {
   useState 
 } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import nutritivApi, { s3URL } from '../../Api/nutritivApi';
 import { updateUserCartQuantity } from '../../Redux/reducers/user';
 import { motion } from 'framer-motion';
+import styled from '@emotion/styled';
+
+const GummyModel = styled.div`
+  display: ${props => props.supermentName === props.title ? (props.gummy ? "inline-block" : "none") : ("none")};
+  height: 300px;
+  width: 270px;
+  `
+const CapsuleModel = styled.div`
+  display: ${props => props.supermentName === props.title ? (props.capsule ? "inline-block" : "none") : ("none")}; 
+  height: 300px;
+  width: 270px;
+`
 
 const ProductPage = forwardRef((props, ref) => {
   const loggedIn = useSelector(state => state.user.loggedIn)
@@ -15,7 +27,10 @@ const ProductPage = forwardRef((props, ref) => {
   const { productTitle } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
-
+  
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [shapeQuery, setShapeQuery] = useState(searchParams.get('shape') || 'gummy');
+  
   const [product, setProduct] = useState({
     productItems: []
   })
@@ -68,7 +83,7 @@ const ProductPage = forwardRef((props, ref) => {
           { 
             msg: "Login to add a product to your cart.",
             cartSelection,
-            from: `/product/${productTitle}`
+            from: `/${productTitle}?shape=${shapeQuery}`
           }
         }
       );
@@ -96,7 +111,7 @@ const ProductPage = forwardRef((props, ref) => {
           `/products/findByTitle/${productTitle}`
         )
         if(isMounted){
-          const fetchedProduct = data.Product[0]
+          const fetchedProduct = data.Product.find(e => e.shape === shapeQuery) || data.Product[1];
           setProduct(fetchedProduct);
           
           if(location.state?.productId){
@@ -114,7 +129,7 @@ const ProductPage = forwardRef((props, ref) => {
       console.log('# /products/findByTitle err :', err)
     }
     return () => { isMounted = false }
-  }, [productTitle, location.state])
+  }, [productTitle, location.state, shapeQuery])
   
   // HANDLE SELECTED ITEM
   const handleSelectedItem = (item) => {
@@ -164,13 +179,18 @@ const ProductPage = forwardRef((props, ref) => {
       setAvailableQuantity(Math.floor(countInStock / cartSelection.load))
     }
   }, [cartSelection.load, countInStock]);
+  
+  const handleSwitchShape = (newShape) => {
+    setShapeQuery(newShape)
+    setSearchParams({ shape: newShape })
+  }
 
   return (
-    <motion.div>
+    <div>
       <h2>
         { product.title }
       </h2>
-      {
+      {/* {
         product.imgs?.map((img, i) => (
           <img
             key={i}
@@ -180,7 +200,120 @@ const ProductPage = forwardRef((props, ref) => {
             alt={`product ${i}`} 
           />
         ))
-      }
+      } */}
+      {/* GUMMIES */}
+      <>
+        <GummyModel 
+          gummy={product.shape === "gummy" ? 1 : undefined}
+          ref={ref.gummyAmethystExtractView} 
+          supermentName="Amethyst Extract"
+          title={product.title}
+        />
+        <GummyModel 
+          gummy={product.shape === "gummy" ? 1 : undefined}
+          ref={ref.gummyAbsoriteView} 
+          supermentName="Absorite"
+          title={product.title}
+        />
+        <GummyModel 
+          gummy={product.shape === "gummy" ? 1 : undefined}
+          ref={ref.gummyBaguettoidsView} 
+          supermentName="Baguettoids"
+          title={product.title}
+        />
+        <GummyModel 
+          gummy={product.shape === "gummy" ? 1 : undefined}
+          ref={ref.gummyBicepstineView}
+          supermentName="Bicepstine"
+          title={product.title} 
+        />
+        <GummyModel 
+          gummy={product.shape === "gummy" ? 1 : undefined}
+          ref={ref.gummyJumpamineView}
+          supermentName="Jumpamine"
+          title={product.title} 
+        />
+        <GummyModel 
+          gummy={product.shape === "gummy" ? 1 : undefined}
+          ref={ref.gummyLumositeView}
+          supermentName="Lumosite"
+          title={product.title} 
+        />
+        <GummyModel 
+          gummy={product.shape === "gummy" ? 1 : undefined}
+          ref={ref.gummyMagmaliteView}
+          supermentName="Magmalite"
+          title={product.title} 
+        />
+        <GummyModel 
+          gummy={product.shape === "gummy" ? 1 : undefined}
+          ref={ref.gummyNodemodulesView}
+          supermentName="node_modules"
+          title={product.title} 
+        />
+        <GummyModel 
+          gummy={product.shape === "gummy" ? 1 : undefined}
+          ref={ref.gummyNotavirusiteView}
+          supermentName="Notavirusite"
+          title={product.title} 
+        />
+        <GummyModel 
+          gummy={product.shape === "gummy" ? 1 : undefined}
+          ref={ref.gummyNucleateView}
+          supermentName="Nucleate"
+          title={product.title} 
+        />
+        <GummyModel 
+          gummy={product.shape === "gummy" ? 1 : undefined}
+          ref={ref.gummySerylView}
+          supermentName="Serylanyponytailanyserine"
+          title={product.title} 
+        />
+        <GummyModel 
+          gummy={product.shape === "gummy" ? 1 : undefined}
+          ref={ref.gummySolvalitisView} 
+          supermentName="Solvalitis"
+          title={product.title}
+        />
+        <GummyModel 
+          gummy={product.shape === "gummy" ? 1 : undefined}
+          ref={ref.gummyTricepstineView}
+          supermentName="Tricepstine"
+          title={product.title} 
+        />
+        <GummyModel 
+          gummy={product.shape === "gummy" ? 1 : undefined}
+          ref={ref.gummyTitaniumView}
+          supermentName="Titanium"
+          title={product.title} 
+        />
+        <GummyModel 
+          gummy={product.shape === "gummy" ? 1 : undefined}
+          ref={ref.gummyWolveriteView}
+          supermentName="Wolverite"
+          title={product.title} 
+        />
+      </>
+      {/* CAPSULES */}
+      <>
+        <CapsuleModel 
+          ref={ref.capsuleWaterView} 
+          capsule={product.shape === "capsule" ? 1 : undefined}
+        />
+      </>
+      
+      {/* <pre>
+        {product && JSON.stringify(product, null, 2)}
+      </pre> */}
+      <button 
+        disabled={location.pathname === '/Magmalite' || location.pathname === '/Liquate'}
+        onClick={() => handleSwitchShape("gummy")}
+      >
+        gummy
+      </button>
+      <button onClick={() => handleSwitchShape("capsule")}>
+        capsule
+      </button>
       <div>
         {/* RADIO BUTTON */}
         <b>
@@ -259,7 +392,7 @@ const ProductPage = forwardRef((props, ref) => {
       {
         loadingAdding && <p>Adding {productTitle} to cart...</p>
       }
-    </motion.div>
+    </div>
   )
 });
 

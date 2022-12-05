@@ -6,11 +6,11 @@ const CanvasDefaultList = forwardRef((props, ref) => {
 
   return (
     <>
-      {Object.values(refs).map((ref, i) => (
+      {Object.values(refs).map((mappedRef, i) => (
         <div 
           className={`default-canvas-${i}`} 
           key={i} 
-          ref={ref}
+          ref={mappedRef}
           style={{display: "none"}} 
         />
       ))}
