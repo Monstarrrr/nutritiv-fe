@@ -64,7 +64,7 @@ function App() {
     { gummyAmethystExtractView,           name: "amethystExtract",           type: "gummyMold", scale: [16, 16, 16] },
     { gummyBaguettoidsView,               name: "baguettoids",               type: "gummyMold", scale: [20, 20, 20] },
     { gummyBicepstineView,                name: "bicepstine",                type: "gummyMold", scale: 0.45 },
-    { gummyJumpamineView,                 name: "jumpamine",                 type: "gummyMold", scale: 0.25 },
+    { gummyJumpamineView,                 name: "jumpamine",                 type: "gummyMold", scale: 0.25,            rotation: [0, angleToRadians(90), angleToRadians(90)]},
     { gummyLumositeView,                  name: "lumosite",                  type: "gummyMold", scale: 50,              rotation: [0, 0, 0] },
     // { gummyMagmaliteView,                 name: "magmalite",                 type: "gummyMold", scale: 50 },
     { gummyNodemodulesView,               name: "nodeModules",               type: "gummyMold", scale: 60 },

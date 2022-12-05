@@ -1,9 +1,9 @@
-import React, { forwardRef, useEffect, useRef } from 'react'
+import React, { forwardRef, useEffect } from 'react'
 import { useGLTF, useProgress } from '@react-three/drei'
 import angleToRadians from '../../../Helpers/angleToRadians'
 import { s3Address } from '../../../Api/nutritivApi'
 import { proxy, useSnapshot } from 'valtio'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import assignModelColor from '../../../Helpers/assignModelColor'
 
 export const capsuleModelsState = proxy({color: "#ffdffd"})

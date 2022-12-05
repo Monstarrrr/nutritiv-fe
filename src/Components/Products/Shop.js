@@ -1,11 +1,97 @@
+/** @jsxImportSource @emotion/react */
 /* eslint-disable no-unused-vars */ // Temp
 import React, { useEffect, useState } from 'react'
-
 import nutritivApi from '../../Api/nutritivApi';
 import { ProductCard } from './ProductCard';
 import { Pagination } from '@mui/material';
 import { AnimatePresence, LayoutGroup, motion, Reorder } from 'framer-motion';
 import { forwardRef } from 'react';
+import { css } from '@emotion/react'
+import styled from '@emotion/styled';
+import { tokens } from '../../Helpers/styleTokens';
+import { Icon } from '../Icons/Icon';
+
+const Container = styled(motion.div)`
+  padding: 0 ${tokens.spacing.lg};
+  width: auto;
+`
+
+const SearchContainer = styled.div`
+  position: relative;
+`
+const SearchBox = styled.input`
+  background: ${tokens.color.secondaryTransparent};
+  border-radius: ${tokens.borderRadius.md};
+  border: none;
+  box-sizing: border-box;
+  color: ${tokens.color.contrastLight};
+  outline: none;
+  padding: ${tokens.spacing.sm} ${tokens.spacing.md};
+  padding-left: 46px;
+  width: 100%;
+`
+
+const Header = styled.div`
+
+`
+const HeaderTitle = styled.h1`
+  margin-top: 0;
+`
+
+const FilterShapeContainer = styled.div`
+  width: 100%;
+`
+const FilterBy = styled.p`
+  display: inline-block;
+  font-size: ${tokens.font.fontSize.md};
+  margin-right: ${tokens.spacing.sm};
+  margin-bottom: 0;
+  width: max-content;
+`
+const ShapeDropdown = styled.form`
+  display: inline-block;
+`
+
+const SortByContainer = styled.div`
+  position: relative;
+`
+const SortByText = styled.p`
+  display: inline-block;
+  font-size: ${tokens.font.fontSize.md};
+  margin-right: ${tokens.spacing.sm};
+  width: max-content;
+`
+const SortByButton = styled.button`
+
+`
+
+const TagsContainer = styled.div`
+  display: flex;
+  margin-bottom: -6px;
+  margin-top: ${tokens.spacing.lg};
+  overflow-x: scroll;
+  overflow-y: hidden;
+  padding: 6px 0;
+  scrollbar-color: #15f1ff80 transparent;
+  > div {
+    border-radius: ${tokens.borderRadius.max};
+    border: 2px solid ${tokens.color.semiTransparentLight};
+    margin-right: 8px;
+    padding: ${tokens.spacing.xs} ${tokens.spacing.md};
+    position: relative;
+  }
+  input {
+    opacity: 0;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+  }
+`
+const TagWrapper = styled.div`
+  background-color: ${props => props.checked ? tokens.color.accentStrong : tokens.color.transparent};
+  color: ${props => props.checked ? tokens.color.contrastDark : tokens.color.contrastLight};
+`
+
 
 const Shop = forwardRef((props, ref) => {  
   console.log("###########-Products-###########")
@@ -28,6 +114,8 @@ const Shop = forwardRef((props, ref) => {
   // const [filterByPriceMaxInput, setFilterByPriceMaxInput] = useState(0)
   const [sortedByPrice, setSortedByPrice] = useState("")
   const [sortedByPriceStatus, setSortedByPriceStatus] = useState("")
+  
+  const [checkedBox, setCheckedBox] = useState([])
   
   const [allTags, setAllTags] = useState([])
 
@@ -54,12 +142,17 @@ const Shop = forwardRef((props, ref) => {
       try {
         setLoading(true)
         const { data } = await nutritivApi.get(
-          `/products/tags`
+          `/products/categories`
         );
         console.log('# data :', data)
-        setAllTags(data.uniqueTags)
+        let category = data.uniqueCategory;
+        // Capitalize first letter
+        let newArr = category.map(e => {
+          return e.charAt(0).toUpperCase() + e.slice(1).toLowerCase();
+        })
+        setAllTags(newArr);
       } catch (err) {
-        console.log('# /products/tags err :', err)
+        console.log('# /products/categories err :', err)
       }
     }
     fetchApi();
@@ -97,7 +190,7 @@ const Shop = forwardRef((props, ref) => {
     
     const filterByTags = (array) => filterByTagsInput ? (
       array.filter((product) => {
-        return filterByTagsInput.every(tag => product.tags.includes(tag))
+        return filterByTagsInput.every(tag => product.category.includes(tag))
       })
     ) : array;
 
@@ -166,16 +259,24 @@ const Shop = forwardRef((props, ref) => {
     setProductsPerPage(e.target.value)
   }
   const handleFilterByTags = (e) => {
-    e.target.checked ? (
+    if(e.target.checked) {
       setFilterByTagsInput(() => [
         ...filterByTagsInput,
         e.target.name,
       ])
-    ) : (
+      setCheckedBox({
+        ...checkedBox,
+        [e.target.name]: true
+      })
+    } else {
       setFilterByTagsInput(prevState => (
         prevState.filter(tag => tag !== e.target.name)
-      )
-    ))
+      ))
+      setCheckedBox({
+        ...checkedBox,
+        [e.target.name]: false
+      })
+    }
     setPage(1);
   }
   const handleOrderByPrice = () => {
@@ -186,129 +287,164 @@ const Shop = forwardRef((props, ref) => {
   }
   
   return (
-    <motion.div
+    <Container
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{
-        default: { duration: 0.5 },
-      }}
     >
-      {
-        loading ? (
-          <h2>
-            Loading products...
-          </h2>
+      <Header>
+        <HeaderTitle><span css={css`font-weight: initial;`}>Explore</span> Nutritiv Products</HeaderTitle>
+      </Header>
+      
+      {/* TITLE FILTER - TEXTBOX */}
+      <SearchContainer>
+        <SearchBox
+          onChange={handleProductsFilter}
+          placeholder="Search a product..."
+          type="text" 
+        />
+        <Icon 
+          color={tokens.color.contrastLightWeak}
+          name="search"
+          resizeDefault="-5 -3 30 30"
+          strokeWidth={2}
+          width={tokens.spacing.xxl}
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            marginLeft: tokens.spacing.md,
+            transform: "scale(-1, 1)"
+          }}
+        />
+      </SearchContainer>
+      {/* TAGS FILTER - CHECKBOXES */}
+      <TagsContainer>
+        {loading ? (
+          <p>Loading tags...</p>
         ) : (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1 }}
-          >
-            <LayoutGroup>
-              <br />
-              {/* TITLE FILTER - TEXTBOX */}
+          allTags && allTags.map((tag, i) => (
+            <TagWrapper 
+              key={i}
+              checked={checkedBox[tag.toLowerCase()]}
+            >
               <input 
-                onChange={handleProductsFilter}
-                placeholder="Search a product..."
-                type="text" 
+                defaultChecked={false}
+                index={i}
+                name={tag.toLowerCase()}
+                onClick={handleFilterByTags}
+                type="checkbox"
               />
-              {/* SHAPE FILTER - DROPDOWN */}
-              <form>
-                <select 
-                  onChange={handleFilterByShapeInput}
-                  name="shapeFilter"
-                >
-                  <option value="">Shape</option>
-                  <option value="capsules">Capsule</option>
-                  <option value="powder">Powder</option>
-                </select>
-              </form>
-              {/* PRICE SORTER - BUTTON */}
-              <button
-                onClick={handleOrderByPrice}
-              >
-                Sorted by price
-                {
-                  sortedByPrice && (sortedByPrice === "asc" ? (
-                    <span> ▲ </span>
-                  ) : (
-                    <span> ▼ </span>
-                  ))
-                }
-              </button>
-              {/* TAGS FILTER - CHECKBOXES */}
+              <label htmlFor={tag}>
+                {tag}
+              </label>
+            </TagWrapper>
+          ))
+        )}
+      </TagsContainer>
+      {/* SHAPE FILTER - DROPDOWN */}
+      <FilterShapeContainer>
+        <FilterBy>
+          Filter by
+        </FilterBy>
+        <ShapeDropdown>
+          <select 
+            onChange={handleFilterByShapeInput}
+            name="shapeFilter"
+          >
+            <option value="">All</option>
+            <option value="capsule">Capsule</option>
+            <option value="gummy">Gummy</option>
+          </select>
+        </ShapeDropdown>
+        <FilterBy style={{ marginLeft: tokens.spacing.sm }}>
+          shapes.
+        </FilterBy>
+      </FilterShapeContainer>
+      {/* PRICE SORTER - BUTTON */}
+      <SortByContainer>
+        <SortByText>
+          Sort by
+        </SortByText>
+        <SortByButton onClick={handleOrderByPrice}>
+          {sortedByPrice ? (<>Price</>) : (<>Name</>)}
+          {
+            sortedByPrice && (sortedByPrice === "asc" ? (
+              <span> ▲ </span>
+            ) : (
+              <span> ▼ </span>
+            ))
+          }
+        </SortByButton>
+        .
+      </SortByContainer>
+      {/* PRODUCTS - CARDS */}
+      {loading ? (
+        <h2>
+          Loading products...
+        </h2>
+      ) : (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1 }}
+        >
+          <LayoutGroup>
+            <AnimatePresence>
               {
-                allTags && allTags.map((tag, i) => (
-                  <div key={i}>
-                    <input 
-                      defaultChecked={false}
-                      name={tag}
-                      onClick={handleFilterByTags}
-                      type="checkbox"
+                productsToDisplay?.length > 0 ? (
+                  productsToDisplay.map((product, i) => (
+                    <ProductCard
+                      index={i}
+                      key={product._id}
+                      product={product}
                     />
-                    <label htmlFor={tag}>
-                      {tag}
-                    </label>
-                  </div>
-                ))
-              }
-              {/* PRODUCTS - CARDS */}
-              <AnimatePresence>
-                {
-                  productsToDisplay?.length > 0 ? (
-                    productsToDisplay.map((product, i) => (
-                      <ProductCard
-                        index={i}
-                        key={product._id}
-                        product={product}
-                      />
-                    ))
-                  ) : (
-                    <motion.p
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                    >
-                      No product(s) found.
-                    </motion.p>
-                  )
-                }
-              </AnimatePresence>
-              <motion.div layout>
-                <Pagination
-                  count={numberOfPages}
-                  page={page}
-                  onChange={handleChangeActivePage}
-                  sx={{
-                    '& .MuiButtonBase-root': {
-                      color: "white",
-                    },
-                    '& .MuiPaginationItem-root': {
-                      color: "white",
-                    }
-                  }}
-                />
-                {/* PRODUCTS PER PAGE - DROPDOWN */}
-                <form>
-                  <label htmlFor="productsPerPage">
-                    Products per page: 
-                  </label>
-                  <select 
-                    onChange={handleChangeProductsPerPage}
-                    id="selectProductsPerPage"
-                    name="productsPerPage" 
+                  ))
+                ) : (
+                  <motion.p
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
                   >
-                    <option value="5">5</option>
-                    <option value="15">15</option>
-                    <option value="30">30</option>
-                  </select>
-                </form>
-              </motion.div>
-            </LayoutGroup>
-          </motion.div>
-        )
-      }
-    </motion.div>
+                    No product(s) found.
+                  </motion.p>
+                )
+              }
+            </AnimatePresence>
+          </LayoutGroup>
+        </motion.div>
+      )}
+      
+      <motion.div layout>
+        <Pagination
+          count={numberOfPages}
+          page={page}
+          onChange={handleChangeActivePage}
+          sx={{
+            '& .MuiButtonBase-root': {
+              color: "white",
+            },
+            '& .MuiPaginationItem-root': {
+              color: "white",
+            }
+          }}
+        />
+        {/* PRODUCTS PER PAGE - DROPDOWN */}
+        <form>
+          <label htmlFor="productsPerPage">
+            Products per page: 
+          </label>
+          <select 
+            onChange={handleChangeProductsPerPage}
+            id="selectProductsPerPage"
+            name="productsPerPage" 
+          >
+            <option value="5">5</option>
+            <option value="15">15</option>
+            <option value="30">30</option>
+          </select>
+        </form>
+      </motion.div>
+    </Container>
   )
 });
 

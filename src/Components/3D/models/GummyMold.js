@@ -6,12 +6,13 @@ import angleToRadians from "../../../Helpers/angleToRadians";
 export const GummyMold = forwardRef(({ 
   supermentName, 
   scale = 1, 
-  rotation = [angleToRadians(45), 0, angleToRadians(45)] 
+  rotation 
+  // = [angleToRadians(45), 0, angleToRadians(45)] 
 }, ref) => {
   const { nodes, materials } = useGLTF(`${s3Address}assets/${supermentName}.glb`);
   
   console.log('# supermentName :', supermentName)
-
+  
   return (
     <group scale={1} dispose={null}>
       <mesh
@@ -20,7 +21,7 @@ export const GummyMold = forwardRef(({
         geometry={nodes.Cube.geometry}
         // material-color={snap.color}
         material={materials.transparent_cap}
-        // rotation={rotation}
+        rotation={rotation}
         scale={scale}
       />
     </group>
