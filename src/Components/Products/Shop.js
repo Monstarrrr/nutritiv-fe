@@ -28,7 +28,12 @@ const SearchBox = styled.input`
   outline: none;
   padding: ${tokens.spacing.sm} ${tokens.spacing.md};
   padding-left: 46px;
+  transition: all ease .2s;
   width: 100%;
+  &:focus {
+    padding-left: 50px;
+    transition: all ease .2s;
+  }
 `
 
 const Header = styled.div`
@@ -48,9 +53,6 @@ const FilterBy = styled.p`
   margin-bottom: 0;
   width: max-content;
 `
-const ShapeDropdown = styled.form`
-  display: inline-block;
-`
 
 const SortByContainer = styled.div`
   position: relative;
@@ -64,7 +66,21 @@ const SortByText = styled.p`
   width: max-content;
 `
 const SortByButton = styled.button`
-
+  background-color: ${tokens.color.semiTransparentLight};
+  border: none;
+  border-radius: ${tokens.borderRadius.sm};
+  border: 2px solid ${tokens.color.transparent};
+  box-shadow: 0 0 0px ${tokens.color.accentTransparent};
+  cursor: pointer;
+  color: ${tokens.color.contrastLight};
+  font-size: ${tokens.font.fontSize.md};
+  font-weight: ${tokens.font.fontWeight.regular};
+  outline: none;
+  padding: 2px ${tokens.spacing.sm};
+  transition: all .2s ease;
+  &:hover {
+    transition: all .2s ease;
+  }
 `
 
 const TagsContainer = styled.div`
@@ -174,6 +190,7 @@ const Shop = forwardRef((props, ref) => {
   const [sortedByPriceStatus, setSortedByPriceStatus] = useState("")
   
   const [checkedBox, setCheckedBox] = useState([])
+  const [focusedBox, setFocusedBox] = useState([])
   
   const [allTags, setAllTags] = useState([])
 
@@ -354,7 +371,7 @@ const Shop = forwardRef((props, ref) => {
       animate={{ opacity: 1 }}
     >
       <Header>
-        <HeaderTitle><span css={css`font-weight: initial;`}>Explore</span> Nutritiv Products</HeaderTitle>
+        <HeaderTitle><span css={css`font-weight: initial;`}>Explore</span> Nutritiv Superments</HeaderTitle>
       </Header>
       
       {/* TITLE FILTER - TEXTBOX */}
@@ -435,6 +452,7 @@ const Shop = forwardRef((props, ref) => {
                 index={i}
                 name={tag.toLowerCase()}
                 onClick={handleFilterByTags}
+                // onFocus={() => set}
                 type="checkbox"
               />
               <label htmlFor={tag}>
@@ -450,16 +468,39 @@ const Shop = forwardRef((props, ref) => {
           Sort by
         </SortByText>
         <SortByButton onClick={handleOrderByPrice}>
-          {sortedByPrice ? (<>Price</>) : (<>Name</>)}
-          {
-            sortedByPrice && (sortedByPrice === "asc" ? (
-              <span> ▲ </span>
+          {sortedByPrice ? (<>price</>) : (<>name</>)}
+          <div css={css`max-width: 20px; display: inline-block;`}>
+            {sortedByPrice && (sortedByPrice === "asc" ? (
+              <>
+                <span css={css`display: none;`}/>
+                <Icon 
+                  name="chevronLeft"
+                  color={tokens.color.contrastLight}
+                  resizeDefault={"-4 4 23 23"}
+                  strokeWidth={2}
+                  style={{ 
+                    display: "inline-block",
+                    transform: "rotate(90deg)" 
+                  }}
+                />
+              </>
             ) : (
-              <span> ▼ </span>
-            ))
-          }
+              <>
+                <span css={css`display: none;`}/>
+                <Icon 
+                  name="chevronRight"
+                  color={tokens.color.contrastLight}
+                  resizeDefault={"-4 4 23 23"}
+                  strokeWidth={2}
+                  style={{ 
+                    display: "inline-block",
+                    transform: "rotate(90deg)" 
+                  }}
+                />
+              </>
+            ))}
+          </div>
         </SortByButton>
-        .
       </SortByContainer>
       {/* PRODUCTS - CARDS */}
       {loading ? (

@@ -5,7 +5,6 @@ import styled from "@emotion/styled"
 import { css, keyframes } from "@emotion/react"
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { Icon } from "./Icons/Icon";
 
 const waveAnimation = keyframes`
   from {
