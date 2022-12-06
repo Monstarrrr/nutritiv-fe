@@ -1,15 +1,15 @@
 /** @jsxImportSource @emotion/react */
-/* eslint-disable no-unused-vars */ // Temp
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import nutritivApi from '../../Api/nutritivApi';
 import { ProductCard } from './ProductCard';
 import { Pagination } from '@mui/material';
-import { AnimatePresence, LayoutGroup, motion, Reorder } from 'framer-motion';
+import { AnimatePresence, LayoutGroup, motion } from 'framer-motion';
 import { forwardRef } from 'react';
 import { css } from '@emotion/react'
 import styled from '@emotion/styled';
 import { tokens } from '../../Helpers/styleTokens';
 import { Icon } from '../Icons/Icon';
+import Select from 'react-select';
 
 const Container = styled(motion.div)`
   padding: 0 ${tokens.spacing.lg};
@@ -74,28 +74,88 @@ const TagsContainer = styled.div`
   padding: 6px 0;
   scrollbar-color: #15f1ff80 transparent;
   > div {
-    border-radius: ${tokens.borderRadius.max};
-    border: 2px solid ${tokens.color.semiTransparentLight};
-    margin-right: 8px;
-    padding: ${tokens.spacing.xs} ${tokens.spacing.md};
-    position: relative;
+    
   }
   input {
+    cursor: pointer;
     opacity: 0;
     position: absolute;
+    left: 0;
+    top: 0;
     height: 100%;
     width: 100%;
   }
 `
 const TagWrapper = styled.div`
   background-color: ${props => props.checked ? tokens.color.accentStrong : tokens.color.transparent};
+  border-radius: ${tokens.borderRadius.max};
+  border: 2px solid ${tokens.color.semiTransparentLight};
   color: ${props => props.checked ? tokens.color.contrastDark : tokens.color.contrastLight};
+  margin-right: 8px;
+  padding: ${tokens.spacing.xs} ${tokens.spacing.md};
+  position: relative;
+  transition: all ease .2s;
+  &:hover {
+    background-color: ${tokens.color.semiTransparentLight};
+    border: 2px solid ${tokens.color.transparent};
+    transition: all ease .2s;
+  }
 `
 
+// const IndicatorSeparator = ({innerProps}) => {
+//   return <span style={{width: 0}} {...innerProps} />
+// }
 
-const Shop = forwardRef((props, ref) => {  
-  console.log("###########-Products-###########")
-  
+const Shop = forwardRef((props, ref) => {
+  const selectStyles = {
+    singleValue: styles => ({
+      ...styles,
+      color: tokens.color.contrastLight,
+      fontSize: tokens.font.fontSize.md,
+    }),
+    menu: styles => ({
+      ...styles,
+      backgroundColor: tokens.color.contrastLight,
+      width: "max-content",
+    }),
+    control: (styles, {data, isDisabled, isFocused, isSelected}) => ({ 
+      ...styles, 
+      backgroundColor: isFocused ? tokens.color.accentWeak : tokens.color.transparent,
+      border: 0,
+      borderBottom: `2px solid ${tokens.color.accentStrong}`,
+      borderRadius: isFocused ? tokens.borderRadius.md : 0,
+      boxShadow: "none",
+      cursor: "pointer",
+      "&:hover": {
+        opacity: 0.8
+      }
+    }),
+    option: (styles, {data, isDisabled, isFocused, isSelected}) => ({
+      ...styles,
+      backgroundColor: isSelected ? tokens.color.contrastLightWeak : tokens.color.contrastLight,
+      color: tokens.color.contrastDark,
+      cursor: "pointer",
+      fontStyle: data.defaultValue ? "italic" : "initial",
+      padding: tokens.spacing.sm,
+      paddingLeft: tokens.spacing.lg,
+      paddingRight: tokens.spacing.xl,
+      "&:hover": {
+        backgroundColor: tokens.color.secondaryTransparent,
+      }
+    }),
+    indicatorSeparator: styles => ({
+      ...styles,
+      width: 0,
+    }),
+    dropdownIndicator: styles => ({
+      ...styles,
+      color: tokens.color.accentStrong,
+      "&:hover": {
+        color: tokens.color.accentStrong,
+        opacity: 0.8
+      }
+    }),
+  }
   const [allProducts, setAllProducts] = useState([])
   const [allFilteredProducts, setAllFilteredProducts] = useState([])
   const [productsToDisplay, setProductsToDisplay] = useState(null)
@@ -246,10 +306,14 @@ const Shop = forwardRef((props, ref) => {
     )
     setPage(1);
   }
-  const handleFilterByShapeInput = (e) => {
-    setFilterByShapeInput(
-      e.target.value.toLowerCase()
-    )
+  // const handleFilterByShapeInput = (e) => {
+  //   setFilterByShapeInput(
+  //     e.target.value.toLowerCase()
+  //   )
+  //   setPage(1);
+  // }
+  const handleFilterByShapeInput = (selectedOption) => {
+    setFilterByShapeInput(selectedOption.value)
     setPage(1);
   }
   const handleChangeActivePage = (e, val) => {
@@ -346,7 +410,28 @@ const Shop = forwardRef((props, ref) => {
         <FilterBy>
           Filter by
         </FilterBy>
-        <ShapeDropdown>
+        <div 
+          css={css`
+            display: inline-block;
+            position: relative;
+            top: 4px;
+          `}
+        >
+          <Select 
+            // components={{ IndicatorSeparator }}
+            defaultValue={{value: "", label: "All", defaultValue: true}}
+            isSearchable={false}
+            options={[
+              {value: "", label: "All", defaultValue: true},
+              {value: "capsule", label: "Capsule"},
+              {value: "gummy", label: "Gummy"},
+            ]}
+            onChange={handleFilterByShapeInput}
+            styles={selectStyles}
+          />
+        </div>
+
+        {/* <ShapeDropdown>
           <select 
             onChange={handleFilterByShapeInput}
             name="shapeFilter"
@@ -355,7 +440,8 @@ const Shop = forwardRef((props, ref) => {
             <option value="capsule">Capsule</option>
             <option value="gummy">Gummy</option>
           </select>
-        </ShapeDropdown>
+        </ShapeDropdown> */}
+        
         <FilterBy style={{ marginLeft: tokens.spacing.sm }}>
           shapes.
         </FilterBy>
