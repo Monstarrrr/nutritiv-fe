@@ -54,6 +54,8 @@ const ShapeDropdown = styled.form`
 
 const SortByContainer = styled.div`
   position: relative;
+  border-top: 2px solid ${tokens.color.transparentLight};
+  top: 4px;
 `
 const SortByText = styled.p`
   display: inline-block;
@@ -68,14 +70,10 @@ const SortByButton = styled.button`
 const TagsContainer = styled.div`
   display: flex;
   margin-bottom: -6px;
-  margin-top: ${tokens.spacing.lg};
   overflow-x: scroll;
   overflow-y: hidden;
-  padding: 6px 0;
+  padding: 24px 0;
   scrollbar-color: #15f1ff80 transparent;
-  > div {
-    
-  }
   input {
     cursor: pointer;
     opacity: 0;
@@ -381,30 +379,6 @@ const Shop = forwardRef((props, ref) => {
           }}
         />
       </SearchContainer>
-      {/* TAGS FILTER - CHECKBOXES */}
-      <TagsContainer>
-        {loading ? (
-          <p>Loading tags...</p>
-        ) : (
-          allTags && allTags.map((tag, i) => (
-            <TagWrapper 
-              key={i}
-              checked={checkedBox[tag.toLowerCase()]}
-            >
-              <input 
-                defaultChecked={false}
-                index={i}
-                name={tag.toLowerCase()}
-                onClick={handleFilterByTags}
-                type="checkbox"
-              />
-              <label htmlFor={tag}>
-                {tag}
-              </label>
-            </TagWrapper>
-          ))
-        )}
-      </TagsContainer>
       {/* SHAPE FILTER - DROPDOWN */}
       <FilterShapeContainer>
         <FilterBy>
@@ -446,6 +420,30 @@ const Shop = forwardRef((props, ref) => {
           shapes.
         </FilterBy>
       </FilterShapeContainer>
+      {/* TAGS FILTER - CHECKBOXES */}
+      <TagsContainer>
+        {loading ? (
+          <p>Loading tags...</p>
+        ) : (
+          allTags && allTags.map((tag, i) => (
+            <TagWrapper 
+              key={i}
+              checked={checkedBox[tag.toLowerCase()]}
+            >
+              <input 
+                defaultChecked={false}
+                index={i}
+                name={tag.toLowerCase()}
+                onClick={handleFilterByTags}
+                type="checkbox"
+              />
+              <label htmlFor={tag}>
+                {tag}
+              </label>
+            </TagWrapper>
+          ))
+        )}
+      </TagsContainer>
       {/* PRICE SORTER - BUTTON */}
       <SortByContainer>
         <SortByText>
