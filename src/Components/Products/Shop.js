@@ -414,7 +414,7 @@ const Shop = forwardRef((props, ref) => {
           css={css`
             display: inline-block;
             position: relative;
-            top: 4px;
+            top: 5px;
           `}
         >
           <Select 
