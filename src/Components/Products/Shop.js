@@ -12,7 +12,7 @@ import { Icon } from '../Icons/Icon';
 import Select from 'react-select';
 
 const Container = styled(motion.div)`
-  padding: 0 ${tokens.spacing.lg};
+  padding: 0 ${tokens.spacing.xl};
   width: auto;
 `
 
@@ -48,22 +48,32 @@ const FilterShapeContainer = styled.div`
 `
 const FilterBy = styled.p`
   display: inline-block;
+  font-style: italic;
   font-size: ${tokens.font.fontSize.md};
   margin-right: ${tokens.spacing.sm};
   margin-bottom: 0;
   width: max-content;
 `
 
-const SortByContainer = styled.div`
+const SortingContainer = styled.div`
+  align-items: center;
+  border-top: 2px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  font-size: ${tokens.font.fontSize.md};
+  justify-content: space-between;
   position: relative;
-  border-top: 2px solid ${tokens.color.transparentLight};
   top: 4px;
+`
+const SortByContainer = styled.div``
+const SortCounter = styled.div`
+  color: ${tokens.color.contrastLightWeak};
+  font-style: italic;
 `
 const SortByText = styled.p`
   display: inline-block;
-  font-size: ${tokens.font.fontSize.md};
   margin-right: ${tokens.spacing.sm};
   width: max-content;
+  font-style: italic;
 `
 const SortByButton = styled.button`
   background-color: ${tokens.color.semiTransparentLight};
@@ -79,6 +89,7 @@ const SortByButton = styled.button`
   padding: 2px ${tokens.spacing.sm};
   transition: all .2s ease;
   &:hover {
+    opacity: 0.8;
     transition: all .2s ease;
   }
 `
@@ -125,7 +136,6 @@ const Shop = forwardRef((props, ref) => {
     singleValue: styles => ({
       ...styles,
       color: tokens.color.contrastLight,
-      fontSize: tokens.font.fontSize.md,
     }),
     menu: styles => ({
       ...styles,
@@ -134,27 +144,34 @@ const Shop = forwardRef((props, ref) => {
     }),
     control: (styles, {data, isDisabled, isFocused, isSelected}) => ({ 
       ...styles, 
-      backgroundColor: isFocused ? tokens.color.accentWeak : tokens.color.transparent,
+      backgroundColor: tokens.color.accentWeak,
       border: 0,
       borderBottom: `2px solid ${tokens.color.accentStrong}`,
-      borderRadius: isFocused ? tokens.borderRadius.md : 0,
+      borderRadius: tokens.borderRadius.md,
       boxShadow: "none",
       cursor: "pointer",
+      minHeight: 0,
+      opacity: isFocused ? 0.8 : 1,
+      transition: "all ease .2s",
       "&:hover": {
-        opacity: 0.8
+        opacity: 0.65,
+        transition: "all ease .2s",
       }
     }),
     option: (styles, {data, isDisabled, isFocused, isSelected}) => ({
       ...styles,
       backgroundColor: isSelected ? tokens.color.contrastLightWeak : tokens.color.contrastLight,
+      borderRadius: "8px",
       color: tokens.color.contrastDark,
       cursor: "pointer",
       fontStyle: data.defaultValue ? "italic" : "initial",
       padding: tokens.spacing.sm,
       paddingLeft: tokens.spacing.lg,
       paddingRight: tokens.spacing.xl,
+      transition: "all ease .2s",
       "&:hover": {
         backgroundColor: tokens.color.secondaryTransparent,
+        transition: "all ease .2s",
       }
     }),
     indicatorSeparator: styles => ({
@@ -164,11 +181,20 @@ const Shop = forwardRef((props, ref) => {
     dropdownIndicator: styles => ({
       ...styles,
       color: tokens.color.accentStrong,
+      paddingLeft: 0,
       "&:hover": {
         color: tokens.color.accentStrong,
         opacity: 0.8
       }
     }),
+    indicatorsContainer: styles => ({
+      alignItems: "center",
+      display: "flex",
+      height: "32px",
+      "> div": {
+        padding: "0 6px 0 0",
+      }
+    })
   }
   const [allProducts, setAllProducts] = useState([])
   const [allFilteredProducts, setAllFilteredProducts] = useState([])
@@ -219,10 +245,10 @@ const Shop = forwardRef((props, ref) => {
         const { data } = await nutritivApi.get(
           `/products/categories`
         );
-        console.log('# data :', data)
-        let category = data.uniqueCategory;
+        console.log('# categories :', data)
+        let categories = data.uniqueCategory;
         // Capitalize first letter
-        let newArr = category.map(e => {
+        let newArr = categories.map(e => {
           return e.charAt(0).toUpperCase() + e.slice(1).toLowerCase();
         })
         setAllTags(newArr);
@@ -265,7 +291,7 @@ const Shop = forwardRef((props, ref) => {
     
     const filterByTags = (array) => filterByTagsInput ? (
       array.filter((product) => {
-        return filterByTagsInput.every(tag => product.category.includes(tag))
+        return filterByTagsInput.every(tag => product.categories.includes(tag))
       })
     ) : array;
 
@@ -335,7 +361,7 @@ const Shop = forwardRef((props, ref) => {
     setPage(val)
   }
   const handleChangeProductsPerPage = (e) => {
-    setProductsPerPage(e.target.value)
+    setProductsPerPage(e.value)
   }
   const handleFilterByTags = (e) => {
     if(e.target.checked) {
@@ -404,6 +430,7 @@ const Shop = forwardRef((props, ref) => {
         <div 
           css={css`
             display: inline-block;
+            font-size: ${tokens.font.fontSize.md};
             position: relative;
             top: 5px;
           `}
@@ -463,45 +490,54 @@ const Shop = forwardRef((props, ref) => {
         )}
       </TagsContainer>
       {/* PRICE SORTER - BUTTON */}
-      <SortByContainer>
-        <SortByText>
-          Sort by
-        </SortByText>
-        <SortByButton onClick={handleOrderByPrice}>
-          {sortedByPrice ? (<>price</>) : (<>name</>)}
-          <div css={css`max-width: 20px; display: inline-block;`}>
-            {sortedByPrice && (sortedByPrice === "asc" ? (
-              <>
-                <span css={css`display: none;`}/>
-                <Icon 
-                  name="chevronLeft"
-                  color={tokens.color.contrastLight}
-                  resizeDefault={"-4 4 23 23"}
-                  strokeWidth={2}
-                  style={{ 
-                    display: "inline-block",
-                    transform: "rotate(90deg)" 
-                  }}
-                />
-              </>
-            ) : (
-              <>
-                <span css={css`display: none;`}/>
-                <Icon 
-                  name="chevronRight"
-                  color={tokens.color.contrastLight}
-                  resizeDefault={"-4 4 23 23"}
-                  strokeWidth={2}
-                  style={{ 
-                    display: "inline-block",
-                    transform: "rotate(90deg)" 
-                  }}
-                />
-              </>
-            ))}
-          </div>
-        </SortByButton>
-      </SortByContainer>
+      <SortingContainer>
+        <SortCounter>
+          {allFilteredProducts.length}/{allProducts.length}
+        </SortCounter>
+        <SortByContainer>
+          <SortByText>
+            Sort by
+          </SortByText>
+          <SortByButton onClick={handleOrderByPrice}>
+            {sortedByPrice ? (<>price</>) : (<>name</>)}
+            <div css={css`max-width: 20px; display: inline-block;`}>
+              {sortedByPrice && (sortedByPrice === "asc" ? (
+                <>
+                  {/* <span css={css`display: none;`}/> */}
+                  <Icon 
+                    name="chevronLeft"
+                    color={tokens.color.contrastLight}
+                    resizeDefault={"-3 3 23 23"}
+                    strokeWidth={3}
+                    style={{ 
+                      display: "inline-block",
+                      transform: "rotate(90deg)",
+                      height: "18px",
+                      marginLeft: "2px"
+                    }}
+                  />
+                </>
+              ) : (
+                <>
+                  {/* <span css={css`display: none;`}/> */}
+                  <Icon 
+                    name="chevronRight"
+                    color={tokens.color.contrastLight}
+                    resizeDefault={"-3 3 23 23"}
+                    strokeWidth={3}
+                    style={{ 
+                      display: "inline-block",
+                      transform: "rotate(90deg)",
+                      height: "18px",
+                      marginLeft: "2px"
+                    }}
+                  />
+                </>
+              ))}
+            </div>
+          </SortByButton>
+        </SortByContainer>
+      </SortingContainer>
       {/* PRODUCTS - CARDS */}
       {loading ? (
         <h2>
@@ -545,20 +581,58 @@ const Shop = forwardRef((props, ref) => {
           page={page}
           onChange={handleChangeActivePage}
           sx={{
-            '& .MuiButtonBase-root': {
-              color: "white",
-            },
             '& .MuiPaginationItem-root': {
-              color: "white",
+              color: tokens.color.contrastLight,
+              fontFamily: "inherit",
+              fontWeight: 500,
+              transition: "all ease .2s",
+              '&:hover': {
+                backgroundColor: tokens.color.accentWeak,
+                opacity: 0.6,
+                transition: "all ease .2s",
+              }
+            },
+            '& .MuiPaginationItem-icon': {
+              color: tokens.color.accentStrong,
+            },
+            '[aria-current=true]': {
+              backgroundColor: tokens.color.contrastLightWeak,
+              color: tokens.color.contrastDark,
+              opacity: 0.2,
+              transition: "all ease .2s",
+              '&:hover': {
+                backgroundColor: tokens.color.semiTransparentLight,
+                transition: "all ease .2s",
+              } 
             }
           }}
         />
         {/* PRODUCTS PER PAGE - DROPDOWN */}
         <form>
-          <label htmlFor="productsPerPage">
-            Products per page: 
+          <label htmlFor="productsPerPage" css={css`margin-right: 4px;`}>
+            Products per page:  
           </label>
-          <select 
+          <div 
+            css={css`
+              display: inline-block;
+              font-size: ${tokens.font.fontSize.sm};
+              position: relative;
+              top: 3px;
+            `}
+          >
+            <Select 
+              defaultValue={{value: 5, label: "5", defaultValue: true}}
+              isSearchable={false}
+              options={[
+                {value: 5, label: "5", defaultValue: true},
+                {value: 10, label: "10"},
+                {value: 30, label: "30"},
+              ]}
+              onChange={handleChangeProductsPerPage}
+              styles={selectStyles}
+            />
+          </div>
+          {/* <select 
             onChange={handleChangeProductsPerPage}
             id="selectProductsPerPage"
             name="productsPerPage" 
@@ -566,7 +640,7 @@ const Shop = forwardRef((props, ref) => {
             <option value="5">5</option>
             <option value="15">15</option>
             <option value="30">30</option>
-          </select>
+          </select> */}
         </form>
       </motion.div>
     </Container>

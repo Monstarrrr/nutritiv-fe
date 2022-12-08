@@ -1,12 +1,123 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { motion } from 'framer-motion';
+import styled from '@emotion/styled';
+import { mediaQuery, tokens } from '../../Helpers/styleTokens';
+import { Icon } from '../Icons/Icon';
+
+const Container = styled(motion.div)`
+  background-color: ${tokens.color.secondaryTransparent};
+  background: radial-gradient(circle at 50% 15%, ${tokens.color.accentWeak} 0%, ${tokens.color.primary} 132%);
+  border-radius: ${tokens.borderRadius.xl};
+  box-sizing: border-box;
+  cursor: pointer;
+  display: inline-block;
+  margin-top: 100px;
+  margin-bottom: ${tokens.spacing.lg};
+  padding: ${tokens.spacing.xxl};
+  position: relative;
+  width: 100%;
+`
+const Image = styled.img`
+  display: block;
+  max-width: 200px;
+  margin: -100px auto 14px;
+  width: 100%;
+`
+const TitleContainer = styled.div`
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  > svg {
+    padding-right: 4px;
+    height: 32px;
+    width: 32px;
+  }
+`
+const Title = styled.h2`
+  font-size: ${tokens.font.fontSize.lg};
+  margin-bottom: ${tokens.spacing.md};
+  margin-top: ${tokens.spacing.md};
+`
+const Description = styled.span`
+  color: ${tokens.color.contrastLightWeak};
+  display: -webkit-box;
+  overflow: hidden;
+  line-clamp: 2; 
+  -webkit-line-clamp: 2;
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+`
+
+const Tags = styled.div`
+  padding: ${tokens.spacing.md} 0 0;
+  margin-top: ${tokens.spacing.md};
+`
+const Tag = styled.span`
+  padding: ${tokens.spacing.xs} ${tokens.spacing.md};
+  background: ${tokens.color.semiTransparentLight};
+  border-radius: ${tokens.borderRadius.max};
+`
+
+const BottomSide = styled.div`
+  align-items: center;
+  display: flex;
+  margin-top: ${tokens.spacing.xl};
+  padding-top: ${tokens.spacing.lg};
+  position: relative;
+  justify-content: space-between;
+  z-index: 1;
+`
+const Price = styled.span`
+  display: block;
+  font-size: ${tokens.font.fontSize.lg};
+  font-weight: bold;
+`
+const PriceUnit = styled.span`
+  color: ${tokens.color.accentStrong};
+  font-size: ${tokens.font.fontSize.sm};
+  font-weight: ${tokens.font.fontWeight.regular};
+  margin-left: 2px;
+`
+const Button = styled.div`
+  background-color: ${tokens.color.accentStrong};
+  border-radius: 999px;
+  cursor: pointer;
+  padding: 8px;
+  padding-bottom: 4px;
+  transition: all ease .2s;
+  > svg {
+    transform: rotate(-90deg);
+  }
+  &:hover {
+    ${mediaQuery[2]} {
+      box-shadow: 0 0 10px -1px ${tokens.color.accentStrong};
+      border: 2px solid ${tokens.color.accentStrong};
+    }
+  }
+`
+const WaveContainer = styled.div`
+  border-radius: 22px;
+  bottom: -2px;
+  left: 0px;
+  overflow: hidden;
+  position: absolute;
+  right: 0;
+  z-index: 0;
+  > svg {
+    bottom: -2px;
+    position: relative;
+    transform: scale(-1,1);
+  }
+`
 
 export const ProductCard = ({ product, index }) => {
   const navigate = useNavigate();
+  const [tags, setTags] = useState([])
   
-  const lowestItemPrice = product.productItems[0].price.value
+  const lowestItemPrice = product.productItems[0].price.value;
   
+  // Animation
   const productCard = {
     initial: { opacity: 0 },
     animate: { 
@@ -15,64 +126,99 @@ export const ProductCard = ({ product, index }) => {
     exit: { opacity: 0 }
   }
   
+  useEffect(() => {
+    let newArr = product.categories.map(e => {
+      return e.charAt(0).toUpperCase() + e.slice(1).toLowerCase();
+    })
+    setTags(newArr);
+  }, [product.categories]);
+
   const handleClickProduct = () => {
     navigate({
       pathname: `/${product.title}`,
       search: `?shape=${product.shape}`
     });
   }
-  
+
   return (
-    <motion.div
+    <Container
       layout
       key={product._id}
       onClick={() => handleClickProduct()}
-      style={{
-        background: "gray",
-      }}
       variants={productCard}
       initial="initial"
       animate="animate"
       exit="exit"
-      // transition={{ 
-      //   duration: 0.32,
-      //   delay: index * 0.05
-      // }}
+      transition={{ 
+        duration: 0.32,
+        delay: index * 0.05
+      }}
     >
-      {/* GENERAL INFO */}
-      <h2>
-        {product.title} ({product.shape})
-      </h2>
-      <span style={{fontSize: "22px", fontWeight: "bold"}}>
-        {lowestItemPrice} €
-      </span>
-      <br />
-      <span>
-        {product.desc}
-      </span>
-      <br />
       {/* IMAGES */}
-      {
-        product.imgs.map((img, i) => (
-          <img
-            style={{
-              paddingLeft: "22px",
-              maxWidth: "100px",
-            }}
-            key={i}
-            src={`${process.env.REACT_APP_S3_ADDRESS}${process.env.REACT_APP_S3_PRODUCTS}${img}`}
-            alt={`${product.title} ${i+1}`}
+      {product.imgs.map((img, i) => (
+        <Image
+          key={i}
+          src={`${process.env.REACT_APP_S3_ADDRESS}${process.env.REACT_APP_S3_PRODUCTS}${img}`}
+          alt={`${product.title} ${i+1}`}
+        />
+      ))}
+      <TitleContainer>
+        <Title>
+          {product.title} 
+        </Title>
+        <Icon 
+          color={tokens.color.contrastLightWeak} 
+          name="gummy" 
+          filled
+          height="30px"
+          width="30px"
+        />
+      </TitleContainer>
+      <Description>
+        {product.desc}
+      </Description>
+      <Tags>
+        {tags && tags.map((tag, i) => (
+          <Tag key={i}>
+            {tag}
+          </Tag>
+        ))}
+      </Tags>
+      <BottomSide>
+        <Price>
+          {lowestItemPrice}<PriceUnit>€</PriceUnit>
+        </Price>
+        <Button>
+          <Icon 
+            color={tokens.color.contrastDark}
+            name="arrowDown" 
+            strokeWidth={2}
+            resizeDefault="0 1 24 24"
+            // resizeFilled="0 0 24 24"
+            height={25}
+            width={25}
           />
-        ))
-      }
-      <br />
-      {
-        product.tags && product.tags.map((tag, i) => (
-          <span key={i}>
-            &nbsp;{tag} /
-          </span>
-        ))
-      }
-    </motion.div>
+        </Button>
+      </BottomSide>
+      <WaveContainer>
+        <svg 
+          width="100%" 
+          height="100%" 
+          id="svg" 
+          viewBox="400 0 940 600" 
+          xmlns="http://www.w3.org/2000/svg" 
+          class="transition duration-300 ease-in-out delay-150"
+        >
+          <path 
+            d="M 0,600 C 0,600 0,300 0,300 C 153.7333333333333,279.2 307.4666666666666,258.4 489,267 C 670.5333333333334,275.6 879.8666666666666,313.6 1043,324 C 1206.1333333333334,334.4 1323.0666666666666,317.2 1440,300 C 1440,300 1440,600 1440,600 Z" 
+            stroke="none" 
+            stroke-width="0" 
+            fill={tokens.color.accentTransparent} 
+            fill-opacity="1" 
+            class="transition-all duration-300 ease-in-out delay-150 path-0"
+          />
+        </svg>
+      </WaveContainer>
+    </Container>
   )
 }
