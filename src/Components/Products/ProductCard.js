@@ -98,16 +98,18 @@ const Button = styled.div`
 `
 const WaveContainer = styled.div`
   border-radius: 22px;
-  bottom: -2px;
-  left: 0px;
+  bottom: 0;
+  left: 0;
   overflow: hidden;
   position: absolute;
   right: 0;
   z-index: 0;
-  > svg {
-    bottom: -2px;
+  > img {
+    bottom: -4px;
+    left: -60px;
+    max-height: 188px;
     position: relative;
-    transform: scale(-1,1);
+    width: 150%;
   }
 `
 
@@ -140,6 +142,8 @@ export const ProductCard = ({ product, index }) => {
     });
   }
 
+  console.log('# product :', product)
+
   return (
     <Container
       layout
@@ -168,7 +172,7 @@ export const ProductCard = ({ product, index }) => {
         </Title>
         <Icon 
           color={tokens.color.contrastLightWeak} 
-          name="gummy" 
+          name={product.shape === "gummy" ? "gummy" : "capsule"} 
           filled
           height="30px"
           width="30px"
@@ -201,23 +205,7 @@ export const ProductCard = ({ product, index }) => {
         </Button>
       </BottomSide>
       <WaveContainer>
-        <svg 
-          width="100%" 
-          height="100%" 
-          id="svg" 
-          viewBox="400 0 940 600" 
-          xmlns="http://www.w3.org/2000/svg" 
-          class="transition duration-300 ease-in-out delay-150"
-        >
-          <path 
-            d="M 0,600 C 0,600 0,300 0,300 C 153.7333333333333,279.2 307.4666666666666,258.4 489,267 C 670.5333333333334,275.6 879.8666666666666,313.6 1043,324 C 1206.1333333333334,334.4 1323.0666666666666,317.2 1440,300 C 1440,300 1440,600 1440,600 Z" 
-            stroke="none" 
-            stroke-width="0" 
-            fill={tokens.color.accentTransparent} 
-            fill-opacity="1" 
-            class="transition-all duration-300 ease-in-out delay-150 path-0"
-          />
-        </svg>
+        <img alt="wave" src="/wave.png" />
       </WaveContainer>
     </Container>
   )
