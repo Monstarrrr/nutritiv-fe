@@ -247,7 +247,7 @@ function App() {
   }
   
   return (
-    <div ref={canvasWrapperRef}>
+    <div style={{touchAction: "auto"}} ref={canvasWrapperRef}>
       <Elements
         stripe={stripePromise}
         // options={stripeOptions}
