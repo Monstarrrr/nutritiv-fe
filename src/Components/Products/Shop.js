@@ -57,7 +57,7 @@ const FilterBy = styled.p`
 
 const SortingContainer = styled.div`
   align-items: center;
-  border-top: 2px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
   display: flex;
   font-size: ${tokens.font.fontSize.md};
   justify-content: space-between;
