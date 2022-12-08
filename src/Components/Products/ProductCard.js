@@ -106,7 +106,7 @@ const WaveContainer = styled.div`
   z-index: 0;
   > img {
     bottom: -4px;
-    left: -60px;
+    left: -48px;
     max-height: 188px;
     position: relative;
     width: 150%;

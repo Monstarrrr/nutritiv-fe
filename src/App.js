@@ -287,6 +287,7 @@ function App() {
                   color: ${tokens.color.contrastLight};
                   font-family: 'Jost', sans-serif;
                   position: relative;
+                  height: 100%;
                 }
                 h1, h2, h3, h4, h5, h6 {
                   font-family: 'Red Hat Display', sans-serif;
