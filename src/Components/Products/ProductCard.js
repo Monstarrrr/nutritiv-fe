@@ -142,8 +142,6 @@ export const ProductCard = ({ product, index }) => {
     });
   }
 
-  console.log('# product :', product)
-
   return (
     <Container
       layout
@@ -198,7 +196,6 @@ export const ProductCard = ({ product, index }) => {
             name="arrowDown" 
             strokeWidth={2}
             resizeDefault="0 1 24 24"
-            // resizeFilled="0 0 24 24"
             height={25}
             width={25}
           />
