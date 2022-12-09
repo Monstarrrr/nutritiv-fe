@@ -47,7 +47,14 @@ const Container = styled(motion.div)`
   padding: ${tokens.spacing.xxl};
   position: relative;
   width: 100%;
+  > img {
+    transition: all ease .4s;
+  }
   &:hover {
+    > img {
+      transform: translateY(-10px);
+      transition: all ease .4s;
+    }
     ${WaveContainer} {
      > img {
       transform: translateX(58px);
