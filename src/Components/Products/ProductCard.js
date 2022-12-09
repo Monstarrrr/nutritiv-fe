@@ -1,22 +1,65 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion';
 import styled from '@emotion/styled';
 import { mediaQuery, tokens } from '../../Helpers/styleTokens';
 import { Icon } from '../Icons/Icon';
 
+const Button = styled.div`
+  background-color: ${tokens.color.accentStrong};
+  border-radius: 999px;
+  cursor: pointer;
+  padding: 8px;
+  padding-bottom: 4px;
+  transition: all ease .2s;
+  > svg {
+    transform: rotate(-90deg);
+  }
+`
+const WaveContainer = styled.div`
+  border-radius: 22px;
+  bottom: 0;
+  left: 0;
+  overflow: hidden;
+  position: absolute;
+  right: 0;
+  z-index: 0;
+  > img {
+    bottom: -4px;
+    left: -58px;
+    max-height: 188px;
+    position: relative;
+    transition: all ease .4s;
+    width: 150%;
+  }
+`
 const Container = styled(motion.div)`
   background-color: ${tokens.color.secondaryTransparent};
   background: radial-gradient(circle at 50% 15%, ${tokens.color.accentWeak} 0%, ${tokens.color.primary} 132%);
   border-radius: ${tokens.borderRadius.xl};
   box-sizing: border-box;
   cursor: pointer;
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   margin-top: 100px;
   margin-bottom: ${tokens.spacing.lg};
   padding: ${tokens.spacing.xxl};
   position: relative;
   width: 100%;
+  &:hover {
+    ${WaveContainer} {
+     > img {
+      transform: translateX(58px);
+      transition: all ease .4s;
+     }
+    }
+    ${Button} {
+      ${mediaQuery[2]} {
+        box-shadow: 0 0 10px -1px ${tokens.color.accentStrong};
+      }
+    }
+  }
 `
 const Image = styled.img`
   display: block;
@@ -31,13 +74,16 @@ const TitleContainer = styled.div`
   > svg {
     padding-right: 4px;
     height: 32px;
-    width: 32px;
+    min-width: 32px;
   }
 `
 const Title = styled.h2`
   font-size: ${tokens.font.fontSize.lg};
   margin-bottom: ${tokens.spacing.md};
   margin-top: ${tokens.spacing.md};
+  overflow: hidden;
+  padding-right: ${tokens.spacing.sm};
+  text-overflow: ellipsis;
 `
 const Description = styled.span`
   color: ${tokens.color.contrastLightWeak};
@@ -78,39 +124,6 @@ const PriceUnit = styled.span`
   font-size: ${tokens.font.fontSize.sm};
   font-weight: ${tokens.font.fontWeight.regular};
   margin-left: 2px;
-`
-const Button = styled.div`
-  background-color: ${tokens.color.accentStrong};
-  border-radius: 999px;
-  cursor: pointer;
-  padding: 8px;
-  padding-bottom: 4px;
-  transition: all ease .2s;
-  > svg {
-    transform: rotate(-90deg);
-  }
-  &:hover {
-    ${mediaQuery[2]} {
-      box-shadow: 0 0 10px -1px ${tokens.color.accentStrong};
-      border: 2px solid ${tokens.color.accentStrong};
-    }
-  }
-`
-const WaveContainer = styled.div`
-  border-radius: 22px;
-  bottom: 0;
-  left: 0;
-  overflow: hidden;
-  position: absolute;
-  right: 0;
-  z-index: 0;
-  > img {
-    bottom: -4px;
-    left: -48px;
-    max-height: 188px;
-    position: relative;
-    width: 150%;
-  }
 `
 
 export const ProductCard = ({ product, index }) => {

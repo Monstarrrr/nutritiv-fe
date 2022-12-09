@@ -25,7 +25,10 @@ export const Footer = () => {
         text-align: center;
       `}
     >
-      <div css={css`margin: ${tokens.spacing.xxl};`}>
+      <div css={css`
+        border-top: 2px solid ${tokens.color.semiTransparentLight};
+        padding: ${tokens.spacing.xxl};
+      `}>
         {location.pathname === "/welcome" && (
           <div
             css={css`

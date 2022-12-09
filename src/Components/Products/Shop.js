@@ -7,13 +7,19 @@ import { AnimatePresence, LayoutGroup, motion } from 'framer-motion';
 import { forwardRef } from 'react';
 import { css } from '@emotion/react'
 import styled from '@emotion/styled';
-import { tokens } from '../../Helpers/styleTokens';
+import { mediaQueries, mediaQuery, tokens } from '../../Helpers/styleTokens';
 import { Icon } from '../Icons/Icon';
 import Select from 'react-select';
 
 const Container = styled(motion.div)`
   padding: 0 ${tokens.spacing.xl};
   width: auto;
+  ${mediaQuery[1]} {
+    padding: 0 ${tokens.spacing.xxl};
+  }
+  ${mediaQuery[3]} {
+    padding: 0;
+  }
 `
 
 const SearchContainer = styled.div`
@@ -40,7 +46,9 @@ const Header = styled.div`
 
 `
 const HeaderTitle = styled.h1`
-  margin-top: 0;
+  ${mediaQueries({
+    marginTop: [0, 0, tokens.spacing.xl, tokens.spacing.xxl]
+  })}
 `
 
 const FilterShapeContainer = styled.div`
@@ -127,6 +135,24 @@ const TagWrapper = styled.div`
   }
 `
 
+const ProductsContainer = styled(motion.div)`
+  ${mediaQuery[1]} {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-gap: 24px;
+  }
+  ${mediaQuery[3]} {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+`
+
+const PaginationContainer = styled(motion.div)`
+  align-items: center;
+  display: flex;
+  margin: ${tokens.spacing.lg} 0 ${tokens.spacing.xxl};
+  justify-content: space-between;
+`
+
 // const IndicatorSeparator = ({innerProps}) => {
 //   return <span style={{width: 0}} {...innerProps} />
 // }
@@ -202,7 +228,7 @@ const Shop = forwardRef((props, ref) => {
   
   const [page, setPage] = useState(1)
   const [numberOfPages, setNumberOfPages] = useState(10)
-  const [productsPerPage, setProductsPerPage] = useState(5)
+  const [productsPerPage, setProductsPerPage] = useState(4)
   
   const [loading, setLoading] = useState(false)
   const [errorApiGetProducts, setErrorApiGetProducts] = useState(false)
@@ -362,6 +388,7 @@ const Shop = forwardRef((props, ref) => {
   }
   const handleChangeProductsPerPage = (e) => {
     setProductsPerPage(e.value)
+    setPage(1);
   }
   const handleFilterByTags = (e) => {
     if(e.target.checked) {
@@ -448,17 +475,6 @@ const Shop = forwardRef((props, ref) => {
             styles={selectStyles}
           />
         </div>
-
-        {/* <ShapeDropdown>
-          <select 
-            onChange={handleFilterByShapeInput}
-            name="shapeFilter"
-          >
-            <option value="">All</option>
-            <option value="capsule">Capsule</option>
-            <option value="gummy">Gummy</option>
-          </select>
-        </ShapeDropdown> */}
         
         <FilterBy style={{ marginLeft: tokens.spacing.sm }}>
           shapes.
@@ -493,6 +509,9 @@ const Shop = forwardRef((props, ref) => {
       <SortingContainer>
         <SortCounter>
           {allFilteredProducts.length}/{allProducts.length}
+          <span>
+            &nbsp;superments
+          </span>
         </SortCounter>
         <SortByContainer>
           <SortByText>
@@ -502,37 +521,31 @@ const Shop = forwardRef((props, ref) => {
             {sortedByPrice ? (<>price</>) : (<>name</>)}
             <div css={css`max-width: 20px; display: inline-block;`}>
               {sortedByPrice && (sortedByPrice === "asc" ? (
-                <>
-                  {/* <span css={css`display: none;`}/> */}
-                  <Icon 
-                    name="chevronLeft"
-                    color={tokens.color.contrastLight}
-                    resizeDefault={"-3 3 23 23"}
-                    strokeWidth={3}
-                    style={{ 
-                      display: "inline-block",
-                      transform: "rotate(90deg)",
-                      height: "18px",
-                      marginLeft: "2px"
-                    }}
-                  />
-                </>
+                <Icon 
+                  name="chevronLeft"
+                  color={tokens.color.contrastLight}
+                  resizeDefault={"-3 3 23 23"}
+                  strokeWidth={3}
+                  style={{ 
+                    display: "inline-block",
+                    transform: "rotate(90deg)",
+                    height: "18px",
+                    marginLeft: "2px"
+                  }}
+                />
               ) : (
-                <>
-                  {/* <span css={css`display: none;`}/> */}
-                  <Icon 
-                    name="chevronRight"
-                    color={tokens.color.contrastLight}
-                    resizeDefault={"-3 3 23 23"}
-                    strokeWidth={3}
-                    style={{ 
-                      display: "inline-block",
-                      transform: "rotate(90deg)",
-                      height: "18px",
-                      marginLeft: "2px"
-                    }}
-                  />
-                </>
+                <Icon 
+                  name="chevronRight"
+                  color={tokens.color.contrastLight}
+                  resizeDefault={"-3 3 23 23"}
+                  strokeWidth={3}
+                  style={{ 
+                    display: "inline-block",
+                    transform: "rotate(90deg)",
+                    height: "18px",
+                    marginLeft: "2px"
+                  }}
+                />
               ))}
             </div>
           </SortByButton>
@@ -544,7 +557,7 @@ const Shop = forwardRef((props, ref) => {
           Loading products...
         </h2>
       ) : (
-        <motion.div
+        <ProductsContainer
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1 }}
@@ -572,10 +585,12 @@ const Shop = forwardRef((props, ref) => {
               }
             </AnimatePresence>
           </LayoutGroup>
-        </motion.div>
+        </ProductsContainer>
       )}
       
-      <motion.div layout>
+      <PaginationContainer 
+        layout
+      >
         <Pagination
           count={numberOfPages}
           page={page}
@@ -588,22 +603,16 @@ const Shop = forwardRef((props, ref) => {
               transition: "all ease .2s",
               '&:hover': {
                 backgroundColor: tokens.color.accentWeak,
-                opacity: 0.6,
+                opacity: 0.8,
                 transition: "all ease .2s",
               }
             },
             '& .MuiPaginationItem-icon': {
               color: tokens.color.accentStrong,
             },
-            '[aria-current=true]': {
-              backgroundColor: tokens.color.contrastLightWeak,
-              color: tokens.color.contrastDark,
-              opacity: 0.2,
-              transition: "all ease .2s",
-              '&:hover': {
-                backgroundColor: tokens.color.semiTransparentLight,
-                transition: "all ease .2s",
-              } 
+            '& .MuiPaginationItem-root.Mui-selected': {
+              backgroundColor: tokens.color.contrastDark,
+              color: tokens.color.semiTransparentLight,
             }
           }}
         />
@@ -621,28 +630,19 @@ const Shop = forwardRef((props, ref) => {
             `}
           >
             <Select 
-              defaultValue={{value: 5, label: "5", defaultValue: true}}
+              defaultValue={{value: 4, label: "4", defaultValue: true}}
               isSearchable={false}
               options={[
-                {value: 5, label: "5", defaultValue: true},
-                {value: 10, label: "10"},
+                {value: 4, label: "4", defaultValue: true},
+                {value: 12, label: "12"},
                 {value: 30, label: "30"},
               ]}
               onChange={handleChangeProductsPerPage}
               styles={selectStyles}
             />
           </div>
-          {/* <select 
-            onChange={handleChangeProductsPerPage}
-            id="selectProductsPerPage"
-            name="productsPerPage" 
-          >
-            <option value="5">5</option>
-            <option value="15">15</option>
-            <option value="30">30</option>
-          </select> */}
         </form>
-      </motion.div>
+      </PaginationContainer>
     </Container>
   )
 });
