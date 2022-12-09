@@ -152,6 +152,9 @@ const PaginationContainer = styled(motion.div)`
   margin: ${tokens.spacing.lg} 0 ${tokens.spacing.xxl};
   justify-content: space-between;
 `
+const PaginationLeftDiv = styled.div`
+  flex: 2 1 0%;
+`
 
 // const IndicatorSeparator = ({innerProps}) => {
 //   return <span style={{width: 0}} {...innerProps} />
@@ -591,11 +594,15 @@ const Shop = forwardRef((props, ref) => {
       <PaginationContainer 
         layout
       >
+        <PaginationLeftDiv />
         <Pagination
           count={numberOfPages}
           page={page}
           onChange={handleChangeActivePage}
           sx={{
+            display: "flex",
+            justifyContent: "center",
+            flex: "3 1 0%",
             '& .MuiPaginationItem-root': {
               color: tokens.color.contrastLight,
               fontFamily: "inherit",
@@ -611,13 +618,18 @@ const Shop = forwardRef((props, ref) => {
               color: tokens.color.accentStrong,
             },
             '& .MuiPaginationItem-root.Mui-selected': {
-              backgroundColor: tokens.color.contrastDark,
+              backgroundColor: tokens.color.accentWeak,
               color: tokens.color.semiTransparentLight,
             }
           }}
         />
         {/* PRODUCTS PER PAGE - DROPDOWN */}
-        <form>
+        <form css={css`
+          align-items: center;
+          display: flex;
+          flex: 2 1 0%;
+          justify-content: end;
+        `}>
           <label htmlFor="productsPerPage" css={css`margin-right: 4px;`}>
             Products per page:  
           </label>
