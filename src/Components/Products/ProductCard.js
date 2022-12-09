@@ -110,6 +110,7 @@ const Tag = styled.span`
   padding: ${tokens.spacing.xs} ${tokens.spacing.md};
   background: ${tokens.color.semiTransparentLight};
   border-radius: ${tokens.borderRadius.max};
+  margin-right: ${tokens.spacing.xs};
 `
 
 const BottomSide = styled.div`
