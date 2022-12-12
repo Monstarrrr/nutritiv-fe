@@ -71,14 +71,10 @@ export const ShapeContainer = styled.li`
 const ShapeLabel = styled.span`
   bottom: 0;
   color: ${props => props.active ? tokens.color.contrastDark : tokens.color.contrastLight};
-  left: '4px';
   font-size: ${tokens.font.fontSize.xs};
   font-weight: ${tokens.font.fontWeight.medium};
   opacity: ${props => props.active ? 1 : 0.5};
-  position: 'absolute';
   right: 0;
-  top: '6px';
-  user-select: 'none';
   z-index: 2;
 `
 const FocusedShape = styled(motion.div)`
