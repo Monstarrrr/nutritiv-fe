@@ -12,7 +12,7 @@ function Container({ canvasSize, scene, index, children, frames, rect, track, up
   const camera = useThree((state) => state.camera)
   const virtualScene = useThree((state) => state.scene)
   const setEvents = useThree((state) => state.setEvents)
-  
+
   let frameCount = 0
   useFrame((state) => {
     if (frames === Infinity || frameCount <= frames) {
@@ -78,7 +78,7 @@ export const View = ({ track, index = 1, frames = Infinity, children, update }) 
   const rect = React.useRef(null)
   const { size, scene } = useThree()
   const [virtualScene] = React.useState(() => new THREE.Scene())
-
+  
   const compute = React.useCallback(
     (event, state) => {
       if (track.current && event.target === track.current) {

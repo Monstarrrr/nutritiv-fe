@@ -1,10 +1,13 @@
-import { Environment, OrbitControls, PerspectiveCamera, Plane, softShadows, Stats, useHelper } from '@react-three/drei'
-import React, { forwardRef, Suspense, useEffect, useRef, useState } from 'react'
-import GummyModel from './models/Gummy';
-import CapsuleModel from './models/Capsule';
+import { Environment, Html, Plane, softShadows, useHelper, useProgress } from '@react-three/drei'
+import React, { forwardRef, Suspense, useEffect, useRef } from 'react'
+import {GummyBlob} from './models/GummyBlob';
+import {GummyMold} from './models/GummyMold';
+import {Capsule} from './models/Capsule';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
-import angleToRadians from '../../Helpers/angleToRadians';
+import { tokens } from '../../Helpers/styleTokens';
+import { proxy, useSnapshot } from 'valtio';
+import { useLocation } from 'react-router-dom';
 
 softShadows({
   frustum: 3.75,
@@ -14,23 +17,54 @@ softShadows({
   rings: 11, // (default: 11) must be a int
 })
 
-export const Scene = forwardRef(({ type, supermentName, homepageCard }, ref) => {
+function Loader() {
+  const { progress, errors } = useProgress();
+  
+  return (
+    <Html
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <div
+        style={{
+          color: errors > 0 ? tokens.color.error : tokens.color.contrastLight,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          position: 'relative',
+          top: "78px",
+          left: "-50%",
+        }}
+      >
+        {errors > 0 ? (
+          errors.map(err => (
+            <div>{err}</div>
+          ))
+        ) : (
+          <>
+            {Math.ceil(progress)}%<br />loaded
+          </>
+        )}
+      </div>
+    </Html>
+  )
+}
+
+export const Scene = forwardRef(({ type, rotation, scale, supermentName, color, homepageCard }, ref) => {
   const modelRotation = useRef(0);
   // const orbitControlsRef = useRef();
-  const directionalLightRef = useRef(null);
+  // const directionalLightRef = useRef(null);
   // const spotLightRef1 = useRef(null);
-  // const spotLightRef2 = useRef(null);
-  // const spotLightRef3 = useRef(null);
   const pointLightRef = useRef(null);
   // useHelper(directionalLightRef, THREE.DirectionalLightHelper, 1, "yellow")
   // useHelper(spotLightRef1, THREE.SpotLightHelper, 'cyan')
-  // useHelper(spotLightRef2, THREE.SpotLightHelper, 'pink')
-  // useHelper(spotLightRef3, THREE.SpotLightHelper, 'white')
-  // useHelper(pointLightRef, THREE.PointLightHelper, 'red')
-  
+  useHelper(pointLightRef, THREE.PointLightHelper, 'red')
+
   // On every frame change
   useFrame(state => {
-    
     // Mouse tracking movement
     // const { x, y } = state.mouse;
     // if(!!ref.current){
@@ -42,53 +76,24 @@ export const Scene = forwardRef(({ type, supermentName, homepageCard }, ref) => 
   })
   
   return (
-    <Suspense fallback={null}>
-      
-      {/* CAMERA */}
-      {/* <PerspectiveCamera
-        makeDefault
-        position={[
-          type === "pill" ? 7 : 9, 
-          1, 
-          0
-        ]}
-      /> */}
-      
-      {/* CONTROLS */}
-      {/* <OrbitControls
-        autoRotate
-        autoRotateSpeed={2}
-        enablePan={false}
-        enableZoom={homepageCard ? false : true}
-        minDistance={
-          type === "pill" ? 2.65 : 7
-        }
-        maxDistance={
-          homepageCard ? (
-            type === "pill" ? 2.65 : 7
-          ) : (
-            type === "pill" ? 7 : 9
-          )
-        }
-        minPolarAngle={angleToRadians(70)}
-        maxPolarAngle={angleToRadians(100)}
-        makeDefault
-        ref={orbitControlsRef}
-      /> */}
+    <Suspense fallback={<Loader />}>
       
       {/* MODEL */}
-      {
-        type === "gummy" ? (
-          <GummyModel forwardRef={modelRotation} supermentName={supermentName} /> 
-        ) : (
-          <CapsuleModel forwardRef={modelRotation} supermentName={supermentName} />
-        )
-      }
+      {type === "gummyBlob" && (
+        <GummyBlob forwardRef={modelRotation} supermentName={supermentName} scale={scale} rotation={rotation} /> 
+      )}
+      {type === "gummyMold" && (
+        <GummyMold forwardRef={modelRotation} supermentName={supermentName} scale={scale} rotation={rotation} />
+      )}
+      {type === "capsule" && (
+        <Capsule forwardRef={modelRotation} supermentName={supermentName} scale={scale} rotation={rotation} supermentColor={color} />
+      )}
       
       <Environment
         background={false}
         files={['px.png', 'nx.png', 'py.png', 'ny.png', 'pz.png', 'nz.png']}
         path="/hdri/venice/"
+        blur={0.4}
       >
         <mesh scale={100}>
           <sphereGeometry args={[1, 64, 64]} />
@@ -100,20 +105,20 @@ export const Scene = forwardRef(({ type, supermentName, homepageCard }, ref) => 
       {/* <Plane receiveShadow rotation-x={-Math.PI / 2} position={[0, -1.7, 0]} args={[10, 10, 4, 4]}>
         <meshBasicMaterial opacity={0.5} />
       </Plane> */}
-      {/* SHADOW */}
       
-      {!homepageCard && (
+      {/* SHADOW */}
+      {/* {!homepageCard && ( */}
         <Plane receiveShadow rotation-x={-Math.PI / 2} position={[0, -1.9, 0]} args={[10, 10, 4, 4]}>
           <shadowMaterial opacity={0.5} />
         </Plane>
-      )}
+      {/* )} */}
       
       {/* LIGHTS */}
-      {/* <directionalLight
+      <directionalLight
         castShadow
-        intensity={3}
+        intensity={0.2}
         position={[0, 6, 0]}
-        ref={directionalLightRef}
+        // ref={directionalLightRef}
         shadow-mapSize-width={1024}
         shadow-mapSize-height={1024}
         shadow-camera-far={30}
@@ -121,13 +126,13 @@ export const Scene = forwardRef(({ type, supermentName, homepageCard }, ref) => 
         shadow-camera-right={10}
         shadow-camera-top={10}
         shadow-camera-bottom={-10}
-      /> */}
+      />
       
-      <pointLight 
-        intensity={20}
+      {/* <pointLight 
+        intensity={type === "capsule" ? 30 : 1}
         position={[0,0,0]}
         ref={pointLightRef}
-      />
+      /> */}
       
       {/* <spotLight
         angle={angleToRadians(10)} 
@@ -138,28 +143,9 @@ export const Scene = forwardRef(({ type, supermentName, homepageCard }, ref) => 
         position={[0, 0, -4]}
         power={10}
         ref={spotLightRef1}
-      />
-      <spotLight
-        angle={angleToRadians(10)} 
-        // castShadow
-        decay={2}
-        distance={4}
-        penumbra={1}
-        position={[4, 0, 0]}
-        power={10}
-        ref={spotLightRef2}
-      />
-      <spotLight
-        angle={angleToRadians(10)} 
-        // castShadow
-        decay={2}
-        distance={4}
-        penumbra={1}
-        position={[-4, 0, 0]}
-        power={10}
-        ref={spotLightRef3}
       /> */}
-      {/* <ambientLight intensity={0.2}/> */}
+
+      <ambientLight intensity={0.2}/>
     </Suspense>
   )
 })

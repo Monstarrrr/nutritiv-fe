@@ -1,15 +1,26 @@
 /** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import { motion } from 'framer-motion'
 import { forwardRef } from 'react'
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { Outlet, useLocation } from 'react-router-dom'
-import { Footer } from '../Footer/Footer'
 import { tokens } from '../Helpers/styleTokens'
 import { closeMobileNavMenu } from '../Redux/reducers/modals'
 import CanvasDefaultList from './3D/CanvasDefaultList'
+import { Footer } from './Footer/Footer'
 import Navbar from './Header/Navbar'
+
+export const HoverableLinks = css`
+  color: ${tokens.color.accentStrong};
+  text-decoration: none;
+  transition: all ease .2s;
+  &:hover {
+    transition: all ease .2s;
+    opacity: 0.65;
+  }
+`
 
 const Pages = styled(({ homepage, minimized, ...props }) => <motion.div {...props} />)`
   background-size: 100% 100%;

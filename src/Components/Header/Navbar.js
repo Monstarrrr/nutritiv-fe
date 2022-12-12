@@ -104,7 +104,7 @@ const Nav = styled(motion.nav)`
     }
   };
 `
-const LogoLink = styled(Link)`
+export const LogoLink = styled(Link)`
   pointer-events: ${props => 
     props.active && `none`
   };
@@ -203,9 +203,9 @@ const MobileSide = styled.div`
   }
 `
 
-const navLinksItems = [
+export const navLinksItems = [
   {link: "/welcome", label: "Home", delay: 0},
-  {link: "/team", label: "The Team", delay: 0},
+  {link: "/team", label: "Nutriteam", delay: 0},
   {link: "/shop", label: "Shop", delay: 0},
 ]
 

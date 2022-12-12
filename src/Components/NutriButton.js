@@ -18,12 +18,13 @@ const waveAnimation = keyframes`
 export const NutriButton = React.memo(function NutriButton(props) {
   const navigate = useNavigate();
   // type:      'filled'  | none
-  // rounded:   any       | none
+  // rounded:   integer   | none
   // disabled:  true      | [false]
   // size:      'small'   | none
   // accent:    'confirm' | 'info' | 'warning' | 'error' | none
+  // icon:      '1'       | none
   // wave:      '1'       | none
-  // to:        any
+  // to:        link
   // ...props:  (style, onClick, onMouseEnter...)
   
   const handleClick = () => {

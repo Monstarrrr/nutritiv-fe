@@ -16,7 +16,6 @@ import { Cart } from './Components/Payment/Cart';
 import Homepage from './Components/Homepage/Homepage';
 import PageNotFound from './Components/PageNotFound/PageNotFound';
 import ChatConnection from './Components/Chat/ChatConnection';
-import { AnimatePresence } from 'framer-motion';
 import { ForgotPassword } from './Components/Authentication/ForgotPassword';
 import { ForgotTFA } from './Components/Authentication/ForgotTFA';
 import { ResetPassword } from './Components/Authentication/ResetPassword';
@@ -26,40 +25,60 @@ import { Global, css } from '@emotion/react';
 import './App.scss';
 import { tokens } from './Helpers/styleTokens';
 import { PageContainer } from './Components/PageContainer';
-import AboutUs from './Components/AboutUs/AboutUs';
+import Nutriteam from './Components/Nutriteam/Nutriteam';
 import { NavbarMenu } from './Components/Header/NavbarMenu';
 import PagesWrapper from './Components/PagesWrapper';
 import { GradientBackground } from './Components/GradientBackground';
 import useRefs from 'react-use-refs';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { Environment, OrbitControls, PerspectiveCamera, Plane, Preload, 
+import { Canvas } from '@react-three/fiber';
+import { OrbitControls, PerspectiveCamera, Preload, 
   // View 
 } from '@react-three/drei';
 import { View } from './Components/View';
 import { Scene } from './Components/3D/Scene';
 import angleToRadians from './Helpers/angleToRadians';
+import { proxy, useSnapshot } from 'valtio';
 
 // init stripe
 const stripePromise = loadStripe(
   process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY
 );
 
+// 3D-models state
+
+
 function App() {
   // 3D
+  // const snap = useSnapshot(modelsState);
+  // console.log('# snap :', snap)
   const orbitControlsRef = useRef();
   const [
     canvasWrapperRef, 
-    gummyPiViewHomepage, gummyPiView, gummyFolderView, capsuleWaterViewHomepage, capsuleWaterView
+    gummyAbsoriteView, gummyAmethystExtractView, gummyBaguettoidsView, gummyBicepstineView, gummyJumpamineView, gummyLumositeView, gummyMagmaliteView, gummyNodemodulesView, gummyNotavirusiteView, gummyNucleateView, gummySerylView, gummySolvalitisView, gummySolvalitisViewHomepage, gummyTitaniumView, gummyTricepstineView, gummyWolveriteView, capsuleSolvalitisView, capsuleWaterViewHomepage, capsuleWaterView
   ] = useRefs();
   const canvasRefs = { 
-    gummyPiViewHomepage, gummyPiView, gummyFolderView, capsuleWaterViewHomepage, capsuleWaterView
+    gummyAbsoriteView, gummyAmethystExtractView, gummyBaguettoidsView, gummyBicepstineView, gummyJumpamineView, gummyLumositeView, gummyMagmaliteView, gummyNodemodulesView, gummyNotavirusiteView, gummyNucleateView, gummySerylView, gummySolvalitisView, gummySolvalitisViewHomepage, gummyTitaniumView, gummyTricepstineView, gummyWolveriteView, capsuleSolvalitisView, capsuleWaterViewHomepage, capsuleWaterView
   };
   const viewsList = [
-    { gummyPiViewHomepage, type: "gummy", homepageCard: true }, 
-    { gummyPiView, type: "gummy" }, 
-    { gummyFolderView, type: "gummy" },
-    { capsuleWaterViewHomepage, type: "capsule", homepageCard: true },
-    { capsuleWaterView, type: "capsule" }
+    { gummyAbsoriteView,                  name: "absorite",                  type: "gummyMold", scale: [23, 23, 23] },
+    { gummyAmethystExtractView,           name: "amethystExtract",           type: "gummyMold", scale: [16, 16, 16] },
+    { gummyBaguettoidsView,               name: "baguettoids",               type: "gummyMold", scale: [20, 20, 20] },
+    { gummyBicepstineView,                name: "bicepstine",                type: "gummyMold", scale: 0.45 },
+    { gummyJumpamineView,                 name: "jumpamine",                 type: "gummyMold", scale: 0.25,            rotation: [0, angleToRadians(90), angleToRadians(90)]},
+    { gummyLumositeView,                  name: "lumosite",                  type: "gummyMold", scale: 50,              rotation: [0, 0, 0] },
+    // { gummyMagmaliteView,                 name: "magmalite",                 type: "gummyMold", scale: 50 },
+    { gummyNodemodulesView,               name: "nodeModules",               type: "gummyMold", scale: 60 },
+    { gummyNotavirusiteView,              name: "notavirusite",              type: "gummyMold", scale: 1.2,              rotation: [0, 0, 0] },
+    { gummyNucleateView,                  name: "nucleate",                  type: "gummyMold", scale: 50 },
+    { gummySerylView,                     name: "serylanyponytailanyserine", type: "gummyMold", scale: 12 },
+    { gummySolvalitisViewHomepage,        name: "solvalitis",                type: "gummyBlob", homepageCard: true }, 
+    { gummySolvalitisView,                name: "solvalitis",                type: "gummyBlob" }, 
+    { gummyTitaniumView,                  name: "titanium",                  type: "gummyMold", scale: 12 },
+    { gummyTricepstineView,               name: "tricepstine",               type: "gummyMold", scale: 0.45 },
+    { gummyWolveriteView,                 name: "wolverite",                 type: "gummyMold", scale: 16 },
+    { capsuleWaterView,                   name: "liquate",                   type: "capsule" },
+    { capsuleSolvalitisView,              name: "solvalitis",                type: "capsule" },
+    { capsuleWaterViewHomepage,           name: "liquate",                   type: "capsule",   homepageCard: true },
   ];
   
   const [gettingUserInfo, setGettingUserInfo] = useState(false);
@@ -75,7 +94,7 @@ function App() {
   const oAuthUsername = searchParams.get('username');
   const oAuthAccessToken = searchParams.get('oAuthToken');
   const registrationToken = searchParams.get('verificationToken');
-
+  
   useEffect(() => {
     // App titles
     const titleWithoutSpecials = location.pathname.replace(/[^a-zA-Z ]/g, "");
@@ -242,17 +261,45 @@ function App() {
               css`
                 * {
                   max-width: ${tokens.maxWidth.xl};
+                  scrollbar-width: thin;
+                  scrollbar-color: ${tokens.color.accentStrong} transparent;
+                  &::selection {
+                    color: ${tokens.color.contrastDark};
+                    background-color: ${tokens.color.accentStrong};
+                  }
+                  /* Scrollbar on Chrome, Edge, and Safari */
+                  &::-webkit-scrollbar {
+                    height: 1px;
+                    width: 8px;
+                  }
+                  
+                  &::-webkit-scrollbar-track {
+                    background: rgba(0, 0, 0, 0);
+                  }
+                  
+                  &::-webkit-scrollbar-thumb {
+                    background-color: ${tokens.color.accentStrong};
+                    border-radius: 10px;
+                  }
                 }
                 body {
                   background: black;
                   color: ${tokens.color.contrastLight};
-                  font-family: 'Roboto', sans-serif;
+                  font-family: 'Jost', sans-serif;
                   position: relative;
+                  height: 100%;
+                }
+                h1, h2, h3, h4, h5, h6 {
+                  font-family: 'Red Hat Display', sans-serif;
                 }
                 html, body, 
                 .iceberg-container, #iceberg-video, #iceberg-image,
                 #root, #gradient-background {
                   max-width: none;
+                }
+                body { // Prevents scrollbar from pushing content
+                  overflow-x: hidden;
+                  width: 100vw; 
                 }
                 .canvas, .canvas > div, canvas {
                   max-width: none;
@@ -286,96 +333,103 @@ function App() {
           />
           <NavbarMenu open={mobileNavMenu} />
             <Suspense fallback={null}>
-              <AnimatePresence exitBeforeEnter>
-                <Routes
-                  location={location} 
-                  key={location.pathname}
-                >
-                  <Route path="" element={
-                    <PagesWrapper ref={canvasRefs} minimized={mobileNavMenu}/>
+              <Routes
+                location={location} 
+                key={location.pathname}
+              >
+                <Route path="" element={
+                  <PagesWrapper ref={canvasRefs} minimized={mobileNavMenu}/>
+                }>
+                  {/* PUBLIC */}
+                  <Route
+                    path="*"
+                    element={<Navigate to="/page-not-found" replace/>}
+                  />
+                  <Route
+                    index
+                    path="/welcome"
+                    element={<Homepage ref={canvasRefs} />}
+                  />
+                  <Route path="/team" element={
+                    <PageContainer><Nutriteam ref={canvasRefs}/></PageContainer>
+                  }/>
+                  <Route path="/shop" element={
+                    <PageContainer><Shop ref={canvasRefs}/></PageContainer>
                   }>
-                    {/* PUBLIC */}
-                    <Route
-                      path="*"
-                      element={<Navigate to="/page-not-found" replace/>}
-                    />
-                    <Route
-                      index
-                      path="/welcome"
-                      element={<Homepage ref={canvasRefs} />}
-                    />
-                    <Route path="/team" element={
-                      <PageContainer><AboutUs ref={canvasRefs}/></PageContainer>
-                    }/>
-                    <Route path="/shop" element={
-                      <PageContainer><Shop ref={canvasRefs}/></PageContainer>
-                    }/>
-                    <Route path="/product">
-                      <Route path=":productTitle" element={
-                        <PageContainer><ProductPage ref={canvasRefs}/></PageContainer>
-                      }/>
-                    </Route>
-                    <Route path="/chat" element={
-                      <PageContainer><ChatConnection ref={canvasRefs}/></PageContainer>
-                    }/> 
-                    <Route path="/releases" element={
-                      <PageContainer><ReleaseNotes ref={canvasRefs}/></PageContainer>
-                    }/>
-                    <Route path="/cancel" element={
-                      <PageContainer><CheckoutCancel ref={canvasRefs}/></PageContainer>
-                    }/>
-                    <Route path="/success" element={
-                      <PageContainer><CheckoutSuccess ref={canvasRefs}/></PageContainer>
-                    }/>
-                    <Route path="/page-not-found" element={
-                      <PageContainer><PageNotFound ref={canvasRefs}/></PageContainer>
-                    }/>
-                    <Route
-                      path="/"
-                      element={<Navigate to="/welcome" replace/>}
-                    />
-                    {/* PRIVATE */}
-                    {/* RESTRICTED - USER */}
-                    <Route element={<Restricted routeType="user" />}>
-                      <Route path="/profile" element={
-                        <PageContainer><Profile ref={canvasRefs}/></PageContainer>
-                      }/>
-                      <Route path="/cart" element={
-                        <PageContainer><Cart ref={canvasRefs}/></PageContainer>
-                      }/>
-                    </Route>
-                    {/* RESTRICTED - GUEST */}
-                    <Route element={<Restricted routeType="guest" />}>
-                      <Route path="/login" element={
-                        <PageContainer><Login ref={canvasRefs}/></PageContainer>
-                      }/>
-                      <Route path="/register" element={
-                        <PageContainer><Register ref={canvasRefs}/></PageContainer>
-                      }/>
-                      <Route path="/forgot-password" element={
-                        <PageContainer><ForgotPassword ref={canvasRefs}/></PageContainer>
-                      }/>
-                      <Route path="/reset-password" element={
-                        <PageContainer><ResetPassword ref={canvasRefs}/></PageContainer>
-                      }/>
-                      <Route path="/forgot-2FA" element={
-                        <PageContainer><ForgotTFA ref={canvasRefs}/></PageContainer>
-                      }/>
-                    </Route>
+                    
                   </Route>
-                </Routes>
-              </AnimatePresence>
+                  <Route path=":productTitle" element={
+                    <PageContainer><ProductPage ref={canvasRefs}/></PageContainer>
+                  }/>
+                  <Route path="/chat" element={
+                    <PageContainer><ChatConnection ref={canvasRefs}/></PageContainer>
+                  }/> 
+                  <Route path="/releases" element={
+                    <PageContainer><ReleaseNotes ref={canvasRefs}/></PageContainer>
+                  }/>
+                  <Route path="/cancel" element={
+                    <PageContainer><CheckoutCancel ref={canvasRefs}/></PageContainer>
+                  }/>
+                  <Route path="/success" element={
+                    <PageContainer><CheckoutSuccess ref={canvasRefs}/></PageContainer>
+                  }/>
+                  <Route path="/page-not-found" element={
+                    <PageContainer><PageNotFound ref={canvasRefs}/></PageContainer>
+                  }/>
+                  <Route
+                    path="/"
+                    element={<Navigate to="/welcome" replace/>}
+                  />
+                  {/* PRIVATE */}
+                  {/* RESTRICTED - USER */}
+                  <Route element={<Restricted routeType="user" />}>
+                    <Route path="/profile" element={
+                      <PageContainer><Profile ref={canvasRefs}/></PageContainer>
+                    }/>
+                    <Route path="/cart" element={
+                      <PageContainer><Cart ref={canvasRefs}/></PageContainer>
+                    }/>
+                  </Route>
+                  {/* RESTRICTED - GUEST */}
+                  <Route element={<Restricted routeType="guest" />}>
+                    <Route path="/login" element={
+                      <PageContainer><Login ref={canvasRefs}/></PageContainer>
+                    }/>
+                    <Route path="/register" element={
+                      <PageContainer><Register ref={canvasRefs}/></PageContainer>
+                    }/>
+                    <Route path="/forgot-password" element={
+                      <PageContainer><ForgotPassword ref={canvasRefs}/></PageContainer>
+                    }/>
+                    <Route path="/reset-password" element={
+                      <PageContainer><ResetPassword ref={canvasRefs}/></PageContainer>
+                    }/>
+                    <Route path="/forgot-2FA" element={
+                      <PageContainer><ForgotTFA ref={canvasRefs}/></PageContainer>
+                    }/>
+                  </Route>
+                </Route>
+              </Routes>
               <Canvas
                 onCreated={(state) =>
                   state.events.connect(canvasWrapperRef.current)
                 }
                 className="canvas"
               >
-                {/* {viewsList.map((view, i) => (
-                  <View key={i} track={Object.values(view)[0]} update={location}>
+                {viewsList.map((view, i) => (
+                  <View 
+                    index={i} 
+                    key={i}
+                    track={Object.values(view)[0]} 
+                    update={location}
+                  >
                     <Scene
-                      type={view.type}
+                      color={view.color}
                       homepageCard={view.homepageCard}
+                      rotation={view.rotation}
+                      scale={view.scale}
+                      supermentName={`${view.type}-${view.name}`}
+                      type={view.type}
                     />
                     <PerspectiveCamera 
                       makeDefault
@@ -385,40 +439,34 @@ function App() {
                     <OrbitControls
                       autoRotate
                       autoRotateSpeed={2}
-                      enablePan={false}
-                      enableZoom
-                      minDistance={5.65}
-                      maxDistance={5.65}
-                      minPolarAngle={angleToRadians(70)}
-                      maxPolarAngle={angleToRadians(100)}
+                      enablePan={true}
+                      // enableZoom={view.homepageCard ? false : true}
+                      enableZoom={true}
+                      minDistance={
+                        view.type === "capsule" ? 3.2 : 7
+                      }
+                      maxDistance={
+                        view.homepageCard ? (
+                          view.type === "capsule" ? 2.65 : 4
+                        ) : (
+                          view.type === "capsule" ? 4 : 8.5
+                        )
+                      }
+                      minPolarAngle={
+                        view.homepageCard ? (
+                          angleToRadians(70)
+                        ) : view.type === "capsule" ? angleToRadians(70) : angleToRadians(0)
+                      }
+                      maxPolarAngle={
+                        view.homepageCard ? (
+                          angleToRadians(70)
+                        ) : view.type === "capsule" ? angleToRadians(110) : angleToRadians(360)
+                      }
                       makeDefault
                       ref={orbitControlsRef}
                     />
                   </View>
-                ))} */}
-               
-                <View track={gummyPiViewHomepage} update={location}>
-                  <Scene
-                    type="gummy"
-                  />
-                  <PerspectiveCamera 
-                    makeDefault 
-                    fov={40}
-                    position={[9, 1, 0]} // temp 
-                  />
-                  <OrbitControls
-                    autoRotate
-                    autoRotateSpeed={2}
-                    enablePan={false}
-                    enableZoom
-                    minDistance={7}
-                    maxDistance={7}
-                    minPolarAngle={angleToRadians(70)}
-                    maxPolarAngle={angleToRadians(100)}
-                    makeDefault
-                    ref={orbitControlsRef}
-                  />
-                </View>
+                ))}
                 <Preload all />
               </Canvas>
             </Suspense>

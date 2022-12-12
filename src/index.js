@@ -2,7 +2,7 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
 
-import { createStore } from '@reduxjs/toolkit';
+import { legacy_createStore as createStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import entities from './Redux/config/entities';
