@@ -53,7 +53,7 @@ const SwitchWrapper = styled.div`
     width: fit-content;
   }
 `
-const ShapeContainer = styled.li`
+export const ShapeContainer = styled.li`
   align-items: center;
   cursor: pointer;
   display: flex;

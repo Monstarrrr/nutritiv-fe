@@ -9,6 +9,32 @@ import nutritivApi, { s3URL } from '../../Api/nutritivApi';
 import { updateUserCartQuantity } from '../../Redux/reducers/user';
 import { motion } from 'framer-motion';
 import styled from '@emotion/styled';
+import { tokens } from '../../Helpers/styleTokens';
+import { ShapeContainer } from '../Homepage/ShapesSection';
+
+const Container = styled.div`
+  padding: 0 ${tokens.spacing.xl};
+`
+
+const Title = styled.h1`
+  font-size: 54px;
+`
+
+const SectionContainer = styled.div`
+  box-sizing: border-box;
+  margin: ${tokens.spacing.max} auto;
+`
+
+const Subtitle = styled.h3`
+  color: ${tokens.color.contrastLightWeak};
+  font-size: ${tokens.font.fontSize.sm};
+  text-transform: uppercase;
+`
+
+const Description = styled.span`
+  color: ${tokens.color.contrastLightWeak};
+  font-size: ${tokens.font.fontSize.md};
+`
 
 const GummyModel = styled.div`
   display: ${props => props.supermentName === props.title ? (props.gummy ? "inline-block" : "none") : ("none")};
@@ -21,6 +47,8 @@ const CapsuleModel = styled.div`
   width: 270px;
 `
 
+const shapes = ["capsule", "gummy"];
+
 const ProductPage = forwardRef((props, ref) => {
   const loggedIn = useSelector(state => state.user.loggedIn)
   const dispatch = useDispatch();
@@ -31,6 +59,9 @@ const ProductPage = forwardRef((props, ref) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [shapeQuery, setShapeQuery] = useState(searchParams.get('shape') || 'gummy');
   
+  const [focusedShape, setFocusedShape] = useState(null);
+  const [selectedShape, setSelectedShape] = useState(shapes[0]);
+
   const [product, setProduct] = useState({
     productItems: []
   })
@@ -47,7 +78,7 @@ const ProductPage = forwardRef((props, ref) => {
   const [loadingAdding, setLoadingAdding] = useState(false)
   const [successAddedToCart, setSuccessAddedToCart] = useState(false)
   const [errorOutOfStock, setErrorOutOfStock] = useState(false)
-  
+
   // HANDLE ADD TO CART
   const handleAddToCart = async (loc) => {
     const selection = loc?.cartSelection ? loc.cartSelection : cartSelection
@@ -186,10 +217,95 @@ const ProductPage = forwardRef((props, ref) => {
   }
 
   return (
-    <div>
-      <h2>
-        { product.title }
-      </h2>
+    <Container>
+      <Title>
+        {product.title}
+      </Title>
+      <SectionContainer>
+        <Subtitle>
+          Description
+        </Subtitle>
+        <Description>
+          {product.desc}
+        </Description>
+      </SectionContainer>
+      <SectionContainer>
+        <Subtitle>
+          Shape
+        </Subtitle>
+          <button 
+            disabled={location.pathname === '/Magmalite' || location.pathname === '/Liquate'}
+            onClick={() => handleSwitchShape("gummy")}
+          >
+            Gummy
+          </button>
+          <button onClick={() => handleSwitchShape("capsule")}>
+            Capsule
+          </button>
+
+          {/* {shapes && shapes.map(shape => (
+            <ShapeContainer
+              key={shape}
+              onClick={() => handleSelectedShape(shape)}
+              onMouseEnter={() => setFocusedShape(shape.name)}
+              onMouseLeave={() => setFocusedShape("")}
+            >
+              <ShapeIcon active={shape.name === selectedShape.name ? 1 : undefined}>
+                
+              </ShapeIcon>
+              {focusedShape === shape.name ? (
+                <AnimatePresence>
+                  <FocusedShape
+                    style={{
+                      bottom: 0,
+                      left: 0,
+                      position: "absolute",
+                      right: 0,
+                    }}
+                    transition={{
+                      layout: {
+                        duration: 0.2,
+                        ease: "easeOut",
+                      },
+                    }}
+                    layoutId="shape-focus"
+                  />
+                </AnimatePresence>) : null
+              }
+              {selectedShape.name === shape.name ? (
+                <AnimatePresence>
+                  <motion.div
+                    style={{
+                      background: tokens.color.accentStrong,
+                      borderRadius: tokens.borderRadius.lg,
+                      borderTopLeftRadius: isMobile ? (
+                        selectedShape.name === "Capsule" ? tokens.borderRadius.lg : 0
+                      ) : (
+                        tokens.borderRadius.lg
+                      ),
+                      borderTopRightRadius: isMobile ? (
+                        selectedShape.name === "Gummy" ? tokens.borderRadius.lg : 0
+                      ) : (
+                        tokens.borderRadius.lg
+                      ),
+                      bottom: 0,
+                      boxShadow: isMobile ? `0 0 8px -1px ${tokens.color.accentStrong}` : "none",
+                      height: "100%",
+                      left: 0,
+                      position: "absolute",
+                      right: 0,
+                      width: "100%",
+                      zIndex: 1,
+                    }}
+                    layoutId="shape-select"
+                  />
+                </AnimatePresence>) : null
+              }
+            </ShapeContainer>
+          ))} */}
+
+      </SectionContainer>
+      <br />
       {/* {
         product.imgs?.map((img, i) => (
           <img
@@ -305,15 +421,6 @@ const ProductPage = forwardRef((props, ref) => {
       {/* <pre>
         {product && JSON.stringify(product, null, 2)}
       </pre> */}
-      <button 
-        disabled={location.pathname === '/Magmalite' || location.pathname === '/Liquate'}
-        onClick={() => handleSwitchShape("gummy")}
-      >
-        gummy
-      </button>
-      <button onClick={() => handleSwitchShape("capsule")}>
-        capsule
-      </button>
       <div>
         {/* RADIO BUTTON */}
         <b>
@@ -392,7 +499,7 @@ const ProductPage = forwardRef((props, ref) => {
       {
         loadingAdding && <p>Adding {productTitle} to cart...</p>
       }
-    </div>
+    </Container>
   )
 });
 
