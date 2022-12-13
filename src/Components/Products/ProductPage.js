@@ -86,10 +86,8 @@ const ShapeIcon = styled.span`
 const LoadWrapper = styled.div`
   display: flex;
   flex-direction: row;
-  padding: ${tokens.spacing.lg} 0;
   position: relative;
   margin-right: 8px;
-  padding: 6px 12px;
   position: relative;
   transition: all ease .2s;
 `
@@ -498,12 +496,11 @@ const ProductPage = forwardRef((props, ref) => {
       {/* <pre>
         {product && JSON.stringify(product, null, 2)}
       </pre> */}
-      <div>
+      <SectionContainer>
         {/* RADIO BUTTON */}
-        <b>
-          Load:
-        </b>
-        <br />
+        <Subtitle>
+          Load
+        </Subtitle>
         <LoadWrapper>
           {product.productItems.map((item, i) => (
             <div 
@@ -539,7 +536,7 @@ const ProductPage = forwardRef((props, ref) => {
             </div>
           ))}
         </LoadWrapper>
-      </div>
+      </SectionContainer>
       {
         errorOutOfStock && <p style={{color: "red"}}>Not enough stock</p>
       }
