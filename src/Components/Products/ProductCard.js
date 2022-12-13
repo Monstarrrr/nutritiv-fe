@@ -102,11 +102,11 @@ const Description = styled.span`
   -webkit-box-orient: vertical;
 `
 
-const Tags = styled.div`
+export const Tags = styled.div`
   padding: ${tokens.spacing.md} 0 0;
   margin-top: ${tokens.spacing.md};
 `
-const Tag = styled.span`
+export const Tag = styled.span`
   padding: ${tokens.spacing.xs} ${tokens.spacing.md};
   background: ${tokens.color.semiTransparentLight};
   border-radius: ${tokens.borderRadius.max};

@@ -7,13 +7,18 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import nutritivApi, { s3URL } from '../../Api/nutritivApi';
 import { updateUserCartQuantity } from '../../Redux/reducers/user';
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import styled from '@emotion/styled';
-import { tokens } from '../../Helpers/styleTokens';
-import { ShapeContainer } from '../Homepage/ShapesSection';
+import { mediaQueries, mediaQuery, tokens } from '../../Helpers/styleTokens';
+import { ShapeContainer, ShapeLabel } from '../Homepage/ShapesSection';
+import { Tag, Tags } from './ProductCard';
+import { Icon } from '../Icons/Icon';
 
 const Container = styled.div`
   padding: 0 ${tokens.spacing.xl};
+  ${mediaQuery[3]} {
+    padding: 0;
+  }
 `
 
 const Title = styled.h1`
@@ -46,6 +51,37 @@ const CapsuleModel = styled.div`
   height: 300px;
   width: 270px;
 `
+const SwitchWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin: 0 10px;
+  ${mediaQuery[2]} {
+    align-items: center;
+    background: ${tokens.color.accentWeak};
+    border-radius: ${tokens.borderRadius.lg};
+    box-shadow: 0px 0px 10px 1px ${tokens.color.contrastDark};
+    justify-content: initial;
+    margin: 0;
+    padding: 4px;
+    width: fit-content;
+  }
+`
+const FocusedShape = styled(motion.div)`
+  background: ${tokens.color.primaryTransparent};
+  border-radius: ${tokens.borderRadius.lg};
+  height: 100%;
+  width: 100%;
+  z-index: 0;
+`
+const ShapeIcon = styled.span`
+  bottom: 0;
+  color: ${props => props.active ? tokens.color.contrastDark : tokens.color.contrastLight};
+  font-size: ${tokens.font.fontSize.xs};
+  font-weight: ${tokens.font.fontWeight.medium};
+  opacity: ${props => props.active ? 1 : 0.5};
+  right: 0;
+  z-index: 2;
+`
 
 const shapes = ["capsule", "gummy"];
 
@@ -58,13 +94,12 @@ const ProductPage = forwardRef((props, ref) => {
   
   const [searchParams, setSearchParams] = useSearchParams();
   const [shapeQuery, setShapeQuery] = useState(searchParams.get('shape') || 'gummy');
-  
   const [focusedShape, setFocusedShape] = useState(null);
-  const [selectedShape, setSelectedShape] = useState(shapes[0]);
 
   const [product, setProduct] = useState({
     productItems: []
   })
+  const [tags, setTags] = useState([])
   const [cartSelection, setCartSelection] = useState({
     // productId: "", <- Added at apiGetProductByTitle()
     load: 0,
@@ -144,6 +179,10 @@ const ProductPage = forwardRef((props, ref) => {
         if(isMounted){
           const fetchedProduct = data.Product.find(e => e.shape === shapeQuery) || data.Product[1];
           setProduct(fetchedProduct);
+          let newArr = fetchedProduct.categories.map(e => {
+            return e.charAt(0).toUpperCase() + e.slice(1).toLowerCase();
+          })
+          setTags(newArr);
           
           if(location.state?.productId){
             setCartSelection(location.state)
@@ -215,7 +254,6 @@ const ProductPage = forwardRef((props, ref) => {
     setShapeQuery(newShape)
     setSearchParams({ shape: newShape })
   }
-
   return (
     <Container>
       <Title>
@@ -231,9 +269,21 @@ const ProductPage = forwardRef((props, ref) => {
       </SectionContainer>
       <SectionContainer>
         <Subtitle>
+          Categories
+        </Subtitle>
+        <Tags>
+          {tags.map(tag => (
+            <Tag>
+              {tag}
+            </Tag>
+          ))}
+        </Tags>
+      </SectionContainer>
+      <SectionContainer>
+        <Subtitle>
           Shape
         </Subtitle>
-          <button 
+          {/* <button 
             disabled={location.pathname === '/Magmalite' || location.pathname === '/Liquate'}
             onClick={() => handleSwitchShape("gummy")}
           >
@@ -241,69 +291,68 @@ const ProductPage = forwardRef((props, ref) => {
           </button>
           <button onClick={() => handleSwitchShape("capsule")}>
             Capsule
-          </button>
-
-          {/* {shapes && shapes.map(shape => (
-            <ShapeContainer
-              key={shape}
-              onClick={() => handleSelectedShape(shape)}
-              onMouseEnter={() => setFocusedShape(shape.name)}
-              onMouseLeave={() => setFocusedShape("")}
-            >
-              <ShapeIcon active={shape.name === selectedShape.name ? 1 : undefined}>
-                
-              </ShapeIcon>
-              {focusedShape === shape.name ? (
-                <AnimatePresence>
-                  <FocusedShape
-                    style={{
-                      bottom: 0,
-                      left: 0,
-                      position: "absolute",
-                      right: 0,
-                    }}
-                    transition={{
-                      layout: {
-                        duration: 0.2,
-                        ease: "easeOut",
-                      },
-                    }}
-                    layoutId="shape-focus"
+          </button> */}
+          <SwitchWrapper>
+            {shapes && shapes.map(shape => (
+              <ShapeContainer
+                style={{
+                  maxHeight: "100px",
+                  padding: `${tokens.spacing.xs} ${tokens.spacing.lg}`,
+                }}
+                key={shape}
+                onClick={() => handleSwitchShape(shape)}
+                onMouseEnter={() => setFocusedShape(shape)}
+                onMouseLeave={() => setFocusedShape("")}
+              >
+                <ShapeIcon active={shape === shapeQuery ? 1 : undefined}>
+                  <Icon 
+                    name={shape} 
+                    color={shapeQuery === shape ? tokens.color.contrastDark : tokens.color.contrastLight}
+                    strokeWidth={2}
+                    height={"42px"}
+                    width={"42px"}
                   />
-                </AnimatePresence>) : null
-              }
-              {selectedShape.name === shape.name ? (
-                <AnimatePresence>
-                  <motion.div
-                    style={{
-                      background: tokens.color.accentStrong,
-                      borderRadius: tokens.borderRadius.lg,
-                      borderTopLeftRadius: isMobile ? (
-                        selectedShape.name === "Capsule" ? tokens.borderRadius.lg : 0
-                      ) : (
-                        tokens.borderRadius.lg
-                      ),
-                      borderTopRightRadius: isMobile ? (
-                        selectedShape.name === "Gummy" ? tokens.borderRadius.lg : 0
-                      ) : (
-                        tokens.borderRadius.lg
-                      ),
-                      bottom: 0,
-                      boxShadow: isMobile ? `0 0 8px -1px ${tokens.color.accentStrong}` : "none",
-                      height: "100%",
-                      left: 0,
-                      position: "absolute",
-                      right: 0,
-                      width: "100%",
-                      zIndex: 1,
-                    }}
-                    layoutId="shape-select"
-                  />
-                </AnimatePresence>) : null
-              }
-            </ShapeContainer>
-          ))} */}
-
+                </ShapeIcon>
+                {focusedShape === shape ? (
+                  <AnimatePresence>
+                    <FocusedShape
+                      style={{
+                        bottom: 0,
+                        left: 0,
+                        position: "absolute",
+                        right: 0,
+                      }}
+                      transition={{
+                        layout: {
+                          duration: 0.2,
+                          ease: "easeOut",
+                        },
+                      }}
+                      layoutId="shape-focus"
+                    />
+                  </AnimatePresence>) : null
+                }
+                {shapeQuery === shape ? (
+                  <AnimatePresence>
+                    <motion.div
+                      style={{
+                        background: tokens.color.accentStrong,
+                        borderRadius: tokens.borderRadius.lg,
+                        bottom: 0,
+                        height: "100%",
+                        left: 0,
+                        position: "absolute",
+                        right: 0,
+                        width: "100%",
+                        zIndex: 1,
+                      }}
+                      layoutId="shape-select"
+                    />
+                  </AnimatePresence>) : null
+                }
+              </ShapeContainer>
+            ))}
+          </SwitchWrapper>
       </SectionContainer>
       <br />
       {/* {
