@@ -6,7 +6,7 @@
     "@emotion/react": "^11.9.3",
     "@emotion/styled": "^11.9.3",
     "@mui/material": "^5.4.4",
-    "@react-three/drei": "^9.36.0",
+    "@react-three/drei": "^9.40.0",
     "@react-three/fiber": "^8.7.3",
     "@reduxjs/toolkit": "^1.8.6",
     "@stripe/react-stripe-js": "^1.7.0",
