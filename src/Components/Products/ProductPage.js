@@ -83,6 +83,33 @@ const ShapeIcon = styled.span`
   z-index: 2;
 `
 
+const LoadWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  padding: ${tokens.spacing.lg} 0;
+  position: relative;
+  margin-right: 8px;
+  padding: 6px 12px;
+  position: relative;
+  transition: all ease .2s;
+`
+const LoadInput = styled.input`
+  cursor: pointer;
+  display: inline-block;
+  opacity: 0;
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+`
+const LoadLabel = styled.label`
+  background: ${props => props.isactive ? tokens.color.accentStrong : tokens.color.accentWeak};
+  color: ${props => props.isactive ? tokens.color.contrastDark : tokens.color.contrastLight};
+  padding: ${tokens.spacing.md} ${tokens.spacing.lg};
+  transition: all ease .2s;
+`
+
 const shapes = ["capsule", "gummy"];
 
 const ProductPage = forwardRef((props, ref) => {
@@ -95,7 +122,7 @@ const ProductPage = forwardRef((props, ref) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [shapeQuery, setShapeQuery] = useState(searchParams.get('shape') || 'gummy');
   const [focusedShape, setFocusedShape] = useState(null);
-
+  
   const [product, setProduct] = useState({
     productItems: []
   })
@@ -306,11 +333,12 @@ const ProductPage = forwardRef((props, ref) => {
               >
                 <ShapeIcon active={shape === shapeQuery ? 1 : undefined}>
                   <Icon 
-                    name={shape} 
+                    name={shape}
                     color={shapeQuery === shape ? tokens.color.contrastDark : tokens.color.contrastLight}
                     strokeWidth={2}
-                    height={"42px"}
-                    width={"42px"}
+                    filled
+                    height={"24px"}
+                    width={"24px"}
                   />
                 </ShapeIcon>
                 {focusedShape === shape ? (
@@ -476,10 +504,16 @@ const ProductPage = forwardRef((props, ref) => {
           Load:
         </b>
         <br />
-        {
-          product.productItems.map((item, i) => (
-            <React.Fragment key={i}>
-              <input
+        <LoadWrapper>
+          {product.productItems.map((item, i) => (
+            <div 
+              style={{
+                padding: `${tokens.spacing.md} 0`,
+                position: "relative"
+              }}
+              key={i}
+            >
+              <LoadInput
                 checked={cartSelection.load === item.load}
                 id={`${product._id}${item.load}`} 
                 name={product._id}
@@ -489,13 +523,22 @@ const ProductPage = forwardRef((props, ref) => {
                 })}
                 type="radio" 
                 value={item.load}
-              />
-              <label htmlFor={i}>
+                />
+              <LoadLabel 
+                htmlFor={i}
+                style={{
+                  borderBottomRightRadius: i === product.productItems.length-1 ? tokens.borderRadius.md : 0,
+                  borderTopRightRadius: i === product.productItems.length-1 ? tokens.borderRadius.md : 0,
+                  borderBottomLeftRadius: i === 0 ? tokens.borderRadius.md : 0,
+                  borderTopLeftRadius: i === 0 ? tokens.borderRadius.md : 0,
+                }}
+                isactive={item.load === cartSelection.load}
+              >
                 {item.load}
-              </label>
-            </React.Fragment>
-          ))
-        }
+              </LoadLabel>
+            </div>
+          ))}
+        </LoadWrapper>
       </div>
       {
         errorOutOfStock && <p style={{color: "red"}}>Not enough stock</p>
