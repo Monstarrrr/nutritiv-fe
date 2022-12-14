@@ -1,3 +1,4 @@
+/** @jsxImportSource @emotion/react */
 import React, {
   forwardRef,
   useEffect, 
@@ -9,13 +10,16 @@ import nutritivApi, { s3URL } from '../../Api/nutritivApi';
 import { updateUserCartQuantity } from '../../Redux/reducers/user';
 import { AnimatePresence, motion } from 'framer-motion';
 import styled from '@emotion/styled';
-import { mediaQueries, mediaQuery, tokens } from '../../Helpers/styleTokens';
+import { mediaQueries, mediaQuery, selectStyles, tokens } from '../../Helpers/styleTokens';
 import { ShapeContainer, ShapeLabel } from '../Homepage/ShapesSection';
 import { Tag, Tags } from './ProductCard';
 import { Icon } from '../Icons/Icon';
+import { css } from '@emotion/react'
+import Select from 'react-select';
 
 const Container = styled.div`
   padding: 0 ${tokens.spacing.xl};
+  margin-bottom: 36px;
   ${mediaQuery[3]} {
     padding: 0;
   }
@@ -100,15 +104,22 @@ const LoadInput = styled.input`
   top: 0;
   height: 100%;
   width: 100%;
+  z-index: 1;
 `
 const LoadLabel = styled.label`
   background: ${props => props.isactive ? tokens.color.accentStrong : tokens.color.accentWeak};
   color: ${props => props.isactive ? tokens.color.contrastDark : tokens.color.contrastLight};
+  opacity: ${props => props.ishovered ? (props.isactive ? 1 : 0.8) : 1};
   padding: ${tokens.spacing.md} ${tokens.spacing.lg};
   transition: all ease .2s;
 `
+const SelectWrapper = styled.div`
+  display: inline-block;
+  font-size: ${tokens.font.fontSize.md};
+  position: relative;
+`
 
-const shapes = ["capsule", "gummy"];
+const shapes = ["gummy", "capsule"];
 
 const ProductPage = forwardRef((props, ref) => {
   const loggedIn = useSelector(state => state.user.loggedIn)
@@ -120,6 +131,7 @@ const ProductPage = forwardRef((props, ref) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [shapeQuery, setShapeQuery] = useState(searchParams.get('shape') || 'gummy');
   const [focusedShape, setFocusedShape] = useState(null);
+  const [hoveredLoad, setHoveredLoad] = useState("");
   
   const [product, setProduct] = useState({
     productItems: []
@@ -134,6 +146,7 @@ const ProductPage = forwardRef((props, ref) => {
   const [countInStock, setCountInStock] = useState(0)
   const [availableQuantity, setAvailableQuantity] = useState(0)
   const [updateStock, setUpdateStock] = useState(false)
+  const [loadOptions, setLoadOptions] = useState([{value: 0, label: 0}])
   
   const [loadingAdding, setLoadingAdding] = useState(false)
   const [successAddedToCart, setSuccessAddedToCart] = useState(false)
@@ -162,7 +175,6 @@ const ProductPage = forwardRef((props, ref) => {
           price: 0,
           quantity: 0,
         }))
-        setAvailableQuantity(0)
       } catch (err) {
         setLoadingAdding(false)
         console.log('# apiAddToCart err :', err)
@@ -202,7 +214,7 @@ const ProductPage = forwardRef((props, ref) => {
           `/products/findByTitle/${productTitle}`
         )
         if(isMounted){
-          const fetchedProduct = data.Product.find(e => e.shape === shapeQuery) || data.Product[1];
+          const fetchedProduct = data.Product.find(e => e.shape === shapeQuery) || data.Product[0];
           setProduct(fetchedProduct);
           let newArr = fetchedProduct.categories.map(e => {
             return e.charAt(0).toUpperCase() + e.slice(1).toLowerCase();
@@ -214,7 +226,10 @@ const ProductPage = forwardRef((props, ref) => {
           } else {
             setCartSelection(prevState => ({
               ...prevState,
-              productId: fetchedProduct._id
+              productId: fetchedProduct._id,
+              load: fetchedProduct.productItems[0].load,
+              price: fetchedProduct.productItems[0].price.value,
+              quantity: 1,
             }))
           }
         }
@@ -266,7 +281,8 @@ const ProductPage = forwardRef((props, ref) => {
   }, [updateStock, product._id]);
   
   // HANDLE QUANTITY
-  const handleSelectedQuantity = (quantity) => {
+  const handleSelectedQuantity = (e) => {
+    let quantity = e.value
     setCartSelection(prevState => ({...prevState, quantity}))
   }
   useEffect(() => {
@@ -274,11 +290,21 @@ const ProductPage = forwardRef((props, ref) => {
       setAvailableQuantity(Math.floor(countInStock / cartSelection.load))
     }
   }, [cartSelection.load, countInStock]);
-  
+  useEffect(() => {
+    console.log('# availableQuantity :', availableQuantity)
+    let quantityArr = Array.from({length: availableQuantity}, (_, i) => i + 1)
+    console.log('# quantityArr :', quantityArr)
+    let reactSelectOptions = quantityArr.map(el => (
+      { value: el, label: el }
+    ));
+    setLoadOptions(reactSelectOptions);
+  }, [availableQuantity]);
+
   const handleSwitchShape = (newShape) => {
     setShapeQuery(newShape)
     setSearchParams({ shape: newShape })
   }
+
   return (
     <Container>
       <Title>
@@ -297,90 +323,14 @@ const ProductPage = forwardRef((props, ref) => {
           Categories
         </Subtitle>
         <Tags>
-          {tags.map(tag => (
-            <Tag>
+          {tags.map((tag, i) => (
+            <Tag key={i}>
               {tag}
             </Tag>
           ))}
         </Tags>
       </SectionContainer>
-      <SectionContainer>
-        <Subtitle>
-          Shape
-        </Subtitle>
-          {/* <button 
-            disabled={location.pathname === '/Magmalite' || location.pathname === '/Liquate'}
-            onClick={() => handleSwitchShape("gummy")}
-          >
-            Gummy
-          </button>
-          <button onClick={() => handleSwitchShape("capsule")}>
-            Capsule
-          </button> */}
-          <SwitchWrapper>
-            {shapes && shapes.map(shape => (
-              <ShapeContainer
-                style={{
-                  maxHeight: "100px",
-                  padding: `${tokens.spacing.xs} ${tokens.spacing.lg}`,
-                }}
-                key={shape}
-                onClick={() => handleSwitchShape(shape)}
-                onMouseEnter={() => setFocusedShape(shape)}
-                onMouseLeave={() => setFocusedShape("")}
-              >
-                <ShapeIcon active={shape === shapeQuery ? 1 : undefined}>
-                  <Icon 
-                    name={shape}
-                    color={shapeQuery === shape ? tokens.color.contrastDark : tokens.color.contrastLight}
-                    strokeWidth={2}
-                    filled
-                    height={"24px"}
-                    width={"24px"}
-                  />
-                </ShapeIcon>
-                {focusedShape === shape ? (
-                  <AnimatePresence>
-                    <FocusedShape
-                      style={{
-                        bottom: 0,
-                        left: 0,
-                        position: "absolute",
-                        right: 0,
-                      }}
-                      transition={{
-                        layout: {
-                          duration: 0.2,
-                          ease: "easeOut",
-                        },
-                      }}
-                      layoutId="shape-focus"
-                    />
-                  </AnimatePresence>) : null
-                }
-                {shapeQuery === shape ? (
-                  <AnimatePresence>
-                    <motion.div
-                      style={{
-                        background: tokens.color.accentStrong,
-                        borderRadius: tokens.borderRadius.lg,
-                        bottom: 0,
-                        height: "100%",
-                        left: 0,
-                        position: "absolute",
-                        right: 0,
-                        width: "100%",
-                        zIndex: 1,
-                      }}
-                      layoutId="shape-select"
-                    />
-                  </AnimatePresence>) : null
-                }
-              </ShapeContainer>
-            ))}
-          </SwitchWrapper>
-      </SectionContainer>
-      <br />
+
       {/* {
         product.imgs?.map((img, i) => (
           <img
@@ -493,22 +443,98 @@ const ProductPage = forwardRef((props, ref) => {
         />
       </>
       
-      {/* <pre>
-        {product && JSON.stringify(product, null, 2)}
-      </pre> */}
       <SectionContainer>
-        {/* RADIO BUTTON */}
+        <Subtitle>
+          Shape
+        </Subtitle>
+          {/* <button 
+            disabled={location.pathname === '/Magmalite' || location.pathname === '/Liquate'}
+            onClick={() => handleSwitchShape("gummy")}
+          >
+            Gummy
+          </button>
+          <button onClick={() => handleSwitchShape("capsule")}>
+            Capsule
+          </button> */}
+          <SwitchWrapper>
+            {shapes && shapes.map(shape => (
+              <ShapeContainer
+                style={{
+                  maxHeight: "100px",
+                  padding: `${tokens.spacing.xs} ${tokens.spacing.lg}`,
+                }}
+                key={shape}
+                onClick={() => handleSwitchShape(shape)}
+                onMouseEnter={() => setFocusedShape(shape)}
+                onMouseLeave={() => setFocusedShape("")}
+              >
+                <ShapeIcon active={shape === shapeQuery ? 1 : undefined}>
+                  <Icon 
+                    name={shape}
+                    color={shapeQuery === shape ? tokens.color.contrastDark : tokens.color.contrastLight}
+                    strokeWidth={2}
+                    filled
+                    height={"24px"}
+                    width={"24px"}
+                  />
+                </ShapeIcon>
+                {focusedShape === shape ? (
+                  <AnimatePresence>
+                    <FocusedShape
+                      style={{
+                        bottom: 0,
+                        left: 0,
+                        position: "absolute",
+                        right: 0,
+                      }}
+                      transition={{
+                        layout: {
+                          duration: 0.2,
+                          ease: "easeOut",
+                        },
+                      }}
+                      layoutId="shape-focus"
+                    />
+                  </AnimatePresence>) : null
+                }
+                {shapeQuery === shape ? (
+                  <AnimatePresence>
+                    <motion.div
+                      style={{
+                        background: tokens.color.accentStrong,
+                        borderRadius: tokens.borderRadius.lg,
+                        bottom: 0,
+                        height: "100%",
+                        left: 0,
+                        position: "absolute",
+                        right: 0,
+                        width: "100%",
+                        zIndex: 1,
+                      }}
+                      layoutId="shape-select"
+                    />
+                  </AnimatePresence>) : null
+                }
+              </ShapeContainer>
+            ))}
+          </SwitchWrapper>
+      </SectionContainer>
+
+      <SectionContainer>
+        {/* LOAD (radio button) */}
         <Subtitle>
           Load
         </Subtitle>
         <LoadWrapper>
           {product.productItems.map((item, i) => (
             <div 
+              key={i}
+              onMouseEnter={() => setHoveredLoad(item.load)}
+              onMouseLeave={() => setHoveredLoad("")}
               style={{
                 padding: `${tokens.spacing.md} 0`,
                 position: "relative"
               }}
-              key={i}
             >
               <LoadInput
                 checked={cartSelection.load === item.load}
@@ -520,7 +546,7 @@ const ProductPage = forwardRef((props, ref) => {
                 })}
                 type="radio" 
                 value={item.load}
-                />
+              />
               <LoadLabel 
                 htmlFor={i}
                 style={{
@@ -530,45 +556,57 @@ const ProductPage = forwardRef((props, ref) => {
                   borderTopLeftRadius: i === 0 ? tokens.borderRadius.md : 0,
                 }}
                 isactive={item.load === cartSelection.load}
+                ishovered={item.load === hoveredLoad}
               >
                 {item.load}
               </LoadLabel>
             </div>
           ))}
         </LoadWrapper>
+        {
+          errorOutOfStock && <p style={{color: tokens.color.error}}>Out of stock</p>
+        }
       </SectionContainer>
-      {
-        errorOutOfStock && <p style={{color: "red"}}>Not enough stock</p>
-      }
-      <br />
-      {/* DROPDOWN */}
-      <b>
-        Quantity:
-      </b>
-      <br />
-      {
-        <select
-          disabled={!availableQuantity}
+      {/* Quantity (dropdown) */}
+      <Subtitle>
+        Quantity
+      </Subtitle>
+      <SelectWrapper>
+        {(cartSelection.productId && availableQuantity) ? (
+          <Select 
+          // components={{ IndicatorSeparator }}
+          defaultValue={{value: 1, label: 1}}
           id={product._id}
-          name="quantity" 
-          onChange={(e) => handleSelectedQuantity(e.target.value)}
-        >
-          {
-            (cartSelection.productId && availableQuantity) && (
-              [...Array(availableQuantity)].map((e, i) => (
-                <option 
-                  key={i}
-                  value={e}
-                >
-                  {i+1}
-                </option>
-              ))
-            )
-          }
-        </select>
-      }
-      <br />
-      <br />
+          name="quantity"
+          isDisabled={!availableQuantity}
+          isSearchable={false}
+          options={loadOptions}
+          onChange={(e) => handleSelectedQuantity(e)}
+          menuPlacement="auto"
+          styles={selectStyles}
+          />
+        ) : null}
+      </SelectWrapper>
+
+      {/* <select
+        disabled={!availableQuantity}
+        id={product._id}
+        name="quantity" 
+        onChange={(e) => handleSelectedQuantity(e.target.value)}
+      >
+        {
+          (cartSelection.productId && availableQuantity) && (
+            [...Array(availableQuantity)].map((e, i) => (
+              <option 
+                key={i}
+                value={e}
+              >
+                {i+1}
+              </option>
+            ))
+          )
+        }
+      </select> */}
       {/* BUTTON */}
       <button
         disabled={!cartSelection.quantity}

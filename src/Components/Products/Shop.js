@@ -7,7 +7,7 @@ import { AnimatePresence, LayoutGroup, motion } from 'framer-motion';
 import { forwardRef } from 'react';
 import { css } from '@emotion/react'
 import styled from '@emotion/styled';
-import { mediaQueries, mediaQuery, tokens } from '../../Helpers/styleTokens';
+import { mediaQueries, mediaQuery, selectStyles, tokens } from '../../Helpers/styleTokens';
 import { Icon } from '../Icons/Icon';
 import Select from 'react-select';
 
@@ -161,70 +161,6 @@ const PaginationLeftDiv = styled.div`
 // }
 
 const Shop = forwardRef((props, ref) => {
-  const selectStyles = {
-    singleValue: styles => ({
-      ...styles,
-      color: tokens.color.contrastLight,
-    }),
-    menu: styles => ({
-      ...styles,
-      backgroundColor: tokens.color.contrastLight,
-      width: "max-content",
-    }),
-    control: (styles, {data, isDisabled, isFocused, isSelected}) => ({ 
-      ...styles, 
-      backgroundColor: tokens.color.accentWeak,
-      border: 0,
-      borderBottom: `2px solid ${tokens.color.accentStrong}`,
-      borderRadius: tokens.borderRadius.md,
-      boxShadow: "none",
-      cursor: "pointer",
-      minHeight: 0,
-      opacity: isFocused ? 0.8 : 1,
-      transition: "all ease .2s",
-      "&:hover": {
-        opacity: 0.65,
-        transition: "all ease .2s",
-      }
-    }),
-    option: (styles, {data, isDisabled, isFocused, isSelected}) => ({
-      ...styles,
-      backgroundColor: isSelected ? tokens.color.contrastLightWeak : tokens.color.contrastLight,
-      borderRadius: "8px",
-      color: tokens.color.contrastDark,
-      cursor: "pointer",
-      fontStyle: data.defaultValue ? "italic" : "initial",
-      padding: tokens.spacing.sm,
-      paddingLeft: tokens.spacing.lg,
-      paddingRight: tokens.spacing.xl,
-      transition: "all ease .2s",
-      "&:hover": {
-        backgroundColor: tokens.color.secondaryTransparent,
-        transition: "all ease .2s",
-      }
-    }),
-    indicatorSeparator: styles => ({
-      ...styles,
-      width: 0,
-    }),
-    dropdownIndicator: styles => ({
-      ...styles,
-      color: tokens.color.accentStrong,
-      paddingLeft: 0,
-      "&:hover": {
-        color: tokens.color.accentStrong,
-        opacity: 0.8
-      }
-    }),
-    indicatorsContainer: styles => ({
-      alignItems: "center",
-      display: "flex",
-      height: "32px",
-      "> div": {
-        padding: "0 6px 0 0",
-      }
-    })
-  }
   const [allProducts, setAllProducts] = useState([])
   const [allFilteredProducts, setAllFilteredProducts] = useState([])
   const [productsToDisplay, setProductsToDisplay] = useState(null)

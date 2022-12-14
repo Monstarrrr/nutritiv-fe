@@ -31,9 +31,7 @@ import PagesWrapper from './Components/PagesWrapper';
 import { GradientBackground } from './Components/GradientBackground';
 import useRefs from 'react-use-refs';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, PerspectiveCamera, Preload, 
-  // View 
-} from '@react-three/drei';
+import { OrbitControls, PerspectiveCamera, Preload } from '@react-three/drei';
 import { View } from './Components/View';
 import { Scene } from './Components/3D/Scene';
 import angleToRadians from './Helpers/angleToRadians';
@@ -43,9 +41,6 @@ import { proxy, useSnapshot } from 'valtio';
 const stripePromise = loadStripe(
   process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY
 );
-
-// 3D-models state
-
 
 function App() {
   // 3D
