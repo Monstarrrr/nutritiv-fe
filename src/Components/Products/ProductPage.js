@@ -2,36 +2,45 @@
 import React, {
   forwardRef,
   useEffect, 
+  useRef, 
   useState 
 } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom'
-import nutritivApi, { s3URL } from '../../Api/nutritivApi';
+import nutritivApi from '../../Api/nutritivApi';
+import { css } from '@emotion/react'
 import { updateUserCartQuantity } from '../../Redux/reducers/user';
 import { AnimatePresence, motion } from 'framer-motion';
 import styled from '@emotion/styled';
-import { mediaQueries, mediaQuery, selectStyles, tokens } from '../../Helpers/styleTokens';
-import { ShapeContainer, ShapeLabel } from '../Homepage/ShapesSection';
+import { mediaQuery, selectStyles, tokens } from '../../Helpers/styleTokens';
+import { ShapeContainer } from '../Homepage/ShapesSection';
 import { Tag, Tags } from './ProductCard';
 import { Icon } from '../Icons/Icon';
-import { css } from '@emotion/react'
 import Select from 'react-select';
+import { NutriButton } from '../NutriButton';
 
 const Container = styled.div`
-  padding: 0 ${tokens.spacing.xl};
+  display: grid;
+  grid-template-columns: 400px 1fr 400px;
+  grid-template-rows: auto auto auto 1fr 200px;
+  justify-items: center;
   margin-bottom: 36px;
+  min-height: calc(100vh - 240px);
+  padding: 0 ${tokens.spacing.xl};
   ${mediaQuery[3]} {
     padding: 0;
   }
 `
 
 const Title = styled.h1`
+  grid-column: 1 / span 3;
+  grid-row: 1 / 1;
   font-size: 54px;
 `
 
 const SectionContainer = styled.div`
   box-sizing: border-box;
-  margin: ${tokens.spacing.max} auto;
+  margin: ${tokens.spacing.lg} 0;
 `
 
 const Subtitle = styled.h3`
@@ -45,6 +54,10 @@ const Description = styled.span`
   font-size: ${tokens.font.fontSize.md};
 `
 
+const SupermentContainer = styled.div`
+  grid-column: 2 / 3;
+  grid-row: 2 / 5;
+`
 const GummyModel = styled.div`
   display: ${props => props.supermentName === props.title ? (props.gummy ? "inline-block" : "none") : ("none")};
   height: 300px;
@@ -55,6 +68,7 @@ const CapsuleModel = styled.div`
   height: 300px;
   width: 270px;
 `
+
 const SwitchWrapper = styled.div`
   display: flex;
   justify-content: space-between;
@@ -87,7 +101,7 @@ const ShapeIcon = styled.span`
   z-index: 2;
 `
 
-const LoadWrapper = styled.div`
+const LdWrapper = styled.div`
   display: flex;
   flex-direction: row;
   position: relative;
@@ -127,6 +141,7 @@ const ProductPage = forwardRef((props, ref) => {
   const { productTitle } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
+  const quantityRef = useRef();
   
   const [searchParams, setSearchParams] = useSearchParams();
   const [shapeQuery, setShapeQuery] = useState(searchParams.get('shape') || 'gummy');
@@ -147,6 +162,7 @@ const ProductPage = forwardRef((props, ref) => {
   const [availableQuantity, setAvailableQuantity] = useState(0)
   const [updateStock, setUpdateStock] = useState(false)
   const [loadOptions, setLoadOptions] = useState([{value: 0, label: 0}])
+  const [selectedQuantity, setSelectedQuantity] = useState({value: 1, label: "1"})
   
   const [loadingAdding, setLoadingAdding] = useState(false)
   const [successAddedToCart, setSuccessAddedToCart] = useState(false)
@@ -155,6 +171,8 @@ const ProductPage = forwardRef((props, ref) => {
   // HANDLE ADD TO CART
   const handleAddToCart = async (loc) => {
     const selection = loc?.cartSelection ? loc.cartSelection : cartSelection
+    
+    console.log("ADDING TO CART");
     
     if(loggedIn){
       setLoadingAdding(true)
@@ -175,6 +193,10 @@ const ProductPage = forwardRef((props, ref) => {
           price: 0,
           quantity: 0,
         }))
+        handleSelectedItem({
+          load: product.productItems[0].load, 
+          price: product.productItems[0].price.value,
+        })
       } catch (err) {
         setLoadingAdding(false)
         console.log('# apiAddToCart err :', err)
@@ -245,7 +267,8 @@ const ProductPage = forwardRef((props, ref) => {
   const handleSelectedItem = (item) => {
     setSuccessAddedToCart(false)
     if(countInStock >= item.load) { 
-      item.quantity = 1
+      item.quantity = 1;
+      setSelectedQuantity({value: 1, label: "1"})
       setErrorOutOfStock(false)
     } else { 
       setErrorOutOfStock(true) 
@@ -283,6 +306,7 @@ const ProductPage = forwardRef((props, ref) => {
   // HANDLE QUANTITY
   const handleSelectedQuantity = (e) => {
     let quantity = e.value
+    setSelectedQuantity(e)
     setCartSelection(prevState => ({...prevState, quantity}))
   }
   useEffect(() => {
@@ -291,9 +315,7 @@ const ProductPage = forwardRef((props, ref) => {
     }
   }, [cartSelection.load, countInStock]);
   useEffect(() => {
-    console.log('# availableQuantity :', availableQuantity)
     let quantityArr = Array.from({length: availableQuantity}, (_, i) => i + 1)
-    console.log('# quantityArr :', quantityArr)
     let reactSelectOptions = quantityArr.map(el => (
       { value: el, label: el }
     ));
@@ -310,15 +332,27 @@ const ProductPage = forwardRef((props, ref) => {
       <Title>
         {product.title}
       </Title>
-      <SectionContainer>
-        <Subtitle>
+      <SectionContainer
+        css={css`
+          justify-self: end;
+          grid-column: 3 / span 1;
+          grid-row: 2 / span 1;
+        `}
+      >
+        <Subtitle css={css`text-align: end;`}>
           Description
         </Subtitle>
         <Description>
           {product.desc}
         </Description>
       </SectionContainer>
-      <SectionContainer>
+      <SectionContainer
+        css={css`
+          grid-column: 3 / span 1;
+          grid-row: 3 / span 1;
+          justify-self: end;
+        `}
+      >
         <Subtitle>
           Categories
         </Subtitle>
@@ -342,120 +376,119 @@ const ProductPage = forwardRef((props, ref) => {
           />
         ))
       } */}
-      {/* GUMMIES */}
-      <>
-        <GummyModel 
-          gummy={product.shape === "gummy" ? 1 : undefined}
-          ref={ref.gummyAmethystExtractView} 
-          supermentName="Amethyst Extract"
-          title={product.title}
-        />
-        <GummyModel 
-          gummy={product.shape === "gummy" ? 1 : undefined}
-          ref={ref.gummyAbsoriteView} 
-          supermentName="Absorite"
-          title={product.title}
-        />
-        <GummyModel 
-          gummy={product.shape === "gummy" ? 1 : undefined}
-          ref={ref.gummyBaguettoidsView} 
-          supermentName="Baguettoids"
-          title={product.title}
-        />
-        <GummyModel 
-          gummy={product.shape === "gummy" ? 1 : undefined}
-          ref={ref.gummyBicepstineView}
-          supermentName="Bicepstine"
-          title={product.title} 
-        />
-        <GummyModel 
-          gummy={product.shape === "gummy" ? 1 : undefined}
-          ref={ref.gummyJumpamineView}
-          supermentName="Jumpamine"
-          title={product.title} 
-        />
-        <GummyModel 
-          gummy={product.shape === "gummy" ? 1 : undefined}
-          ref={ref.gummyLumositeView}
-          supermentName="Lumosite"
-          title={product.title} 
-        />
-        <GummyModel 
-          gummy={product.shape === "gummy" ? 1 : undefined}
-          ref={ref.gummyMagmaliteView}
-          supermentName="Magmalite"
-          title={product.title} 
-        />
-        <GummyModel 
-          gummy={product.shape === "gummy" ? 1 : undefined}
-          ref={ref.gummyNodemodulesView}
-          supermentName="node_modules"
-          title={product.title} 
-        />
-        <GummyModel 
-          gummy={product.shape === "gummy" ? 1 : undefined}
-          ref={ref.gummyNotavirusiteView}
-          supermentName="Notavirusite"
-          title={product.title} 
-        />
-        <GummyModel 
-          gummy={product.shape === "gummy" ? 1 : undefined}
-          ref={ref.gummyNucleateView}
-          supermentName="Nucleate"
-          title={product.title} 
-        />
-        <GummyModel 
-          gummy={product.shape === "gummy" ? 1 : undefined}
-          ref={ref.gummySerylView}
-          supermentName="Serylanyponytailanyserine"
-          title={product.title} 
-        />
-        <GummyModel 
-          gummy={product.shape === "gummy" ? 1 : undefined}
-          ref={ref.gummySolvalitisView} 
-          supermentName="Solvalitis"
-          title={product.title}
-        />
-        <GummyModel 
-          gummy={product.shape === "gummy" ? 1 : undefined}
-          ref={ref.gummyTricepstineView}
-          supermentName="Tricepstine"
-          title={product.title} 
-        />
-        <GummyModel 
-          gummy={product.shape === "gummy" ? 1 : undefined}
-          ref={ref.gummyTitaniumView}
-          supermentName="Titanium"
-          title={product.title} 
-        />
-        <GummyModel 
-          gummy={product.shape === "gummy" ? 1 : undefined}
-          ref={ref.gummyWolveriteView}
-          supermentName="Wolverite"
-          title={product.title} 
-        />
-      </>
-      {/* CAPSULES */}
-      <>
-        <CapsuleModel 
-          ref={ref.capsuleWaterView} 
-          capsule={product.shape === "capsule" ? 1 : undefined}
-        />
-      </>
+      <SupermentContainer>
+        {/* GUMMIES */}
+        <>
+          <GummyModel 
+            gummy={product.shape === "gummy" ? 1 : undefined}
+            ref={ref.gummyAmethystExtractView} 
+            supermentName="Amethyst Extract"
+            title={product.title}
+          />
+          <GummyModel 
+            gummy={product.shape === "gummy" ? 1 : undefined}
+            ref={ref.gummyAbsoriteView} 
+            supermentName="Absorite"
+            title={product.title}
+          />
+          <GummyModel 
+            gummy={product.shape === "gummy" ? 1 : undefined}
+            ref={ref.gummyBaguettoidsView} 
+            supermentName="Baguettoids"
+            title={product.title}
+          />
+          <GummyModel 
+            gummy={product.shape === "gummy" ? 1 : undefined}
+            ref={ref.gummyBicepstineView}
+            supermentName="Bicepstine"
+            title={product.title} 
+          />
+          <GummyModel 
+            gummy={product.shape === "gummy" ? 1 : undefined}
+            ref={ref.gummyJumpamineView}
+            supermentName="Jumpamine"
+            title={product.title} 
+          />
+          <GummyModel 
+            gummy={product.shape === "gummy" ? 1 : undefined}
+            ref={ref.gummyLumositeView}
+            supermentName="Lumosite"
+            title={product.title} 
+          />
+          <GummyModel 
+            gummy={product.shape === "gummy" ? 1 : undefined}
+            ref={ref.gummyMagmaliteView}
+            supermentName="Magmalite"
+            title={product.title} 
+          />
+          <GummyModel 
+            gummy={product.shape === "gummy" ? 1 : undefined}
+            ref={ref.gummyNodemodulesView}
+            supermentName="node_modules"
+            title={product.title} 
+          />
+          <GummyModel 
+            gummy={product.shape === "gummy" ? 1 : undefined}
+            ref={ref.gummyNotavirusiteView}
+            supermentName="Notavirusite"
+            title={product.title} 
+          />
+          <GummyModel 
+            gummy={product.shape === "gummy" ? 1 : undefined}
+            ref={ref.gummyNucleateView}
+            supermentName="Nucleate"
+            title={product.title} 
+          />
+          <GummyModel 
+            gummy={product.shape === "gummy" ? 1 : undefined}
+            ref={ref.gummySerylView}
+            supermentName="Serylanyponytailanyserine"
+            title={product.title} 
+          />
+          <GummyModel 
+            gummy={product.shape === "gummy" ? 1 : undefined}
+            ref={ref.gummySolvalitisView} 
+            supermentName="Solvalitis"
+            title={product.title}
+          />
+          <GummyModel 
+            gummy={product.shape === "gummy" ? 1 : undefined}
+            ref={ref.gummyTricepstineView}
+            supermentName="Tricepstine"
+            title={product.title} 
+          />
+          <GummyModel 
+            gummy={product.shape === "gummy" ? 1 : undefined}
+            ref={ref.gummyTitaniumView}
+            supermentName="Titanium"
+            title={product.title} 
+          />
+          <GummyModel 
+            gummy={product.shape === "gummy" ? 1 : undefined}
+            ref={ref.gummyWolveriteView}
+            supermentName="Wolverite"
+            title={product.title} 
+          />
+        </>
+        {/* CAPSULES */}
+        <>
+          <CapsuleModel 
+            ref={ref.capsuleWaterView} 
+            capsule={product.shape === "capsule" ? 1 : undefined}
+          />
+        </>
+      </SupermentContainer>
       
-      <SectionContainer>
+      <SectionContainer
+        css={css`
+          grid-column: 1 / span 1;
+          grid-row: 2 / span 1;
+          justify-self: start;
+        `}
+      >
         <Subtitle>
           Shape
         </Subtitle>
-          {/* <button 
-            disabled={location.pathname === '/Magmalite' || location.pathname === '/Liquate'}
-            onClick={() => handleSwitchShape("gummy")}
-          >
-            Gummy
-          </button>
-          <button onClick={() => handleSwitchShape("capsule")}>
-            Capsule
-          </button> */}
           <SwitchWrapper>
             {shapes && shapes.map(shape => (
               <ShapeContainer
@@ -520,12 +553,18 @@ const ProductPage = forwardRef((props, ref) => {
           </SwitchWrapper>
       </SectionContainer>
 
-      <SectionContainer>
+      <SectionContainer
+        css={css`
+          grid-column: 1 / span 1;
+          grid-row: 3 / span 1;
+          justify-self: start;
+        `}
+      >
         {/* LOAD (radio button) */}
         <Subtitle>
           Load
         </Subtitle>
-        <LoadWrapper>
+        <LdWrapper>
           {product.productItems.map((item, i) => (
             <div 
               key={i}
@@ -562,70 +601,69 @@ const ProductPage = forwardRef((props, ref) => {
               </LoadLabel>
             </div>
           ))}
-        </LoadWrapper>
+        </LdWrapper>
         {
           errorOutOfStock && <p style={{color: tokens.color.error}}>Out of stock</p>
         }
       </SectionContainer>
-      {/* Quantity (dropdown) */}
-      <Subtitle>
-        Quantity
-      </Subtitle>
-      <SelectWrapper>
-        {(cartSelection.productId && availableQuantity) ? (
-          <Select 
-          // components={{ IndicatorSeparator }}
-          defaultValue={{value: 1, label: 1}}
-          id={product._id}
-          name="quantity"
-          isDisabled={!availableQuantity}
-          isSearchable={false}
-          options={loadOptions}
-          onChange={(e) => handleSelectedQuantity(e)}
-          menuPlacement="auto"
-          styles={selectStyles}
-          />
-        ) : null}
-      </SelectWrapper>
 
-      {/* <select
-        disabled={!availableQuantity}
-        id={product._id}
-        name="quantity" 
-        onChange={(e) => handleSelectedQuantity(e.target.value)}
+      {/* QUANTITY (dropdown) */}
+      <SectionContainer
+        css={css`
+          grid-column: 1 / span 1;
+          grid-row: 4 / span 1;
+          justify-self: start;
+        `}
       >
-        {
-          (cartSelection.productId && availableQuantity) && (
-            [...Array(availableQuantity)].map((e, i) => (
-              <option 
-                key={i}
-                value={e}
-              >
-                {i+1}
-              </option>
-            ))
-          )
-        }
-      </select> */}
-      {/* BUTTON */}
-      <button
-        disabled={!cartSelection.quantity}
-        onClick={handleAddToCart}
+        <Subtitle>
+          Quantity
+        </Subtitle>
+        <SelectWrapper>
+          {(cartSelection.productId && availableQuantity) ? (
+            <Select 
+              // components={{ IndicatorSeparator }}
+              defaultValue={{value: 1, label: 1}}
+              id={product._id}
+              name="quantity"
+              isDisabled={!availableQuantity}
+              isSearchable={false}
+              options={loadOptions}
+              onChange={(e) => handleSelectedQuantity(e)}
+              menuPlacement="auto"
+              ref={quantityRef}
+              styles={selectStyles}
+              value={selectedQuantity}
+            />
+          ) : null}
+        </SelectWrapper>
+      </SectionContainer>
+
+      {/* ADD TO CART (button) */}
+      <SectionContainer
+        css={css`
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          grid-column: 2;
+          grid-row: 5;
+          justify-self: center;
+        `}
       >
-        Add to cart
-      </button>
-      {/* SUCCESS */}
-      {
-        successAddedToCart && (
-          <p style={{color: "green"}}>
-            Successfully added {productTitle}!
-          </p>
-        ) 
-      }
-      {/* LOADING */}
-      {
-        loadingAdding && <p>Adding {productTitle} to cart...</p>
-      }
+        <div onClick={handleAddToCart}>
+          <NutriButton 
+            disabled={!cartSelection.quantity}
+            label={loadingAdding ? "Adding to cart..." : "Add to cart"}
+            style={{alignSelf: "center"}}
+            type="filled"
+          />
+          {/* SUCCESS */}
+          {successAddedToCart ? (
+            <p style={{color: "green"}}>
+              Successfully added {productTitle}!
+            </p>
+          ) : null}
+        </div>
+      </SectionContainer>
     </Container>
   )
 });

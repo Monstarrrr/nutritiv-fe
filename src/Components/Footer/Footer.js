@@ -2,7 +2,7 @@
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import { Link, useLocation } from 'react-router-dom'
-import { mediaQueries, tokens } from '../../Helpers/styleTokens'
+import { mediaQueries, mediaQuery, tokens } from '../../Helpers/styleTokens'
 import { LogoLink, navLinksItems } from '../Header/Navbar'
 import { Icon } from '../Icons/Icon'
 import { HoverableLinks } from '../PagesWrapper'
@@ -25,10 +25,12 @@ export const Footer = () => {
         text-align: center;
       `}
     >
-      <div css={css`
-        border-top: 2px solid ${tokens.color.semiTransparentLight};
-        padding: ${tokens.spacing.xxl};
-      `}>
+      <div 
+        style={{
+          borderTop: location.pathname !== "/welcome" ? `2px solid ${tokens.color.semiTransparentLight}` : "none",
+          padding: tokens.spacing.xxl
+        }}
+      >
         {location.pathname === "/welcome" && (
           <div
             css={css`
