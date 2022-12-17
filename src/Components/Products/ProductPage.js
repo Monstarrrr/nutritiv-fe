@@ -20,13 +20,12 @@ import Select from 'react-select';
 import { NutriButton } from '../NutriButton';
 
 const Container = styled.div`
-  display: grid;
-  grid-template-columns: 400px 1fr 400px;
-  grid-template-rows: auto auto auto 1fr 200px;
-  justify-items: center;
-  margin-bottom: 36px;
-  min-height: calc(100vh - 240px);
-  padding: 0 ${tokens.spacing.xl};
+  background: ${tokens.color.primary};
+  border-top-left-radius: 42px;
+  border-top-right-radius: 42px;
+  padding: ${tokens.spacing.xl};
+  position: relative;
+  z-index: 9999;
   ${mediaQuery[3]} {
     padding: 0;
   }
@@ -36,11 +35,13 @@ const Title = styled.h1`
   grid-column: 1 / span 3;
   grid-row: 1 / 1;
   font-size: 54px;
+  justify-self: start;
+  margin: 0;
+  padding: ${tokens.spacing.sm} 0 ${tokens.spacing.xl};
 `
 
 const SectionContainer = styled.div`
   box-sizing: border-box;
-  margin: ${tokens.spacing.lg} 0;
 `
 
 const Subtitle = styled.h3`
@@ -55,24 +56,39 @@ const Description = styled.span`
 `
 
 const SupermentContainer = styled.div`
+  background: radial-gradient(circle at 50% 100%, rgba(16, 109, 228, 0.54) 0%, rgba(17, 16, 228, 0) 80%);
+  bottom: -40px;
+  display: flex;
   grid-column: 2 / 3;
   grid-row: 2 / 5;
+  height: 40vh;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+  > div {
+    align-self: center;
+    bottom: 16px;
+    position: relative;
+    height: 80%;
+    width: 100%;
+  }
 `
 const GummyModel = styled.div`
   display: ${props => props.supermentName === props.title ? (props.gummy ? "inline-block" : "none") : ("none")};
-  height: 300px;
-  width: 270px;
-  `
+`
 const CapsuleModel = styled.div`
   display: ${props => props.supermentName === props.title ? (props.capsule ? "inline-block" : "none") : ("none")}; 
-  height: 300px;
-  width: 270px;
 `
 
 const SwitchWrapper = styled.div`
+  background-color: ${tokens.color.accentWeak};
+  border-radius: ${tokens.borderRadius.lg};
   display: flex;
   justify-content: space-between;
-  margin: 0 10px;
+  position: absolute;
+  top: 16px;
+  right: 0;
+  padding: 4px;
   ${mediaQuery[2]} {
     align-items: center;
     background: ${tokens.color.accentWeak};
@@ -105,7 +121,7 @@ const LdWrapper = styled.div`
   display: flex;
   flex-direction: row;
   position: relative;
-  margin-right: 8px;
+  /* margin-right: 8px; */
   position: relative;
   transition: all ease .2s;
 `
@@ -328,54 +344,77 @@ const ProductPage = forwardRef((props, ref) => {
   }
 
   return (
-    <Container>
-      <Title>
-        {product.title}
-      </Title>
+    <>
       <SectionContainer
         css={css`
-          justify-self: end;
-          grid-column: 3 / span 1;
-          grid-row: 2 / span 1;
+          position: absolute;
+          right: 14px;
+          text-align: right;
         `}
       >
-        <Subtitle css={css`text-align: end;`}>
-          Description
-        </Subtitle>
-        <Description>
-          {product.desc}
-        </Description>
-      </SectionContainer>
-      <SectionContainer
-        css={css`
-          grid-column: 3 / span 1;
-          grid-row: 3 / span 1;
-          justify-self: end;
-        `}
-      >
-        <Subtitle>
-          Categories
-        </Subtitle>
-        <Tags>
-          {tags.map((tag, i) => (
-            <Tag key={i}>
-              {tag}
-            </Tag>
+        <SwitchWrapper>
+          {shapes && shapes.map(shape => (
+            <ShapeContainer
+              style={{
+                maxHeight: "100px",
+                padding: `${tokens.spacing.xs} ${tokens.spacing.lg}`,
+              }}
+              key={shape}
+              onClick={() => handleSwitchShape(shape)}
+              onMouseEnter={() => setFocusedShape(shape)}
+              onMouseLeave={() => setFocusedShape("")}
+            >
+              <ShapeIcon active={shape === shapeQuery ? 1 : undefined}>
+                <Icon 
+                  name={shape}
+                  color={shapeQuery === shape ? tokens.color.contrastDark : tokens.color.contrastLight}
+                  strokeWidth={2}
+                  filled
+                  height={"24px"}
+                  width={"24px"}
+                />
+              </ShapeIcon>
+              {focusedShape === shape ? (
+                <AnimatePresence>
+                  <FocusedShape
+                    style={{
+                      bottom: 0,
+                      left: 0,
+                      position: "absolute",
+                      right: 0,
+                    }}
+                    transition={{
+                      layout: {
+                        duration: 0.2,
+                        ease: "easeOut",
+                      },
+                    }}
+                    layoutId="shape-focus"
+                  />
+                </AnimatePresence>) : null
+              }
+              {shapeQuery === shape ? (
+                <AnimatePresence>
+                  <motion.div
+                    style={{
+                      background: tokens.color.accentStrong,
+                      borderRadius: tokens.borderRadius.lg,
+                      bottom: 0,
+                      height: "100%",
+                      left: 0,
+                      position: "absolute",
+                      right: 0,
+                      width: "100%",
+                      zIndex: 1,
+                    }}
+                    layoutId="shape-select"
+                  />
+                </AnimatePresence>) : null
+              }
+            </ShapeContainer>
           ))}
-        </Tags>
+        </SwitchWrapper>
       </SectionContainer>
-
-      {/* {
-        product.imgs?.map((img, i) => (
-          <img
-            key={i}
-            src={
-              `${s3URL}${img}`
-            } 
-            alt={`product ${i}`} 
-          />
-        ))
-      } */}
       <SupermentContainer>
         {/* GUMMIES */}
         <>
@@ -478,193 +517,167 @@ const ProductPage = forwardRef((props, ref) => {
           />
         </>
       </SupermentContainer>
-      
-      <SectionContainer
-        css={css`
-          grid-column: 1 / span 1;
-          grid-row: 2 / span 1;
-          justify-self: start;
-        `}
-      >
-        <Subtitle>
-          Shape
-        </Subtitle>
-          <SwitchWrapper>
-            {shapes && shapes.map(shape => (
-              <ShapeContainer
-                style={{
-                  maxHeight: "100px",
-                  padding: `${tokens.spacing.xs} ${tokens.spacing.lg}`,
-                }}
-                key={shape}
-                onClick={() => handleSwitchShape(shape)}
-                onMouseEnter={() => setFocusedShape(shape)}
-                onMouseLeave={() => setFocusedShape("")}
-              >
-                <ShapeIcon active={shape === shapeQuery ? 1 : undefined}>
-                  <Icon 
-                    name={shape}
-                    color={shapeQuery === shape ? tokens.color.contrastDark : tokens.color.contrastLight}
-                    strokeWidth={2}
-                    filled
-                    height={"24px"}
-                    width={"24px"}
-                  />
-                </ShapeIcon>
-                {focusedShape === shape ? (
-                  <AnimatePresence>
-                    <FocusedShape
-                      style={{
-                        bottom: 0,
-                        left: 0,
-                        position: "absolute",
-                        right: 0,
-                      }}
-                      transition={{
-                        layout: {
-                          duration: 0.2,
-                          ease: "easeOut",
-                        },
-                      }}
-                      layoutId="shape-focus"
-                    />
-                  </AnimatePresence>) : null
-                }
-                {shapeQuery === shape ? (
-                  <AnimatePresence>
-                    <motion.div
-                      style={{
-                        background: tokens.color.accentStrong,
-                        borderRadius: tokens.borderRadius.lg,
-                        bottom: 0,
-                        height: "100%",
-                        left: 0,
-                        position: "absolute",
-                        right: 0,
-                        width: "100%",
-                        zIndex: 1,
-                      }}
-                      layoutId="shape-select"
-                    />
-                  </AnimatePresence>) : null
-                }
-              </ShapeContainer>
+      <Container>
+        <Title>
+          {product.title}
+        </Title>
+        <SectionContainer
+          css={css`
+            justify-self: start;
+            grid-column: 1 / span 1;
+            grid-row: 2 / span 1;
+          `}
+        >
+          <Description>
+            {product.desc}
+          </Description>
+        </SectionContainer>
+        <SectionContainer
+          css={css`
+            grid-column: 1 / span 1;
+            grid-row: 3 / span 1;
+            justify-self: start;
+            margin-top: ${tokens.spacing.xl};
+          `}
+        >
+          <Tags>
+            {tags.map((tag, i) => (
+              <Tag key={i}>
+                {tag}
+              </Tag>
             ))}
-          </SwitchWrapper>
-      </SectionContainer>
+          </Tags>
+        </SectionContainer>
 
-      <SectionContainer
-        css={css`
-          grid-column: 1 / span 1;
-          grid-row: 3 / span 1;
-          justify-self: start;
-        `}
-      >
-        {/* LOAD (radio button) */}
-        <Subtitle>
-          Load
-        </Subtitle>
-        <LdWrapper>
-          {product.productItems.map((item, i) => (
-            <div 
+        {/* {
+          product.imgs?.map((img, i) => (
+            <img
               key={i}
-              onMouseEnter={() => setHoveredLoad(item.load)}
-              onMouseLeave={() => setHoveredLoad("")}
-              style={{
-                padding: `${tokens.spacing.md} 0`,
-                position: "relative"
-              }}
-            >
-              <LoadInput
-                checked={cartSelection.load === item.load}
-                id={`${product._id}${item.load}`} 
-                name={product._id}
-                onChange={() => handleSelectedItem({
-                  load: item.load,
-                  price: item.price.value,
-                })}
-                type="radio" 
-                value={item.load}
-              />
-              <LoadLabel 
-                htmlFor={i}
-                style={{
-                  borderBottomRightRadius: i === product.productItems.length-1 ? tokens.borderRadius.md : 0,
-                  borderTopRightRadius: i === product.productItems.length-1 ? tokens.borderRadius.md : 0,
-                  borderBottomLeftRadius: i === 0 ? tokens.borderRadius.md : 0,
-                  borderTopLeftRadius: i === 0 ? tokens.borderRadius.md : 0,
-                }}
-                isactive={item.load === cartSelection.load}
-                ishovered={item.load === hoveredLoad}
-              >
-                {item.load}
-              </LoadLabel>
-            </div>
-          ))}
-        </LdWrapper>
-        {
-          errorOutOfStock && <p style={{color: tokens.color.error}}>Out of stock</p>
-        }
-      </SectionContainer>
-
-      {/* QUANTITY (dropdown) */}
-      <SectionContainer
-        css={css`
-          grid-column: 1 / span 1;
-          grid-row: 4 / span 1;
-          justify-self: start;
-        `}
-      >
-        <Subtitle>
-          Quantity
-        </Subtitle>
-        <SelectWrapper>
-          {(cartSelection.productId && availableQuantity) ? (
-            <Select 
-              // components={{ IndicatorSeparator }}
-              defaultValue={{value: 1, label: 1}}
-              id={product._id}
-              name="quantity"
-              isDisabled={!availableQuantity}
-              isSearchable={false}
-              options={loadOptions}
-              onChange={(e) => handleSelectedQuantity(e)}
-              menuPlacement="auto"
-              ref={quantityRef}
-              styles={selectStyles}
-              value={selectedQuantity}
+              src={
+                `${s3URL}${img}`
+              } 
+              alt={`product ${i}`} 
             />
-          ) : null}
-        </SelectWrapper>
-      </SectionContainer>
+          ))
+        } */}
 
-      {/* ADD TO CART (button) */}
-      <SectionContainer
-        css={css`
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          grid-column: 2;
-          grid-row: 5;
-          justify-self: center;
-        `}
-      >
-        <div onClick={handleAddToCart}>
-          <NutriButton 
-            disabled={!cartSelection.quantity}
-            label={loadingAdding ? "Adding to cart..." : "Add to cart"}
-            style={{alignSelf: "center"}}
-            type="filled"
-          />
-          {/* SUCCESS */}
-          {successAddedToCart ? (
-            <p style={{color: "green"}}>
-              Successfully added {productTitle}!
-            </p>
-          ) : null}
-        </div>
-      </SectionContainer>
-    </Container>
+        <SectionContainer
+          css={css`
+            border-top: 2px solid ${tokens.color.semiTransparentLight};
+            grid-column: 3 / span 1;
+            grid-row: 3 / span 1;
+            justify-self: end;
+            margin-top: ${tokens.spacing.xxl};
+          `}
+        >
+          {/* LOAD (radio button) */}
+          <Subtitle>
+            Load
+          </Subtitle>
+          <LdWrapper>
+            {product.productItems.map((item, i) => (
+              <div 
+                key={i}
+                onMouseEnter={() => setHoveredLoad(item.load)}
+                onMouseLeave={() => setHoveredLoad("")}
+                style={{
+                  padding: `${tokens.spacing.md} 0`,
+                  position: "relative"
+                }}
+              >
+                <LoadInput
+                  checked={cartSelection.load === item.load}
+                  id={`${product._id}${item.load}`} 
+                  name={product._id}
+                  onChange={() => handleSelectedItem({
+                    load: item.load,
+                    price: item.price.value,
+                  })}
+                  type="radio" 
+                  value={item.load}
+                />
+                <LoadLabel 
+                  htmlFor={i}
+                  style={{
+                    borderBottomRightRadius: i === product.productItems.length-1 ? tokens.borderRadius.md : 0,
+                    borderTopRightRadius: i === product.productItems.length-1 ? tokens.borderRadius.md : 0,
+                    borderBottomLeftRadius: i === 0 ? tokens.borderRadius.md : 0,
+                    borderTopLeftRadius: i === 0 ? tokens.borderRadius.md : 0,
+                  }}
+                  isactive={item.load === cartSelection.load}
+                  ishovered={item.load === hoveredLoad}
+                >
+                  {item.load}
+                </LoadLabel>
+              </div>
+            ))}
+          </LdWrapper>
+          {
+            errorOutOfStock && <p style={{color: tokens.color.error}}>Out of stock</p>
+          }
+        </SectionContainer>
+
+        {/* QUANTITY (dropdown) */}
+        <SectionContainer
+          css={css`
+            margin-bottom: ${tokens.spacing.xl};
+            margin-top: ${tokens.spacing.xl};
+          `}
+        >
+          <Subtitle>
+            Quantity
+          </Subtitle>
+          <SelectWrapper>
+            {(cartSelection.productId && availableQuantity) ? (
+              <Select 
+                // components={{ IndicatorSeparator }}
+                defaultValue={{value: 1, label: 1}}
+                id={product._id}
+                name="quantity"
+                isDisabled={!availableQuantity}
+                isSearchable={false}
+                options={loadOptions}
+                onChange={(e) => handleSelectedQuantity(e)}
+                menuPlacement="auto"
+                ref={quantityRef}
+                styles={selectStyles}
+                value={selectedQuantity}
+              />
+            ) : null}
+          </SelectWrapper>
+        </SectionContainer>
+
+        {/* ADD TO CART (button) */}
+        <SectionContainer
+          css={css`
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            grid-column: 3;
+            grid-row: 5;
+            justify-self: end;
+          `}
+        >
+          <div onClick={handleAddToCart}>
+            <NutriButton 
+              disabled={!cartSelection.quantity}
+              label={loadingAdding ? "Adding to cart..." : "Add to cart"}
+              style={{
+                borderRadius: "8px",
+                width: "100%",
+              }}
+              type="filled"
+            />
+            {/* SUCCESS */}
+            {successAddedToCart ? (
+              <p style={{color: "green"}}>
+                Successfully added {productTitle}!
+              </p>
+            ) : null}
+          </div>
+        </SectionContainer>
+      </Container>
+    </>
   )
 });
 
