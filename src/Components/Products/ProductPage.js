@@ -361,7 +361,11 @@ const ProductPage = forwardRef((props, ref) => {
   }
   
   return (
-    <div css={css`display: flex;`}>
+    <div css={css`
+      ${mediaQuery[2]} {
+        display: flex;
+      }
+    `}>
       <SupermentContainer>
         <SectionContainer
           css={css`
