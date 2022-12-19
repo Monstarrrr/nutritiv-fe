@@ -26,8 +26,10 @@ const Container = styled.div`
   padding: ${tokens.spacing.xl};
   position: relative;
   z-index: 9999;
-  ${mediaQuery[3]} {
+  ${mediaQuery[2]} {
     padding: 0;
+    margin-bottom: ${tokens.spacing.xl};
+    margin-top: ${tokens.spacing.xl};
   }
 `
 
@@ -38,9 +40,12 @@ const Title = styled.h1`
   justify-self: start;
   margin: 0;
   padding: ${tokens.spacing.sm} 0 ${tokens.spacing.xl};
+  ${mediaQuery[2]} {
+    padding-top: 0;
+  }
 `
 
-const SectionContainer = styled.div`
+const SectionContainer = styled.span`
   box-sizing: border-box;
 `
 
@@ -57,7 +62,7 @@ const Description = styled.span`
 
 const SupermentContainer = styled.div`
   background: radial-gradient(circle at 50% 100%, rgba(16, 109, 228, 0.54) 0%, rgba(17, 16, 228, 0) 80%);
-  bottom: -40px;
+  top: 35px;
   display: flex;
   grid-column: 2 / 3;
   grid-row: 2 / 5;
@@ -67,10 +72,15 @@ const SupermentContainer = styled.div`
   width: 100%;
   > div {
     align-self: center;
-    bottom: 16px;
+    bottom: 35px;
     position: relative;
     height: 80%;
     width: 100%;
+  }
+  ${mediaQuery[2]} {
+    background: radial-gradient(circle at 50% 50%, rgba(16, 109, 228, 0.54) 0%, rgba(17, 16, 228, 0) 50%);
+    height: 60vh;
+    order: 2;
   }
 `
 const GummyModel = styled.div`
@@ -86,9 +96,10 @@ const SwitchWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   position: absolute;
-  top: 16px;
+  top: -18px;
   right: 0;
   padding: 4px;
+  z-index: 2;
   ${mediaQuery[2]} {
     align-items: center;
     background: ${tokens.color.accentWeak};
@@ -148,6 +159,13 @@ const SelectWrapper = styled.div`
   font-size: ${tokens.font.fontSize.md};
   position: relative;
 `
+const Price = styled.h4`
+  margin: ${tokens.spacing.md} 0;
+  font-size: ${tokens.font.fontSize.md};
+`
+const Currency = styled.span`
+
+`
 
 const shapes = ["gummy", "capsule"];
 
@@ -187,8 +205,6 @@ const ProductPage = forwardRef((props, ref) => {
   // HANDLE ADD TO CART
   const handleAddToCart = async (loc) => {
     const selection = loc?.cartSelection ? loc.cartSelection : cartSelection
-    
-    console.log("ADDING TO CART");
     
     if(loggedIn){
       setLoadingAdding(true)
@@ -341,81 +357,83 @@ const ProductPage = forwardRef((props, ref) => {
   const handleSwitchShape = (newShape) => {
     setShapeQuery(newShape)
     setSearchParams({ shape: newShape })
+    setSelectedQuantity({ value: 1, label: "1" })
   }
-
+  
   return (
-    <>
-      <SectionContainer
-        css={css`
-          position: absolute;
-          right: 14px;
-          text-align: right;
-        `}
-      >
-        <SwitchWrapper>
-          {shapes && shapes.map(shape => (
-            <ShapeContainer
-              style={{
-                maxHeight: "100px",
-                padding: `${tokens.spacing.xs} ${tokens.spacing.lg}`,
-              }}
-              key={shape}
-              onClick={() => handleSwitchShape(shape)}
-              onMouseEnter={() => setFocusedShape(shape)}
-              onMouseLeave={() => setFocusedShape("")}
-            >
-              <ShapeIcon active={shape === shapeQuery ? 1 : undefined}>
-                <Icon 
-                  name={shape}
-                  color={shapeQuery === shape ? tokens.color.contrastDark : tokens.color.contrastLight}
-                  strokeWidth={2}
-                  filled
-                  height={"24px"}
-                  width={"24px"}
-                />
-              </ShapeIcon>
-              {focusedShape === shape ? (
-                <AnimatePresence>
-                  <FocusedShape
-                    style={{
-                      bottom: 0,
-                      left: 0,
-                      position: "absolute",
-                      right: 0,
-                    }}
-                    transition={{
-                      layout: {
-                        duration: 0.2,
-                        ease: "easeOut",
-                      },
-                    }}
-                    layoutId="shape-focus"
-                  />
-                </AnimatePresence>) : null
-              }
-              {shapeQuery === shape ? (
-                <AnimatePresence>
-                  <motion.div
-                    style={{
-                      background: tokens.color.accentStrong,
-                      borderRadius: tokens.borderRadius.lg,
-                      bottom: 0,
-                      height: "100%",
-                      left: 0,
-                      position: "absolute",
-                      right: 0,
-                      width: "100%",
-                      zIndex: 1,
-                    }}
-                    layoutId="shape-select"
-                  />
-                </AnimatePresence>) : null
-              }
-            </ShapeContainer>
-          ))}
-        </SwitchWrapper>
-      </SectionContainer>
+    <div css={css`display: flex;`}>
       <SupermentContainer>
+        <SectionContainer
+          css={css`
+            position: absolute;
+            right: 14px;
+            text-align: right;
+            top: 0;
+          `}
+        >
+          <SwitchWrapper>
+            {shapes && shapes.map(shape => (
+              <ShapeContainer
+                style={{
+                  maxHeight: "100px",
+                  padding: `${tokens.spacing.xs} ${tokens.spacing.lg}`,
+                }}
+                key={shape}
+                onClick={() => handleSwitchShape(shape)}
+                onMouseEnter={() => setFocusedShape(shape)}
+                onMouseLeave={() => setFocusedShape("")}
+              >
+                <ShapeIcon active={shape === shapeQuery ? 1 : undefined}>
+                  <Icon 
+                    name={shape}
+                    color={shapeQuery === shape ? tokens.color.contrastDark : tokens.color.contrastLight}
+                    strokeWidth={2}
+                    filled
+                    height={"24px"}
+                    width={"24px"}
+                  />
+                </ShapeIcon>
+                {focusedShape === shape ? (
+                  <AnimatePresence>
+                    <FocusedShape
+                      style={{
+                        bottom: 0,
+                        left: 0,
+                        position: "absolute",
+                        right: 0,
+                      }}
+                      transition={{
+                        layout: {
+                          duration: 0.2,
+                          ease: "easeOut",
+                        },
+                      }}
+                      layoutId="shape-focus"
+                    />
+                  </AnimatePresence>) : null
+                }
+                {shapeQuery === shape ? (
+                  <AnimatePresence>
+                    <motion.div
+                      style={{
+                        background: tokens.color.accentStrong,
+                        borderRadius: tokens.borderRadius.lg,
+                        bottom: 0,
+                        height: "100%",
+                        left: 0,
+                        position: "absolute",
+                        right: 0,
+                        width: "100%",
+                        zIndex: 1,
+                      }}
+                      layoutId="shape-select"
+                    />
+                  </AnimatePresence>) : null
+                }
+              </ShapeContainer>
+            ))}
+          </SwitchWrapper>
+        </SectionContainer>
         {/* GUMMIES */}
         <>
           <GummyModel 
@@ -521,32 +539,31 @@ const ProductPage = forwardRef((props, ref) => {
         <Title>
           {product.title}
         </Title>
-        <SectionContainer
-          css={css`
-            justify-self: start;
-            grid-column: 1 / span 1;
-            grid-row: 2 / span 1;
-          `}
-        >
+        <SectionContainer>
           <Description>
             {product.desc}
           </Description>
         </SectionContainer>
         <SectionContainer
           css={css`
-            grid-column: 1 / span 1;
-            grid-row: 3 / span 1;
-            justify-self: start;
             margin-top: ${tokens.spacing.xl};
           `}
         >
-          <Tags>
+          <Tags
+            css={css`padding: ${tokens.spacing.md} 0;`}
+          >
             {tags.map((tag, i) => (
               <Tag key={i}>
                 {tag}
               </Tag>
             ))}
           </Tags>
+        </SectionContainer>
+        
+        <SectionContainer>
+          <Price>
+            {(cartSelection.price * cartSelection.quantity).toFixed(2)} <Currency>€</Currency>
+          </Price>
         </SectionContainer>
 
         {/* {
@@ -560,18 +577,19 @@ const ProductPage = forwardRef((props, ref) => {
             />
           ))
         } */}
-
+        
         <SectionContainer
           css={css`
-            border-top: 2px solid ${tokens.color.semiTransparentLight};
-            grid-column: 3 / span 1;
-            grid-row: 3 / span 1;
-            justify-self: end;
             margin-top: ${tokens.spacing.xxl};
           `}
         >
           {/* LOAD (radio button) */}
-          <Subtitle>
+          <Subtitle
+            css={css`
+              border-top: 2px solid ${tokens.color.semiTransparentLight};
+              padding-top: ${tokens.spacing.xl};
+            `}
+          >
             Load
           </Subtitle>
           <LdWrapper>
@@ -616,7 +634,7 @@ const ProductPage = forwardRef((props, ref) => {
             errorOutOfStock && <p style={{color: tokens.color.error}}>Out of stock</p>
           }
         </SectionContainer>
-
+        
         {/* QUANTITY (dropdown) */}
         <SectionContainer
           css={css`
@@ -624,7 +642,9 @@ const ProductPage = forwardRef((props, ref) => {
             margin-top: ${tokens.spacing.xl};
           `}
         >
-          <Subtitle>
+          <Subtitle
+            css={css`margin-top: ${tokens.spacing.xxl};`}
+          >
             Quantity
           </Subtitle>
           <SelectWrapper>
@@ -653,9 +673,7 @@ const ProductPage = forwardRef((props, ref) => {
             display: flex;
             flex-direction: column;
             justify-content: center;
-            grid-column: 3;
-            grid-row: 5;
-            justify-self: end;
+            margin-top: ${tokens.spacing.xl};
           `}
         >
           <div onClick={handleAddToCart}>
@@ -677,7 +695,7 @@ const ProductPage = forwardRef((props, ref) => {
           </div>
         </SectionContainer>
       </Container>
-    </>
+    </div>
   )
 });
 
