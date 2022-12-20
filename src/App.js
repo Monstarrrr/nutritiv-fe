@@ -35,7 +35,6 @@ import { OrbitControls, PerspectiveCamera, Preload } from '@react-three/drei';
 import { View } from './Components/View';
 import { Scene } from './Components/3D/Scene';
 import angleToRadians from './Helpers/angleToRadians';
-import { proxy, useSnapshot } from 'valtio';
 
 // init stripe
 const stripePromise = loadStripe(
@@ -436,7 +435,7 @@ function App() {
                       autoRotateSpeed={2}
                       enablePan={true}
                       // enableZoom={view.homepageCard ? false : true}
-                      enableZoom={true}
+                      enableZoom={false}
                       minDistance={
                         view.type === "capsule" ? 3.2 : 7
                       }
