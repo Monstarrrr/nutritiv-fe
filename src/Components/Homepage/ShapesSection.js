@@ -8,6 +8,7 @@ import { Icon } from '../Icons/Icon';
 import { NutriButton } from '../NutriButton';
 import { ScrollRef, SectionTitle } from './Homepage';
 import useWindowDimensions from '../../Helpers/useWindowDimensions';
+import { useNavigate } from 'react-router-dom';
 
 
 // SECTION
@@ -308,6 +309,7 @@ const shapes = [
 ];
 
 export const ShapesSection = forwardRef(({props}, ref) => {
+  const navigate = useNavigate();
   const [focusedShape, setFocusedShape] = useState(null);
   const [selectedShape, setSelectedShape] = useState(shapes[0]);
   const [isMobile, setIsMobile] = useState(true);
@@ -537,6 +539,14 @@ export const ShapesSection = forwardRef(({props}, ref) => {
             <NutriButton 
               label={selectedShape.name === "Capsule" ? "Shop Capsules" : "Shop Gummies"}
               type="filled"
+              onClick={() =>
+                navigate(
+                  '/shop',
+                  { state: 
+                    { shape: selectedShape.name.toLowerCase() }
+                  }
+                )
+              }
             />
           </CardButton>
         </CardContent>

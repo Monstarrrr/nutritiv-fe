@@ -434,7 +434,6 @@ function App() {
                       autoRotate
                       autoRotateSpeed={2}
                       enablePan={true}
-                      // enableZoom={view.homepageCard ? false : true}
                       enableZoom={false}
                       minDistance={
                         view.type === "capsule" ? 3.2 : 7

@@ -248,7 +248,12 @@ export const CategoriesSection = () => {
                     setHoveredCategory(category.title)
                   )}
                   onMouseLeave={() => setHoveredCategory("")}
-                  onClick={() => navigate("/shop")}
+                  onClick={() => navigate(
+                    "/shop",
+                    { state: 
+                      { category: category.title.toLowerCase() }
+                    }
+                  )}
                   variants={variants}
                   initial={{ borderRadius: "20px" }}
                   animate={category.title === hoveredCategory ? 

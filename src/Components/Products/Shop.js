@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import nutritivApi from '../../Api/nutritivApi';
 import { ProductCard } from './ProductCard';
 import { Pagination } from '@mui/material';
@@ -10,6 +10,7 @@ import styled from '@emotion/styled';
 import { mediaQueries, mediaQuery, selectStyles, tokens } from '../../Helpers/styleTokens';
 import { Icon } from '../Icons/Icon';
 import Select from 'react-select';
+import { useLocation } from 'react-router-dom';
 
 const Container = styled(motion.div)`
   padding: 0 ${tokens.spacing.xl};
@@ -161,6 +162,7 @@ const PaginationLeftDiv = styled.div`
 // }
 
 const Shop = forwardRef((props, ref) => {
+  const location = useLocation();
   const [allProducts, setAllProducts] = useState([])
   const [allFilteredProducts, setAllFilteredProducts] = useState([])
   const [productsToDisplay, setProductsToDisplay] = useState(null)
@@ -223,7 +225,6 @@ const Shop = forwardRef((props, ref) => {
     }
     fetchApi();
   }, []);
-
   
   // TOTAL PAGES EFFECT
   useEffect(() => {
@@ -236,7 +237,6 @@ const Shop = forwardRef((props, ref) => {
   
   // DISPLAY EFFECT
   useEffect(() => {
-    
     const filterByText = (array) => filterByTextInput ? (
       array.filter((product) => {
         let titleFilter = product.title.toLowerCase().includes(filterByTextInput)
@@ -304,7 +304,7 @@ const Shop = forwardRef((props, ref) => {
     filterByTagsInput,
     sortedByPrice
   ]);
-
+  
   // HANDLERS
   const handleProductsFilter = (e) => {
     setFilterByTextInput(
@@ -329,7 +329,7 @@ const Shop = forwardRef((props, ref) => {
     setProductsPerPage(e.value)
     setPage(1);
   }
-  const handleFilterByTags = (e) => {
+  const handleFilterByTags = useCallback((e) => {
     if(e.target.checked) {
       setFilterByTagsInput(() => [
         ...filterByTagsInput,
@@ -349,13 +349,29 @@ const Shop = forwardRef((props, ref) => {
       })
     }
     setPage(1);
-  }
+  }, [checkedBox, filterByTagsInput]);
   const handleOrderByPrice = () => {
     sortedByPrice ? (
       sortedByPrice === "asc" ? setSortedByPrice("desc") : setSortedByPrice("")
     ) : setSortedByPrice("asc")
     setPage(1);
   }
+  
+  console.log('# checkedBox :', checkedBox)
+  console.log('# filterByTagsInput :', filterByTagsInput)
+  
+  // LOCATION STATE
+  useEffect(() => {
+    if(location.state?.category) {
+      handleFilterByTags({ target: { 
+        name: location.state.category,
+        checked: true
+      }})
+    } else if (location.state?.shape) {
+      handleFilterByShapeInput({ value: location.state.shape })
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.state?.category, location.state?.shape]);
   
   return (
     <Container
@@ -403,7 +419,17 @@ const Shop = forwardRef((props, ref) => {
         >
           <Select 
             // components={{ IndicatorSeparator }}
-            defaultValue={{value: "", label: "All", defaultValue: true}}
+            defaultValue={
+              location.state?.shape ? (
+                {
+                  value: location.state.shape, 
+                  label: location.state.shape.charAt(0).toUpperCase() + location.state.shape.slice(1).toLowerCase(),
+                  defaultValue: true
+                }
+              ) : (
+                {value: "", label: "All", defaultValue: true}
+              )
+            }
             isSearchable={false}
             options={[
               {value: "", label: "All", defaultValue: true},
