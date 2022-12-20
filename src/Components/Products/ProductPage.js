@@ -30,6 +30,7 @@ const Container = styled.div`
     padding: 0;
     margin-bottom: ${tokens.spacing.xl};
     margin-top: ${tokens.spacing.xl};
+    max-width: 364px;
   }
 `
 
@@ -39,6 +40,7 @@ const Title = styled.h1`
   font-size: 54px;
   justify-self: start;
   margin: 0;
+  overflow-wrap: break-word;
   padding: ${tokens.spacing.sm} 0 ${tokens.spacing.xl};
   ${mediaQuery[2]} {
     padding-top: 0;
@@ -80,6 +82,7 @@ const SupermentContainer = styled.div`
   ${mediaQuery[2]} {
     background: radial-gradient(circle at 50% 50%, rgba(16, 109, 228, 0.54) 0%, rgba(17, 16, 228, 0) 50%);
     height: 60vh;
+    min-height: 510px;
     order: 2;
   }
 `
@@ -104,10 +107,9 @@ const SwitchWrapper = styled.div`
     align-items: center;
     background: ${tokens.color.accentWeak};
     border-radius: ${tokens.borderRadius.lg};
-    box-shadow: 0px 0px 10px 1px ${tokens.color.contrastDark};
-    justify-content: initial;
     margin: 0;
     padding: 4px;
+    position: initial;
     width: fit-content;
   }
 `
@@ -161,7 +163,7 @@ const SelectWrapper = styled.div`
 `
 const Price = styled.h4`
   margin: ${tokens.spacing.md} 0;
-  font-size: ${tokens.font.fontSize.md};
+  font-size: ${tokens.font.fontSize.xl};
 `
 const Currency = styled.span`
 
@@ -362,17 +364,31 @@ const ProductPage = forwardRef((props, ref) => {
   
   return (
     <div css={css`
+      padding: 0;
       ${mediaQuery[2]} {
         display: flex;
+        padding: 0 ${tokens.spacing.xl}; 
+      }
+      ${mediaQuery[3]} {
+        padding: 0;
       }
     `}>
       <SupermentContainer>
+        {/* SHAPE */}
         <SectionContainer
           css={css`
             position: absolute;
             right: 14px;
             text-align: right;
             top: 0;
+            ${mediaQuery[2]} {
+              display: none;
+              /* bottom: 0;
+              right: 0;
+              top: -60px;
+              transform: translateY(50%);
+              z-index: 2; */
+            }
           `}
         >
           <SwitchWrapper>
@@ -548,6 +564,11 @@ const ProductPage = forwardRef((props, ref) => {
             {product.desc}
           </Description>
         </SectionContainer>
+        <SectionContainer>
+          <Price>
+            {(cartSelection.price * cartSelection.quantity).toFixed(2)} <Currency>€</Currency>
+          </Price>
+        </SectionContainer>
         <SectionContainer
           css={css`
             margin-top: ${tokens.spacing.xl};
@@ -563,12 +584,6 @@ const ProductPage = forwardRef((props, ref) => {
             ))}
           </Tags>
         </SectionContainer>
-        
-        <SectionContainer>
-          <Price>
-            {(cartSelection.price * cartSelection.quantity).toFixed(2)} <Currency>€</Currency>
-          </Price>
-        </SectionContainer>
 
         {/* {
           product.imgs?.map((img, i) => (
@@ -582,6 +597,88 @@ const ProductPage = forwardRef((props, ref) => {
           ))
         } */}
         
+        {/* SHAPE */}
+        <SectionContainer
+          css={css`
+            display: none;
+            ${mediaQuery[2]} {
+              display: initial;
+            }
+          `}
+        >
+          <Subtitle
+            css={css`
+              border-top: 2px solid ${tokens.color.semiTransparentLight};
+              padding-top: ${tokens.spacing.xl};
+            `}
+          >
+            Shape
+          </Subtitle>
+          <SwitchWrapper>
+            {shapes && shapes.map(shape => (
+              <ShapeContainer
+                style={{
+                  maxHeight: "100px",
+                  padding: `${tokens.spacing.xs} ${tokens.spacing.lg}`,
+                }}
+                key={shape}
+                onClick={() => handleSwitchShape(shape)}
+                onMouseEnter={() => setFocusedShape(shape)}
+                onMouseLeave={() => setFocusedShape("")}
+              >
+                <ShapeIcon active={shape === shapeQuery ? 1 : undefined}>
+                  <Icon 
+                    name={shape}
+                    color={shapeQuery === shape ? tokens.color.contrastDark : tokens.color.contrastLight}
+                    strokeWidth={2}
+                    filled
+                    height={"24px"}
+                    width={"24px"}
+                  />
+                </ShapeIcon>
+                {focusedShape === shape ? (
+                  <AnimatePresence>
+                    <FocusedShape
+                      style={{
+                        bottom: 0,
+                        left: 0,
+                        position: "absolute",
+                        right: 0,
+                      }}
+                      transition={{
+                        layout: {
+                          duration: 0.2,
+                          ease: "easeOut",
+                        },
+                      }}
+                      layoutId="shape-focus"
+                    />
+                  </AnimatePresence>) : null
+                }
+                {shapeQuery === shape ? (
+                  <AnimatePresence>
+                    <motion.div
+                      style={{
+                        background: tokens.color.accentStrong,
+                        borderRadius: tokens.borderRadius.lg,
+                        bottom: 0,
+                        height: "100%",
+                        left: 0,
+                        position: "absolute",
+                        right: 0,
+                        width: "100%",
+                        zIndex: 1,
+                      }}
+                      layoutId="shape-select"
+                    />
+                  </AnimatePresence>) : null
+                }
+              </ShapeContainer>
+            ))}
+          </SwitchWrapper>
+        </SectionContainer>
+        
+        {/* LOAD */}
         <SectionContainer
           css={css`
             margin-top: ${tokens.spacing.xxl};
@@ -590,8 +687,13 @@ const ProductPage = forwardRef((props, ref) => {
           {/* LOAD (radio button) */}
           <Subtitle
             css={css`
+              margin-top: ${tokens.spacing.xxl};
               border-top: 2px solid ${tokens.color.semiTransparentLight};
               padding-top: ${tokens.spacing.xl};
+              ${mediaQuery[2]} {
+                border-top: 0;
+                padding-top: 0;
+              }
             `}
           >
             Load
