@@ -13,7 +13,7 @@ import Select from 'react-select';
 import { useLocation } from 'react-router-dom';
 
 const Container = styled(motion.div)`
-  padding: 0 ${tokens.spacing.xl};
+  padding: ${tokens.spacing.xl};
   width: auto;
   ${mediaQuery[1]} {
     padding: 0 ${tokens.spacing.xxl};
@@ -73,7 +73,9 @@ const SortingContainer = styled.div`
   position: relative;
   top: 4px;
 `
-const SortByContainer = styled.div``
+const SortByContainer = styled.div`
+  display: flex;
+`
 const SortCounter = styled.div`
   color: ${tokens.color.contrastLightWeak};
   font-style: italic;
@@ -85,6 +87,7 @@ const SortByText = styled.p`
   font-style: italic;
 `
 const SortByButton = styled.button`
+  align-self: center;
   background-color: ${tokens.color.semiTransparentLight};
   border: none;
   border-radius: ${tokens.borderRadius.sm};
@@ -94,6 +97,7 @@ const SortByButton = styled.button`
   color: ${tokens.color.contrastLight};
   font-size: ${tokens.font.fontSize.md};
   font-weight: ${tokens.font.fontWeight.regular};
+  height: fit-content;
   outline: none;
   padding: 2px ${tokens.spacing.sm};
   transition: all .2s ease;
@@ -473,9 +477,12 @@ const Shop = forwardRef((props, ref) => {
       {/* PRICE SORTER - BUTTON */}
       <SortingContainer>
         <SortCounter>
-          {allFilteredProducts.length}/{allProducts.length}
-          <span>
-            &nbsp;superments
+          {allFilteredProducts.length}/{allProducts.length}&nbsp;
+          <span css={css`
+            display: inline-block;
+            padding-right: ${tokens.spacing.md};
+          `}>
+            superments
           </span>
         </SortCounter>
         <SortByContainer>
