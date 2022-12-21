@@ -23,7 +23,11 @@ const Description = styled.p`
 const Illustration = styled.img`
   opacity: 0.92;
   max-width: 800px;
+  padding-top: ${tokens.spacing.xxl};
   width: 90%;
+  ${mediaQuery[2]} {
+    padding-top: 0;
+  }
 `
 
 const AboutUs = forwardRef((props, ref) => {
