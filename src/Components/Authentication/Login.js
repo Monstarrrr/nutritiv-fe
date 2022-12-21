@@ -13,6 +13,11 @@ import nutritivApi from '../../Api/nutritivApi';
 import { updateUser, updateUserCartQuantity } from '../../Redux/reducers/user';
 import { OAuth } from './OAuth';
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
+import styled from '@emotion/styled';
+
+const Title = styled.h1`
+  text-transform: uppercase;
+`
 
 const LoginPage = forwardRef((props, ref) => {
   
@@ -204,7 +209,7 @@ const LoginPage = forwardRef((props, ref) => {
   
   return (
     <div>
-      <h1>Login page</h1>
+      <Title>Login</Title>
       {
         location.state?.msg && (
           <p 

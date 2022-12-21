@@ -598,85 +598,87 @@ const ProductPage = forwardRef((props, ref) => {
         } */}
         
         {/* SHAPE */}
-        <SectionContainer
-          css={css`
-            display: none;
-            ${mediaQuery[2]} {
-              display: initial;
-            }
-          `}
-        >
-          <Subtitle
+        {(product.title !== "Magmalite" || product.title !== "Liquate") && (
+          <SectionContainer
             css={css`
-              border-top: 2px solid ${tokens.color.semiTransparentLight};
-              padding-top: ${tokens.spacing.xl};
+              display: none;
+              ${mediaQuery[2]} {
+                display: initial;
+              }
             `}
           >
-            Shape
-          </Subtitle>
-          <SwitchWrapper>
-            {shapes && shapes.map(shape => (
-              <ShapeContainer
-                style={{
-                  maxHeight: "100px",
-                  padding: `${tokens.spacing.xs} ${tokens.spacing.lg}`,
-                }}
-                key={shape}
-                onClick={() => handleSwitchShape(shape)}
-                onMouseEnter={() => setFocusedShape(shape)}
-                onMouseLeave={() => setFocusedShape("")}
-              >
-                <ShapeIcon active={shape === shapeQuery ? 1 : undefined}>
-                  <Icon 
-                    name={shape}
-                    color={shapeQuery === shape ? tokens.color.contrastDark : tokens.color.contrastLight}
-                    strokeWidth={2}
-                    filled
-                    height={"24px"}
-                    width={"24px"}
-                  />
-                </ShapeIcon>
-                {focusedShape === shape ? (
-                  <AnimatePresence>
-                    <FocusedShape
-                      style={{
-                        bottom: 0,
-                        left: 0,
-                        position: "absolute",
-                        right: 0,
-                      }}
-                      transition={{
-                        layout: {
-                          duration: 0.2,
-                          ease: "easeOut",
-                        },
-                      }}
-                      layoutId="shape-focus"
+            <Subtitle
+              css={css`
+                border-top: 2px solid ${tokens.color.semiTransparentLight};
+                padding-top: ${tokens.spacing.xl};
+              `}
+            >
+              Shape
+            </Subtitle>
+            <SwitchWrapper>
+              {shapes && shapes.map(shape => (
+                <ShapeContainer
+                  style={{
+                    maxHeight: "100px",
+                    padding: `${tokens.spacing.xs} ${tokens.spacing.lg}`,
+                  }}
+                  key={shape}
+                  onClick={() => handleSwitchShape(shape)}
+                  onMouseEnter={() => setFocusedShape(shape)}
+                  onMouseLeave={() => setFocusedShape("")}
+                >
+                  <ShapeIcon active={shape === shapeQuery ? 1 : undefined}>
+                    <Icon 
+                      name={shape}
+                      color={shapeQuery === shape ? tokens.color.contrastDark : tokens.color.contrastLight}
+                      strokeWidth={2}
+                      filled
+                      height={"24px"}
+                      width={"24px"}
                     />
-                  </AnimatePresence>) : null
-                }
-                {shapeQuery === shape ? (
-                  <AnimatePresence>
-                    <motion.div
-                      style={{
-                        background: tokens.color.accentStrong,
-                        borderRadius: tokens.borderRadius.lg,
-                        bottom: 0,
-                        height: "100%",
-                        left: 0,
-                        position: "absolute",
-                        right: 0,
-                        width: "100%",
-                        zIndex: 1,
-                      }}
-                      layoutId="shape-select"
-                    />
-                  </AnimatePresence>) : null
-                }
-              </ShapeContainer>
-            ))}
-          </SwitchWrapper>
-        </SectionContainer>
+                  </ShapeIcon>
+                  {focusedShape === shape ? (
+                    <AnimatePresence>
+                      <FocusedShape
+                        style={{
+                          bottom: 0,
+                          left: 0,
+                          position: "absolute",
+                          right: 0,
+                        }}
+                        transition={{
+                          layout: {
+                            duration: 0.2,
+                            ease: "easeOut",
+                          },
+                        }}
+                        layoutId="shape-focus"
+                      />
+                    </AnimatePresence>) : null
+                  }
+                  {shapeQuery === shape ? (
+                    <AnimatePresence>
+                      <motion.div
+                        style={{
+                          background: tokens.color.accentStrong,
+                          borderRadius: tokens.borderRadius.lg,
+                          bottom: 0,
+                          height: "100%",
+                          left: 0,
+                          position: "absolute",
+                          right: 0,
+                          width: "100%",
+                          zIndex: 1,
+                        }}
+                        layoutId="shape-select"
+                      />
+                    </AnimatePresence>) : null
+                  }
+                </ShapeContainer>
+              ))}
+            </SwitchWrapper>
+          </SectionContainer>
+        )}
         
         {/* LOAD */}
         <SectionContainer

@@ -398,9 +398,6 @@ const Shop = forwardRef((props, ref) => {
     setPage(1);
   }
   
-  console.log('# checkedBox :', checkedBox)
-  console.log('# filterByTagsInput :', filterByTagsInput)
-  
   // LOCATION STATE
   useEffect(() => {
     if(location.state?.category) {
