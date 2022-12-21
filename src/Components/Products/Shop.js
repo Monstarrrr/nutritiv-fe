@@ -7,10 +7,11 @@ import { AnimatePresence, LayoutGroup, motion } from 'framer-motion';
 import { forwardRef } from 'react';
 import { css } from '@emotion/react'
 import styled from '@emotion/styled';
-import { mediaQueries, mediaQuery, selectStyles, tokens } from '../../Helpers/styleTokens';
+import { breakpoints, mediaQueries, mediaQuery, selectStyles, tokens } from '../../Helpers/styleTokens';
 import { Icon } from '../Icons/Icon';
 import Select from 'react-select';
 import { useLocation } from 'react-router-dom';
+import useWindowDimensions from '../../Helpers/useWindowDimensions';
 
 const Container = styled(motion.div)`
   padding: ${tokens.spacing.xl};
@@ -154,11 +155,35 @@ const ProductsContainer = styled(motion.div)`
 const PaginationContainer = styled(motion.div)`
   align-items: center;
   display: flex;
+  flex-direction: column;
   margin: ${tokens.spacing.lg} 0 ${tokens.spacing.xxl};
   justify-content: space-between;
+  ${mediaQuery[1]} {
+    flex-direction: row;
+  }
+  > nav {
+    padding: 0;
+    padding-top: ${tokens.spacing.xxl};
+    ${mediaQuery[1]} {
+      padding-top: 0;
+    }
+  }
+  > form {
+    display: flex;
+    flex: 2 1 0%;
+    justify-content: end;
+    padding-top: ${tokens.spacing.md};
+    ${mediaQuery[1]} {
+      padding-top: 0;
+    }
+  }
 `
 const PaginationLeftDiv = styled.div`
-  flex: 2 1 0%;
+  display: none;
+  ${mediaQuery[2]} {
+    display: inherit;
+    flex: 2 1 0%;
+  }
 `
 
 // const IndicatorSeparator = ({innerProps}) => {
@@ -167,6 +192,9 @@ const PaginationLeftDiv = styled.div`
 
 const Shop = forwardRef((props, ref) => {
   const location = useLocation();
+  const { width } = useWindowDimensions();
+  const [isMobile, setIsMobile] = useState(true);
+  
   const [allProducts, setAllProducts] = useState([])
   const [allFilteredProducts, setAllFilteredProducts] = useState([])
   const [productsToDisplay, setProductsToDisplay] = useState(null)
@@ -190,6 +218,15 @@ const Shop = forwardRef((props, ref) => {
   const [focusedBox, setFocusedBox] = useState([])
   
   const [allTags, setAllTags] = useState([])
+  
+  // RESPONSIVE EFFECT
+  useEffect(() => {
+    if(width < breakpoints[1]) {
+      setIsMobile(true);  
+    } else {
+      setIsMobile(false);  
+    }
+  }, [width]);
 
   // API EFFECTS
   useEffect(() => {
@@ -567,11 +604,9 @@ const Shop = forwardRef((props, ref) => {
         <Pagination
           count={numberOfPages}
           page={page}
+          size={isMobile ? 'small' : 'default'}
           onChange={handleChangeActivePage}
           sx={{
-            display: "flex",
-            justifyContent: "center",
-            flex: "3 1 0%",
             '& .MuiPaginationItem-root': {
               color: tokens.color.contrastLight,
               fontFamily: "inherit",
