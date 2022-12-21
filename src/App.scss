@@ -4,6 +4,9 @@
 .grecaptcha-badge { 
   visibility: hidden;
 }
+.touch-action-fix {
+  touch-action: initial !important;
+}
 
 /* Document
    ========================================================================== */

@@ -90,6 +90,8 @@ function App() {
   const registrationToken = searchParams.get('verificationToken');
   
   useEffect(() => {
+    // touch-action fix
+    document.getElementById("root-inner").className += ' touch-action-fix';
     // App titles
     const titleWithoutSpecials = location.pathname.replace(/[^a-zA-Z ]/g, "");
     if(titleWithoutSpecials){
@@ -241,7 +243,7 @@ function App() {
   }
   
   return (
-    <div ref={canvasWrapperRef}>
+    <div id="root-inner" ref={canvasWrapperRef}>
       <Elements
         stripe={stripePromise}
         // options={stripeOptions}
