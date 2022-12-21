@@ -2,7 +2,7 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { forwardRef } from 'react'
-import { tokens } from '../../Helpers/styleTokens';
+import { mediaQueries, mediaQuery, tokens } from '../../Helpers/styleTokens';
 import { currentYear } from '../Footer/Footer';
 import { SectionTitle } from '../Homepage/Homepage';
 
@@ -14,23 +14,36 @@ const Test = styled.div`
 
 const Description = styled.p`
   font-size: ${tokens.font.fontSize.sm};
-  width: 420px;
+  max-width: 450px;
+  ${mediaQuery[2]} {
+    font-size: ${tokens.font.fontSize.md};
+  }
 `
 
 const Illustration = styled.img`
-  opacity: 0.9;
-  width: 90vw;
+  opacity: 0.92;
+  max-width: 800px;
+  width: 90%;
 `
 
 const AboutUs = forwardRef((props, ref) => {
   return (
     <div
       css={css`
-        display: flex;
         align-items: center;
+        display: flex;
         flex-direction: column;
+        max-width: 100vw;
+        /* min-height: calc(100vh - 105px); */
+        padding: 0 ${tokens.spacing.lg};
         text-align: center;
-        min-height: calc(100vh - 105px);
+        ${mediaQueries({
+          minHeight: [
+            "calc(100vh - 72px)", 
+            "calc(100vh - 72px)", 
+            "calc(100vh - 100px)"
+          ]
+        })}
       `}
     >
       {/* Debugging 3D Models */}
@@ -63,7 +76,9 @@ const AboutUs = forwardRef((props, ref) => {
         The Nutriteam
       </SectionTitle>
       <Description>
-          Our team is a group of passionate scientists and designers from around the world. We all come from similar yet different backgrounds and gathered to make what is today known as the only superments company.
+          Our team is a group of passionate scientists and designers from around the world.
+          <br /> 
+          We all come from similar yet different backgrounds and gathered to make what is today known as the only superments company.
           <br/> 
           Since {currentYear + 20} we've kept evolving out range of products and will continue doing so for many years to come.
       </Description>

@@ -407,7 +407,7 @@ const Shop = forwardRef((props, ref) => {
       {/* SHAPE FILTER - DROPDOWN */}
       <FilterShapeContainer>
         <FilterBy>
-          Filter by
+          Filtered by
         </FilterBy>
         <div 
           css={css`
