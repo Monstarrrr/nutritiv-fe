@@ -203,7 +203,7 @@ const ProductPage = forwardRef((props, ref) => {
   const [loadingAdding, setLoadingAdding] = useState(false)
   const [successAddedToCart, setSuccessAddedToCart] = useState(false)
   const [errorOutOfStock, setErrorOutOfStock] = useState(false)
-
+  
   // HANDLE ADD TO CART
   const handleAddToCart = async (loc) => {
     const selection = loc?.cartSelection ? loc.cartSelection : cartSelection
@@ -304,8 +304,6 @@ const ProductPage = forwardRef((props, ref) => {
       item.quantity = 1;
       setSelectedQuantity({value: 1, label: "1"})
       setErrorOutOfStock(false)
-    } else { 
-      setErrorOutOfStock(true) 
     }
     const { load, price, quantity } = item;
     setCartSelection(prevState => ({
@@ -315,6 +313,17 @@ const ProductPage = forwardRef((props, ref) => {
       quantity
     }))
   }
+  
+  // CHECK STOCK
+  useEffect(() => {
+    if(cartSelection && countInStock) {
+      if(countInStock >= cartSelection.load) {
+        setErrorOutOfStock(false);
+      } else {
+        setErrorOutOfStock(true);
+      }
+    }
+  }, [cartSelection, countInStock]);
 
   // GET STOCK
   useEffect(() => {
@@ -566,7 +575,10 @@ const ProductPage = forwardRef((props, ref) => {
         </SectionContainer>
         <SectionContainer>
           <Price>
-            {(cartSelection.price * cartSelection.quantity).toFixed(2)} <Currency>€</Currency>
+            {cartSelection.quantity 
+              ? (cartSelection.price * cartSelection.quantity).toFixed(2)
+              : (cartSelection.price * 1)
+            } <Currency>€</Currency>
           </Price>
         </SectionContainer>
         <SectionContainer
@@ -756,25 +768,23 @@ const ProductPage = forwardRef((props, ref) => {
             Quantity
           </Subtitle>
           <SelectWrapper>
-            {(cartSelection.productId && availableQuantity) ? (
-              <Select 
-                // components={{ IndicatorSeparator }}
-                defaultValue={{value: 1, label: 1}}
-                id={product._id}
-                name="quantity"
-                isDisabled={!availableQuantity}
-                isSearchable={false}
-                options={loadOptions}
-                onChange={(e) => handleSelectedQuantity(e)}
-                menuPlacement="auto"
-                ref={quantityRef}
-                styles={selectStyles}
-                value={selectedQuantity}
-              />
-            ) : null}
+            <Select 
+              // components={{ IndicatorSeparator }}
+              defaultValue={{value: 1, label: 1}}
+              id={product._id}
+              name="quantity"
+              isDisabled={errorOutOfStock}
+              isSearchable={false}
+              options={loadOptions}
+              onChange={(e) => handleSelectedQuantity(e)}
+              menuPlacement="auto"
+              ref={quantityRef}
+              styles={selectStyles}
+              value={selectedQuantity}
+            />
           </SelectWrapper>
         </SectionContainer>
-
+        
         {/* ADD TO CART (button) */}
         <SectionContainer
           css={css`
@@ -786,7 +796,7 @@ const ProductPage = forwardRef((props, ref) => {
         >
           <div onClick={handleAddToCart}>
             <NutriButton 
-              disabled={!cartSelection.quantity}
+              disabled={errorOutOfStock}
               label={loadingAdding ? "Adding to cart..." : "Add to cart"}
               style={{
                 borderRadius: "8px",
