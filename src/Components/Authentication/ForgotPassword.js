@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import nutritivApi from '../../Api/nutritivApi';
+import { AuthPageContainer } from './Login';
 
 export const ForgotPassword = () => {
   const [email, setEmail] = useState("")
@@ -24,7 +25,7 @@ export const ForgotPassword = () => {
   }
   
   return (
-    <>
+    <AuthPageContainer>
       <form onSubmit={handleForgotPassword}>
         <p>Enter your email:</p>
         <input
@@ -37,6 +38,6 @@ export const ForgotPassword = () => {
         <input value="Set new password" type="submit"/>
       </form>
       {error && <p style={{color: "red"}}>{error}</p>}
-    </>
+    </AuthPageContainer>
   )
 }

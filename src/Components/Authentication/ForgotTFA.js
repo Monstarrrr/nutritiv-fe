@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import nutritivApi from '../../Api/nutritivApi';
+import { AuthPageContainer } from './Login';
 import { QrCodeTFA } from './QrCodeTFA';
 
 export const ForgotTFA = () => {
@@ -37,7 +38,7 @@ export const ForgotTFA = () => {
   }
 
   return (
-    <>
+    <AuthPageContainer>
       {
         recoverySuccessfull ? (
           <>
@@ -66,6 +67,6 @@ export const ForgotTFA = () => {
       {
         error && <p style={{color: "red"}}>{error}</p>
       }
-    </>
+    </AuthPageContainer>
   )
 }

@@ -1,7 +1,11 @@
+/** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react';
 import React, { forwardRef, useState } from 'react';
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 import { useNavigate } from 'react-router-dom';
 import nutritivApi from '../../Api/nutritivApi';
+import { tokens } from '../../Helpers/styleTokens';
+import { AuthButton, AuthInput, AuthPageContainer, AuthSubtitle, AuthTextInput, AuthTitle } from './Login';
 import { OAuth } from './OAuth';
 
 const RegisterPage = forwardRef((props, ref) => {
@@ -105,13 +109,12 @@ const RegisterPage = forwardRef((props, ref) => {
   }
     
   return (
-    <div>
-      <h2>Register page</h2>
-      <b>Register with your email:</b>
+    <AuthPageContainer>
+      <AuthTitle>Create Account</AuthTitle>
       <form onSubmit={ handleSubmit }>
         <label>
-          <p>Username</p>
-          <input 
+          <AuthSubtitle>Username</AuthSubtitle>
+          <AuthTextInput 
             name="username" 
             onChange={ handleChange } 
             placeholder="Username..."
@@ -119,8 +122,8 @@ const RegisterPage = forwardRef((props, ref) => {
           />
         </label>
         <label>
-          <p>Email</p>
-          <input 
+          <AuthSubtitle>Email</AuthSubtitle>
+          <AuthTextInput 
             name="email" 
             onChange={ handleChange }
             placeholder="Email..." 
@@ -128,8 +131,8 @@ const RegisterPage = forwardRef((props, ref) => {
           />
         </label>
         <label>
-          <p>Password</p>
-          <input 
+          <AuthSubtitle>Password</AuthSubtitle>
+          <AuthTextInput 
             name="password" 
             onChange={ handleChange }
             placeholder="Password..." 
@@ -157,12 +160,26 @@ const RegisterPage = forwardRef((props, ref) => {
             </p>
           )
         }
-        <div>
-          <button type="submit">Submit</button>
+        <div
+          css={css`
+            margin-top: ${tokens.spacing.md};
+          `}
+        >
+          <AuthButton
+            type="submit"  
+          >
+            Submit
+          </AuthButton>
         </div>
       </form>
       <br />
-      <b>or register with a third party account:</b>
+      <span
+        css={css`
+          margin-bottom: ${tokens.spacing.xl};
+        `}
+      >
+        or
+      </span>
       <br />
       <br />
       <OAuth provider="google"/>
@@ -170,7 +187,7 @@ const RegisterPage = forwardRef((props, ref) => {
       <OAuth provider="facebook"/>
       <br />
       <OAuth provider="github"/>
-    </div>
+    </AuthPageContainer>
   )
 })
 
