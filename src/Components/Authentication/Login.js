@@ -39,10 +39,12 @@ export const AuthTextInput = styled.input`
   background: ${tokens.color.accentTransparent};
   border: none;
   border-radius: ${tokens.borderRadius.sm};
+  box-sizing: border-box;
   color: ${tokens.color.contrastLight};
   font-size: ${tokens.font.fontSize.sm};
   padding: ${tokens.spacing.xs} ${tokens.spacing.md};
   outline: none;
+  width: 100%;
   &:focus {
     outline: 1px solid ${tokens.color.accentStrong};
   }
@@ -371,11 +373,22 @@ const LoginPage = forwardRef((props, ref) => {
           >
             or
           </span>
-          <OAuth provider="google"/>
-          <br />
-          <OAuth provider="facebook"/>
-          <br />
-          <OAuth provider="github"/>
+          <button
+            css={css`
+              background: none;
+              border: none;
+              color: ${tokens.color.accentStrong};
+              cursor: pointer;
+              transition: all ease .2s;
+              &:hover {
+                opacity: 0.8;
+                transition: all ease .2s;
+              }
+            `}
+            onClick={() => navigate('/register')}
+          >
+            Create an account
+          </button>
         </>
       )}
       {

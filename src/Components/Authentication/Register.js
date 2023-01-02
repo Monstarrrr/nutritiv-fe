@@ -1,14 +1,28 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import React, { forwardRef, useState } from 'react';
+import styled from '@emotion/styled';
+import { forwardRef, useState } from 'react';
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 import { useNavigate } from 'react-router-dom';
 import nutritivApi from '../../Api/nutritivApi';
 import { tokens } from '../../Helpers/styleTokens';
-import { AuthButton, AuthInput, AuthPageContainer, AuthSubtitle, AuthTextInput, AuthTitle } from './Login';
+import { AuthButton, AuthPageContainer, AuthSubtitle, AuthTextInput, AuthTitle } from './Login';
 import { OAuth } from './OAuth';
 
+const ThirdPartyContainer = styled.div`
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 250px;
+`
+const Form = styled.form`
+  width: 250px;
+`
+const FormLabel = styled.label``
+
 const RegisterPage = forwardRef((props, ref) => {
+  const navigate = useNavigate();
   const { executeRecaptcha } = useGoogleReCaptcha();
   const [registerData, setRegisterData] = useState({
     username: "",
@@ -111,8 +125,10 @@ const RegisterPage = forwardRef((props, ref) => {
   return (
     <AuthPageContainer>
       <AuthTitle>Create Account</AuthTitle>
-      <form onSubmit={ handleSubmit }>
-        <label>
+      <Form
+        onSubmit={ handleSubmit }
+      >
+        <FormLabel>
           <AuthSubtitle>Username</AuthSubtitle>
           <AuthTextInput 
             name="username" 
@@ -120,8 +136,8 @@ const RegisterPage = forwardRef((props, ref) => {
             placeholder="Username..."
             type="text" 
           />
-        </label>
-        <label>
+        </FormLabel>
+        <FormLabel>
           <AuthSubtitle>Email</AuthSubtitle>
           <AuthTextInput 
             name="email" 
@@ -129,8 +145,8 @@ const RegisterPage = forwardRef((props, ref) => {
             placeholder="Email..." 
             type="text" 
           />
-        </label>
-        <label>
+        </FormLabel>
+        <FormLabel>
           <AuthSubtitle>Password</AuthSubtitle>
           <AuthTextInput 
             name="password" 
@@ -138,7 +154,7 @@ const RegisterPage = forwardRef((props, ref) => {
             placeholder="Password..." 
             type="password"
           />
-        </label>
+        </FormLabel>
         {
           registerStatus.loading && (
             <p>
@@ -171,7 +187,7 @@ const RegisterPage = forwardRef((props, ref) => {
             Submit
           </AuthButton>
         </div>
-      </form>
+      </Form>
       <br />
       <span
         css={css`
@@ -180,13 +196,38 @@ const RegisterPage = forwardRef((props, ref) => {
       >
         or
       </span>
-      <br />
-      <br />
-      <OAuth provider="google"/>
-      <br />
-      <OAuth provider="facebook"/>
-      <br />
-      <OAuth provider="github"/>
+      <ThirdPartyContainer>
+        <OAuth provider="google"/>
+        <OAuth provider="facebook"/>
+        <OAuth provider="github"/>
+      </ThirdPartyContainer>
+      <div css={css`
+        display: flex; 
+        margin-top: ${tokens.spacing.md};
+        justify-content: space-between;
+        width: 250px;
+      `}>
+        <span css={css`display: inline-block;`}>
+          Already have an account ?
+        </span>
+        <button
+          css={css`
+            background: none;
+            border: none;
+            color: ${tokens.color.accentStrong};
+            cursor: pointer;
+            display: inline-block;
+            transition: all ease .2s;
+            &:hover {
+              opacity: 0.8;
+              transition: all ease .2s;
+            }
+          `}
+          onClick={() => navigate('/register')}
+        >
+          Login
+        </button>
+      </div>
     </AuthPageContainer>
   )
 })
