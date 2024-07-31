@@ -8,74 +8,62 @@
 [![GitHub last commit](https://img.shields.io/github/last-commit/monstarrrr/nutritiv-fe?color=blue&label=last%20updated)](#) 
 [![Lines of code](https://img.shields.io/tokei/lines/github/Monstarrrr/nutritiv-fe)](#) 
 
-## Available Scripts
- 
-In the project directory, you can run:
+💡/ Creating a unique start-up idea
 
-### `npm start`
+Instead of building an existing webapp's clone, I wanted to create a fresh concept that offers an engaging and enjoyable user experience. I developed a futuristic start-up that produces "superments" (super supplements) with various benefits.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+🎨/ Establishing brand identity
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+Starting with a carefully chosen color palette, I designed a logo and gathered inspiration from platforms like Dribbble.com. I incorporated a floating iceberg to symbolize that there is more beneath the surface of the brand.
 
-### `npm test`
+🖼️/ Crafting an intuitive landing page
 
-Launches the test runner in the interactive watch mode.\
-See section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Taking inspiration from the floating iceberg concept, I designed the landing page to showcase product shapes and categories separately, ensuring clarity and preventing confusion.
 
-### `npm run build`
+👤/ User authentication and registration
 
-Builds the app for production to the `build` folder.\
-See section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Implementing secure login and registration processes involved handling credentials and managing redirects to enhance the user experience. Integration with third-party applications like Google and Facebook was also included.
 
-## Website Structure
+🔒/ Implementing 2FA authentication
 
-### Nav
-- Homepage
-- Results
-- Product
+To enhance security, I collaborated with the back-end developer to implement two-factor authentication, including QR code generation and backup words functionality.
 
-### Buyer & Seller
-- Login
-- Sign Up
-- Forgot
-- Profile
-- Settings
+⚙️/ Managing user settings
 
-### Buyer
-- Cart
-- Order
-<!-- - Payment -->
+Basic user settings such as updating username, email, password, and 2FA were implemented, focusing on user input validation and seamless API calls.
 
-### Seller
-- Upload
-- Dashboard
+🛡️/ Preventing spam with ReCaptcha
 
-### Admin
-- Moderation
-- Dashboard
+To reduce user friction, I integrated an invisible ReCaptcha solution to maintain security without inconveniencing regular users.
 
-## Work steps
+🧊/ Creating 3D models of each item
 
-1. Routing
-   - Route
-   - Navigate 
-   - useNavigate
-   - Link (param "state" to carry data )
-   - useLocation (useLocation.state to retrieve data)
-   - Outlet
-   - useParams
+Using Blender, I designed optimized 3D models for each product. This required expertise in WebGL and libraries like ThreeJS, React-three-fiber, and React-three-drei, as well as addressing compatibility issues.
 
-2. Axios
-   - Add default.baseURL
-   - Get JWT token w/ res & store it locally w/ localStorage.setItem
-   - Login/Signup
-   - set localStorage tokens interceptor
+⏳/ Pre-loading 3D models for seamless integration
 
-## Workspace tools
+To minimize loading times, I implemented pre-loading techniques for the 3D models, leveraging the illusion of multiple canvases using scissoring techniques provided by react-three-drei.
 
-### Dependencies
+🔍/ Displaying, ordering, and filtering item lists
 
-- react-router-dom (v6)
+Items were displayed in chunks with dynamic pagination options and sortable filters for an improved user experience. Careful attention was given to animations to ensure a smooth transition.
+
+📋/ Displaying individual item details
+
+The individual item page showcased the 3D model, price, and customization options, allowing users to add items to their cart.
+
+🧺/ Managing the shopping cart
+
+The cart functionality enabled users to add and remove items seamlessly, updating the cart icon dynamically. Redux was utilized for state management to ensure scalability.
+
+💳/ Enabling purchases with Stripe
+
+Integrating Stripe's payment processing involved navigating their API complexity and implementing the payment page. Test mode was utilized for a simulated purchasing experience.
+
+💬/ Real-time messaging with websockets
+
+Implementing websockets, I created a 24/7 live support chat feature, showcasing bidirectional communication between the user and support team.
+
+📱/ Ensuring responsiveness
+
+Using a mobile-first approach, I prioritized responsiveness across the entire application to provide optimal user experience, particularly for mobile devices.
