@@ -8,6 +8,13 @@
 
 [![image_original](https://github.com/user-attachments/assets/4e842201-138c-4d44-84e8-a4db2e589f22)](https://i.imgur.com/RvoPldV.gif)
 
+![RExu2Hm](https://github.com/user-attachments/assets/efdf1bb7-75f3-4683-8468-5a2241cbe960)
+
+![Nxov8rx](https://github.com/user-attachments/assets/e09e65b8-fc19-47ed-8c48-1bb0ee06d771)
+
+![oK74j0B](https://github.com/user-attachments/assets/17ae005d-36b1-43b0-b827-a9ef5c8e7ec7)
+
+![HabwbNS](https://github.com/user-attachments/assets/e93c52e0-a8be-4354-8c2b-48721905f5b5)
 
 💡/ Creating a unique start-up idea
 
@@ -47,7 +54,7 @@ To minimize loading times, I implemented pre-loading techniques for the 3D model
 
 🔍/ Displaying, ordering, and filtering item lists
 
-Items were displayed in chunks with dynamic pagination options and sortable filters for an improved user experience. Careful attention was given to animations to ensure a smooth transition.
+Items were displayed in chunks with dynamic pagination options and sortable filters for an improved user experience. Careful attention was given to animations to ensure a smooth transition.  
 
 📋/ Displaying individual item details
 
