@@ -6,7 +6,7 @@
 [![GitHub commit activity](https://img.shields.io/github/commit-activity/w/monstarrrr/nutritiv-fe)](#) 
 [![GitHub last commit](https://img.shields.io/github/last-commit/monstarrrr/nutritiv-fe?color=blue&label=last%20updated)](#) 
 
-![image_original](https://github.com/user-attachments/assets/4e842201-138c-4d44-84e8-a4db2e589f22)
+[![image_original](https://github.com/user-attachments/assets/4e842201-138c-4d44-84e8-a4db2e589f22)](https://i.imgur.com/RvoPldV.gif)
 
 
 💡/ Creating a unique start-up idea
