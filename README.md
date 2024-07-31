@@ -6,6 +6,9 @@
 [![GitHub commit activity](https://img.shields.io/github/commit-activity/w/monstarrrr/nutritiv-fe)](#) 
 [![GitHub last commit](https://img.shields.io/github/last-commit/monstarrrr/nutritiv-fe?color=blue&label=last%20updated)](#) 
 
+![image_original](https://github.com/user-attachments/assets/4e842201-138c-4d44-84e8-a4db2e589f22)
+
+
 💡/ Creating a unique start-up idea
 
 Instead of building an existing webapp's clone, I wanted to create a fresh concept that offers an engaging and enjoyable user experience. I developed a futuristic start-up that produces "superments" (super supplements) with various benefits.
